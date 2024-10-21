@@ -14,18 +14,14 @@ ul,
 ol {
   list-style-type: none;
 }
+html{
+  font-size: 10px;
+}
+img{
+  vertical-align: bottom;
+  border: none;
+}
 
-.full_page {
-  width: 100vw;
-  height: 100vh;
-  background-color: bisque;
-}
-.max_width_1280 {
-  width: 1280px;
-  height: 200px;
-  background-color: aliceblue;
-  margin: 0 auto;
-}
 
 /* @media (hover: hover) {
   a:hover {
