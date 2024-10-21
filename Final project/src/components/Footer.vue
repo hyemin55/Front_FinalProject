@@ -6,16 +6,19 @@
         <li>개인정보처리방침</li>
         <li>이용약관</li>
       </ul>
+      <br>
       <p>
         (주)CHERRISH | 대표이사 : 태영 김 | 사업자등록번호 : 123-45-67891 |
         통신판매업 : 제 2024-대구반월D-0505호 대구광역시 달서구 반월로 67
         그린컴퓨터아트학원 5층 | 호스팅 서비스 : 네이버 클라우드 (주)
       </p>
+      <br>
       <p>
         신한은행 채무지급보증 안내 당사는 고객님의 현금 결제 금액에 대해
         신한은행과 채무지급보증 계약을 체결하여 안전거래를 보장하고
-        있습니다.서비스가입 사실 확인
+        있습니다. 서비스가입 사실 확인
       </p>
+      <br>
       <p>
         (주)CHERRISH는 통신판매 중개자로서 통신판매의 당사자가 아닙니다. 본
         상품은 개별판매자가 등록한 상품으로 상품, 상품정보, 거래에 관한 의무와
@@ -31,11 +34,19 @@
 
 <style scoped>
 #footer {
-  background-color: var(--color-main-Lgray);
-  margin: 0 auto;
+  background-color: var(--color-main-gray);
+  width: 100%;
 }
 #footer_text{
   max-width: var(--main-max-width);
-  width: 100vw;
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px 0px
+}
+ul{
+  display: flex;
+}
+li{
+  margin-right: 20px;
 }
 </style>

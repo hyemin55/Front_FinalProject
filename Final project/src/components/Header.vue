@@ -69,6 +69,9 @@
 #header_top{
   font-size: 1.2rem;
 }
+#header_top>p{
+font-family: 'PRISTINA'
+}
 .login li{
   margin-left: 0.4rem;
 }
