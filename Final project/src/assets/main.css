@@ -1,11 +1,12 @@
 @import './root.css';
 @import './fonts/PRISTINA/font_pristina.css';
 @import './fonts/Jacques_Francois/font_jacques_Francois.css';
+@import './fonts/pretendard/pretendard.css';
 
 *,*::before,*::after {
   margin: 0;
   padding: 0;
-  font-family: 'JacquesFrancois-Regular', 'PRISTINA';
+  font-family: 'Pretendard-Regular', 'JacquesFrancois-Regular', 'PRISTINA';
   box-sizing: border-box;
 }
 a {

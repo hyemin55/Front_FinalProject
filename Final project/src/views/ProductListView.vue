@@ -1,7 +1,19 @@
+<script setup>
+import ProductComponent from '@/components/ProductComponent.vue';
+</script>
+
 <template>
-  <div><h1>productList</h1></div>
+  <section id="product_wrapper">
+    <div style="height: 400px;"></div>
+    <ProductComponent/>
+
+  </section>
 </template>
 
-<script setup></script>
 
-<style scoped></style>
+<style scoped>
+#product_wrapper{
+  width: 100%;
+  height: 100vh;
+}
+</style>

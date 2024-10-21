@@ -84,6 +84,7 @@ font-family: 'PRISTINA'
     height: 0.2px; 
     background-color: var(--color-main-bloode);
 }
+
 /* header_bottom 설정 */
 .logo img{
   width: 95px;
