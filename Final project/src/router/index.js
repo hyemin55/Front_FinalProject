@@ -1,4 +1,5 @@
 import CartView from '@/views/CartView.vue'
+import LoginView from '@/views/LoginView.vue'
 import MainView from '@/views/MainView.vue'
 import ProductListView from '@/views/ProductListView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
@@ -25,6 +26,11 @@ const router = createRouter({
       path: '/cart',
       name: 'cart',
       component: CartView,
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: LoginView,
     },
   ],
 })

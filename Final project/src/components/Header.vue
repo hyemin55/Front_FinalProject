@@ -12,7 +12,7 @@ const categories = [
     <article id="header_top">
       <p>Where people linger, a fragrance remains</p>
       <ul class="login">
-        <li>로그인</li>
+        <li><RouterLink to="/login">로그인</RouterLink></li>
         <li>|</li>
         <li>회원가입</li>
       </ul>
