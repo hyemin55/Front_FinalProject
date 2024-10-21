@@ -1,6 +1,6 @@
 @import './root.css';
 
-* {
+*,*::before,*::after {
   margin: 0;
   padding: 0;
   font-family: 'Jacques Francois', 'Pristina', 'Inter', 'Pretendard';
@@ -21,8 +21,6 @@ img{
   vertical-align: bottom;
   border: none;
 }
-
-
 
 
 /* @media (hover: hover) {
