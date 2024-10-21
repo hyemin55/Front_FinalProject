@@ -38,13 +38,14 @@
 /* header 전체설정 */
 #header {
   width: 100vw;
-  height: 130px;
+  height: 100px;
   display: flex;
   flex-direction: column;
   position: fixed;
+  z-index: 999;
   top: 0;
   left: 0;
-  background-color: rgb(255, 255, 255, 0.5);
+  background-color: rgb(255, 255, 255, 0.2);
 }
 #header>article{
   max-width: var(--main-max-width);
@@ -58,7 +59,7 @@
   height: 30px;
 }
 #header>article:nth-child(2){
-  height: 100px;
+  height: 70px;
 }
 #header>article>ul{
   display: flex;
@@ -75,7 +76,7 @@
   content: "";
     position: absolute;
     left: 0;
-    bottom: 100px;
+    bottom: 70px;
     width: 100vw;
     height: 0.2px; 
     background-color: var(--color-main-bloode);

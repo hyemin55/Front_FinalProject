@@ -1,6 +1,8 @@
 <template>
   <section id="main_wrapper">
-    <article id="main_video"></article>
+    <article id="main_video">
+      <!-- <video autoplay muted loop src="../img/main.mp4"></video> -->
+    </article>
     <article id="main_best">
       
     </article>
@@ -17,5 +19,11 @@
 #main_video{
   width: 100%;
   height: 100vh;
+  background-color: rgb(35, 138, 74);
+}
+#main_video video{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 </style>
