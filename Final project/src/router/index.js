@@ -12,18 +12,8 @@ const router = createRouter({
       component: MainView,
     },
     {
-      path: '/perfume/',
-      name: 'perfume',
-      component: ProductListView,
-    },
-    {
-      path: '/diffuser',
-      name: 'diffuser',
-      component: ProductListView,
-    },
-    {
-      path: '/candle',
-      name: 'candle',
+      path: '/category/:title', // 매개변수 추가
+      name: 'productList',
       component: ProductListView,
     },
     {

@@ -1,4 +1,11 @@
-<script setup></script>
+<script setup>
+// 대분류 카테코리를 이곳으로 받자(되면...)
+const categories = [
+  { title: 'Perfume', path: '/category/Perfume' }, 
+  { title: 'Diffuser', path: '/category/Diffuser' }, 
+  { title: 'Candle', path: '/category/Candle' }, 
+];
+</script>
 
 <template>
   <section id="header">
@@ -15,11 +22,13 @@
       <RouterLink class="logo" to="/">
         <img src="../img/logo_text.png" alt="">
       </RouterLink>
+
       <ul class="gnb01">
-        <li><RouterLink to="/perfume">Perfume</RouterLink></li>
-        <li><RouterLink to="/diffuser">Diffuser</RouterLink></li>
-        <li><RouterLink to="/candle">Candle</RouterLink></li>
+        <li v-for="(category, index) in categories" :key="index">
+          <RouterLink :to="category.path">{{ category.title }}</RouterLink>
+        </li>
       </ul>
+      
       <ul class="gnb02">
         <li>
           <img class="icon" src="../img/icon/free-icon-font-search-3917132.png" alt="">
