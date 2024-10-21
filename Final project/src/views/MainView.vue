@@ -18,7 +18,7 @@
 /* 1-section 설정 */
 #main_video{
   width: 100%;
-  height: 100vh;
+  height: 200vh;
   background-color: rgb(35, 138, 74);
 }
 #main_video video{
