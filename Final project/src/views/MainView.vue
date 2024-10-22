@@ -6,25 +6,32 @@
 
     <article id="main_best">
       <h1>BEST</h1>
-      <div class="best_left_box">
-        <div class="best_product_banner">
-          <p>
-            <button @click="best_page_left">&lt;</button>
-            1 / 3
-            <button @click="best_page_right">&gt;</button>
-          </p>
+      <div id="best_position">
+        
+        <div class="best_left_box">
+          <div class="best_product_banner">
+            <p>
+              <button @click="best_page_left">&lt;</button>
+              1 / 3
+              <button @click="best_page_right">&gt;</button>
+            </p>
+          </div>
+          <div class="best_product">
+            <img class="best_product_img" src="../img/p_003.png" alt="" />
+            <ul class="best_left_text">
+              <li>Dior</li>
+              <li>
+                향수 설명글이에요 조금 길게 적어볼게요 어떻게 나오는지
+                확인하는거에요
+              </li>
+            </ul>
+          </div>
         </div>
-        <div class="best_product">
-          <img class="best_img" src="../img/p_003.png" alt="" />
-          <ul class="best_left_text">
-            <li>Dior</li>
-            <li>
-              향수 설명글이에요 조금 길게 적어볼게요 어떻게 나오는지
-              확인하는거에요
-            </li>
-          </ul>
+        <div class="best_right_box">
+          <p class="best_right_text">가장 인기 많은 향수<br>&nbsp;시원한 오이향에 빠져보세요*^.^*</p>
+          <img class="best_promotion_img" src="../img/best_img.png" alt="">
         </div>
-      </div>
+     </div>
     </article>
 
     <article id="main_product_list"></article>
@@ -64,6 +71,10 @@ import { ref } from 'vue'
   justify-content: center;
   padding: 35px 0;
 }
+#best_position{
+  display: flex;
+
+}
 .best_left_box {
   /* background-color: rgb(250, 183, 183); */
   position: relative;
@@ -90,12 +101,21 @@ import { ref } from 'vue'
   transform: translateX(-50%);
   top: 10%;
 }
-.best_img {
-  width: 350px;
-  height: 350px;
+.best_product_img {
+  width: 100%;
+  height: auto;
 }
 .best_left_text {
   text-align: center;
   font-size: 2rem;
+}
+
+.best_right_box{
+ widows: 47.5%;
+ position: relative;
+ top: 10px;
+ font-size: 2rem;
+}
+.best_promotion_img{
 }
 </style>
