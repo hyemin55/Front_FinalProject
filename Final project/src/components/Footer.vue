@@ -57,7 +57,7 @@ onBeforeUnmount(() => {
 <style scoped>
 #footer {
   position: fixed;
-  bottom: -18%;
+  bottom: -100%;
   left: 0;
   width: 100%;
   background-color: var(--color-main-gray);
