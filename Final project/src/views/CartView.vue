@@ -1,17 +1,41 @@
 <script setup>
 import CartProductComponent from '@/components/CartProductComponent.vue';
 import { useCartStore } from '@/stores/CartStore';
+import { ref, watchEffect } from 'vue';
+
 const cartStore = useCartStore();
 const cart = cartStore.cartItems;
+
+const allChecked = ref(false);
+
+const deleteToCart = () => {
+  console.log('삭제')
+};
+
+// 전체 선택 체크박스 토글
+const toggleAllCheck = () => {
+  allChecked.value = allChecked.value; // 체크 상태 반전
+  console.log(allChecked.value); 
+  // watchEffect(() => {
+    
+  // })
+  cartStore.toggleAllCheck(allChecked.value); // Pinia Store에서 상태 업데이트
+};
 </script>
 
 <template>
   <section id="cart_wrapper">
     <article class="cart_product">
+      <ul class="cart_ctroll">
+        <li><input @change="toggleAllCheck" v-model="allChecked" type="checkbox" name="allCheck" id="allCheck">전체선택</li>
+        <li><button @click="deleteToCart">삭제</button></li>
+      </ul>
+
       <CartProductComponent 
-      v-for="(item, index) in cart" 
+      v-for="(item, index) in cartStore.cartItems" 
       :key="index" 
-      :productInfo="item" />
+      :productInfo="item"
+      :isChecked="item.isChecked" />
     </article>
 
     <article class="cart_total_price">
@@ -59,8 +83,16 @@ const cart = cartStore.cartItems;
   width: 670px;
   height: 100%;
   background-color: aliceblue;
+  overflow-y: scroll;
 }
-
+.cart_ctroll{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 80px;
+  padding: 20px;
+}
 
 /* 결제금액 설정 */
 .cart_total_price{

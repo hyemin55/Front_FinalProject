@@ -8,14 +8,21 @@ const props = defineProps({ // 받아오는props정의
     type: Object,
     required: true,
   },
+  isChecked: {
+    type: Boolean,
+    required: false,
+  },
 });
 const cart_product_name = ref(props.productInfo.productName);
 const cart_product_price = ref(props.productInfo.price);
+const cart_quantity = ref(props.productInfo.quantity);
+const cartCheck = ref(props.isChecked);
+
 </script>
 
 <template v-for="item in cart" :key="item.idx">
   <article id="cart_product_component_wrapper">
-    <input type="checkbox" name="check" id="product_check">
+    <input v-model="cartCheck" type="checkbox" name="check" id="product_check">
 
     <div class="img">
         <img :src="`${GLOBAL_URL}/api/file/download/${productInfo.images[0].filename}`" style="height: 100%;" /> 
@@ -27,7 +34,7 @@ const cart_product_price = ref(props.productInfo.price);
         </div>
         <div class="count">
             <button>+</button>
-            <p>수량 : 1</p>
+            <p>수량 : {{ cart_quantity }}</p>
             <button>-</button>
         </div>
     </div>

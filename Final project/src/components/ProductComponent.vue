@@ -3,24 +3,39 @@ import { GLOBAL_URL } from '@/api/util'
 import { useRouter } from 'vue-router';
 import { ref } from 'vue'
 import { useCartStore } from '@/stores/CartStore';
+import axios from 'axios';
 
 // 장바구니 추가
 const cartStore =useCartStore();
 const addToCart = () => {
   console.log("장바구니 추가")
   cartStore.addItem(props.productInfo);
+
+  // axios통신 부분
+  const data = {
+    memberId : 1,
+    productId: props.productInfo.productId,
+    quantity: 1
+  };
+  try {
+  const res = axios.post(`${GLOBAL_URL}/cart/add`, data);
+
+  console.log(res);
+  } catch (e) {
+    console.log(e);
+  }
+
 }
 // 찜목록 추가
 const addToWishlist = () => {
   console.log("찜목록 추가")
 }
-
 // 상품리스트에 출력 
 const props = defineProps({ // 받아오는props정의
   productInfo: {
     type: Object,
     required: true,
-  },
+  }
 });
 
 const productName = ref(props.productInfo.productName || '상품이름')
