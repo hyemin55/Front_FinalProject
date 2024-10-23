@@ -79,7 +79,6 @@ watchEffect(async () => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: rgb(255, 249, 241);
 }
 .product_category_title {
   font-size: 2.8rem;

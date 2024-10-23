@@ -1,6 +1,7 @@
 import CartView from '@/views/CartView.vue'
 import LoginView from '@/views/LoginView.vue'
 import MainView from '@/views/MainView.vue'
+import ProductDetailView from '@/views/ProductDetailView.vue'
 import ProductListView from '@/views/ProductListView.vue'
 import OauthView from '@/views/OauthView.vue';
 import { createRouter, createWebHistory } from 'vue-router'
@@ -37,6 +38,11 @@ const router = createRouter({
       path: '/oauth',
       name: 'oauth',
       component: OauthView,
+    },
+    {
+      path: '/productsdetail/:idx',
+      name: 'productsdetail',
+      component: ProductDetailView,
     },
   ],
 })
