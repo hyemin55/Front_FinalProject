@@ -15,11 +15,11 @@ const props = defineProps({
     },
 });
 
-const productName = ref(props.productInfo.productName || '상품이름')
-const content = ref(props.productInfo.content || '상품설명')
-const price = ref(props.productInfo.price || '가격')
+const productName = ref('상품이름')
+const content = ref('상품설명')
+const price = ref('가격')
 // const review_avr = ref('평점');
-const reviewCount = ref(props.productInfo.reviewCount || '리뷰수')
+const reviewCount = ref('리뷰수')
 
 </script>
 
