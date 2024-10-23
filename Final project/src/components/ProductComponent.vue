@@ -1,41 +1,53 @@
 <script setup>
-import axios from 'axios'
-import { ref, watchEffect } from 'vue'
 import { GLOBAL_URL } from '@/api/util'
+import { useRouter } from 'vue-router';
+import { ref } from 'vue'
+import { useCartStore } from '@/stores/CartStore';
 
 // 장바구니 추가
-const addToCart = () => {}
+const cartStore =useCartStore();
+const addToCart = () => {
+  console.log("장바구니 추가")
+  cartStore.addItem(props.productInfo);
+}
 // 찜목록 추가
-const addToWishlist = () => {}
+const addToWishlist = () => {
+  console.log("찜목록 추가")
+}
 
-const props = defineProps({
-    productInfo: {
-        type: Object,
-        required: true,
-    },
+// 상품리스트에 출력 
+const props = defineProps({ // 받아오는props정의
+  productInfo: {
+    type: Object,
+    required: true,
+  },
 });
-
 const productName = ref(props.productInfo.productName || '상품이름')
 const content = ref(props.productInfo.content || '상품설명')
 const price = ref(props.productInfo.price || '가격')
 // const review_avr = ref('평점');
-const reviewCount = ref(props.productInfo.reviewCount || '리뷰수')
+const reviewCount = ref(props.productInfo.reviewCount || '0')
 
+// useNavigator
+const router = useRouter();
+const navDetailProduct = () =>{
+  router.push(`/productsdetail/${props.productInfo.productId}`);
+}
 </script>
 
 <template v-for="item in list" :key="item.productId">
   <article class="products">
-    <div class="product_img">
+    <div class="product_img" @click="navDetailProduct" >
       <img :src="`${GLOBAL_URL}/api/file/download/${productInfo.images[0].filename}`" style="height: 100%;" />   
-      <ul>
-        <li class="cart_push" @click="addToCart">
+      <ul @click.stop>
+        <li class="cart_push" @click.stop="addToCart">
           <img
             class="icon"
             src="../img/icon/free-icon-font-shopping-cart.svg"
             alt=""
           />
         </li>
-        <li class="wish_push" @click="addToWishlist">
+        <li class="wish_push" @click.stop="addToWishlist">
           <img
             class="icon"
             src="../img/icon/free-icon-font-heart-line.svg"
@@ -46,11 +58,11 @@ const reviewCount = ref(props.productInfo.reviewCount || '리뷰수')
     </div>
     <div class="product_text">
       <ul>
-        <li class="product_title">{{ productInfo.productName }}</li>
-        <li class="product_content">{{ 0 }}</li>
+        <li @click="navDetailProduct" class="product_title">{{ productName }}</li>
+        <li class="product_content">{{ content }}</li>
       </ul>
       <ul>
-        <li class="product_price">￦{{ productInfo.price }}</li>
+        <li class="product_price">￦{{ price }}</li>
         <li class="product_review">
           <span>
             <img
@@ -60,7 +72,7 @@ const reviewCount = ref(props.productInfo.reviewCount || '리뷰수')
             />
             별점
           </span>
-          (<span>{{ productInfo.reviewCount }}</span
+          (<span>{{ reviewCount }}</span
           >)
         </li>
       </ul>
@@ -83,6 +95,7 @@ const reviewCount = ref(props.productInfo.reviewCount || '리뷰수')
   width: 100%;
   height: 305px;
   background-color: var(--color-main-Lgray);
+  cursor: pointer;
 }
 .product_img > ul {
   display: flex;
@@ -150,6 +163,9 @@ const reviewCount = ref(props.productInfo.reviewCount || '리뷰수')
   align-items: center;
   height: 40px;
   width: 100%;
+}
+.product_text li{
+  cursor: pointer;
 }
 .product_title {
   font-weight: 400;
