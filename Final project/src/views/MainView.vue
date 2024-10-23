@@ -26,7 +26,8 @@
         </div>
         <div class="best_right_box">
           <p class="best_right_text">
-            가장 인기 많은 향수<br/>&nbsp;&nbsp;&nbsp;&nbsp;시원한 오이향에 빠져보세요*^.^*
+            가장 인기 많은 향수<br />&nbsp;&nbsp;&nbsp;&nbsp;시원한 오이향에
+            빠져보세요*^.^*
           </p>
           <img class="best_promotion_img" src="../img/best_img.png" alt="" />
         </div>
@@ -35,11 +36,27 @@
 
     <article id="main_product_list" :class="{ expanded: product_see_more }">
       <div>
-        <div class="main_product_Com"><ProductComponent /><ProductComponent /><ProductComponent /><ProductComponent /></div>
-        <div class="main_add_product_Com" v-if="product_see_more"><ProductComponent /><ProductComponent /><ProductComponent /><ProductComponent /></div>
+        <div class="main_product_Com">
+          <ProductComponent /><ProductComponent /><ProductComponent /><ProductComponent />
+        </div>
+        <div class="main_add_product_Com" v-if="product_see_more">
+          <ProductComponent /><ProductComponent /><ProductComponent /><ProductComponent />
+        </div>
       </div>
-      <button class="main_product_list_btn" @click="see_handle" v-show="!product_see_more">더보기 ▽</button>
-      <button class="main_product_list_btn" @click="see_handle" v-show="product_see_more">닫기 △</button>
+      <button
+        class="main_product_list_btn"
+        @click="see_handle"
+        v-show="!product_see_more"
+      >
+        더보기 ▽
+      </button>
+      <button
+        class="main_product_list_btn"
+        @click="see_handle"
+        v-show="product_see_more"
+      >
+        닫기 △
+      </button>
     </article>
 
     <article id="promotion_banner">
@@ -48,63 +65,72 @@
         <p class="promotion_banner_text">
           지난 추억의 잔향을 나누고,
           <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          새 이야기의
-          향기를 품어보세요
+          새 이야기의 향기를 품어보세요
         </p>
         <!-- to 나중에 판매페이지로 바꿔야함 -->
-        <RouterLink to="/productList" class="promotion_banner_link">바로 판매하기 →</RouterLink>
+        <RouterLink to="/productList" class="promotion_banner_link"
+          >바로 판매하기 →</RouterLink
+        >
       </div>
     </article>
 
     <article id="main_editor">
       <h1>Editor's Picks</h1>
       <ul id="main_editor_list">
-        <li v-for="(image, index) in editor_images"
-            :key="index"
-            :class="['main_editor_img',{main_editor_img1: index === currentMainIndex}]"
-            @click="handleImageClick(index)">
-            <img :src="image.src" :alt="`Image ${index + 1}`" />
-        </li>
+        <li class="main_editor_img1"><img src="../img/editor_front_img.png" alt=""></li>
+        <li class="main_editor_img2"><img src="../img/p_003.png" alt=""></li>
       </ul>
     </article>
-
-    <article id="main_new"></article>
+    
+    <article id="main_new">
+      <h1>NEW</h1>
+      <div class="main_new_box">
+        <ul>
+        <li>00:00:30 등록상품</li>
+        <li><img src="../img/p_003.png" alt=""></li>
+        <li>Dior</li>
+        <li>미스 디올 오 드 퍼품</li>
+        <li>\ 130,000</li>
+      </ul>
+      </div>
+    
+    </article>
   </section>
 </template>
 
 <script setup>
-import ProductComponent from '@/components/ProductComponent.vue';
-import { ref } from 'vue';
+import ProductComponent from '@/components/ProductComponent.vue'
+import { ref } from 'vue'
 
 // main_product_list
 const product_see_more = ref(false)
-const see_handle = () =>{
+const see_handle = () => {
   product_see_more.value = !product_see_more.value
 }
 
 // main_editor_list
-const editor_images = [
-  {src: "../img/p_003.png"},
-  {src: "../img/editor_front_img.png"},
-  {src: "../img/editor_front_img.png"},
-  {src: "../img/editor_front_img.png"},
-  {src: "../img/editor_front_img.png"},
-  ]
-  const currentMainIndex = ref(0)
-  const isAnimating = ref(false)
+// const editor_images = [
+//   { src: require('../img/p_003.png') },
+//   { src: require('../img/editor_front_img.png') },
+//   { src: require('../img/editor_front_img.png') },
+//   { src: require('../img/editor_front_img.png') },
+//   { src: require('../img/editor_front_img.png') },
+// ]
+// const currentMainIndex = ref(0)
+// const isAnimating = ref(false)
 
-  const handleImageClick = (index) => {
-    if(index === this.currentMainIndex.value){
-    return;
-    } else{
-      isAnimating.value = true;
+// const handleImageClick = index => {
+//   if (index === currentMainIndex.value) {
+//     return
+//   } else {
+//     isAnimating.value = true
 
-     setTimeout = (() => {
-      currentMainIndex.value = index;
-      isAnimating.value = false;
-    }, 300)
-  }
-  };
+//     setTimeout = () => {
+//       currentMainIndex.value = index
+//       isAnimating.value = false
+//     }
+//   }
+// }
 </script>
 
 <style scoped>
@@ -229,15 +255,16 @@ const editor_images = [
   align-items: center;
   flex-direction: column;
 }
-.expanded{
+.expanded {
   height: 1020px !important;
 }
-.main_product_list_btn{
+.main_product_list_btn {
   font-size: 1.5rem;
   margin: 10px 0;
   color: var(--color-text-gray);
 }
-.main_product_Com, .main_add_product_Com{
+.main_product_Com,
+.main_add_product_Com {
   width: var(--main-max-width);
   margin: 0 auto;
   display: flex;
@@ -247,25 +274,25 @@ const editor_images = [
 
 /* ====promotion_banner==== */
 #promotion_banner {
-  background: linear-gradient( to right, #A85D71,#F3EED9 );
+  background: linear-gradient(to right, #a85d71, #f3eed9);
   margin: 0 auto;
   height: 189px;
   display: flex;
   margin: 10% 0;
 }
-.promotion_banner_size{
+.promotion_banner_size {
   position: relative;
   width: var(--main-max-width);
   margin: 0 auto;
 }
-.promotion_banner_logo{
+.promotion_banner_logo {
   position: absolute;
   /* width: var(--main-max-width); */
   height: 188px;
   opacity: 0.15;
   margin: 0 auto;
 }
-.promotion_banner_text{
+.promotion_banner_text {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -274,7 +301,7 @@ const editor_images = [
   font-family: var(--font-family-pretendard-bold);
   color: var(--color-main-Lgray);
 }
-.promotion_banner_link{
+.promotion_banner_link {
   position: absolute;
   right: 0;
   top: 50%;
@@ -284,46 +311,87 @@ const editor_images = [
   font-size: 2rem;
   padding: 15px 0 15px 15px;
 }
-@media(max-width: 300px){
-  .promotion_banner_text{
+@media (max-width: 300px) {
+  .promotion_banner_text {
     display: none;
   }
 }
 
 /* ==== main_editor ==== */
-#main_editor{
+#main_editor {
   width: var(--main-max-width);
   margin: 0 auto;
   height: 700px;
-  background-color: #F3EED9;
+  background-color: #f3eed9;
   overflow: hidden;
   display: flex;
   flex-direction: column;
 }
-#main_editor>h1{
+#main_editor > h1 {
   font-size: 4rem;
   font-family: var(--font-JacquesFrancois);
   display: flex;
   justify-content: center;
   padding: 40px 0;
 }
-#main_editor_list{
+#main_editor_list {
   display: flex;
   gap: 1%;
+  justify-content: space-around;
 }
-.main_editor_img1{
+.main_editor_img1 {
   width: 49%;
   height: auto;
+  background-color: var(--color-main-Lgray);
+  /* border: 0.5pt solid #333; */
+  border-radius: 10%;
 }
-.main_editor_img2, .main_editor_img3, .main_editor_img4, .main_editor_img5 {
+.main_editor_img1>img{
+  width: 100%;
+  height: auto;
+  background-color: #411420;
+}
+.main_editor_img2,
+.main_editor_img3,
+.main_editor_img4,
+.main_editor_img5 {
   width: 27%;
   height: auto;
 }
+.main_editor_img2>img
+ {
+  width: 100%;
+  height: auto;
+}
 
-#main_new{
+/* ==== main_new ==== */
+#main_new {
   background-color: rgb(145, 127, 104);
   width: var(--main-max-width);
   margin: 0 auto;
   height: 900px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-/between;
+  align-items: center;
+}
+#main_new>h1{
+  font-size: 4rem;
+  font-family: var(--font-JacquesFrancois);
+  display: flex;
+  justify-content: center;
+  padding: 50px 0;
+}
+.main_new_box{
+  position: relative;
+  background-color: #f3eed9;
+  width: 31%;
+  height: 700px;
+  border: 0.5pt solid var(--color-main-bloode);
+  /* border-radius: 5%; */
+}
+.main_new_box img{
+  width: 80%;
 }
 </style>
