@@ -9,6 +9,8 @@ import axios from 'axios';
 const cartStore =useCartStore();
 const addToCart = () => {
   console.log("장바구니 추가")
+  // alert("장바구니에 담았습니다.")
+
   cartStore.addItem(props.productInfo);
 
   // axios통신 부분
@@ -28,6 +30,7 @@ const addToCart = () => {
 }
 // 찜목록 추가
 const addToWishlist = () => {
+  // alert("༼ つ ◕_◕ ༽つ 찜~")
   console.log("찜목록 추가")
 }
 // 상품리스트에 출력 
@@ -54,7 +57,7 @@ const navDetailProduct = () =>{
 <template v-for="item in list" :key="item.productId">
   <article class="products">
     <div class="product_img" @click="navDetailProduct" >
-      <img :src="`${GLOBAL_URL}/api/file/download/${productInfo.images[0].filename}`" style="height: 100%;" />   
+      <img :src="`${GLOBAL_URL}/api/file/download/${productInfo.images[0].filename}`" style="height: 90%;" />   
       <ul @click.stop>
         <li class="cart_push" @click.stop="addToCart">
           <img
@@ -99,11 +102,13 @@ const navDetailProduct = () =>{
 <style scoped>
 /* 전체설정 */
 .products {
-  width: 305px;
+  max-width: 305px;
+  width: 100%;
   height: 390px;
   border: solid rgba(0, 0, 0, 0.1) 1px;
   border-radius: 6px;
   overflow: hidden;
+  margin: 10px 0;
 }
 /* 상단_이미지 설정 */
 .product_img {
@@ -112,6 +117,12 @@ const navDetailProduct = () =>{
   height: 305px;
   background-color: var(--color-main-Lgray);
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.product_img:hover > ul li{
+  opacity: 1;
 }
 .product_img > ul {
   display: flex;
@@ -120,25 +131,27 @@ const navDetailProduct = () =>{
   right: 0;
 }
 .product_img > ul > li {
-  width: 45px;
-  height: 45px;
+  width: 35px;
+  height: 35px;
   border: 2px solid rgba(0, 0, 0, 0.05);
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  margin: 15px;
+  margin: 12px;
   cursor: pointer;
   transition: background-color 0.2s;
   background-color: var(--color-main-Lgray);
+  transition: opacity 0.2s;
+  opacity: 0;
 }
 .product_img > ul > li:hover {
   background-color: rgba(20, 20, 20, 0.8);
   border: 2px solid rgba(255, 255, 255, 0.6);
 }
 .product_img > ul > li:nth-child(1) {
-  margin-right: -10px;
+  margin-right: -7px;
 }
 .cart_push:hover .icon {
   filter: brightness(0) saturate(100%) invert(1); /* 흰색으로 변경 */

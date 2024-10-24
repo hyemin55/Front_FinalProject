@@ -81,6 +81,7 @@ watchEffect(async () => {
   justify-content: center;
 }
 .product_category_title {
+  font-family: var(--font-JacquesFrancois);
   font-size: 2.8rem;
 }
 .product_category {
@@ -139,4 +140,13 @@ watchEffect(async () => {
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
 }
+
+
+/* 미디어쿼리 구간 */
+@media (max-width: 630px) {
+  .product_list {
+  grid-template-columns: repeat(2, 1fr);
+}
+} 
+
 </style>

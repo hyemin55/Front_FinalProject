@@ -1,33 +1,65 @@
 <script setup>
+import { GLOBAL_URL } from '@/api/util';
 import CartProductComponent from '@/components/CartProductComponent.vue';
 import { useCartStore } from '@/stores/CartStore';
+import axios from 'axios';
 import { ref, watchEffect } from 'vue';
 
 const cartStore = useCartStore();
 const cart = cartStore.cartItems;
-
 const allChecked = ref(false);
-
-const deleteToCart = () => {
-  console.log('삭제')
-};
 
 // 전체 선택 체크박스 토글
 const toggleAllCheck = () => {
-  allChecked.value = allChecked.value; // 체크 상태 반전
-  console.log(allChecked.value); 
-  // watchEffect(() => {
-    
-  // })
-  cartStore.toggleAllCheck(allChecked.value); // Pinia Store에서 상태 업데이트
+  cartStore.toggleAllCheck(allChecked.value);
 };
+
+// 장바구니 삭제
+const deleteToCart = () => {
+  console.log(cartStore.deathNote.value)
+  cartStore.removeItem();
+  axios.delete(`${GLOBAL_URL}/cart/remove`, 
+    {
+      data : cartStore.deathNote, 
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+};
+
+const deleteAxios=(cartid)=>{
+  console.log(cartid)
+}
+
+// 회원장바구니 불러오기
+watchEffect(async()=>{
+  console.log('회원장바구니 호출')
+
+  const res = await axios.get(`${GLOBAL_URL}/cartProduct/select?memberId=1`)
+  .then(res => {
+    cartStore.updateCart(res.data);
+    console.log(res);
+    console.log("cart length : " + cart.length);
+  })
+  .catch(error => {
+      console.error(error);
+  });
+
+})
 </script>
 
 <template>
   <section id="cart_wrapper">
     <article class="cart_product">
       <ul class="cart_ctroll">
-        <li><input @change="toggleAllCheck" v-model="allChecked" type="checkbox" name="allCheck" id="allCheck">전체선택</li>
+        <li><input 
+          @change="toggleAllCheck" 
+          v-model="allChecked" 
+          type="checkbox" 
+          name="allCheck" 
+          id="allCheck">
+          <label for="allCheck">전체선택</label>
+        </li>
         <li><button @click="deleteToCart">삭제</button></li>
       </ul>
 
@@ -35,7 +67,10 @@ const toggleAllCheck = () => {
       v-for="(item, index) in cartStore.cartItems" 
       :key="index" 
       :productInfo="item"
-      :isChecked="item.isChecked" />
+      :isChecked="item.isChecked"
+      v-model:isChecked="item.isChecked"
+      @sendCartId="deleteAxios"
+      />
     </article>
 
     <article class="cart_total_price">
@@ -76,14 +111,18 @@ const toggleAllCheck = () => {
   height: calc(100vh - 100px);
   display: flex;
 }
-
 /* 장바구니 상품 설정 */
 .cart_product{
   position: relative;
-  width: 670px;
+  max-width: 768px;
+  width: 60%;
   height: 100%;
-  background-color: aliceblue;
   overflow-y: scroll;
+  background-color: var(--color-main-Lgray);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* justify-content: center; */
 }
 .cart_ctroll{
   display: flex;
@@ -91,21 +130,25 @@ const toggleAllCheck = () => {
   justify-content: space-between;
   width: 100%;
   height: 80px;
-  padding: 20px;
+  padding: 20px 69px;
 }
+.cart_product::-webkit-scrollbar {width: 0.7rem;}
+.cart_product::-webkit-scrollbar-track {background: transparent;}
+.cart_product::-webkit-scrollbar-thumb {background: rgba(0, 0, 0, 0.2); border-radius: 10px;}
+.cart_product::-webkit-scrollbar-thumb:hover {background: rgba(0, 0, 0, 0.5);}
 
 /* 결제금액 설정 */
 .cart_total_price{
   position: relative;
-  width: 610px;
+  max-width: 512px;
+  width: 40%;
   height: 100%;
-  background-color: antiquewhite;
 }
 .cart_total_price>div{
   position: absolute;
   top: 50%;
   left: 50%;
-  margin-top: -291px;
+  margin-top: -241px;
   margin-left: -147.5px;
   width: 295px;
   height: 382px;
