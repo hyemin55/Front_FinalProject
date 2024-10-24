@@ -1,23 +1,21 @@
 <template>
-   <article id="promotion_banner">
-      <div class="promotion_banner_size">
-        <img class="promotion_banner_logo" src="../../img/logo_text.png" alt="" />
-        <p class="promotion_banner_text">
-          지난 추억의 잔향을 나누고,
-          <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          새 이야기의 향기를 품어보세요
-        </p>
-        <!-- to 나중에 판매페이지로 바꿔야함 -->
-        <RouterLink to="/productList" class="promotion_banner_link"
-          >바로 판매하기 →</RouterLink
-        >
-      </div>
-    </article>
+  <article id="promotion_banner">
+    <div class="promotion_banner_size">
+      <img class="promotion_banner_logo" src="../../img/logo_text.png" alt="" />
+      <p class="promotion_banner_text">
+        지난 추억의 잔향을 나누고,
+        <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        새 이야기의 향기를 품어보세요
+      </p>
+      <!-- to 나중에 판매페이지로 바꿔야함 -->
+      <RouterLink to="/" class="promotion_banner_link"
+        >바로 판매하기 →</RouterLink
+      >
+    </div>
+  </article>
 </template>
 
-<script setup>
-
-</script>
+<script setup></script>
 
 <style scoped>
 /* ====promotion_banner==== */

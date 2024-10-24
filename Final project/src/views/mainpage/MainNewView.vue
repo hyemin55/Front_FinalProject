@@ -1,19 +1,17 @@
 <template>
-    <article id="main_new">
-      <h1>NEW</h1>
-      <NewSilde></NewSilde>
-
-    </article>
+  <article id="main_new">
+    <h1>NEW</h1>
+    <NewSilde></NewSilde>
+  </article>
 </template>
 <script setup>
-import NewSilde from '@/components/NewSilde.vue';
-
+import NewSilde from '@/components/NewSilde.vue'
 </script>
 
 <style scoped>
 /* ==== main_new ==== */
 #main_new {
-  background-color: rgb(145, 127, 104);
+  /* background-color: rgb(145, 127, 104); */
   max-width: var(--main-max-width);
   width: 100%;
   margin: 0 auto;

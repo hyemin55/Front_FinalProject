@@ -9,21 +9,15 @@
     <PromotionBannerView></PromotionBannerView>
     <MainEditorView></MainEditorView>
     <MainNewView></MainNewView>
-    
-
-    
-
-   
   </section>
 </template>
 
 <script setup>
-import MainBestView from './mainpage/MainBestView.vue';
-import MainEditorView from './mainpage/MainEditorView.vue';
-import MainListView from './mainpage/MainListView.vue';
-import MainNewView from './mainpage/MainNewView.vue';
-import PromotionBannerView from './mainpage/PromotionBannerView.vue';
-
+import MainBestView from './mainpage/MainBestView.vue'
+import MainEditorView from './mainpage/MainEditorView.vue'
+import MainListView from './mainpage/MainListView.vue'
+import MainNewView from './mainpage/MainNewView.vue'
+import PromotionBannerView from './mainpage/PromotionBannerView.vue'
 
 // main_editor_list
 // const editor_images = [
@@ -62,10 +56,4 @@ import PromotionBannerView from './mainpage/PromotionBannerView.vue';
   height: 100%;
   object-fit: cover;
 }
-
-
-
-
-
-
 </style>

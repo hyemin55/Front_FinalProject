@@ -1,48 +1,83 @@
+<!-- 슬라이드 공식 사이트 = https://ismail9k.github.io/vue3-carousel/getting-started.html -->
 <template>
   <div class="wrapper">
-    <Carousel :items-to-show="3.2" 
-    :autoplay="2000" 
-    :snapAlign="'center'" 
-    :wrap-around="true" 
-    :pause-autoplay-on-hover="true">
-      <Slide v-for="(slide, index) in slides" 
-      :key="index">
-        <div class="carousel__item">
-          <p class="time_check">00:00:10 등록</p>
-          <img class="slideImg" :src="slide" />
+    <Carousel
+      :items-to-show="3.2"
+      :autoplay="2000"
+      :snapAlign="'center'"
+      :wrap-around="true"
+      :pause-autoplay-on-hover="true"
+      :mouseDrag="false"
+    >
+      <Slide v-for="(slide, index) in slides" :key="index">
+        <!-- <div v-for="productDtail in New_list" :key="productDtail.productId"> -->
+        <div class="carousel__item" @click="navDetailProduct(slide.productId)">
+          <p class="time_check">{{ slide.productId }}</p>
+          <img
+            class="slideImg"
+            :src="`${GLOBAL_URL}/api/file/download/${slide.images[0].filename}`"
+          />
           <div class="item_info">
-            <p>Dior</p>
-            <p>미스 디올 오 드 퍼퓸미스 디올 오 드 퍼퓸</p>
-            <p>￦130,000</p>
+            <p>{{ slide.brandName }}</p>
+            <p>{{ slide.productName }}</p>
+            <p>￦{{ slide.price }}</p>
           </div>
         </div>
+        <!-- </div> -->
       </Slide>
 
       <template #addons>
-        <Pagination />
+        <!-- <Pagination /> -->
       </template>
-      <Navigation />
+      <!-- <Navigation /> -->
     </Carousel>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watchEffect } from 'vue'
 import { Carousel, Pagination, Slide, Navigation } from 'vue3-carousel'
-import home_1 from '@/img/editor_front_img.png'
-import home_2 from '@/img/p_003.png'
-import home_3 from '@/img/editor_front_img.png'
-import home_4 from '@/img/p_003.png'
-import home_5 from '@/img/editor_front_img.png'
-import home_6 from '@/img/p_003.png'
-import home_7 from '@/img/editor_front_img.png'
-import home_8 from '@/img/p_003.png'
-import home_9 from '@/img/editor_front_img.png'
-import home_10 from '@/img/p_003.png'
+import axios from 'axios'
+import 'vue3-carousel/dist/carousel.css'
+import { GLOBAL_URL } from '@/api/util'
+import router from '@/router'
+import ProductDetailView from '@/views/ProductDetailView.vue'
 
-import 'vue3-carousel/dist/carousel.css';
+const slides = ref([])
+const pageNum = 0
+const size = 10
 
-const slides = ref([home_1, home_2, home_3, home_4, home_5, home_6, home_7, home_8, home_9, home_10])
+//  '/category/:title/:idx'이거 받아오기!!!!!!!
+
+const getNewList = async () => {
+  try {
+    const res = await axios.get(
+      `${GLOBAL_URL}/api/products/new?pageNum=${pageNum}&size=${size}`,
+    )
+    console.log(res)
+    if (res.status == 200) {
+      // New_list.value = res.data
+      console.log(res.data.length)
+      // for (let i = 0; i < res.data.length; i++) {
+      //   slides.value.push(res.data[i].images[0])
+      // }
+      slides.value = res.data
+    }
+  } catch (e) {
+    console.log('리스트 못 받아오는 오류에요 = ' + e)
+  }
+}
+
+watchEffect(() => {
+  getNewList()
+})
+// `/productsdetail/${props.productInfo.productId}
+const navDetailProduct = productId => {
+  console.log(productId)
+  router.push(`/productsdetail/${productId}`)
+}
+
+// getNewList()
 </script>
 
 <style scoped>
@@ -51,19 +86,22 @@ const slides = ref([home_1, home_2, home_3, home_4, home_5, home_6, home_7, home
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
+  position: relative;
   overflow: hidden;
   width: 95%;
   height: 700px;
   border-radius: 10px;
   background-color: var(--color-main-Lgray);
   color: black;
+  cursor: pointer;
 }
 
 .carousel__item img {
+  position: absolute;
   width: 95%;
-  max-height: 400px;
+  max-height: auto;
+  top: 20%;
 }
-
 
 .carousel__prev,
 .carousel__next {
@@ -74,17 +112,23 @@ const slides = ref([home_1, home_2, home_3, home_4, home_5, home_6, home_7, home
 .wrapper {
   margin-top: 3vh;
 }
-.time_check{
+.time_check {
   font-size: 2rem;
+  position: absolute;
+  top: 30px;
 }
-.carousel__item p{
+.item_info {
+  position: absolute;
   display: flex;
   flex-direction: column;
-  /* justify-content: flex-start; */
   text-align: left;
+  justify-content: space-between;
+  bottom: 20px;
+  left: 10px;
+}
+.item_info p {
   font-size: 2.4rem;
-  max-height: 150px;
-  /* margin-left: -30%; */
+  /* height: 200px; */
   padding: 5px 20px;
 }
 </style>
