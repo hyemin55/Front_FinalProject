@@ -28,43 +28,14 @@ import EditorPicksSlide from '../../components/EditorPicksSlide.vue'
   height: 800px;
   background-color: #f3eed9;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
+  /* display: flex;
+  flex-direction: column; */
 }
 #main_editor > h1 {
   font-size: 4rem;
   font-family: var(--font-JacquesFrancois);
-  display: flex;
-  justify-content: center;
+  text-align: center;
   padding: 40px 0;
 }
-#main_editor_list {
-  display: flex;
-  gap: 1%;
-  justify-content: space-around;
-  align-items: end;
-}
-.main_editor_img1 {
-  width: 49%;
-  height: auto;
-  background-color: var(--color-main-Lgray);
-  /* border: 0.5pt solid #333; */
-  border-radius: 10%;
-}
-.main_editor_img1 > img {
-  width: 100%;
-  height: auto;
-  background-color: #411420;
-}
-.main_editor_img2,
-.main_editor_img3,
-.main_editor_img4,
-.main_editor_img5 {
-  width: 27%;
-  height: auto;
-}
-.main_editor_img2 > img {
-  width: 100%;
-  height: auto;
-}
+
 </style>

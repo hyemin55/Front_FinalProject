@@ -39,10 +39,34 @@ const categories = [
   { title: 'Diffuser', path: '/category/Diffuser/2' },
   { title: 'Candle', path: '/category/Candle/1' },
 ]
+
+const isTransparent = ref(true)
+const handleScroll = () => {
+  if(window.scrollY >= window.innerHeight){
+    isTransparent.value = false
+  }else{
+    isTransparent.value = true
+  }
+}
+
+onMounted(()=>{
+  if(route.path ==='/'){
+    HeaderMode.value = true
+    window.addEventListener('scroll', handleScroll)
+  }else{
+    HeaderMode.value = false
+  }
+})
+
 </script>
 
 <template>
-  <section id="header" :class="{ sticky: !HeaderMode, fixed: HeaderMode }">
+  <section
+    id="header"
+    :class="
+      [{ sticky: !HeaderMode, fixed: HeaderMode },
+      { transparent: !isTransparent, transparentX:isTransparent}]"
+  >
     <article id="header_top">
       <p>Where people linger, a fragrance remains</p>
       <template v-if="useStore.loginCheck">
@@ -71,7 +95,6 @@ const categories = [
           <RouterLink :to="category.path">{{ category.title }}</RouterLink>
         </li>
       </ul>
-
       <ul class="gnb02">
         <li>
           <img
@@ -105,6 +128,7 @@ const categories = [
   z-index: 999;
   top: 0;
   left: 0;
+  transition: background-color 0.3s ease;
 }
 .sticky {
   position: sticky;
@@ -112,6 +136,13 @@ const categories = [
 }
 .fixed {
   position: fixed;
+  background-color: rgb(255, 255, 255, 0.2);
+}
+.transparent{
+  background-color: white;
+  
+}
+.fixed:not(.transparent){
   background-color: rgb(255, 255, 255, 0.2);
 }
 #header > article {
@@ -146,7 +177,7 @@ const categories = [
   content: '';
   position: absolute;
   left: 0;
-  bottom: 70px;
+  top: 30px;
   width: 100vw;
   height: 0.2px;
   background-color: var(--color-main-bloode);
@@ -160,6 +191,7 @@ const categories = [
 .gnb01 li {
   font-size: 1.8rem;
   margin: 0 2.4rem;
+  font-family: 'JacquesFrancois-Regular';
 }
 .gnb02 li {
   font-size: 1.5rem;

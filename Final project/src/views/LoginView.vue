@@ -5,22 +5,31 @@ const kakaoLogin = () => {
   })
 }
 
-const kakaoLogout = () => {
-  localStorage.removeItem('token')
-  alert('로그아웃 성공')
-}
+// const kakaoLogout = () => {
+//   localStorage.removeItem('token')
+//   alert('로그아웃 성공')
+// }
 </script>
 
 <template>
   <section id="login">
     <article id="login_box">
       <h1 class="login_box_h1">Sign in</h1>
-      <div class="login_box_btn">
-        <a id="kakao-login-btn" @click="kakaoLogin()">
+      <div class="login_box_btn" @click="kakaoLogin()">
+        <a id="kakao-login-btn" >
           <img src="../img/btn_kakao.svg" />카카오로 시작하기
         </a>
       </div>
-      <div @click="kakaoLogout()">로그아웃</div>
+      <div class="login_box_btn" @click="kakaoLogin()">
+        <a id="kakao-login-btn" >
+          <img src="../img/btn_naver.svg" />네이버로 시작하기
+        </a>
+      </div>
+      <div class="login_box_btn" @click="kakaoLogin()">
+        <a id="kakao-login-btn" >
+          <img src="../img/btn_google.svg" />구글로 시작하기
+        </a>
+      </div>
     </article>
   </section>
 </template>
@@ -30,7 +39,7 @@ const kakaoLogout = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  height: 80vh;
 }
 #login_box {
   /* background-color: antiquewhite; */
@@ -40,27 +49,33 @@ const kakaoLogout = () => {
   flex-direction: column;
   width: 485px;
   height: 343px;
-}
-#kakao-login-btn img {
-  width: 30px;
-  margin: 0 10px;
-}
-#kakao-login-btn {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-text-gray);
+  transform: translateY(-30%);
+  /* background-color: rgb(240, 240, 240);
+  border-radius: 50px; */
 }
 .login_box_h1 {
   font-size: 1.7rem;
   padding: 20px;
+  margin-top: -20px;
 }
 .login_box_btn {
   display: flex;
-  border: 0.5pt solid var(--color-main-bloode);
+  border: 0.5px solid var(--color-main-bloode);
   width: 350px;
   height: 45px;
   border-radius: 9px;
+  cursor: pointer;
+  margin: 10px 0;
+}
+#kakao-login-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-gray);
+  font-size: 1.2rem;
+}
+#kakao-login-btn img {
+  width: 30px;
+  margin: 0 10px;
 }
 </style>
