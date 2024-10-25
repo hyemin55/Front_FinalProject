@@ -201,7 +201,7 @@ const navDetailProduct = () =>{
   font-size: 16px;
 }
 .product_content {
-  font-size: 10px;
+  font-size: 1rem;
 }
 .product_price {
   font-weight: bold;

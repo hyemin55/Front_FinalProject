@@ -24,11 +24,10 @@ export const useCartStore = defineStore('cart', {
 
         // 수량변경
         upQuantity(quantity){
-            console.log(quantity);
-            this.cartItems.quantity = quantity+1;
+            console.log('store로 들어온 현재수량'+quantity);
         },
         downQuantity(quantity){
-
+            console.log('store로 들어온 현재수량'+quantity);
         },
 
         // 토글 전체선택
@@ -40,12 +39,10 @@ export const useCartStore = defineStore('cart', {
             //     .filter(item => item.isChecked) 
             //     .map(item => item.productId);
         },
-
         // 장바구니 회원정보 불러오기
         updateCart(items) {
             // 장바구니 초기화
             this.cartItems = [];
-
             items.forEach(item => {
                 const p = {
                     productId: item.productResDto.productId,
