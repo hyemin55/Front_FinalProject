@@ -49,7 +49,7 @@ watchEffect(async () => {
     res = await loginCheck()
     if (res.status.toString().startsWith('2')) {
       console.log(res.data)
-      useStore.login(res.data)
+      await useStore.login(res.data)
     }
     await router.push({ name: 'main' })
   }

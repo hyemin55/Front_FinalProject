@@ -141,12 +141,10 @@ watchEffect(async () => {
   gap: 20px;
 }
 
-
 /* 미디어쿼리 구간 */
 @media (max-width: 630px) {
   .product_list {
-  grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
-} 
-
 </style>

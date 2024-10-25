@@ -1,45 +1,47 @@
 <script setup>
 import { GLOBAL_URL } from '@/api/util'
-import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router'
 import { ref } from 'vue'
-import { useCartStore } from '@/stores/CartStore';
-import axios from 'axios';
+import { useCartStore } from '@/stores/CartStore'
+import axios from 'axios'
 
 // 장바구니 추가
-const cartStore =useCartStore();
+const cartStore = useCartStore()
 const addToCart = () => {
-  console.log("장바구니 추가")
+  console.log('장바구니 추가')
   // alert("장바구니에 담았습니다.")
 
-  cartStore.addItem(props.productInfo);
+  cartStore.addItem(props.productInfo)
 
   // axios통신 부분
   const data = {
-    memberId : 1,
+    memberId: 1,
     productId: props.productInfo.productId,
-    quantity: 1
-  };
-  try {
-  const res = axios.post(`${GLOBAL_URL}/cart/add`, data);
-
-  console.log(res);
-  } catch (e) {
-    console.log(e);
+    quantity: 1,
   }
+  try {
+    const res = axios.post(`${GLOBAL_URL}/cart/add`, data)
 
+    console.log(res)
+  } catch (e) {
+    console.log(e)
+  }
 }
 // 찜목록 추가
 const addToWishlist = () => {
   // alert("༼ つ ◕_◕ ༽つ 찜~")
-  console.log("찜목록 추가")
+  console.log('찜목록 추가')
 }
-// 상품리스트에 출력 
-const props = defineProps({ // 받아오는props정의
+
+// 상품리스트에 출력
+const props = defineProps({
+  // 받아오는props정의
   productInfo: {
     type: Object,
     required: true,
-  }
-});
+  },
+})
+console.log(props.productInfo)
 
 const productName = ref(props.productInfo.productName || '상품이름')
 const content = ref(props.productInfo.content || '상품설명')
@@ -48,16 +50,19 @@ const price = ref(props.productInfo.price || '가격')
 const reviewCount = ref(props.productInfo.reviewCount || '0')
 
 // useNavigator
-const router = useRouter();
-const navDetailProduct = () =>{
-  router.push(`/productsdetail/${props.productInfo.productId}`);
+const router = useRouter()
+const navDetailProduct = () => {
+  router.push(`/productsdetail/${props.productInfo.productId}`)
 }
 </script>
 
-<template v-for="item in list" :key="item.productId">
+<template>
   <article class="products">
-    <div class="product_img" @click="navDetailProduct" >
-      <img :src="`${GLOBAL_URL}/api/file/download/${productInfo.images[0].filename}`" style="height: 90%;" />   
+    <div class="product_img" @click="navDetailProduct">
+      <img
+        :src="`${GLOBAL_URL}/api/file/download/${productInfo.images[0].filename}`"
+        style="height: 90%"
+      />
       <ul @click.stop>
         <li class="cart_push" @click.stop="addToCart">
           <img
@@ -77,7 +82,9 @@ const navDetailProduct = () =>{
     </div>
     <div class="product_text">
       <ul>
-        <li @click="navDetailProduct" class="product_title">{{ productName }}</li>
+        <li @click="navDetailProduct" class="product_title">
+          {{ productName }}
+        </li>
         <li class="product_content">{{ content }}</li>
       </ul>
       <ul>
@@ -121,7 +128,7 @@ const navDetailProduct = () =>{
   align-items: center;
   justify-content: center;
 }
-.product_img:hover > ul li{
+.product_img:hover > ul li {
   opacity: 1;
 }
 .product_img > ul {
@@ -193,7 +200,7 @@ const navDetailProduct = () =>{
   height: 40px;
   width: 100%;
 }
-.product_text li{
+.product_text li {
   cursor: pointer;
 }
 .product_title {
