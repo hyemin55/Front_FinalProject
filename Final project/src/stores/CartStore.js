@@ -25,7 +25,6 @@ export const useCartStore = defineStore('cart', {
         // 수량변경
         upQuantity(quantity){
             console.log(quantity);
-            this.cartItems.quantity = quantity+1;
         },
         downQuantity(quantity){
 
