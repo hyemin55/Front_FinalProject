@@ -28,7 +28,6 @@ watch(
   newValue => {
     // props 변화 감지
     cartCheck.value = newValue
-    
     makeDeathNote()
   },
 )
@@ -44,10 +43,18 @@ const makeDeathNote = () => {
   }
 }
 
-// 부모에게 상태 전달(삭제를 위해서)
+// 부모에게 상태 전달
 const emit = defineEmits(['update:isChecked'])
 const handleCheckboxChange = () => {
   emit('update:isChecked', cartCheck.value)
+  
+  // if(cartCheck.value==ture){
+
+  // }
+  // else{
+
+  // }
+
 }
 watch(cartCheck, newValue => {
   emit('update:isChecked', newValue)
@@ -64,6 +71,8 @@ const downCount = () => {
   }
   cartStore.downQuantity(cart_quantity.value)
 }
+
+
 </script>
 
 <template v-for="item in cart" :key="item.idx">
@@ -75,7 +84,6 @@ const downCount = () => {
       id="product_check"
       @change="handleCheckboxChange()"
     />
-
     <div class="img">
       <img
         :src="`${GLOBAL_URL}/api/file/download/${productInfo.images[0].filename}`"

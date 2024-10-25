@@ -34,7 +34,6 @@ const deleteAxios=(cartid)=>{
 // 회원장바구니 불러오기
 watchEffect(async()=>{
   console.log('회원장바구니 호출')
-
   const res = await axios.get(`${GLOBAL_URL}/cartProduct/select?memberId=1`)
   .then(res => {
     cartStore.updateCart(res.data);
@@ -44,8 +43,8 @@ watchEffect(async()=>{
   .catch(error => {
       console.error(error);
   });
+});
 
-})
 </script>
 
 <template>
@@ -58,9 +57,9 @@ watchEffect(async()=>{
           type="checkbox" 
           name="allCheck" 
           id="allCheck">
-          <label for="allCheck">전체선택</label>
+          <label for="allCheck">전체 선택</label>
         </li>
-        <li><button @click="deleteToCart">삭제</button></li>
+        <li><button @click="deleteToCart">선택 삭제</button></li>
       </ul>
 
       <CartProductComponent 
@@ -80,7 +79,7 @@ watchEffect(async()=>{
         <div id="calculate">
           <ul class="product_price price_list">
             <li>상품 금액</li>
-            <li>3,000원</li>
+            <li>원</li>
           </ul>
           <ul class="delivery_pirce price_list">
             <li>배송비</li>

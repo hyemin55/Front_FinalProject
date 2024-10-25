@@ -1,9 +1,11 @@
 import  { defineStore } from 'pinia';
+import { ref } from 'vue';
 
 export const useCartStore = defineStore('cart', {
     state: ()=>({
         cartItems: [],
         deathNote: [],
+        totalPrice: ref(0),
     }),
     actions:{
         // 장바구니 담기
@@ -27,7 +29,7 @@ export const useCartStore = defineStore('cart', {
             console.log(quantity);
         },
         downQuantity(quantity){
-
+            console.log(quantity);
         },
 
         // 토글 전체선택
@@ -35,9 +37,6 @@ export const useCartStore = defineStore('cart', {
             this.cartItems.forEach(item => {
                 item.isChecked = isChecked;
             })
-            // return this.cartItems
-            //     .filter(item => item.isChecked) 
-            //     .map(item => item.productId);
         },
 
         // 장바구니 회원정보 불러오기
@@ -59,7 +58,11 @@ export const useCartStore = defineStore('cart', {
             });
         },
 
-       
+        // 총 구매 금액
+        productTotalPrice(price){
+            console.log("store에 들어왔나요"+price)
+            this.totalPrice.value += price;
+        }
     }
 
 })
