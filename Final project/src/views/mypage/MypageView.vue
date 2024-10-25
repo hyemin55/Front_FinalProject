@@ -1,7 +1,13 @@
 <template>
-  <div><h1>Login</h1></div>
+  <article>
+    <h1>Mypage</h1>
+  </article>
 </template>
 
 <script setup></script>
 
-<style scoped></style>
+<style scoped>
+article {
+  height: 100vh;
+}
+</style>
