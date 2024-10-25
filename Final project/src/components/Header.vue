@@ -42,38 +42,38 @@ const categories = [
 
 const isTransparent = ref(true)
 const handleScroll = () => {
-  if(window.scrollY >= window.innerHeight){
+  if (window.scrollY >= window.innerHeight) {
     isTransparent.value = false
-  }else{
+  } else {
     isTransparent.value = true
   }
 }
 
-onMounted(()=>{
-  if(route.path ==='/'){
+onMounted(() => {
+  if (route.path === '/') {
     HeaderMode.value = true
     window.addEventListener('scroll', handleScroll)
-  }else{
+  } else {
     HeaderMode.value = false
   }
 })
-
 </script>
 
 <template>
   <section
     id="header"
-    :class="
-      [{ sticky: !HeaderMode, fixed: HeaderMode },
-      { transparent: !isTransparent, transparentX:isTransparent}]"
+    :class="[
+      { sticky: !HeaderMode, fixed: HeaderMode },
+      { transparent: !isTransparent, transparentX: isTransparent },
+    ]"
   >
     <article id="header_top">
       <p>Where people linger, a fragrance remains</p>
       <template v-if="useStore.loginCheck">
-        <ul class="login" @click="kakaoLogout()">
-          <li>로그아웃</li>
+        <ul class="login">
+          <li @click="kakaoLogout()">로그아웃</li>
           <li>|</li>
-          <li>마이페이지</li>
+          <li><router-link to="/mypage">마이페이지</router-link></li>
         </ul>
       </template>
       <template v-else>
@@ -138,11 +138,10 @@ onMounted(()=>{
   position: fixed;
   background-color: rgb(255, 255, 255, 0.2);
 }
-.transparent{
+.transparent {
   background-color: white;
-  
 }
-.fixed:not(.transparent){
+.fixed:not(.transparent) {
   background-color: rgb(255, 255, 255, 0.2);
 }
 #header > article {
@@ -172,6 +171,7 @@ onMounted(()=>{
 }
 .login li {
   margin-left: 0.4rem;
+  cursor: pointer;
 }
 #header_top::after {
   content: '';
