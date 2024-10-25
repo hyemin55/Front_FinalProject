@@ -111,11 +111,12 @@ watchEffect(async()=>{
   height: calc(100vh - 100px);
   display: flex;
 }
+
 /* 장바구니 상품 설정 */
 .cart_product{
   position: relative;
-  max-width: 768px;
-  width: 60%;
+  width: 768px;
+  /* width: 60%; */
   height: 100%;
   overflow-y: scroll;
   background-color: var(--color-main-Lgray);
@@ -137,11 +138,20 @@ watchEffect(async()=>{
 .cart_product::-webkit-scrollbar-thumb {background: rgba(0, 0, 0, 0.2); border-radius: 10px;}
 .cart_product::-webkit-scrollbar-thumb:hover {background: rgba(0, 0, 0, 0.5);}
 
+.cart_ctroll li{
+  display: flex;
+  align-items: center;
+}
+.cart_ctroll li label{
+  cursor: pointer;
+  margin-left: 5px;
+}
+
 /* 결제금액 설정 */
 .cart_total_price{
   position: relative;
-  max-width: 512px;
-  width: 40%;
+  width: 512px;
+  /* width: 40%; */
   height: 100%;
 }
 .cart_total_price>div{

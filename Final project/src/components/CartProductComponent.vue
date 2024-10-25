@@ -44,22 +44,25 @@ const makeDeathNote = () => {
   }
 }
 
-// 부모에게 상태 전달
+// 부모에게 상태 전달(삭제를 위해서)
 const emit = defineEmits(['update:isChecked'])
 const handleCheckboxChange = () => {
   emit('update:isChecked', cartCheck.value)
 }
-
 watch(cartCheck, newValue => {
   emit('update:isChecked', newValue)
 })
 
 // 수량 변경
 const upCount = () => {
+  cart_quantity.value += 1;
   cartStore.upQuantity(cart_quantity.value)
 }
 const downCount = () => {
-  cartStore.downQuantity(cart_quantity)
+  if(cart_quantity.value>1){
+    cart_quantity.value -= 1;
+  }
+  cartStore.downQuantity(cart_quantity.value)
 }
 </script>
 
@@ -112,7 +115,7 @@ const downCount = () => {
 .img {
   width: 197px;
   height: 100%;
-  background-color: var(--color-main-bloode);
+  background-color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -122,13 +125,15 @@ const downCount = () => {
 .text {
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
+  padding: 0 15px;
   max-width: 433px;
   width: 100%;
   height: 100%;
   background-color: #fff;
 }
 .text_box p {
+  margin: 10px 0;
 }
 .title {
   font-size: 1.6rem;
