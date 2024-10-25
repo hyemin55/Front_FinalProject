@@ -43,10 +43,9 @@ onBeforeUnmount(() => {
       </ul>
       <br />
       <p>
-        (주)CHERRISH | 대표이사 : 태영 김 | 기술고문 : 강도현 | 개발지원 :
-        송호창, 조혜민 | 사업자등록번호 : 123-45-67891 | 통신판매업 : 제
-        2024-대구반월D-0505호 대구광역시 달서구 반월로 67 그린컴퓨터아트학원 5층
-        | 호스팅 서비스 : 네이버 클라우드 (주)
+        (주)CHERRISH | 대표이사 : 태영 김 | 사업자등록번호 : 123-45-67891 |
+        통신판매업 : 제 2024-대구반월D-0505호 대구광역시 달서구 반월로 67
+        그린컴퓨터아트학원 5층 | 호스팅 서비스 : 네이버 클라우드 (주)
       </p>
       <br />
       <p>
@@ -68,20 +67,10 @@ onBeforeUnmount(() => {
 
 <style scoped>
 #footer {
-  position: sticky;
-  bottom: 0;
-  left: 0;
   width: 100%;
   height: 160px;
   background-color: var(--color-main-gray);
-  transition: transform 0.2s ease-in; /* 부드러운 슬라이드 업 */
-}
-
-#footer.show {
-  transform: translateY(100); /* 보일 때 화면으로 슬라이드 업 */
-}
-#footer.noshow {
-  transform: translateY(100%);
+  margin-top: 60px;
 }
 #footer_text {
   max-width: var(--main-max-width);

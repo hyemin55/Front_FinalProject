@@ -92,7 +92,7 @@ onMounted(() => {
 
       <ul class="gnb01">
         <li v-for="(category, index) in categories" :key="index">
-          <RouterLink :to="category.path">{{ category.title }}</RouterLink>
+          <RouterLink :to="category.path" class="link_title">{{ category.title }}</RouterLink>
         </li>
       </ul>
       <ul class="gnb02">
@@ -120,7 +120,7 @@ onMounted(() => {
 <style scoped>
 /* header 전체설정 */
 #header {
-  width: 100vw;
+  width: 100%;
   height: 100px;
   display: flex;
   flex-direction: column;
@@ -128,7 +128,9 @@ onMounted(() => {
   z-index: 999;
   top: 0;
   left: 0;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.2s ease;
+  /* 순서대로 : x축 y축 블러 색상 */
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
 }
 .sticky {
   position: sticky;
@@ -178,7 +180,7 @@ onMounted(() => {
   position: absolute;
   left: 0;
   top: 30px;
-  width: 100vw;
+  width: 100%;
   height: 0.2px;
   background-color: var(--color-main-bloode);
 }
@@ -189,9 +191,13 @@ onMounted(() => {
   height: auto;
 }
 .gnb01 li {
-  font-size: 1.8rem;
   margin: 0 2.4rem;
+}
+.link_title{
+  font-size: 1.8rem;
+  font-weight: 500;
   font-family: 'JacquesFrancois-Regular';
+  color: rgb(19, 19, 19);
 }
 .gnb02 li {
   font-size: 1.5rem;
@@ -203,9 +209,5 @@ onMounted(() => {
 }
 
 /* 반응현 구간 설정 */
-@media (max-width: 1280px) {
-  #header {
-    padding-right: 20px;
-  }
-}
+/* @media (max-width: 1280px) {} */
 </style>
