@@ -1,17 +1,23 @@
 <style scoped>
 .wrapper {
+  padding: 10px;
   /* background-color: aquamarine; */
 }
 
 .Slidebox {
-  background-color: rgb(194, 156, 105);
   padding: 10px;
+  /* background-color: #5f5f5f; */
+  
 }
 
 .carousel__item {
+  /* background-color: rgb(194, 156, 105); */
   display: flex;
   align-items: flex-end;
-  position: relative;
+  padding: 20px;
+  /* justify-content: space-around; */
+  /* position: relative;
+
   /* background-color: brown; */
   height: 500px;
 }
@@ -23,28 +29,33 @@
   color: white; /* 글자 색상 설정 */
   text-align: left;
   font-size: 2.3rem;
-  text-shadow: 1px 1px 2px #5f5f5f;
+  /* text-shadow: 1px 1px 2px #5f5f5f; */
 }
 
 .firstslideImg {
-  width: 100%; /* 첫 번째 슬라이드 이미지의 너비 조정 */
+  width: 400px; /* 첫 번째 슬라이드 이미지의 너비 조정 */
   height: auto; /* 비율 유지 */
 }
 
-.otherslideImg {
-  width: 60%; /* 나머지 슬라이드 이미지의 너비 조정 */
+.dfdfdf  {
+  width: 250px; /* 나머지 슬라이드 이미지의 너비 조정 */
   height: auto; /* 비율 유지 */
   /* background-color: black; */
-  
 }
-
-
+.dfdfdff{
+  width: 250px ;
+}
+.dfdfdfff{
+  
+  width: 250px ;
+}
 </style>
 
 <template>
   <div class="wrapper">
     <Carousel
       :items-to-show="3"
+      :snapAlign="'start'"
       :wrap-around="true"
       :pause-autoplay-on-hover="true"
       :autoplay="0"
@@ -57,7 +68,9 @@
         @click="handleClick(index)"
       >
         <div class="carousel__item">
-          <img :class="{firstslideImg: index === 0, otherslideImg: index !==0}" :src="slide"><p>산뜻한<br>홍보용 글자</p></img>
+          <img :class="{firstslideImg: index === 0, dfdfdf : index === 1, dfdfdff : index === 2, dfdfdfff : index === 3 }" :src="slide"></img>
+          <!-- <img class="firstslideImg" :src="slide" /> -->
+          <!-- <img :class="{lideImg: index === 2}" :src="slide" /> -->
         </div>
       </Slide>
 
@@ -75,16 +88,18 @@ import { Carousel, Pagination, Slide, Navigation } from 'vue3-carousel'
 import home_1 from '@/img/editor_front_img.png'
 import home_2 from '@/img/p_003.png'
 import home_3 from '@/img/빵빵덕세안.png'
+import home_4 from '@/img/빵빵덕세안.png'
 
 import 'vue3-carousel/dist/carousel.css'
 import Queue from 'queue-fifo'
 
-const slides = ref([home_1, home_2, home_3])
+const slides = ref([home_1, home_2, home_3,home_4])
 
 let queue = new Queue()
 let image_list = []
 // 1. img idx => q
 for (let i = 0; i < slides.value.length; i++) {
+  console.log('ddd ' + i)
   queue.enqueue(i)
   image_list.push(slides.value[i])
 }
@@ -120,4 +135,3 @@ const handleClick = index => {
   }
 }
 </script>
-

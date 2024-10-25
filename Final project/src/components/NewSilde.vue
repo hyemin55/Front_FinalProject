@@ -12,7 +12,7 @@
       <Slide v-for="(slide, index) in slides" :key="index">
         <!-- <div v-for="productDtail in New_list" :key="productDtail.productId"> -->
         <div class="carousel__item" @click="navDetailProduct(slide.productId)">
-          <p class="time_check">{{ slide.productId }}</p>
+          <p class="time_check">{{ slide.registerDate }} 등록상품</p>
           <img
             class="slideImg"
             :src="`${GLOBAL_URL}/api/file/download/${slide.images[0].filename}`"

@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 
-const FooterVisible = ref(false)
+const FooterVisible = ref('')
 
 const handleScroll = () => {
   const scrollPosition = window.innerHeight + window.scrollY // 현재 스크롤 위치
@@ -67,20 +67,20 @@ onBeforeUnmount(() => {
 
 <style scoped>
 #footer {
-  position: fixed;
+  position: sticky;
   bottom: 0;
   left: 0;
   width: 100%;
+  height: 160px;
   background-color: var(--color-main-gray);
-  transition: transform 0.4s ease-in-out; /* 부드러운 슬라이드 업 */
+  transition: transform 0.2s ease-in; /* 부드러운 슬라이드 업 */
 }
 
 #footer.show {
-  transform: translateY(0); /* 보일 때 화면으로 슬라이드 업 */
+  transform: translateY(100); /* 보일 때 화면으로 슬라이드 업 */
 }
-#footer.noshow{
+#footer.noshow {
   transform: translateY(100%);
-
 }
 #footer_text {
   max-width: var(--main-max-width);
