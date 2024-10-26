@@ -7,7 +7,7 @@
   width: 100%;
 }
 img {
-  width: 10%;
+  width: 7%;
   height: auto;
   animation: rotate 4s infinite linear;
 }
@@ -31,7 +31,6 @@ img {
 <script setup>
 import { watchEffect, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import MainView from './MainView.vue'
 import { login, loginCheck } from '@/api/KakaoLoginApi'
 import { useUserStore } from '@/stores/Login'
 

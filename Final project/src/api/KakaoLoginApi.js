@@ -6,7 +6,7 @@ export const login = async code => {
   try {
     const res = await axios.get(`${GLOBAL_URL}/kakao/login?code=${code}`)
     if (res.status.toString().startsWith('2')) {
-      localStorage.setItem('token', res.data)
+      sessionStorage.setItem('token', res.data)
     }
     console.log(res.data)
     return res
@@ -21,7 +21,7 @@ export const loginCheck = async data => {
     const res = await axios.get(`${GLOBAL_URL}/member/info`, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
       },
     })
     return res

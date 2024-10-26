@@ -1,9 +1,10 @@
 <script setup>
 import { useUserStore } from '@/stores/Login'
 import { onMounted } from 'vue'
-import { GLOBAL_URL } from '@/api/util'
 
 const user = useUserStore()
+console.log(user.nickName)
+console.log(user.profileImage)
 
 onMounted(() => {})
 </script>
@@ -11,14 +12,14 @@ onMounted(() => {})
 <template>
   <section id="mypage">
     <article id="myInfoNav">
-      <img
-        :src="`${GLOBAL_URL}/api/file/download/${user.profileImage}`"
-        alt=""
-      />
-      <p>{{ user.nickName }}</p>
+      <div class="nickname">
+        <!-- <img src="@/img/빵빵덕세안.png" alt="" /> -->
+        <img :src="`${user.profileImage}`" alt="" />
+        <p>{{ user.nickName }}</p>
+      </div>
       <ul id="myInfoNavList">
         <li>주문 내역 조회</li>
-        <li>파매 내역 조회</li>
+        <li>판매 내역 조회</li>
         <li>찜 목록</li>
         <li>내 리뷰 관리</li>
         <li>회원 정보 관리</li>
@@ -40,31 +41,65 @@ onMounted(() => {})
   margin: 0 auto;
 }
 #myInfoNav {
-  width: 30%;
-  background-color: antiquewhite;
+  width: 161px;
+  height: 500px;
+  /* background-color: antiquewhite; */
   padding: 30px 0;
+  margin-top: 50px;
   position: fixed;
 }
-#myInfoNav img {
-  width: 8%;
+.nickname {
+  /* position: absolute; */
+  padding-bottom: 20px;
+  font-size: 1.5rem;
+  text-align: center;
+  line-height: 3rem;
+}
+.nickname > img {
+  width: 80px;
+  height: 80px;
+  /* border: 0.1px solid var(--color-main-Lgray); */
   border-radius: 100%;
-  border: 0.1px solid var(--color-main-Lgray);
+  background-color: white;
+  object-fit: cover;
+}
+#myInfoNavList {
+  height: auto;
+  /* width: 100%; */
+  display: flex;
+  flex-direction: column;
+  font-size: 1.6rem;
+  /* background-color: yellow; */
 }
 #myInfoNavList li {
+  position: relative;
+  margin-bottom: 50px;
+  /* width: 100%; */
+  padding-left: 8%;
+  cursor: pointer;
+}
+#myInfoNavList li::after {
+  position: absolute;
   content: '';
   left: 0;
-  height: 0.2px;
+  bottom: -10px;
+  height: 0.1px;
+  width: 100%;
   background-color: var(--color-main-bloode);
-  width: 13%;
+}
+#myInfoNavList li:hover {
+  color: var(--color-main-bloode);
+  font-family: 'Pretendard-Bold';
 }
 #rightGroub {
   width: 70%;
+  height: 300vh;
 }
 #currentSituation {
-  background-color: aquamarine;
+  /* background-color: aquamarine; */
   height: 400px;
 }
 #myDetailInfo {
-  background-color: brown;
+  /* background-color: brown; */
 }
 </style>

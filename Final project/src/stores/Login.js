@@ -29,4 +29,13 @@ export const useUserStore = defineStore('member', {
       this.userId = ''
     },
   },
+  persist: {
+    enabled: true,
+    strategies: [
+      {
+        paths: ['nickName', 'profileImage'], // 로컬 스토리지에 저장될 키
+        storage: sessionStorage, // 사용할 스토리지
+      },
+    ],
+  },
 })
