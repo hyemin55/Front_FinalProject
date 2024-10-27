@@ -1,0 +1,137 @@
+<script setup>
+import MyInformation from '@/components/mypage_component/MyInformation.vue';
+import MyWishlist from '@/components/mypage_component/MyWishlist.vue';
+import MypageOrderHistory from '@/components/mypage_component/MypageOrderHistory.vue';
+import MypageReview from '@/components/mypage_component/MypageReview.vue';
+import MypageSalseHistory from '@/components/mypage_component/MypageSalseHistory.vue';
+import { computed, onMounted, ref } from 'vue'
+import { useUserStore } from '../../stores/Login';
+import CurrentSituation from './CurrentSituation.vue';
+
+const user = useUserStore();
+const NoprofileImage = ref(user.profileImage)
+
+onMounted(() => {
+  if(!NoprofileImage.value){
+    user.profileImage = require('@/img/빵빵덕세안.png')
+  }
+})
+
+
+const selectpage = ref('myOrderHistory')
+const componentMap = {
+  myOrderHistory : MypageOrderHistory,
+  mySalseHistory : MypageSalseHistory,
+  myWishlist : MyWishlist,
+  myReview : MypageReview,
+  myInformation : MyInformation,
+}
+const currentComponent = computed(() => 
+  componentMap[selectpage.value])
+
+</script>
+
+<template>
+  <section id="mypage">
+    <article id="myInfoNav">
+      <div class="nickname">
+        <!-- <img src="@/img/빵빵덕세안.png" alt="" /> -->
+        <img :src="user.profileImage" alt="" />
+        <p>{{ user.nickName }}</p>
+      </div>
+      <ul id="myInfoNavList">
+        <li @click="selectpage = 'myOrderHistory'">주문 내역 조회</li>
+        <li @click="selectpage = 'mySalseHistory'">판매 내역 조회</li>
+        <li @click="selectpage = 'myWishlist'">찜 목록</li>
+        <li @click="selectpage = 'myReview'">내 리뷰 관리</li>
+        <li @click="selectpage = 'myInformation'">회원 정보 관리</li>
+      </ul>
+    </article>
+
+    <main id="rightGroub">
+      <article id="currentSituation">
+        <CurrentSituation />
+      </article>
+
+      <article id="myDetailInfo">
+        <component :is='currentComponent'></component>
+      </article>
+    </main>
+  </section>
+</template>
+
+<style scoped>
+#mypage {
+  position: relative;
+  width: var(--main-max-width);
+  margin: 0 auto;
+  display: flex;
+}
+#myInfoNav {
+  position: relative;
+  width: 15%;
+  min-width: 100px;
+  max-width: 150px;
+  height: 500px;
+  /* background-color: antiquewhite; */
+  padding: 30px 0;
+  margin-top: 50px;
+  /* position: fixed; */
+}
+.nickname {
+  padding-bottom: 30px;
+  font-size: 1.5rem;
+  text-align: center;
+  line-height: 3rem;
+}
+.nickname > img {
+  width: 80px;
+  height: 80px;
+  /* border: 0.1px solid var(--color-main-Lgray); */
+  border-radius: 100%;
+  background-color: white;
+  object-fit: cover;
+}
+#myInfoNavList {
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  font-size: 1.6rem;
+  /* background-color: yellow; */
+}
+#myInfoNavList li {
+  position: relative;
+  /* background-color: antiquewhite; */
+  margin-bottom: 50px;
+  padding-left: 8%;
+  cursor: pointer;
+}
+#myInfoNavList li::after {
+  position: absolute;
+  content: '';
+  left: 0;
+  bottom: -10px;
+  height: 0.1px;
+  width: 100%;
+  background-color: var(--color-main-bloode);
+}
+#myInfoNavList li:hover {
+  color: var(--color-main-bloode);
+  font-family: 'Pretendard-Bold';
+}
+#rightGroub {
+  width: 100%;
+  max-width: 1130px;
+  flex-direction: column;
+  margin-left: 5%;
+
+}
+#currentSituation {
+  background-color: aquamarine;
+  height: 400px;
+}
+#myDetailInfo {
+  background-color: brown;
+  height: 400px;
+}
+</style>

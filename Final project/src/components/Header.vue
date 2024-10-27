@@ -74,13 +74,15 @@ onMounted(() => {
           <li @click="kakaoLogout()">로그아웃</li>
           <li>|</li>
           <li><router-link to="/mypage">마이페이지</router-link></li>
+          <li>|</li>
+          <li>고객센터</li>
         </ul>
       </template>
       <template v-else>
         <ul class="login">
           <li><RouterLink to="/login2">로그인</RouterLink></li>
           <li>|</li>
-          <li>회원가입</li>
+          <li>고객센터</li>
         </ul>
       </template>
     </article>

@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { GLOBAL_URL } from './util'
-import OauthView from '@/views/OauthView.vue'
+import OauthView from '@/views/login/OauthView.vue'
 
 export const login = async code => {
   try {
