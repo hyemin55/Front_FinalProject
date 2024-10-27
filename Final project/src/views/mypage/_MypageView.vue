@@ -1,9 +1,9 @@
 <script setup>
-import MyInformation from '@/components/mypage_component/MyInformation.vue';
-import MyWishlist from '@/components/mypage_component/MyWishlist.vue';
-import MypageOrderHistory from '@/components/mypage_component/MypageOrderHistory.vue';
-import MypageReview from '@/components/mypage_component/MypageReview.vue';
-import MypageSalseHistory from '@/components/mypage_component/MypageSalseHistory.vue';
+import MyInformation from '@/components/mypage/MyInformation.vue';
+import MyWishlist from '@/components/mypage/MyWishlist.vue';
+import MypageOrderHistory from '@/components/mypage/MypageOrderHistory.vue';
+import MypageReview from '@/components/mypage/MypageReview.vue';
+import MypageSalseHistory from '@/components/mypage/MypageSalseHistory.vue';
 import { computed, onMounted, ref } from 'vue'
 import { useUserStore } from '../../stores/Login';
 import CurrentSituation from './CurrentSituation.vue';

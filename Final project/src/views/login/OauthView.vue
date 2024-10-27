@@ -43,7 +43,7 @@ const useStore = useUserStore()
 watchEffect(async () => {
   // console.log('code = ', route.query.code);
   if (route.query.code) {
-    let res = await login(route.query.code)
+    res = await login(route.query.code)
     if (!res.status.toString().startsWith('2')) return
     res = await loginCheck()
     if (res.status.toString().startsWith('2')) {

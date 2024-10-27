@@ -1,7 +1,7 @@
 <template>
   <section id="main_wrapper">
     <article id="main_video">
-      <!-- <video autoplay muted loop src="../img/main.mp4"></video> -->
+      <!-- <video autoplay muted loop src="../../img/main.mp4"></video> -->
     </article>
 
     <MainBestView></MainBestView>
