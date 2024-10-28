@@ -3,11 +3,16 @@ import { GLOBAL_URL } from '@/api/util';
 import CartProductComponent from '@/components/CartProductComponent.vue';
 import { useCartStore } from '@/stores/CartStore';
 import axios from 'axios';
-import { ref, watchEffect } from 'vue';
+import { computed, ref, watchEffect } from 'vue';
 
 const cartStore = useCartStore();
 const cart = cartStore.cartItems;
-const allChecked = ref(false);
+const allChecked = ref(true);
+
+const deliveryPrice = ref(5000);
+const total_amount = computed(() => {
+  return Number(deliveryPrice.value + cartStore.totalPrice);
+});
 
 // 전체 선택 체크박스 토글
 const toggleAllCheck = () => {
@@ -16,20 +21,16 @@ const toggleAllCheck = () => {
 
 // 장바구니 삭제
 const deleteToCart = () => {
-  console.log(cartStore.deathNote.value)
+  console.log(cartStore.cartCheckList.value)
   cartStore.removeItem();
   axios.delete(`${GLOBAL_URL}/cart/remove`, 
     {
-      data : cartStore.deathNote, 
+      data : cartStore.cartCheckList, 
       headers: {
         'Content-Type': 'application/json',
       },
     });
 };
-
-const deleteAxios=(cartid)=>{
-  console.log(cartid)
-}
 
 // 회원장바구니 불러오기
 watchEffect(async()=>{
@@ -68,7 +69,6 @@ watchEffect(async()=>{
       :productInfo="item"
       :isChecked="item.isChecked"
       v-model:isChecked="item.isChecked"
-      @sendCartId="deleteAxios"
       />
     </article>
 
@@ -79,18 +79,18 @@ watchEffect(async()=>{
         <div id="calculate">
           <ul class="product_price price_list">
             <li>상품 금액</li>
-            <li>원</li>
+            <li>{{ cartStore.totalPrice }}원</li>
           </ul>
           <ul class="delivery_pirce price_list">
             <li>배송비</li>
-            <li>5,000원</li>
+            <li>{{ deliveryPrice }}원</li>
           </ul>
         </div>
         
         <div id="total_amount">
           <ul class="price_list">
             <li style="font-weight: 800;">총 결제 금액</li>
-            <li>8,000원</li>
+            <li>{{ total_amount }}원</li>
           </ul>
         </div>        
         

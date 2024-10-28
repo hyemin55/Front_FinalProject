@@ -26,8 +26,8 @@ const addToCart = () => {
   } catch (e) {
     console.log(e);
   }
-
 }
+
 // 찜목록 추가
 const addToWishlist = () => {
   // alert("༼ つ ◕_◕ ༽つ 찜~")
@@ -54,7 +54,7 @@ const navDetailProduct = () =>{
 }
 </script>
 
-<template v-for="item in list" :key="item.productId">
+<template>
   <article class="products">
     <div class="product_img" @click="navDetailProduct" >
       <img :src="`${GLOBAL_URL}/api/file/download/${productInfo.images[0].filename}`" style="height: 90%;" />   

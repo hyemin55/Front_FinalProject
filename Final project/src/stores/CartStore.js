@@ -4,8 +4,8 @@ import { ref } from 'vue';
 export const useCartStore = defineStore('cart', {
     state: ()=>({
         cartItems: [],
-        deathNote: [],
-        totalPrice: ref(0),
+        // ↓ axios 통신으로 데이터베이스에서 통신할 id를 모으기 위해서 사용하는 배열이다.
+        cartCheckList: [],
     }),
     actions:{
         // 장바구니 담기
@@ -20,16 +20,7 @@ export const useCartStore = defineStore('cart', {
         },
         // 장바구니 삭제
         removeItem(){
-            // this.cartItems = this.cartItems.filter(item => item.isChecked == false);
             this.cartItems = this.cartItems.filter(item => !item.isChecked);
-        },
-
-        // 수량변경
-        upQuantity(quantity){
-            console.log(quantity);
-        },
-        downQuantity(quantity){
-            console.log(quantity);
         },
 
         // 토글 전체선택
@@ -57,12 +48,16 @@ export const useCartStore = defineStore('cart', {
                 this.cartItems.push(p);
             });
         },
+        // 수량변경
+        upQuantity(quantity){console.log(quantity);},
+        downQuantity(quantity){console.log(quantity);},
+    },
 
-        // 총 구매 금액
-        productTotalPrice(price){
-            console.log("store에 들어왔나요"+price)
-            this.totalPrice.value += price;
-        }
-    }
+    getters: {
+        // 선택 상품 가격합계
+        totalPrice: (state) => {
+          return state.cartCheckList.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        },
+    },
 
 })

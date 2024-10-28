@@ -7,7 +7,7 @@ const cartStore = useCartStore()
 
 // 상품리스트에 출력
 const props = defineProps({
-  // 받아오는props정의
+  // 받아오는props의 정의 방법
   productInfo: {
     type: Object,
     required: true,
@@ -19,27 +19,30 @@ const props = defineProps({
 })
 const cart_idx = ref(props.productInfo.productId) // 부모자로 보낼 idx
 const cart_product_name = ref(props.productInfo.productName)
-const cart_product_price = ref(props.productInfo.price)
+const cart_product_price = ref(props.productInfo.price) // 이것도
 const cart_quantity = ref(props.productInfo.quantity)
 const cartCheck = ref(props.isChecked)
 
-watch(
-  () => props.isChecked,
+
+watch(() => props.isChecked,
   newValue => {
-    // props 변화 감지
+    // props 변화 감지 => makeCartCheckList 실행
     cartCheck.value = newValue
-    makeDeathNote()
+    makeCartCheckList()
   },
 )
-
-const makeDeathNote = () => {
-  // id추가/제거
+const makeCartCheckList = () => {
+  // 배열에 추가
   if (cartCheck.value) {
-    cartStore.deathNote.push({ productId: cart_idx.value })
-  } else {
-    cartStore.deathNote = cartStore.deathNote.filter(
+    cartStore.cartCheckList.push({ productId: cart_idx.value, price: cart_product_price.value, quantity: cart_quantity });
+    // emit('update:price', cart_product_price.value); // 가격을 부모에게 전달
+  } 
+  // 배역에 삭제
+  else {
+    cartStore.cartCheckList = cartStore.cartCheckList.filter(
       item => item.productId !== cart_idx.value,
-    )
+      // emit('update:price', -removedItem.price); // 제거된 가격을 부모에게 전달
+    );
   }
 }
 
@@ -47,18 +50,11 @@ const makeDeathNote = () => {
 const emit = defineEmits(['update:isChecked'])
 const handleCheckboxChange = () => {
   emit('update:isChecked', cartCheck.value)
-  
-  // if(cartCheck.value==ture){
-
-  // }
-  // else{
-
-  // }
-
 }
 watch(cartCheck, newValue => {
   emit('update:isChecked', newValue)
 })
+
 
 // 수량 변경
 const upCount = () => {
@@ -71,9 +67,8 @@ const downCount = () => {
   }
   cartStore.downQuantity(cart_quantity.value)
 }
-
-
 </script>
+
 
 <template v-for="item in cart" :key="item.idx">
   <article id="cart_product_component_wrapper">
