@@ -1,7 +1,8 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { GLOBAL_URL } from '@/api/util'
 import { useCartStore } from '@/stores/CartStore'
+import axios from 'axios';
 
 const cartStore = useCartStore()
 
@@ -23,10 +24,12 @@ const cart_product_price = ref(props.productInfo.price) // 이것도
 const cart_quantity = ref(props.productInfo.quantity)
 const cartCheck = ref(props.isChecked)
 
-
+onMounted(() => {
+  makeCartCheckList(); 
+});
 watch(() => props.isChecked,
   newValue => {
-    // props 변화 감지 => makeCartCheckList 실행
+    // props 변화 감지 => makecartCheckList 실행
     cartCheck.value = newValue
     makeCartCheckList()
   },
@@ -35,13 +38,11 @@ const makeCartCheckList = () => {
   // 배열에 추가
   if (cartCheck.value) {
     cartStore.cartCheckList.push({ productId: cart_idx.value, price: cart_product_price.value, quantity: cart_quantity });
-    // emit('update:price', cart_product_price.value); // 가격을 부모에게 전달
   } 
-  // 배역에 삭제
+  // 배열에 삭제
   else {
     cartStore.cartCheckList = cartStore.cartCheckList.filter(
       item => item.productId !== cart_idx.value,
-      // emit('update:price', -removedItem.price); // 제거된 가격을 부모에게 전달
     );
   }
 }
@@ -57,16 +58,38 @@ watch(cartCheck, newValue => {
 
 
 // 수량 변경
-const upCount = () => {
-  cart_quantity.value += 1;
-  cartStore.upQuantity(cart_quantity.value)
-}
-const downCount = () => {
-  if(cart_quantity.value>1){
-    cart_quantity.value -= 1;
+const upCount = async() => {
+  cartStore.upQuantity(cart_idx.value)
+  const data = {
+    productId : cart_idx.value,
+    quantity : 1,
+    memberId : 1,
   }
-  cartStore.downQuantity(cart_quantity.value)
-}
+  await axios.post(`${GLOBAL_URL}/cartProduct/increment`, data,{
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  })
+};
+const downCount = async() => {
+  if(cart_quantity.value>1){
+    cartStore.downQuantity(cart_idx.value)
+    const data = {
+      productId : cart_idx.value,
+      quantity : 1,
+      memberId : 1,
+    }
+    await axios.post(`${GLOBAL_URL}/cartProduct/decrement`, data,{
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+  }
+};
+watch(() => props.productInfo.quantity, (newValue) => {
+    cart_quantity.value = newValue;
+});
+
 </script>
 
 

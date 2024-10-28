@@ -29,9 +29,10 @@ const addToCart = () => {
 }
 
 // 찜목록 추가
+const redHeart = ref(false)
 const addToWishlist = () => {
-  // alert("༼ つ ◕_◕ ༽つ 찜~")
-  console.log('찜목록 추가')
+  alert("༼ つ ◕_◕ ༽つ 찜~")
+  redHeart.value = !redHeart.value;
 }
 
 // 상품리스트에 출력
@@ -42,7 +43,6 @@ const props = defineProps({
     required: true,
   },
 })
-console.log(props.productInfo)
 
 const productName = ref(props.productInfo.productName || '상품이름')
 const content = ref(props.productInfo.content || '상품설명')
@@ -72,7 +72,7 @@ const navDetailProduct = () => {
             alt=""
           />
         </li>
-        <li class="wish_push" @click.stop="addToWishlist">
+        <li class="wish_push" :class="{active : redHeart}" @click.stop="addToWishlist">
           <img
             class="icon"
             src="../img/icon/free-icon-font-heart-line.svg"
@@ -155,7 +155,7 @@ const navDetailProduct = () => {
   opacity: 0;
 }
 .product_img > ul > li:hover {
-  background-color: rgba(20, 20, 20, 0.8);
+  background-color: var(--color-main-bloode);
   border: 2px solid rgba(255, 255, 255, 0.6);
 }
 .product_img > ul > li:nth-child(1) {
@@ -164,6 +164,13 @@ const navDetailProduct = () => {
 .cart_push:hover .icon {
   filter: brightness(0) saturate(100%) invert(1); /* 흰색으로 변경 */
 }
+
+.wish_push.active{
+  background-color: var(--color-main-bloode);
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  opacity: 1;
+}
+
 
 .icon {
   width: 60%;
