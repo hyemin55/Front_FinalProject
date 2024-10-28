@@ -1,34 +1,31 @@
 <script setup>
-import MyInformation from '@/components/mypage/MyInformation.vue';
-import MyWishlist from '@/components/mypage/MyWishlist.vue';
-import MypageOrderHistory from '@/components/mypage/MypageOrderHistory.vue';
-import MypageReview from '@/components/mypage/MypageReview.vue';
-import MypageSalseHistory from '@/components/mypage/MypageSalseHistory.vue';
+import MyInformation from '@/components/mypage/MyInformation.vue'
+import MyWishlist from '@/components/mypage/MyWishlist.vue'
+import MypageOrderHistory from '@/components/mypage/MypageOrderHistory.vue'
+import MypageReview from '@/components/mypage/MypageReview.vue'
+import MypageSalseHistory from '@/components/mypage/MypageSalseHistory.vue'
 import { computed, onMounted, ref } from 'vue'
-import { useUserStore } from '../../stores/Login';
-import CurrentSituation from './CurrentSituation.vue';
+import { useUserStore } from '../../stores/Login'
+import CurrentSituation from './CurrentSituation.vue'
 
-const user = useUserStore();
+const user = useUserStore()
 const NoprofileImage = ref(user.profileImage)
 
 onMounted(() => {
-  if(!NoprofileImage.value){
-    user.profileImage = require('@/img/빵빵덕세안.png')
-  }
+  // if (!NoprofileImage.value) {
+  //   user.profileImage = require('@/img/빵빵덕세안.png')
+  // }
 })
-
 
 const selectpage = ref('myOrderHistory')
 const componentMap = {
-  myOrderHistory : MypageOrderHistory,
-  mySalseHistory : MypageSalseHistory,
-  myWishlist : MyWishlist,
-  myReview : MypageReview,
-  myInformation : MyInformation,
+  myOrderHistory: MypageOrderHistory,
+  mySalseHistory: MypageSalseHistory,
+  myWishlist: MyWishlist,
+  myReview: MypageReview,
+  myInformation: MyInformation,
 }
-const currentComponent = computed(() => 
-  componentMap[selectpage.value])
-
+const currentComponent = computed(() => componentMap[selectpage.value])
 </script>
 
 <template>
@@ -54,7 +51,7 @@ const currentComponent = computed(() =>
       </article>
 
       <article id="myDetailInfo">
-        <component :is='currentComponent'></component>
+        <component :is="currentComponent"></component>
       </article>
     </main>
   </section>
@@ -68,15 +65,15 @@ const currentComponent = computed(() =>
   display: flex;
 }
 #myInfoNav {
-  position: relative;
   width: 15%;
-  min-width: 100px;
+  min-width: 120px;
   max-width: 150px;
   height: 500px;
-  /* background-color: antiquewhite; */
   padding: 30px 0;
-  margin-top: 50px;
-  /* position: fixed; */
+  position: sticky;
+  top: 150px;
+  left: 0;
+  /* background-color: antiquewhite; */
 }
 .nickname {
   padding-bottom: 30px;
@@ -102,15 +99,15 @@ const currentComponent = computed(() =>
 #myInfoNavList li {
   position: relative;
   /* background-color: antiquewhite; */
-  margin-bottom: 50px;
-  padding-left: 8%;
+  margin-top: 20px;
+  padding: 9%;
   cursor: pointer;
 }
 #myInfoNavList li::after {
   position: absolute;
   content: '';
   left: 0;
-  bottom: -10px;
+  bottom: 0;
   height: 0.1px;
   width: 100%;
   background-color: var(--color-main-bloode);
@@ -120,18 +117,21 @@ const currentComponent = computed(() =>
   font-family: 'Pretendard-Bold';
 }
 #rightGroub {
+  /* position: absolute; */
   width: 100%;
   max-width: 1130px;
-  flex-direction: column;
-  margin-left: 5%;
-
+  right: 0;
 }
 #currentSituation {
-  background-color: aquamarine;
+  /* position: relative; */
+  padding: 15px 3%;
+  /* background-color: aquamarine; */
   height: 400px;
 }
 #myDetailInfo {
-  background-color: brown;
+  /* position: relative; */
+  padding: 15px 3%;
+  /* background-color: brown; */
   height: 400px;
 }
 </style>

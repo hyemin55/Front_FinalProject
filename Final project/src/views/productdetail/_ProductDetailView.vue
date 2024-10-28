@@ -1,70 +1,46 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+import ProductInfoSection from './ProductInfoSection.vue'
+import ProductSlide from './ProductSlide.vue'
+import ProductDescription from './ProductDescription.vue'
+import ProductDetailReview from './ProductDetailReview.vue'
 
 const route = useRoute()
 const productId = computed(() => route.params.idx)
 </script>
 
 <template>
-  <nav>{{ productId }}번 상품 상세페이지 경로</nav>
+  <nav class="productRoute">{{ productId }}번 상품 상세페이지 경로</nav>
+
   <section id="product">
     <main id="productMain">
-      <article id="productSlide">
-        <h1>이미지 슬라이드</h1>
-      </article>
-
-      <div id="productInfosection">
-        <article id="productInfo">
-          <h1>상품명</h1>
-        </article>
-        <figure id="salseChart">
-          <h1>차트</h1>
-          <figcaption></figcaption>
-        </figure>
-      </div>
+      <ProductSlide />
+      <ProductInfoSection />
     </main>
-
-    <article>
-      <h1>상품 상세페이지</h1>
-    </article>
-
-    <article>
-      <h1>리뷰들</h1>
-    </article>
+    <ProductDescription />
+    <ProductDetailReview />
   </section>
 </template>
 
 <style scoped>
-*{
-  width: var(--main-max-width);
-  margin: 0 auto;
-}
-nav{
+nav {
   padding: 10px 0;
   color: var(--color-text-gray);
 }
-
+.productRoute {
+  width: var(--main-max-width);
+  margin: 0 auto;
+}
+#product {
+  width: var(--main-max-width);
+  margin: 0 auto;
+}
 /* 상단 구역 */
-#productMain{
+#productMain {
   display: flex;
   /* justify-content: center; */
-  height: 500px;
-  background-color: antiquewhite;
-  
-}
-#productSlide{
-  text-align: center;
-  background-color: aqua;
-  width: 50%;
-  display: flex;
-}
-#productInfosection{
-  text-align: center;
-  background-color: aquamarine;
- width: 50%;
-}
-#salseChart{
-
+  height: auto;
+  /* background-color: antiquewhite; */
 }
 </style>
