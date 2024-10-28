@@ -15,14 +15,14 @@ watchEffect(() => {
 })
 
 const kakaoLogout = () => {
-  localStorage.removeItem('token')
+  sessionStorage.removeItem('token')
   useStore.logout()
   console.log('로그아웃 성공')
   token.value = false
   window.location.reload()
 }
 onMounted(() => {
-  const savedToken = localStorage.getItem('token')
+  const savedToken = sessionStorage.getItem('token')
   if (savedToken) {
     token.value = true
     useStore.loginCheck = true // 스토어에 로그인 상태 설정
@@ -74,13 +74,15 @@ onMounted(() => {
           <li @click="kakaoLogout()">로그아웃</li>
           <li>|</li>
           <li><router-link to="/mypage">마이페이지</router-link></li>
+          <li>|</li>
+          <li>고객센터</li>
         </ul>
       </template>
       <template v-else>
         <ul class="login">
           <li><RouterLink to="/login2">로그인</RouterLink></li>
           <li>|</li>
-          <li>회원가입</li>
+          <li>고객센터</li>
         </ul>
       </template>
     </article>
@@ -92,7 +94,9 @@ onMounted(() => {
 
       <ul class="gnb01">
         <li v-for="(category, index) in categories" :key="index">
-          <RouterLink :to="category.path" class="link_title">{{ category.title }}</RouterLink>
+          <RouterLink :to="category.path" class="link_title">{{
+            category.title
+          }}</RouterLink>
         </li>
       </ul>
       <ul class="gnb02">
@@ -193,7 +197,7 @@ onMounted(() => {
 .gnb01 li {
   margin: 0 2.4rem;
 }
-.link_title{
+.link_title {
   font-size: 1.8rem;
   font-weight: 500;
   font-family: 'JacquesFrancois-Regular';

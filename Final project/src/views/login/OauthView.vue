@@ -7,7 +7,7 @@
   width: 100%;
 }
 img {
-  width: 10%;
+  width: 7%;
   height: auto;
   animation: rotate 4s infinite linear;
 }
@@ -31,7 +31,6 @@ img {
 <script setup>
 import { watchEffect, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import MainView from './MainView.vue'
 import { login, loginCheck } from '@/api/KakaoLoginApi'
 import { useUserStore } from '@/stores/Login'
 
@@ -44,12 +43,12 @@ const useStore = useUserStore()
 watchEffect(async () => {
   // console.log('code = ', route.query.code);
   if (route.query.code) {
-    let res = await login(route.query.code)
+    res = await login(route.query.code)
     if (!res.status.toString().startsWith('2')) return
     res = await loginCheck()
     if (res.status.toString().startsWith('2')) {
       console.log(res.data)
-      useStore.login(res.data)
+      await useStore.login(res.data)
     }
     await router.push({ name: 'main' })
   }
