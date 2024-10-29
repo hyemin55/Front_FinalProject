@@ -41,7 +41,7 @@ import SalseChart from './SalseChart.vue'
 #productInfoSection {
   /* background-color: aquamarine; */
   width: 50%;
-  margin: 25px 0 25px 1%;
+  margin: 25px 0 25px 0;
   /* background-color: yellow; */
 }
 #productInfo {

@@ -29,7 +29,7 @@ const addToCart = () => {
 }
 // 찜목록 추가
 const addToWishlist = () => {
-  // alert("༼ つ ◕_◕ ༽つ 찜~")
+  alert('༼ つ ◕_◕ ༽つ 찜~')
   console.log('찜목록 추가')
 }
 
