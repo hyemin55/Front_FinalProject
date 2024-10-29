@@ -6,6 +6,7 @@ import ProductListView from '@/views/ProductListView.vue'
 import OauthView from '@/views/login/OauthView.vue'
 import MypageView from '@/views/mypage/_MypageView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
+import PaymentView from '@/views/PaymentView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -49,6 +50,11 @@ const router = createRouter({
       path: '/mypage',
       name: 'mypage',
       component: MypageView,
+    },
+    {
+      path: '/payment/:idx',
+      name: 'payment',
+      component: PaymentView,
     },
   ],
 })

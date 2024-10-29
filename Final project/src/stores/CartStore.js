@@ -4,8 +4,9 @@ import { ref } from 'vue';
 
 export const useCartStore = defineStore('cart', {
     state: ()=>({
-        cartItems: [],
+        cartItems: JSON.parse(localStorage.getItem('cartItems')) || [],
         // ↓ axios 통신으로 데이터베이스에서 통신할 id를 모으기 위해서 사용하는 배열이다.
+        // 장바구니 체크된 상품들이 들어오는 배열
         cartCheckList: [],
     }),
     actions:{
@@ -18,18 +19,22 @@ export const useCartStore = defineStore('cart', {
             else{
                 this.cartItems.push({ ...item, quantity: 1, isChecked: true });
             }
+            localStorage.setItem('cartItems', JSON.stringify(this.cartItems));
         },
         // 장바구니 삭제
         removeItem(){
             this.cartItems = this.cartItems.filter(item => !item.isChecked);
             this.cartCheckList = [];
+            localStorage.setItem('cartItems', JSON.stringify(this.cartItems));
         },
+        
         // 토글 전체선택
         toggleAllCheck(isChecked) {
-            this.cartItems.forEach(item => {
-                item.isChecked = isChecked;
-            })
+            this.cartItems.forEach(item => {item.isChecked = isChecked;})
+            localStorage.setItem('cartItems', JSON.stringify(this.cartItems));
         },
+
+
         // 장바구니 회원정보 불러오기
         updateCart(items) {
             // 장바구니 초기화
@@ -46,6 +51,7 @@ export const useCartStore = defineStore('cart', {
                 // 생성한 객체를 cartItems에 추가
                 this.cartItems.push(p);
             });
+            localStorage.setItem('cartItems', JSON.stringify(this.cartItems));
         },
 
         // 수량변경
@@ -56,6 +62,7 @@ export const useCartStore = defineStore('cart', {
             if (item) {
                 item.quantity += 1;
             }
+            localStorage.setItem('cartItems', JSON.stringify(this.cartItems));
         },
         downQuantity(productId){
             console.log(productId)
@@ -64,6 +71,7 @@ export const useCartStore = defineStore('cart', {
             if (item) {
                 item.quantity -= 1;
             }
+            localStorage.setItem('cartItems', JSON.stringify(this.cartItems));
         },
     },
 
@@ -72,16 +80,6 @@ export const useCartStore = defineStore('cart', {
         totalPrice: (state) => {
           return state.cartCheckList.reduce((sum, item) => sum + item.price * item.quantity, 0);
         },
-    },
-
-    persist:{
-        enabled: true,
-        strategies: [
-            {
-                paths: ['cartItems'], 
-                storage: localStorage,
-            },
-        ],
     },
 
 })

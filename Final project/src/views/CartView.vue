@@ -1,18 +1,20 @@
 <script setup>
 import { GLOBAL_URL } from '@/api/util';
 import CartProductComponent from '@/components/CartProductComponent.vue';
+import router from '@/router';
 import { useCartStore } from '@/stores/CartStore';
 import axios from 'axios';
 import { computed, ref, watchEffect } from 'vue';
 
 const cartStore = useCartStore();
-const cart = cartStore.cartItems;
+const cart = computed(() => cartStore.cartItems);
 const allChecked = ref(true);
 
 const deliveryPrice = ref(5000);
 const total_amount = computed(() => {
   return Number(deliveryPrice.value + cartStore.totalPrice);
 });
+
 
 // 전체 선택 체크박스 토글
 const toggleAllCheck = () => {
@@ -31,17 +33,36 @@ const deleteToCart = async() => {
   cartStore.removeItem();
 };
 
+
 // 회원장바구니 불러오기
-watchEffect(async()=>{
-  console.log('회원장바구니 호출')
-  const res = await axios.get(`${GLOBAL_URL}/cartProduct/select?memberId=1`)
-  .then(res => {
+// watchEffect(async()=>{
+//   console.log('회원장바구니 호출')
+//   const res = await axios.get(`${GLOBAL_URL}/cartProduct/select?memberId=1`)
+//   .then(res => {
+//     cartStore.updateCart(res.data);
+//   })
+//   .catch(error => {
+//       console.error(error);
+//   });
+// });
+
+const fetchMemberCart = async () => {
+  alert('로그인 성공')
+  console.log('회원장바구니 호출');
+  try {
+    const res = await axios.get(`${GLOBAL_URL}/cartProduct/select?memberId=1`);
+    // 스토어에서 장바구니 업데이트
     cartStore.updateCart(res.data);
-  })
-  .catch(error => {
-      console.error(error);
-  });
-});
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+// 결제하기
+// const doPayment =()=>{
+//   router.push()
+// };
+
 </script>
 
 <template>
@@ -59,6 +80,7 @@ watchEffect(async()=>{
             <label for="allCheck">전체 선택</label>
           </li>
           <li><button @click="deleteToCart">선택 삭제</button></li>
+          <li><button @click="fetchMemberCart">로그인 장바구니</button></li>
         </ul>
 
         <CartProductComponent 
@@ -88,7 +110,7 @@ watchEffect(async()=>{
               <li>{{ total_amount.toLocaleString() }}원</li>
             </ul>
           </div>        
-          <button class="payment">결제하기</button>
+          <button class="payment" @click="doPayment">결제하기</button>
         </div>
       </article>
     </article>
