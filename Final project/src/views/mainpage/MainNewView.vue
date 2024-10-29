@@ -1,12 +1,13 @@
+    <script setup>
+    import NewSilde from '@/components/NewSilde.vue'
+    </script>
+
 <template>
   <article id="main_new">
     <h1>NEW</h1>
     <NewSilde></NewSilde>
   </article>
 </template>
-<script setup>
-import NewSilde from '@/components/NewSilde.vue'
-</script>
 
 <style scoped>
 /* ==== main_new ==== */

@@ -8,6 +8,7 @@
       :wrap-around="true"
       :pause-autoplay-on-hover="true"
       :mouseDrag="false"
+      :i18n="iconArrowRight"
     >
       <Slide v-for="(slide, index) in slides" :key="index">
         <!-- <div v-for="productDtail in New_list" :key="productDtail.productId"> -->
@@ -36,7 +37,7 @@
 
 <script setup>
 import { ref, watchEffect } from 'vue'
-import { Carousel, Pagination, Slide, Navigation } from 'vue3-carousel'
+import { Carousel, Pagination, Slide, Navigation, Icon } from 'vue3-carousel'
 import axios from 'axios'
 import 'vue3-carousel/dist/carousel.css'
 import { GLOBAL_URL } from '@/api/util'

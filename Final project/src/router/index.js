@@ -46,6 +46,11 @@ const router = createRouter({
       name: 'productsdetail',
       component: ProductDetailView,
     },
+    // {
+    //   path: '/productsdetail/:idx',
+    //   name: 'productsdetail',
+    //   component: () => import('@/views/ProductDetailView.vue'),
+    // },
     {
       path: '/mypage',
       name: 'mypage',
