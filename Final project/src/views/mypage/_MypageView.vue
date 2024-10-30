@@ -7,6 +7,7 @@ import MypageSalseHistory from '@/components/mypage/MypageSalseHistory.vue'
 import { computed, onMounted, ref } from 'vue'
 import { useUserStore } from '../../stores/Login'
 import CurrentSituation from './CurrentSituation.vue'
+import image1 from '@/img/빵빵덕세안.png';
 
 const user = useUserStore()
 // const NoprofileImage = ref(user.profileImage)
@@ -17,8 +18,7 @@ onMounted(() => {
     NoprofileImage.value ===
     'http://img1.kakaocdn.net/thumb/R640x640.q70/?fname=http://t1.kakaocdn.net/account_images/default_profile.jpeg'
   ) {
-    console.log(NoprofileImage.value)
-    user.profileImage = require('@/img/빵빵덕세안.png')
+    user.profileImage = image1
   }
 })
 
