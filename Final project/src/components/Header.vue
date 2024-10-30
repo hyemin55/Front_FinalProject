@@ -1,10 +1,11 @@
 <script setup>
 import { useUserStore } from '@/stores/Login'
-import { ref, watchEffect, onMounted } from 'vue'
+import { ref, watchEffect, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { logout } from '@/api/KakaoLoginApi'
 import { eventBus } from '@/eventBus';
-
+import { useCartStore } from '@/stores/CartStore';
+const cartStore = useCartStore();
 const route = useRoute()
 const router = useRouter()
 const HeaderMode = ref(false)
@@ -25,6 +26,8 @@ const kakaoLogout = () => {
   // console.log(token.value)
   // token.value = false
   router.push({ name: 'login2' })
+
+  eventBus.emit('logout');
 }
 
 onMounted(() => {
@@ -64,8 +67,15 @@ onMounted(() => {
   }
 })
 
-const cartLogin = () => {
-  eventBus.emit('cartLogin');
+onBeforeUnmount(() => {
+  eventBus.off('cartLogin', () => {
+    console.log("카트 로그인 이벤트 해제")
+  });
+})
+
+const cartLogin = async () => {
+  await eventBus.emit('cartLogin');
+  console.log('------ 버스작동 완료 ------')
 };
 
 </script>
@@ -119,12 +129,11 @@ const cartLogin = () => {
           />
         </li>
         <li>
-          <RouterLink to="/cart">
+          <RouterLink to="/cart" @click="cartLogin();">
             <img
               class="icon"
               src="../img/icon/free-icon-font-basket-shopping-simple-9768421.png"
               alt=""
-              @click="cartLogin();"
             />
           </RouterLink>
         </li>
