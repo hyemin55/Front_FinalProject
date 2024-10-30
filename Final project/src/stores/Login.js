@@ -8,6 +8,7 @@ export const useUserStore = defineStore('member', {
     profileImage: '',
     email: '',
     userId: '',
+    snsType: '',
   }),
   //   data를 받아오면 위의 상태안에 값을 넣고 레이아웃네비뷰의 watchEffect로 다시 넘겨준다.
   actions: {
@@ -19,6 +20,9 @@ export const useUserStore = defineStore('member', {
       this.thumbnail = data.thumbnail
       this.profileImage = data.profileImage
       this.email = data.email
+      this.snsType = data.snsType
+      sessionStorage.setItem('nickName', this.nickName)
+      sessionStorage.setItem('profileImage', this.profileImage)
     },
     logout() {
       this.loginCheck = false
@@ -27,15 +31,10 @@ export const useUserStore = defineStore('member', {
       this.profileImage = ''
       this.email = ''
       this.userId = ''
+      this.snsType = ''
+      sessionStorage.removeItem('token')
+      sessionStorage.removeItem('nickName')
+      sessionStorage.removeItem('profileImage')
     },
-  },
-  persist: {
-    enabled: false,
-    strategies: [
-      {
-        paths: ['nickName', 'profileImage'], // 로컬 스토리지에 저장될 키
-        storage: sessionStorage, // 사용할 스토리지
-      },
-    ],
   },
 })

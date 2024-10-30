@@ -1,3 +1,7 @@
+<script setup>
+import EditorPicksSlide from '../../components/EditorPicksSlide.vue'
+</script>
+
 <template>
   <article id="main_editor">
     <h1>Editor's Picks</h1>
@@ -14,10 +18,6 @@
     <EditorPicksSlide></EditorPicksSlide>
   </article>
 </template>
-
-<script setup>
-import EditorPicksSlide from '../../components/EditorPicksSlide.vue'
-</script>
 
 <style scoped>
 /* ==== main_editor ==== */
