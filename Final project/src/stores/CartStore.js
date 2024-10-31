@@ -7,7 +7,7 @@ export const useCartStore = defineStore('cart', {
         cartItems: JSON.parse(localStorage.getItem('cartItems')) || [],
         // ↓ axios 통신으로 데이터베이스에서 통신할 id를 모으기 위해서 사용하는 배열이다.
         // 장바구니 체크된 상품들이 들어오는 배열
-        cartCheckList: [],
+        cartCheckList: ref([]),
     }),
     actions:{
         // 장바구니 담기

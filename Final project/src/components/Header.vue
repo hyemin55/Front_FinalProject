@@ -1,10 +1,11 @@
 <script setup>
 import { useUserStore } from '@/stores/Login'
-import { ref, watchEffect, onMounted, onBeforeUnmount } from 'vue'
+import { ref, watchEffect, onMounted, onUpdated } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { logout } from '@/api/KakaoLoginApi'
 import { eventBus } from '@/eventBus';
 import { useCartStore } from '@/stores/CartStore';
+
 const cartStore = useCartStore();
 const route = useRoute()
 const router = useRouter()
@@ -16,18 +17,18 @@ const loginCheck = ref(false)
 const token = ref(false)
 watchEffect(() => {
   HeaderMode.value = route.path === '/'
+  cartStore.cartCheckList = [] // 계산 중첩 방지
 })
 
-const kakaoLogout = () => {
+const kakaoLogout = async () => {
   // await logout(sessionStorage.getItem('token'))
   sessionStorage.removeItem('token')
   useStore.logout()
   // console.log('로그아웃 성공')
   // console.log(token.value)
   // token.value = false
-  router.push({ name: 'login2' })
-
   eventBus.emit('logout');
+  router.push({ name: 'login2' })
 }
 
 onMounted(() => {
@@ -42,7 +43,6 @@ onMounted(() => {
 // onMounted(() => {
 //   token.value = localStorage.getItem('token')
 // })
-// 대분류 카테코리를 이곳으로 받자(되면...)
 const categories = [
   { title: 'Perfume', path: '/category/Perfume/3' },
   { title: 'Diffuser', path: '/category/Diffuser/2' },
@@ -66,18 +66,6 @@ onMounted(() => {
     HeaderMode.value = false
   }
 })
-
-onBeforeUnmount(() => {
-  eventBus.off('cartLogin', () => {
-    console.log("카트 로그인 이벤트 해제")
-  });
-})
-
-const cartLogin = async () => {
-  await eventBus.emit('cartLogin');
-  console.log('------ 버스작동 완료 ------')
-};
-
 </script>
 
 <template>
@@ -129,7 +117,7 @@ const cartLogin = async () => {
           />
         </li>
         <li>
-          <RouterLink to="/cart" @click="cartLogin();">
+          <RouterLink to="/cart">
             <img
               class="icon"
               src="../img/icon/free-icon-font-basket-shopping-simple-9768421.png"

@@ -4,7 +4,7 @@ import CartProductComponent from '@/components/CartProductComponent.vue'
 import { useCartStore } from '@/stores/CartStore'
 import { useUserStore } from '@/stores/Login'
 import axios from 'axios'
-import { computed, ref, watchEffect } from 'vue'
+import { computed, ref, watchEffect, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { eventBus } from '@/eventBus'
 
@@ -15,10 +15,11 @@ const userLogin = computed(() => userStore.loginCheck)
 // 장바구니 pinia
 const cartStore = useCartStore()
 const cart = computed(() => cartStore.cartItems)
+const checkList = computed(() => cartStore.cartCheckList)
 const allChecked = ref(true)
 
 // 장바구니 계산
-const deliveryPrice = ref(5000)
+const deliveryPrice = ref(0)
 const total_amount = computed(() => {
   return Number(deliveryPrice.value + cartStore.totalPrice)
 })
@@ -31,7 +32,6 @@ const toggleAllCheck = () => {
 // 장바구니 삭제
 const deleteToCart = async () => {
   cartStore.removeItem()
-
   if (userLogin.value) {
     await axios.delete(`${GLOBAL_URL}/cart/remove`, {
       data: cartStore.cartCheckList,
@@ -43,33 +43,34 @@ const deleteToCart = async () => {
   }
 }
 
-// 장바구니 데이터가 이미 불러왔는지 추적
-eventBus.on('cartLogin', () => {
-  console.log('로그인 체크');
-  const token = sessionStorage.getItem('token');
-  if (!token) {
-    console.log('토큰이 없습니다. 로그인 필요');
-    return; // 토큰이 없으면 중단
-  }
-  const isCartFetched = sessionStorage.getItem('isCartFetched') === 'true'; // 장바구니 로딩 여부 확인
-  if (isCartFetched) return; // 이미 불러왔다면 중단
-
-  if (token) {
-    console.log('로그인 여부 저장');
-    fetchMemberCart(); // 장바구니 데이터 불러오기
-    sessionStorage.setItem('isCartFetched', 'true');
-  }
+// 라우터가 이동하면 한번
+onMounted(async () => {
+  await cartLogin()
 });
-// 로그아웃 시 세션 초기화
+    // 로그아웃 시 세션 초기화
 eventBus.on('logout', () => {
-  console.log('로그아웃 처리');
-  cartStore.removeItem();
-  sessionStorage.removeItem('isCartFetched');
+    console.log('로그아웃 처리');
+    cartStore.removeItem();
+    sessionStorage.removeItem('isCartFetched');
 });
+const cartLogin = async () => {
+    console.log('로그인 체크');
+    const token = sessionStorage.getItem('token');
+    if (!token) {
+      console.log('토큰이 없습니다. 로그인 필요');
+      return; // 토큰이 없으면 중단
+    }
+    const isCartFetched = sessionStorage.getItem('isCartFetched') === 'true'; // 장바구니 로딩 여부 확인
+    if (isCartFetched) return; // 이미 불러왔다면 중단
 
-
+    if (token) {
+      console.log('로그인 여부 저장');
+      await fetchMemberCart(); // 장바구니 데이터 불러오기
+      sessionStorage.setItem('isCartFetched', 'true');
+    }
+  };
+console.log('로그인 완료')
 const fetchMemberCart = async () => {
-  console.log('로그인 완료')
   const pushData = cart.value.map(item => ({
     productId: item.productId,
     quantity: item.quantity,
@@ -95,10 +96,23 @@ const fetchMemberCart = async () => {
   }
 }
 
-// 결제하기
-const router1 = useRouter()
+// 결제 하러가기
+const payRouter = useRouter()
 const doPayment = () => {
-  router1.push(`/payment/1`)
+  const purchaseProducttDtos = checkList.value.map(item => ({
+    productId: item.productId,
+    quantity: item.quantity,
+  }));
+  const data = {
+    purchaseProductDtos: purchaseProducttDtos,
+    totalPrice: total_amount.value
+  };
+  console.log(data); 
+
+  payRouter.push({
+    path: '/payment',
+    query: { item: encodeURIComponent(JSON.stringify(data)) }
+  });
 }
 </script>
 

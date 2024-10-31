@@ -57,7 +57,7 @@ const router = createRouter({
       component: MypageView,
     },
     {
-      path: '/payment/:item',
+      path: '/payment',
       name: 'payment',
       component: PaymentView,
     },
