@@ -1,26 +1,18 @@
 <script setup>
-import MyInformation from '@/components/mypage/MyInformation.vue'
-import MyWishlist from '@/components/mypage/MyWishlist.vue'
-import MypageOrderHistory from '@/components/mypage/MypageOrderHistory.vue'
-import MypageReview from '@/components/mypage/MypageReview.vue'
-import MypageSalseHistory from '@/components/mypage/MypageSalseHistory.vue'
+import MyInformation from '@/components/mypage/MyInformationView.vue'
+import MyWishlist from '@/components/mypage/MyWishlistView.vue'
+import MypageOrderHistory from '@/components/mypage/MypageOrderHistoryView.vue'
+import MypageReview from '@/components/mypage/MypageReviewView.vue'
+import MypageSalseHistory from '@/components/mypage/MypageSalseHistoryView.vue'
 import { computed, onMounted, ref } from 'vue'
 import { useUserStore } from '../../stores/Login'
-import CurrentSituation from './CurrentSituation.vue'
+import CurrentSituation from './CurrentSituationView.vue'
+// import image1 from '@/img/빵빵덕세안.png'
 
 const user = useUserStore()
-// const NoprofileImage = ref(user.profileImage)
-const NoprofileImage = computed(() => user.profileImage)
 
-onMounted(() => {
-  if (
-    NoprofileImage.value ===
-    'http://img1.kakaocdn.net/thumb/R640x640.q70/?fname=http://t1.kakaocdn.net/account_images/default_profile.jpeg'
-  ) {
-    console.log(NoprofileImage.value)
-    user.profileImage = require('@/img/빵빵덕세안.png')
-  }
-})
+onMounted(() => {})
+const profileImage = sessionStorage.getItem('profileImage')
 
 const selectpage = ref('myOrderHistory')
 const componentMap = {
@@ -37,7 +29,7 @@ const currentComponent = computed(() => componentMap[selectpage.value])
   <section id="mypage">
     <article id="myInfoNav">
       <div class="nickname">
-        <img :src="user.profileImage" alt="" />
+        <img :src="profileImage" alt="" />
         <p>{{ user.nickName }}</p>
       </div>
       <ul id="myInfoNavList">

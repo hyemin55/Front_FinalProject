@@ -22,7 +22,6 @@ watchEffect(() => {
 
 const kakaoLogout = async () => {
   // await logout(sessionStorage.getItem('token'))
-  sessionStorage.removeItem('token')
   useStore.logout()
   // console.log('로그아웃 성공')
   // console.log(token.value)
