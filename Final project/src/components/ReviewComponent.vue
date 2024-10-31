@@ -1,4 +1,13 @@
-<script setup></script>
+<script setup>
+import { ref } from 'vue'
+
+const totalPages = ref(10)
+const pageNum = ref(20)
+
+const setPageNum = num => {
+  pageNum.value = num
+}
+</script>
 
 <template>
   <div id="userReviewList" class="border">
@@ -32,6 +41,19 @@
         <img src="@/img/빵빵덕세안핑크.png" alt="" class="userInfoImg" />
       </li>
       <li class="userInfoNickname">닉네임</li>
+    </ul>
+  </div>
+
+  <div id="totalPages">
+    <ul>
+      <li
+        class="totalPages"
+        v-for="num in totalPages"
+        v-bind:key="num"
+        @click="setPageNum(num - 1)"
+      >
+        {{ num }}
+      </li>
     </ul>
   </div>
 </template>

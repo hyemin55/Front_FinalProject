@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import image1234 from '@/img/빵빵덕세안.png'
 
 export const useUserStore = defineStore('member', {
   state: () => ({
@@ -21,9 +22,18 @@ export const useUserStore = defineStore('member', {
       this.profileImage = data.profileImage
       this.email = data.email
       this.snsType = data.snsType
+
+      if (
+        this.profileImage ===
+        'http://img1.kakaocdn.net/thumb/R640x640.q70/?fname=http://t1.kakaocdn.net/account_images/default_profile.jpeg'
+      ) {
+        this.profileImage = image1234
+      }
+
       sessionStorage.setItem('nickName', this.nickName)
       sessionStorage.setItem('profileImage', this.profileImage)
     },
+
     logout() {
       this.loginCheck = false
       this.nickName = ''

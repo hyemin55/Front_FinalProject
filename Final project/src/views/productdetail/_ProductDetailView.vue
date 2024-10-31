@@ -1,10 +1,10 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import ProductSlide from '@/views/productdetail/ProductSlide.vue'
-import ProductDescription from '@/views/productdetail/ProductDescription.vue'
-import ProductDetailReview from '@/views/productdetail/ProductDetailReview.vue'
-import ProductInfoSection from '@/views/productdetail/ProductInfoSection.vue'
+import ProductSlide from '@/views/productdetail/ProductSlideView.vue'
+import ProductDescription from '@/views/productdetail/ProductDescriptionView.vue'
+import ProductDetailReview from '@/views/productdetail/ProductDetailReviewView.vue'
+import ProductInfoSection from '@/views/productdetail/ProductInfoSectionView.vue'
 
 const route = useRoute()
 const productId = computed(() => route.params.idx)

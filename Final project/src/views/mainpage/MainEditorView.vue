@@ -1,5 +1,5 @@
 <script setup>
-import EditorPicksSlide from '../../components/EditorPicksSlide.vue'
+import EditorPicksSlide from '../../components/EditorPicksSlideView.vue'
 </script>
 
 <template>

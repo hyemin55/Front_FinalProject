@@ -1,3 +1,20 @@
+<script setup>
+import SalseChart from '@/views/productdetail/SalseChart.vue'
+import { colProps } from 'vant'
+
+const urlShare = () => {
+  const url = window.location.href
+  navigator.clipboard
+    .writeText(url)
+    .then(() => {
+      alert('URL이 클립보드에 복사되었습니다.')
+    })
+    .catch(err => {
+      console.error('URL 복사를 실패했어요ㅠㅡㅠ', err)
+    })
+}
+</script>
+
 <template>
   <article id="productInfoSection">
     <ul id="productInfo">
@@ -17,24 +34,20 @@
     <div class="addButtonGroub">
       <button class="addToCart BuyNow">바로 구매하기</button>
       <button class="addToCart">
-        <img src="../../img/icon/free-icon-font-shopping-cart.svg" alt="" />
+        <img src="@/img/icon/free-icon-font-shopping-cart.svg" alt="" />
         장바구니 추가
       </button>
       <button class="addwish">
-        <img src="../../img/icon/wish.png" alt="" />
+        <img src="@/img/icon/wish.png" alt="" />
       </button>
-      <button class="addwish">
-        <img src="../../img/icon/share.png" alt="" />
+      <button class="addwish" @click="urlShare">
+        <img src="@/img/icon/share.png" alt="" />
       </button>
     </div>
 
     <SalseChart />
   </article>
 </template>
-
-<script setup>
-import SalseChart from './SalseChart.vue'
-</script>
 
 <style scoped>
 /* 오른쪽 상품정보 구역 */
