@@ -1,5 +1,5 @@
 <script setup>
-import SalseChart from '@/views/productdetail/SalseChart.vue'
+import SalseChart from '@/views/product/productdetail/SalseChart.vue'
 import { colProps } from 'vant'
 
 const urlShare = () => {
