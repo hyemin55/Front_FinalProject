@@ -2,11 +2,11 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { GLOBAL_URL } from '@/api/util'
 import { useCartStore } from '@/stores/CartStore'
-import axios from 'axios';
-import { useUserStore } from '@/stores/Login';
+import axios from 'axios'
+import { useUserStore } from '@/stores/Login'
 
 // 로그인 pinia
-const userStore = useUserStore();
+const userStore = useUserStore()
 const userID = computed(() => userStore.userId)
 const userLogin = computed(() => userStore.loginCheck)
 
@@ -31,9 +31,10 @@ const cart_quantity = ref(props.productInfo.quantity)
 const cartCheck = ref(props.isChecked)
 
 onMounted(() => {
-  makeCartCheckList(); 
-});
-watch(() => props.isChecked,
+  makeCartCheckList()
+})
+watch(
+  () => props.isChecked,
   newValue => {
     // props 변화 감지 => makecartCheckList 실행
     cartCheck.value = newValue
@@ -43,13 +44,17 @@ watch(() => props.isChecked,
 const makeCartCheckList = () => {
   // 배열에 추가
   if (cartCheck.value) {
-    cartStore.cartCheckList.push({ productId: cart_idx.value, price: cart_product_price.value, quantity: cart_quantity });
-  } 
+    cartStore.cartCheckList.push({
+      productId: cart_idx.value,
+      price: cart_product_price.value,
+      quantity: cart_quantity,
+    })
+  }
   // 배열에 삭제
   else {
     cartStore.cartCheckList = cartStore.cartCheckList.filter(
       item => item.productId !== cart_idx.value,
-    );
+    )
   }
 }
 
@@ -62,48 +67,48 @@ watch(cartCheck, newValue => {
   emit('update:isChecked', newValue)
 })
 
-
 // 수량 변경
-const upCount = async() => {
+const upCount = async () => {
   cartStore.upQuantity(cart_idx.value)
   const data = {
-    productId : cart_idx.value,
-    quantity : 1,
-    memberId : 1,
+    productId: cart_idx.value,
+    quantity: 1,
+    memberId: 1,
   }
-  if(userLogin.value){
-    await axios.post(`${GLOBAL_URL}/cartProduct/increment`, data,{
+  if (userLogin.value) {
+    await axios.post(`${GLOBAL_URL}/cartProduct/increment`, data, {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
-      }
+        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+      },
     })
   }
-};
-const downCount = async() => {
-  if(cart_quantity.value>1){
+}
+const downCount = async () => {
+  if (cart_quantity.value > 1) {
     cartStore.downQuantity(cart_idx.value)
     const data = {
-      productId : cart_idx.value,
-      quantity : 1,
-      memberId : 1,
+      productId: cart_idx.value,
+      quantity: 1,
+      memberId: 1,
     }
-    if(userLogin.value){
-      await axios.post(`${GLOBAL_URL}/cartProduct/decrement`, data,{
+    if (userLogin.value) {
+      await axios.post(`${GLOBAL_URL}/cartProduct/decrement`, data, {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
-        }
+          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
       })
     }
   }
-};
-watch(() => props.productInfo.quantity, (newValue) => {
-    cart_quantity.value = newValue;
-});
-
+}
+watch(
+  () => props.productInfo.quantity,
+  newValue => {
+    cart_quantity.value = newValue
+  },
+)
 </script>
-
 
 <template v-for="item in cart" :key="item.idx">
   <article id="cart_product_component_wrapper">

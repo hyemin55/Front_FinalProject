@@ -1,7 +1,7 @@
 <script setup>
 // import { GLOBAL_URL } from '@/api/util'
 // import axios from 'axios'
-// import { onMounted, defineProps } from 'vue'
+// import { onMounted } from 'vue'
 
 // const props = defineProps({
 //   productId: {

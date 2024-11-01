@@ -16,7 +16,7 @@ const productId = computed(() => route.params.idx)
   <section id="product">
     <main id="productMain">
       <ProductSlide :productId="productId" />
-      <ProductInfoSection />
+      <ProductInfoSection :productId="productId" />
     </main>
     <ProductDescription id="ProductDescription" />
     <ProductDetailReview id="ProductDetailReview" />

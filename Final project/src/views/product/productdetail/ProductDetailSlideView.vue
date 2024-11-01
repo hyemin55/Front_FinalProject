@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, defineProps } from 'vue'
+import { onMounted, ref } from 'vue'
 import { Carousel, Slide, Navigation } from 'vue3-carousel'
 import 'vue3-carousel/dist/carousel.css'
 import axios from 'axios'

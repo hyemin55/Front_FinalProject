@@ -1,6 +1,37 @@
 <script setup>
+import router from '@/router'
 import SalseChart from '@/views/product/productdetail/SalseChart.vue'
-import { colProps } from 'vant'
+import { ref } from 'vue'
+import { useRoute } from 'vue-router'
+
+const props = defineProps({
+  productId: {
+    type: Object,
+    required: true,
+  },
+  size: {
+    type: Number,
+    required: true,
+  },
+})
+
+const productOptions = ref(['30ml', '50ml', '100ml'])
+
+const productOptionselec = selectedOption => {
+  console.log(selectedOption)
+  console.log(props.productId)
+  console.log(props.size)
+
+  router.push({ path: `/productsdetail/${productId}?size=30` })
+}
+
+const BuyNow = () => {}
+
+const redHeart = ref(false)
+const addToWishlist = () => {
+  alert('༼ つ ◕_◕ ༽つ 찜~')
+  redHeart.value = !redHeart.value
+}
 
 const urlShare = () => {
   const url = window.location.href
@@ -25,23 +56,45 @@ const urlShare = () => {
     </ul>
 
     <p class="OptionSelect">옵션선택</p>
-    <ul id="productOption">
-      <li>30ml</li>
-      <li>50ml</li>
-      <li>100ml</li>
-    </ul>
+    <div id="productOption">
+      <button
+        @click="productOptionselec(Option)"
+        v-for="(Option, index) in productOptions"
+        :key="index"
+      >
+        {{ Option }}
+      </button>
+      <!-- <button>50ml</button>
+      <button>100ml</button> -->
+    </div>
+    <div>
+      <p>제조일자 : 2024-11-01</p>
+      <p>유통기한 : 2029-11-01</p>
+    </div>
 
     <div class="addButtonGroub">
-      <button class="addToCart BuyNow">바로 구매하기</button>
+      <button class="addToCart BuyNow" @click="BuyNow">바로 구매하기</button>
       <button class="addToCart">
         <img src="@/assets/img/icon/free-icon-font-shopping-cart.svg" alt="" />
         장바구니 추가
       </button>
-      <button class="addwish">
-        <img src="@/assets/img/icon/wish.png" alt="" />
+      <button
+        class="wish_push"
+        :class="{ active: redHeart }"
+        @click.stop="addToWishlist"
+      >
+        <img
+          class="icon"
+          src="@/assets/img/icon/free-icon-font-heart-line.svg"
+          alt=""
+        />
       </button>
-      <button class="addwish" @click="urlShare">
-        <img src="@/assets/img/icon/share.png" alt="" />
+      <button class="wish_push" @click="urlShare">
+        <img
+          src="@/assets/img/icon/free-icon-font-share-3917574.png"
+          class="icon"
+          alt=""
+        />
       </button>
     </div>
 
@@ -87,17 +140,22 @@ const urlShare = () => {
   font-size: 1.4rem;
   /* background-color: aquamarine; */
 }
-#productOption li {
+#productOption button {
   border: 0.5px solid var(--color-main-gray);
   padding: 10px 7%;
   border-radius: 10px;
   cursor: pointer;
 }
-#productOption li:hover {
+#productOption button:hover {
   background-color: var(--color-main-bloode);
   color: white;
   border: 0.5px solid var(--color-main-bloode);
 }
+/* #productOption button {
+  background-color: var(--color-main-bloode);
+  color: white;
+  border: 0.5px solid var(--color-main-bloode);
+} */
 .addButtonGroub {
   display: flex;
   justify-content: space-between;
@@ -105,6 +163,7 @@ const urlShare = () => {
   height: 45px;
   width: 80%;
   /* background-color: brown; */
+  gap: 2%;
 }
 .addToCart {
   width: 35%;
@@ -126,7 +185,25 @@ const urlShare = () => {
   margin-right: 5px;
   /* background-color: antiquewhite; */
 }
-.addwish {
+.wish_push {
   height: 100%;
+  width: 9%;
+  /* background-color: rgb(173, 143, 104); */
+  border-radius: 50%;
+  border: 0.5px solid var(--color-main-gray);
+}
+.icon {
+  width: 100%;
+  height: auto;
+  /* border-radius: 50%; */
+  padding: 15%;
+  transition: filter 0.4s;
+}
+.wish_push.active {
+  background-color: var(--color-main-bloode);
+  border: 0.5px solid var(-color-main-bloode);
+}
+.wish_push.active .icon {
+  filter: brightness(0) saturate(100%) invert(1);
 }
 </style>
