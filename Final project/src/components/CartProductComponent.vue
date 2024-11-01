@@ -112,13 +112,16 @@ watch(
 
 <template v-for="item in cart" :key="item.idx">
   <article id="cart_product_component_wrapper">
-    <input
-      v-model="cartCheck"
-      type="checkbox"
-      name="check"
-      id="product_check"
-      @change="handleCheckboxChange()"
-    />
+    <label class="product_check-container">
+  <input
+    v-model="cartCheck"
+    type="checkbox"
+    name="check"
+    class="product_check"
+    @change="handleCheckboxChange"
+  />
+  <span class="custom-checkmark"></span>
+</label>
     <div class="img">
       <img
         :src="`${GLOBAL_URL}/api/file/download/${productInfo.images[0].filename}`"
@@ -128,7 +131,8 @@ watch(
     <div class="text">
       <div class="text_box">
         <p class="title">상품명 : {{ cart_product_name }}</p>
-        <p class="price">{{ cart_product_price }}원</p>
+        <p class="contents">옵션 : 100ml</p>
+        <p class="price">{{ cart_product_price.toLocaleString() }}원</p>
       </div>
       <div class="count">
         <button @click="upCount">+</button>
@@ -146,19 +150,41 @@ watch(
   display: flex;
   width: 630px;
   height: 172px;
-  border: 1px solid black;
   margin: 14px 0;
+  background-color: #fff;
+  border-radius: 0.8rem;
 }
-#product_check {
+/* 체크박스 설정 */
+.product_check {
   position: absolute;
-  top: 0;
-  left: 0;
+  margin: 10px;
+  width: 18px;
+  height: 18px;
+  appearance: none; 
+  transition: all 0.1s;
+  border: solid 1px #818181;
+  border-radius: 0.4rem;
+}
+.product_check:checked {
+  background-color: var(--color-main-bloode); /* 체크 시 배경색 */
+  border: solid 1px #8f8f8f;
+}
+.product_check:checked::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 6px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg); /* 체크 모양을 위한 회전 */
 }
 /* 이미지 박스 설정 */
 .img {
   width: 197px;
   height: 100%;
-  background-color: #fff;
+  /* background-color: #fff; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -173,18 +199,25 @@ watch(
   max-width: 433px;
   width: 100%;
   height: 100%;
-  background-color: #fff;
+  /* background-color: #fff; */
 }
 .text_box p {
   margin: 10px 0;
 }
 .title {
   font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: -0.034rem;
+}
+.contents{
+  font-size: 1.3rem;
   font-weight: 400;
+  letter-spacing: -0.034rem;
 }
 .price {
   font-weight: 600;
   font-size: 2.2rem;
+  letter-spacing: -0.034rem;
 }
 /* 버튼 설정 */
 .count {
@@ -203,4 +236,5 @@ button {
   cursor: pointer;
   font-size: 2rem;
 }
+
 </style>

@@ -31,7 +31,6 @@ const addToCart = () => {
           Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
       })
-
       console.log(res)
     } catch (e) {
       console.log(e)
@@ -42,7 +41,6 @@ const addToCart = () => {
 // 찜목록 추가
 const redHeart = ref(false)
 const addToWishlist = () => {
-  alert('༼ つ ◕_◕ ༽つ 찜~')
   redHeart.value = !redHeart.value
 }
 
@@ -61,6 +59,7 @@ const props = defineProps({
 const productName = ref(props.productInfo.productName || '상품이름')
 const content = ref(props.productInfo.content || '상품설명')
 const price = ref(props.productInfo.price || '가격')
+const size = ref(props.productInfo.size || '사이즈')
 // const review_avr = ref('평점');
 const reviewCount = ref(props.productInfo.reviewCount || '0')
 
@@ -74,7 +73,12 @@ const reviewCount = ref(props.productInfo.reviewCount || '0')
 // 각자 다른 상품들을 불러오는 같은 페이지가 되는 겁니다.
 const router = useRouter()
 const navDetailProduct = () => {
-  router.push(`/productsdetail/${props.productInfo.productId}`)
+  router.push({
+    path: `/productsdetail/${props.productInfo.productId}`,
+    query:{
+      size: size.value
+    }
+  })
 }
 </script>
 
@@ -109,12 +113,12 @@ const navDetailProduct = () => {
     <div class="product_text">
       <ul>
         <li @click="navDetailProduct" class="product_title">
-          {{ productName }}
+          {{ productName }} - {{ size }}ml
         </li>
         <li class="product_content">{{ content }}</li>
       </ul>
       <ul>
-        <li class="product_price">￦{{ price }}</li>
+        <li class="product_price">￦ {{ price.toLocaleString() }}</li>
         <li class="product_review">
           <span>
             <img
@@ -137,7 +141,7 @@ const navDetailProduct = () => {
 .products {
   max-width: 305px;
   width: 100%;
-  height: 390px;
+  /* height: 400px; */
   border: solid rgba(0, 0, 0, 0.1) 1px;
   border-radius: 6px;
   overflow: hidden;
@@ -181,13 +185,10 @@ const navDetailProduct = () => {
 }
 .product_img > ul > li:hover {
   background-color: var(--color-main-bloode);
-  border: 2px solid rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.6);
 }
 .product_img > ul > li:nth-child(1) {
   margin-right: -7px;
-}
-.cart_push:hover .icon {
-  filter: brightness(0) saturate(100%) invert(1); /* 흰색으로 변경 */
 }
 
 .wish_push.active {
@@ -209,41 +210,53 @@ const navDetailProduct = () => {
 /* 하단_텍스트 설정 */
 .product_text {
   width: 100%;
-  height: 85px;
+  /* height: 85px; */
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 0 10px;
+  padding: 10px;
 }
 .product_text ul:nth-child(1) {
   width: 100%;
-  height: 45px;
+  /* height: 45px; */
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
-.product_text ul:nth-child(1) > li {
-  margin-top: 4px;
 }
 .product_text ul:nth-child(2) {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 40px;
+  /* height: 40px; */
   width: 100%;
 }
 .product_text li {
   cursor: pointer;
 }
 .product_title {
-  font-weight: 400;
-  font-size: 16px;
+  font-weight: 500;
+  font-size: 1.65rem;
+  font-weight: 600;
+  letter-spacing: -0.34px;
+  color: #1f1f1f;
 }
 .product_content {
   font-size: 1rem;
+  letter-spacing: -0.034rem;
+  line-height: 1.4rem;
+  margin: 7px 0 5px 0;
+  color: var(--color-text-gray);
+  /* display: -webkit-box;       
+  -webkit-line-clamp: 2;       
+  -webkit-box-orient: vertical;
+  overflow: hidden;            
+  text-overflow: ellipsis;  */
 }
 .product_price {
+  /* background-color: blueviolet; */
+  letter-spacing: -0.034rem;
   font-weight: bold;
-  font-size: 19px;
+  font-size: 1.85rem;
+  color: #1f1f1f;
 }
 </style>

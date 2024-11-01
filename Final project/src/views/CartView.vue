@@ -7,6 +7,7 @@ import axios from 'axios'
 import { computed, ref, watchEffect, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { eventBus } from '@/eventBus'
+// import { storeToRefs } from 'pinia'
 
 // 로그인 pinia
 const userStore = useUserStore()
@@ -53,6 +54,7 @@ eventBus.on('logout', () => {
   cartStore.removeItem()
   sessionStorage.removeItem('isCartFetched')
 })
+
 const cartLogin = async () => {
   console.log('로그인 체크')
   const token = sessionStorage.getItem('token')
@@ -69,6 +71,7 @@ const cartLogin = async () => {
     sessionStorage.setItem('isCartFetched', 'true')
   }
 }
+
 console.log('로그인 완료')
 const fetchMemberCart = async () => {
   const pushData = cart.value.map(item => ({
@@ -102,13 +105,14 @@ const doPayment = () => {
   const purchaseProducttDtos = checkList.value.map(item => ({
     productId: item.productId,
     quantity: item.quantity,
+    name: item.productName,
   }))
   const data = {
     purchaseProductDtos: purchaseProducttDtos,
     totalPrice: total_amount.value,
   }
   console.log(data)
-
+  
   payRouter.push({
     path: '/payment',
     query: { item: encodeURIComponent(JSON.stringify(data)) },
@@ -135,7 +139,7 @@ const doPayment = () => {
         </ul>
 
         <CartProductComponent
-          v-for="(item, index) in cartStore.cartItems"
+          v-for="(item) in cartStore.cartItems"
           :key="item.productId"
           :productInfo="item"
           :isChecked="item.isChecked"
