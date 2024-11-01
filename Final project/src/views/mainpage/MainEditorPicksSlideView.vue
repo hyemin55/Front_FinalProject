@@ -1,10 +1,10 @@
 <script setup>
 import { ref } from 'vue'
 import { Carousel, Pagination, Slide, Navigation } from 'vue3-carousel'
-import home_1 from '@/img/editor_front_img.png'
-import home_2 from '@/img/p_003.png'
-import home_3 from '@/img/빵빵덕세안.png'
-import home_4 from '@/img/빵빵덕세안.png'
+import home_1 from '@/assets/img/editor_front_img.png'
+import home_2 from '@/assets/img/p_003.png'
+import home_3 from '@/assets/img/빵빵덕세안.png'
+import home_4 from '@/assets/img/빵빵덕세안.png'
 
 import 'vue3-carousel/dist/carousel.css'
 import Queue from 'queue-fifo'

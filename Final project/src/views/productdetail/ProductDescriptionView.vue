@@ -27,7 +27,7 @@
 
 <template>
   <article id="ProductDescription">
-    <img src="../../img/상세페이지_1.jpg" alt="" />
+    <img src="@/assets/img/상세페이지_1.jpg" alt="" />
     <!-- <img :src="`${GLOBAL_URL}/api/file/download/${props.productId}`" alt="" /> -->
   </article>
 </template>

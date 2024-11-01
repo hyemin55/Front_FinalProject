@@ -1,5 +1,5 @@
 <script setup>
-import EditorPicksSlide from '../../components/EditorPicksSlideView.vue'
+import MainEditorPicksSlideView from './MainEditorPicksSlideView.vue'
 </script>
 
 <template>
@@ -15,7 +15,7 @@ import EditorPicksSlide from '../../components/EditorPicksSlideView.vue'
         </li>
       </ul> -->
 
-    <EditorPicksSlide></EditorPicksSlide>
+    <MainEditorPicksSlideView></MainEditorPicksSlideView>
   </article>
 </template>
 

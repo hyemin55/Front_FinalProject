@@ -6,7 +6,7 @@
 
     <MainBestView></MainBestView>
     <MainListView></MainListView>
-    <PromotionBannerView></PromotionBannerView>
+    <MainPromotionBannerView></MainPromotionBannerView>
     <MainEditorView></MainEditorView>
     <MainNewView></MainNewView>
   </section>
@@ -17,7 +17,7 @@ import MainBestView from './MainBestView.vue'
 import MainEditorView from './MainEditorView.vue'
 import MainListView from './MainListView.vue'
 import MainNewView from './MainNewView.vue'
-import PromotionBannerView from './PromotionBannerView.vue'
+import MainPromotionBannerView from './MainPromotionBannerView.vue'
 
 // main_editor_list
 // const editor_images = [
@@ -46,7 +46,7 @@ import PromotionBannerView from './PromotionBannerView.vue'
 
 <style scoped>
 /* 1-section 설정 */
-#main_wrapper{
+#main_wrapper {
   position: relative;
 }
 #main_video {

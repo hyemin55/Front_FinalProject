@@ -13,13 +13,13 @@ const setPageNum = num => {
   <div id="userReviewList" class="border">
     <p class="userReviewStar">★★★★★</p>
     <div class="userReviewImgs">
-      <img src="@/img/p_003.png" alt="" class="userReviewImg" />
+      <img src="@/assets/img/p_003.png" alt="" class="userReviewImg" />
     </div>
     <p class="userReviewText">리뷰 내용들 샬라샬라샬라</p>
     <p class="userReviewTime">2024-10-29 21:52:10</p>
     <ul class="userInfo">
       <li>
-        <img src="@/img/빵빵덕세안핑크.png" alt="" class="userInfoImg" />
+        <img src="@/assets/img/빵빵덕세안핑크.png" alt="" class="userInfoImg" />
       </li>
       <li class="userInfoNickname">닉네임</li>
     </ul>
@@ -28,17 +28,17 @@ const setPageNum = num => {
   <div id="userReviewList" class="border">
     <p class="userReviewStar">★★★★★</p>
     <div class="userReviewImgs">
-      <img src="@/img/p_003.png" alt="" class="userReviewImg" />
-      <img src="@/img/p_003.png" alt="" class="userReviewImg" />
-      <img src="@/img/p_003.png" alt="" class="userReviewImg" />
-      <img src="@/img/p_003.png" alt="" class="userReviewImg" />
-      <img src="@/img/p_003.png" alt="" class="userReviewImg" />
+      <img src="@/assets/img/p_003.png" alt="" class="userReviewImg" />
+      <img src="@/assets/img/p_003.png" alt="" class="userReviewImg" />
+      <img src="@/assets/img/p_003.png" alt="" class="userReviewImg" />
+      <img src="@/assets/img/p_003.png" alt="" class="userReviewImg" />
+      <img src="@/assets/img/p_003.png" alt="" class="userReviewImg" />
     </div>
     <p class="userReviewText">리뷰 내용들 샬라샬라샬라</p>
     <p class="userReviewTime">2024-10-29 21:52:10</p>
     <ul class="userInfo">
       <li>
-        <img src="@/img/빵빵덕세안핑크.png" alt="" class="userInfoImg" />
+        <img src="@/assets/img/빵빵덕세안핑크.png" alt="" class="userInfoImg" />
       </li>
       <li class="userInfoNickname">닉네임</li>
     </ul>

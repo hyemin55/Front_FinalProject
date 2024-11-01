@@ -1,9 +1,9 @@
 <script setup>
-import img1 from '@/img/빵빵덕세안.png'
-import img2 from '@/img/빵빵덕세안핑크.png'
+import img1 from '@/assets/img/빵빵덕세안.png'
+import img2 from '@/assets/img/빵빵덕세안핑크.png'
 import { ref } from 'vue'
 import ReviewComponent from '@/components/ReviewComponent.vue'
-import ProductDetailReviewSlide from './ProductDetailReviewSlide.vue'
+import ProductDetailReviewSlide from './ProductDetailReviewSlideView.vue'
 
 const SortStar = ref(true)
 const Latest = ref(true)

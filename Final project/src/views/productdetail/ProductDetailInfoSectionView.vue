@@ -34,14 +34,14 @@ const urlShare = () => {
     <div class="addButtonGroub">
       <button class="addToCart BuyNow">바로 구매하기</button>
       <button class="addToCart">
-        <img src="@/img/icon/free-icon-font-shopping-cart.svg" alt="" />
+        <img src="@/assets/img/icon/free-icon-font-shopping-cart.svg" alt="" />
         장바구니 추가
       </button>
       <button class="addwish">
-        <img src="@/img/icon/wish.png" alt="" />
+        <img src="@/assets/img/icon/wish.png" alt="" />
       </button>
       <button class="addwish" @click="urlShare">
-        <img src="@/img/icon/share.png" alt="" />
+        <img src="@/assets/img/icon/share.png" alt="" />
       </button>
     </div>
 

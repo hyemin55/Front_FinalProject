@@ -2,8 +2,8 @@
 import 'vue3-carousel/dist/carousel.css'
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
 import { ref } from 'vue'
-import img1 from '@/img/빵빵덕세안.png'
-import img2 from '@/img/빵빵덕세안핑크.png'
+import img1 from '@/assets/img/빵빵덕세안.png'
+import img2 from '@/assets/img/빵빵덕세안핑크.png'
 
 const slides = ref([
   img1,

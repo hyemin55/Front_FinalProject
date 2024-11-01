@@ -1,13 +1,12 @@
 <script setup>
-import MyInformation from '@/components/mypage/MyInformationView.vue'
-import MyWishlist from '@/components/mypage/MyWishlistView.vue'
-import MypageOrderHistory from '@/components/mypage/MypageOrderHistoryView.vue'
-import MypageReview from '@/components/mypage/MypageReviewView.vue'
-import MypageSalseHistory from '@/components/mypage/MypageSalseHistoryView.vue'
 import { computed, onMounted, ref } from 'vue'
 import { useUserStore } from '../../stores/Login'
-import CurrentSituation from './CurrentSituationView.vue'
-// import image1 from '@/img/빵빵덕세안.png'
+import MypageInformationView from './MypageInformationView.vue'
+import MypageOrderHistoryView from './MypageOrderHistoryView.vue'
+import MypageSalseHistoryView from './MypageSalseHistoryView.vue'
+import MypageWishlistView from './MypageWishlistView.vue'
+import MypageReviewView from './MypageReviewView.vue'
+import MypageCurrentSituationView from './MypageCurrentSituationView.vue'
 
 const user = useUserStore()
 
@@ -16,11 +15,11 @@ const profileImage = sessionStorage.getItem('profileImage')
 
 const selectpage = ref('myOrderHistory')
 const componentMap = {
-  myOrderHistory: MypageOrderHistory,
-  mySalseHistory: MypageSalseHistory,
-  myWishlist: MyWishlist,
-  myReview: MypageReview,
-  myInformation: MyInformation,
+  myOrderHistory: MypageOrderHistoryView,
+  mySalseHistory: MypageSalseHistoryView,
+  myWishlist: MypageWishlistView,
+  myReview: MypageReviewView,
+  myInformation: MypageInformationView,
 }
 const currentComponent = computed(() => componentMap[selectpage.value])
 </script>
@@ -43,7 +42,7 @@ const currentComponent = computed(() => componentMap[selectpage.value])
 
     <main id="rightGroub">
       <article id="currentSituation">
-        <CurrentSituation />
+        <MypageCurrentSituationView />
       </article>
 
       <article id="myDetailInfo">

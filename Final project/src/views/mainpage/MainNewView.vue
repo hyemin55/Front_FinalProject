@@ -1,11 +1,11 @@
 <script setup>
-import NewSilde from '@/components/NewSilde.vue'
+import MainNewSildeView from './MainNewSildeView.vue'
 </script>
 
 <template>
   <article id="main_new">
     <h1>NEW</h1>
-    <NewSilde></NewSilde>
+    <MainNewSildeView></MainNewSildeView>
   </article>
 </template>
 

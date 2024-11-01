@@ -3,10 +3,10 @@ import { useUserStore } from '@/stores/Login'
 import { ref, watchEffect, onMounted, onUpdated } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { logout } from '@/api/KakaoLoginApi'
-import { eventBus } from '@/eventBus';
-import { useCartStore } from '@/stores/CartStore';
+import { eventBus } from '@/eventBus'
+import { useCartStore } from '@/stores/CartStore'
 
-const cartStore = useCartStore();
+const cartStore = useCartStore()
 const route = useRoute()
 const router = useRouter()
 const HeaderMode = ref(false)
@@ -26,7 +26,7 @@ const kakaoLogout = async () => {
   // console.log('로그아웃 성공')
   // console.log(token.value)
   // token.value = false
-  eventBus.emit('logout');
+  eventBus.emit('logout')
   router.push({ name: 'login2' })
 }
 
@@ -97,7 +97,7 @@ onMounted(() => {
 
     <article id="header_bottom">
       <RouterLink class="logo" to="/">
-        <img src="../img/logo_text.png" alt="" />
+        <img src="@/assets/img/logo_text.png" alt="" />
       </RouterLink>
 
       <ul class="gnb01">
@@ -111,7 +111,7 @@ onMounted(() => {
         <li>
           <img
             class="icon"
-            src="../img/icon/free-icon-font-search-3917132.png"
+            src="@/assets/img/icon/free-icon-font-search-3917132.png"
             alt=""
           />
         </li>
@@ -119,7 +119,7 @@ onMounted(() => {
           <RouterLink to="/cart">
             <img
               class="icon"
-              src="../img/icon/free-icon-font-basket-shopping-simple-9768421.png"
+              src="@/assets/img/icon/free-icon-font-basket-shopping-simple-9768421.png"
               alt=""
             />
           </RouterLink>

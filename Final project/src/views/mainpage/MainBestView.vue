@@ -12,7 +12,7 @@
           </p>
         </div>
         <div class="best_product">
-          <img class="best_product_img" src="../../img/p_003.png" alt="" />
+          <img class="best_product_img" src="@/assets/img/p_003.png" alt="" />
           <ul class="best_left_text">
             <li>Dior</li>
             <li>향수제품명자리니조금길게적어볼게요</li>
@@ -24,7 +24,11 @@
           가장 인기 많은 향수<br />&nbsp;&nbsp;&nbsp;&nbsp;시원한 오이향에
           빠져보세요*^.^*
         </p>
-        <img class="best_promotion_img" src="../../img/best_img.png" alt="" />
+        <img
+          class="best_promotion_img"
+          src="@/assets/img/best_img.png"
+          alt=""
+        />
       </div>
     </div>
   </article>

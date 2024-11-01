@@ -46,29 +46,29 @@ const deleteToCart = async () => {
 // 라우터가 이동하면 한번
 onMounted(async () => {
   await cartLogin()
-});
-    // 로그아웃 시 세션 초기화
+})
+// 로그아웃 시 세션 초기화
 eventBus.on('logout', () => {
-    console.log('로그아웃 처리');
-    cartStore.removeItem();
-    sessionStorage.removeItem('isCartFetched');
-});
+  console.log('로그아웃 처리')
+  cartStore.removeItem()
+  sessionStorage.removeItem('isCartFetched')
+})
 const cartLogin = async () => {
-    console.log('로그인 체크');
-    const token = sessionStorage.getItem('token');
-    if (!token) {
-      console.log('토큰이 없습니다. 로그인 필요');
-      return; // 토큰이 없으면 중단
-    }
-    const isCartFetched = sessionStorage.getItem('isCartFetched') === 'true'; // 장바구니 로딩 여부 확인
-    if (isCartFetched) return; // 이미 불러왔다면 중단
+  console.log('로그인 체크')
+  const token = sessionStorage.getItem('token')
+  if (!token) {
+    console.log('토큰이 없습니다. 로그인 필요')
+    return // 토큰이 없으면 중단
+  }
+  const isCartFetched = sessionStorage.getItem('isCartFetched') === 'true' // 장바구니 로딩 여부 확인
+  if (isCartFetched) return // 이미 불러왔다면 중단
 
-    if (token) {
-      console.log('로그인 여부 저장');
-      await fetchMemberCart(); // 장바구니 데이터 불러오기
-      sessionStorage.setItem('isCartFetched', 'true');
-    }
-  };
+  if (token) {
+    console.log('로그인 여부 저장')
+    await fetchMemberCart() // 장바구니 데이터 불러오기
+    sessionStorage.setItem('isCartFetched', 'true')
+  }
+}
 console.log('로그인 완료')
 const fetchMemberCart = async () => {
   const pushData = cart.value.map(item => ({
@@ -102,17 +102,17 @@ const doPayment = () => {
   const purchaseProducttDtos = checkList.value.map(item => ({
     productId: item.productId,
     quantity: item.quantity,
-  }));
+  }))
   const data = {
     purchaseProductDtos: purchaseProducttDtos,
-    totalPrice: total_amount.value
-  };
-  console.log(data); 
+    totalPrice: total_amount.value,
+  }
+  console.log(data)
 
   payRouter.push({
     path: '/payment',
-    query: { item: encodeURIComponent(JSON.stringify(data)) }
-  });
+    query: { item: encodeURIComponent(JSON.stringify(data)) },
+  })
 }
 </script>
 
@@ -167,7 +167,7 @@ const doPayment = () => {
     </article>
 
     <article class="else_cart" v-else>
-      <img src="../img/else_cart.png" alt="" />
+      <img src="@/assets/img/else_cart.png" alt="" />
       <h1>장바구니에 담긴 물건이 없습니다.</h1>
     </article>
   </section>

@@ -7,7 +7,7 @@ import axios from 'axios'
 import { useUserStore } from '@/stores/Login'
 
 // 로그인 pinia
-const userStore = useUserStore();
+const userStore = useUserStore()
 const userID = computed(() => userStore.userId)
 const userLogin = computed(() => userStore.loginCheck)
 
@@ -18,7 +18,7 @@ const addToCart = () => {
   // alert("장바구니에 담았습니다.")
   cartStore.addItem(props.productInfo)
 
-  if(userLogin.value){
+  if (userLogin.value) {
     // axios통신 부분
     const data = {
       memberId: 1,
@@ -26,12 +26,12 @@ const addToCart = () => {
       quantity: 1,
     }
     try {
-      const res = axios.post(`${GLOBAL_URL}/cart/add`, data,{
+      const res = axios.post(`${GLOBAL_URL}/cart/add`, data, {
         headers: {
-          'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
-        }
+          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
       })
-  
+
       console.log(res)
     } catch (e) {
       console.log(e)
@@ -42,8 +42,8 @@ const addToCart = () => {
 // 찜목록 추가
 const redHeart = ref(false)
 const addToWishlist = () => {
-  alert("༼ つ ◕_◕ ༽つ 찜~")
-  redHeart.value = !redHeart.value;
+  alert('༼ つ ◕_◕ ༽つ 찜~')
+  redHeart.value = !redHeart.value
 }
 
 // 1. productList에서 axios 통신을 통해 데이테이베이스에서 온 정보, for구문으로 받아온다.
@@ -89,14 +89,18 @@ const navDetailProduct = () => {
         <li class="cart_push" @click.stop="addToCart">
           <img
             class="icon"
-            src="../img/icon/free-icon-font-shopping-cart.svg"
+            src="@/assets/img/icon/free-icon-font-shopping-cart.svg"
             alt=""
           />
         </li>
-        <li class="wish_push" :class="{active : redHeart}" @click.stop="addToWishlist">
+        <li
+          class="wish_push"
+          :class="{ active: redHeart }"
+          @click.stop="addToWishlist"
+        >
           <img
             class="icon"
-            src="../img/icon/free-icon-font-heart-line.svg"
+            src="@/assets/img/icon/free-icon-font-heart-line.svg"
             alt=""
           />
         </li>
@@ -115,7 +119,7 @@ const navDetailProduct = () => {
           <span>
             <img
               class="star"
-              src="../img/icon/free-icon-font-star.svg"
+              src="@/assets/img/icon/free-icon-font-star.svg"
               alt=""
             />
             별점
@@ -186,12 +190,11 @@ const navDetailProduct = () => {
   filter: brightness(0) saturate(100%) invert(1); /* 흰색으로 변경 */
 }
 
-.wish_push.active{
+.wish_push.active {
   background-color: var(--color-main-bloode);
   border: 2px solid rgba(255, 255, 255, 0.6);
   opacity: 1;
 }
-
 
 .icon {
   width: 60%;

@@ -1,7 +1,11 @@
 <template>
   <article id="promotion_banner">
     <div class="promotion_banner_size">
-      <img class="promotion_banner_logo" src="../../img/logo_text.png" alt="" />
+      <img
+        class="promotion_banner_logo"
+        src="@/assets/img/logo_text.png"
+        alt=""
+      />
       <p class="promotion_banner_text">
         지난 추억의 잔향을 나누고,
         <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

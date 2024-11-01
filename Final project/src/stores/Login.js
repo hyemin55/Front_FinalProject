@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import image1234 from '@/img/빵빵덕세안.png'
+import image1234 from '@/assets/img/빵빵덕세안.png'
 
 export const useUserStore = defineStore('member', {
   state: () => ({

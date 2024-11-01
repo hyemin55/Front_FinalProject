@@ -23,7 +23,7 @@ img {
 
 <template>
   <div id="loginCheck">
-    <img src="../../img/p_003.png" alt="" />
+    <img src="@/assets/img/p_003.png" alt="" />
     <!-- <h1>{{ useStore.nickName }}</h1> -->
   </div>
 </template>
