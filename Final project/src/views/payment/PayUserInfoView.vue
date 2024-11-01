@@ -3,10 +3,20 @@ import { GLOBAL_URL } from '@/api/util';
 import axios from 'axios';
 import { watchEffect } from 'vue';
 
-// watchEffect(()=>{
-//   axios.post(`${GLOBAL_URL}/api/payment/save-user-info`)
+// watchEffect(async()=>{
+//   try{
+//     const res = await axios.post(`${GLOBAL_URL}`, {
+//       header:{
+//         'Content-Type': 'application/json',
+//         Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+//       }
+//     })
+//     console.log("유저 정보", res)
+//   }
+//   catch(error){
+//     console.error("Error:", error)
+//   }
 // })
-
 </script>
 
 <template>

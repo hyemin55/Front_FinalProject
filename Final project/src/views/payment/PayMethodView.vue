@@ -72,8 +72,6 @@ import { ref } from 'vue';
             </div>
             </transition>
         </article>
-
-        <button class="pay_btn" type="submit">결제하기</button>
     </section>
 </template>
 
@@ -110,18 +108,6 @@ import { ref } from 'vue';
     display: flex;
     align-items: center;
     justify-content: left;
-}
-.pay_btn{
-    padding: 10px;
-    width: 80px;
-    height: 30px;
-    background-color: antiquewhite;
-    border-radius: 1.2rem;
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    margin-left: -40px;
-    text-align: center;
 }
 
 
