@@ -47,6 +47,7 @@ export const useCartStore = defineStore('cart', {
           productName: item.productResDto.productName,
           images: item.productResDto.images,
           price: item.productResDto.price,
+          size: item.productResDto.size,
           quantity: item.quantity || 1, // 기본값 1 설정
           isChecked: true, // 기본 체크 여부
         }

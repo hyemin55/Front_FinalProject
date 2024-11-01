@@ -126,13 +126,17 @@ const doPayment = () => {
       <article class="cart_product">
         <ul class="cart_ctroll">
           <li>
+            <label class="product_check-container">
             <input
               @change="toggleAllCheck"
               v-model="allChecked"
               type="checkbox"
               name="allCheck"
               id="allCheck"
+              class="product_check"
             />
+            <span class="custom-checkmark"></span>
+            </label>
             <label for="allCheck">전체 선택</label>
           </li>
           <li><button @click="deleteToCart">선택 삭제</button></li>
@@ -316,5 +320,31 @@ const doPayment = () => {
   border: 2px solid rgb(146, 146, 146);
   border-radius: 5px;
   font-size: 16px;
+}
+
+/* 체크박스 설정 */
+.product_check {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  appearance: none; 
+  transition: all 0.1s;
+  border: solid 1px #818181;
+  border-radius: 0.4rem;
+}
+.product_check:checked {
+  background-color: var(--color-main-bloode); /* 체크 시 배경색 */
+  border: solid 1px #8f8f8f;
+}
+.product_check:checked::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 6px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg); /* 체크 모양을 위한 회전 */
 }
 </style>

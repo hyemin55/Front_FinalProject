@@ -28,7 +28,11 @@ const cart_idx = ref(props.productInfo.productId) // 부모자로 보낼 idx
 const cart_product_name = ref(props.productInfo.productName)
 const cart_product_price = ref(props.productInfo.price) // 이것도
 const cart_quantity = ref(props.productInfo.quantity)
+// 사이즈 수정 필요
+const cart_size = ref(props.productInfo.size)
 const cartCheck = ref(props.isChecked)
+
+console.log(cart_size.value)
 
 onMounted(() => {
   makeCartCheckList()
@@ -131,7 +135,7 @@ watch(
     <div class="text">
       <div class="text_box">
         <p class="title">상품명 : {{ cart_product_name }}</p>
-        <p class="contents">옵션 : 100ml</p>
+        <p class="contents">옵션 : {{ cart_size }}ml</p>
         <p class="price">{{ cart_product_price.toLocaleString() }}원</p>
       </div>
       <div class="count">
