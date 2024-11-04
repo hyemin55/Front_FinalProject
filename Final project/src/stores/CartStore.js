@@ -25,7 +25,6 @@ export const useCartStore = defineStore('cart', {
     // 장바구니 삭제
     removeItem() {
       this.cartItems = this.cartItems.filter(item => !item.isChecked)
-      // this.cartCheckList = [];
       localStorage.setItem('cartItems', JSON.stringify(this.cartItems))
     },
 
@@ -91,4 +90,5 @@ export const useCartStore = defineStore('cart', {
       )
     },
   },
+  
 })

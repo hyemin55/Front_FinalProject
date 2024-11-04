@@ -31,13 +31,6 @@ const size = ref(props.productInfo.size || '사이즈')
 const reviewCount = ref(props.productInfo.reviewCount || '0')
 
 // useNavigator
-// 4. 클릭 이벤트에 반응하여 경로이동을 한다.
-// 경로 이동을 하는데 클릭한 해당 이미지의 id를 가지고 페이지로 이동을 하는겁니다.
-// 이게 전부입니다.
-// 그런데 어떻게 다 다른 페이지로 이동하느냐고요???
-// 그게 아니죠 다 같은 페이지로 가는게 맞습니다.
-// 같은 페이지로 이동해서 가지고간 다른 id를 가지고 그곳에서 통신을해서
-// 각자 다른 상품들을 불러오는 같은 페이지가 되는 겁니다.
 const router = useRouter()
 const navDetailProduct = () => {
   router.push({
@@ -56,7 +49,6 @@ const addToCart = () => {
   cartStore.addItem(props.productInfo)
 
   if (userLogin.value) {
-    // axios통신 부분
     const data = {
       memberId: 1,
       productId: props.productInfo.productId,
@@ -253,14 +245,8 @@ const addToWishlist = () => {
   line-height: 1.4rem;
   margin: 7px 0 5px 0;
   color: var(--color-text-gray);
-  /* display: -webkit-box;       
-  -webkit-line-clamp: 2;       
-  -webkit-box-orient: vertical;
-  overflow: hidden;            
-  text-overflow: ellipsis;  */
 }
 .product_price {
-  /* background-color: blueviolet; */
   letter-spacing: -0.034rem;
   font-weight: bold;
   font-size: 1.85rem;
