@@ -9,21 +9,36 @@ const idx = ref(route.params.idx)
 const ReviewList = ref([])
 const reviewcount = ref(0)
 
+const review = 132
 const totalPages = ref(10)
+const num = ref(0)
 
 const star_list = ['★', '★★', '★★★', '★★★★', '★★★★★']
-
 onMounted(async () => {
-  const res = await axios.get(`${GLOBAL_URL}/detail/review/1`)
+  const res = await axios.get(`${GLOBAL_URL}/detail/review/${idx.value}`)
   // const res = await axios.get(`${GLOBAL_URL}/detail/review/${idx}`)
   ReviewList.value = res.data
-  reviewcount.value = res.data.list
-  console.log(reviewcount.value)
   // console.log('별이 5개 맞아?', ReviewList.value[0].star)
-
-  const res2 = await axios.get(`${GLOBAL_URL}/detail/detailReviewInfo/1`)
-  totalPages = res2.data.reviewCount
 })
+
+num.value = review / 5
+
+if (num.value <= 0) {
+  totalPages.value = 1
+} else if (num.value % 5 == 0) {
+  totalPages.value = num.value
+} else {
+  totalPages.value = Math.ceil(num.value) //소수 올림
+}
+
+const viewpageNum = async pageNum => {
+  const res = await axios.get(
+    `${GLOBAL_URL}/detail/review/1?pageNum=${pageNum}`,
+  )
+  console.log(pageNum, res.data)
+  ReviewList.value = res.data
+  return pageNum
+}
 </script>
 
 <template>
@@ -55,26 +70,26 @@ onMounted(async () => {
     </ul>
   </div>
 
-  <!-- <ul id="totalPages">
-    <li @click="setPageNum(pageNum.value - 1)" v-if="pageNum.value > 0">
+  <ul id="totalPages">
+    <!-- <li @click="viewpageNum(pageNum.value - 1)" v-if="pageNum.value > 0">
       이전
-    </li>
+    </li> -->
     <li
       class="totalPages"
-      v-for="num in totalPages"
-      v-bind:key="num"
-      @click="setPageNum(num - 1)"
-      :class="{ active: pageNum.value === num - 1 }"
+      v-for="pageNum in totalPages"
+      v-bind:key="pageNum"
+      @click="viewpageNum(pageNum - 1)"
+      :class="{ active: viewpageNum.value === pageNum - 1 }"
     >
-      {{ num }}
+      {{ pageNum }}
     </li>
-    <li
-      @click="setPageNum(pageNum.value + 1)"
+    <!-- <li
+      @click="viewpageNum(pageNum.value + 1)"
       v-if="pageNum.value < totalPages - 1"
     >
       다음
-    </li>
-  </ul> -->
+    </li> -->
+  </ul>
 </template>
 
 <style scoped>
@@ -145,15 +160,22 @@ onMounted(async () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 30%;
+  width: 100%;
   margin-top: 30px;
-  background-color: rgb(161, 160, 158);
+  /* background-color: rgb(161, 160, 158); */
 }
 .totalPages {
-  background-color: rgb(236, 207, 172);
+  /* background-color: rgb(236, 207, 172); */
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 10%;
+  /* width: 10%; */
+  /* margin: 0 1%; */
+  cursor: pointer;
+  padding: 1%;
+}
+.clickpageNum {
+  color: red;
+  font-size: large;
 }
 </style>

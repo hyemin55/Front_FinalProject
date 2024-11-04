@@ -81,6 +81,12 @@ const urlShare = () => {
       console.error('URL 복사를 실패했어요ㅠㅡㅠ', err)
     })
 }
+const Average= (data)=>{
+  data = data*10
+  data = Math.round(data)
+  data = data/10
+  return data;
+}
 </script>
 
 <template>
@@ -90,8 +96,8 @@ const urlShare = () => {
       <li>{{ list.productName }}</li>
       <li>
         1,222찜 수
-        <span style="color: red"
-          >★ {{ reviewData.starAverage }} ({{
+        <span style="color: orange"
+          >★ {{ Average(reviewData.starAverage) }} ({{
             reviewData.reviewCount
           }}
           reviews)</span
@@ -107,10 +113,9 @@ const urlShare = () => {
         v-for="(size, index) in productData"
         :key="index"
       >
-        {{ size.size }}
+        {{ size.size }} ml
       </button>
-      <!-- <button>50ml</button>
-      <button>100ml</button> -->
+
     </div>
     <div>
       <p>제조일자 : 2024-11-01</p>
