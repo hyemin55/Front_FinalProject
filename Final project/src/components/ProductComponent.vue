@@ -73,11 +73,12 @@ const reviewCount = ref(props.productInfo.reviewCount || '0')
 // 각자 다른 상품들을 불러오는 같은 페이지가 되는 겁니다.
 const router = useRouter()
 const navDetailProduct = () => {
+  console.log('사이즈 값', size.value)
   router.push({
     path: `/productsdetail/${props.productInfo.productId}`,
-    query:{
-      size: size.value
-    }
+    query: {
+      size: size.value,
+    },
   })
 }
 </script>

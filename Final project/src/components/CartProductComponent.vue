@@ -113,15 +113,15 @@ watch(
 <template v-for="item in cart" :key="item.idx">
   <article id="cart_product_component_wrapper">
     <label class="product_check-container">
-  <input
-    v-model="cartCheck"
-    type="checkbox"
-    name="check"
-    class="product_check"
-    @change="handleCheckboxChange"
-  />
-  <span class="custom-checkmark"></span>
-</label>
+      <input
+        v-model="cartCheck"
+        type="checkbox"
+        name="check"
+        class="product_check"
+        @change="handleCheckboxChange"
+      />
+      <span class="custom-checkmark"></span>
+    </label>
     <div class="img">
       <img
         :src="`${GLOBAL_URL}/api/file/download/${productInfo.images[0].filename}`"
@@ -160,7 +160,7 @@ watch(
   margin: 10px;
   width: 18px;
   height: 18px;
-  appearance: none; 
+  appearance: none;
   transition: all 0.1s;
   border: solid 1px #818181;
   border-radius: 0.4rem;
@@ -209,7 +209,7 @@ watch(
   font-weight: 600;
   letter-spacing: -0.034rem;
 }
-.contents{
+.contents {
   font-size: 1.3rem;
   font-weight: 400;
   letter-spacing: -0.034rem;
@@ -236,5 +236,4 @@ button {
   cursor: pointer;
   font-size: 2rem;
 }
-
 </style>
