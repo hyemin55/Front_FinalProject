@@ -96,6 +96,7 @@ import { ref } from 'vue';
     width: 100%;
     /* width: 1064px; */
     height: auto;
+    background-color: rgb(197, 197, 197);
 }
 
 .method_check>div:nth-child(1){
