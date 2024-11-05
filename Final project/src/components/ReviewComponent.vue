@@ -1,44 +1,106 @@
 <script setup>
 import { GLOBAL_URL } from '@/api/util'
 import axios from 'axios'
-import { computed, onMounted, ref } from 'vue'
+import { onMounted, ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
 const idx = ref(route.params.idx)
 const ReviewList = ref([])
-const reviewcount = ref(0)
-
-const review = 132
-const totalPages = ref(10)
-const num = ref(0)
 
 const star_list = ['★', '★★', '★★★', '★★★★', '★★★★★']
-onMounted(async () => {
-  const res = await axios.get(`${GLOBAL_URL}/detail/review/${idx.value}`)
-  // const res = await axios.get(`${GLOBAL_URL}/detail/review/${idx}`)
-  ReviewList.value = res.data
-  // console.log('별이 5개 맞아?', ReviewList.value[0].star)
+// onMounted(async () => {
+//   const res = await axios.get(`${GLOBAL_URL}/detail/review/${idx.value}`)
+// const res = await axios.get(`${GLOBAL_URL}/detail/review/${idx}`)
+// ReviewList.value = res.data
+// console.log('별이 5개 맞아?', ReviewList.value[0].star)
+// })
+
+let flag = 0
+const reviewCount = 61
+const totalPages = ref(10)
+const pageSize = 5
+const currPage = ref(1)
+const currentPageGroup = ref(0)
+const startPage = ref(0)
+const endPage = ref(0)
+
+totalPages.value = Math.ceil(reviewCount / pageSize)
+// console.log('totalPages = ', totalPages.value)
+const totalPageGroup = Math.floor(totalPages.value / 10)
+// console.log('totalPageGroup = ', totalPageGroup)
+
+startPage.value = currentPageGroup.value * 10 + 1
+console.log('startPage = ', startPage.value)
+
+// 토탈페이지그룹과 현재페이지 중 작은수를 작은 수를 출력
+endPage.value = Math.min(currentPageGroup.value * 10 + 10, totalPages.value)
+// console.log('endPage = ', endPage.value)
+
+// 이전페이지
+const backPage = async currentPage => {
+  console.log(currentPage)
+  currentPageGroup.value = Math.floor((currentPage - 1) / 10)
+  if (currentPageGroup.value > 0) {
+    currentPageGroup.value -= 1
+    console.log('이전페이지 = ', currentPageGroup.value)
+    startPage.value = currentPageGroup.value * 10 + 1
+    endPage.value = Math.min(startPage.value + 9, totalPages.value)
+    const res = await axios.get(
+      `${GLOBAL_URL}/detail/review/${idx.value}?pageNum=${currentPage - 1}`,
+    )
+    ReviewList.value = res.data
+  } else {
+    console.log('첫페이지입니다.')
+    alert('첫페이지입니다.')
+  }
+}
+
+// 다음페이지
+const nextPage = async currentPage => {
+  currentPageGroup.value = Math.floor((currentPage - 1) / 10)
+  console.log(currentPageGroup.value)
+  if (currentPageGroup.value < totalPageGroup) {
+    currentPageGroup.value += 1
+    // console.log('currentPageGroup', currentPageGroup.value)
+    startPage.value = currentPageGroup.value * 10 + 1
+    // console.log('startPage', startPage.value)
+    endPage.value = Math.min(startPage.value + 9, totalPages.value)
+    // console.log('endPage', endPage.value)
+    // console.log('다음페이지 = ', currentPageGroup.value)
+    const res = await axios.get(
+      `${GLOBAL_URL}/detail/review/${idx.value}?pageNum=${currentPage - 1}`,
+    )
+    // console.log(res.data)
+    ReviewList.value = res.data
+    // console.log('currentPageGroup 후', currentPageGroup.value)
+    // console.log('startPage 후', startPage.value)
+    // viewCurrentPage(currentPage + 1)
+  } else {
+    console.log('마지막페이지입니다.')
+    alert('마지막페이지입니다.')
+  }
+}
+const viewCurrentPage = async currentPage => {
+  // console.log(currentPage - 1)
+  currentPageGroup.value = Math.floor((currentPage - 1) / 10)
+  console.log('현재페이지', currPage.value)
+  if (currentPageGroup.value == currentPage - 1 && flag) {
+    flag = true
+    console.log('처음이라..')
+    return
+  } else {
+    const res = await axios.get(
+      `${GLOBAL_URL}/detail/review/${idx.value}?pageNum=${currentPage - 1}`,
+    )
+    console.log(res.data)
+    ReviewList.value = res.data
+    // startPage.value = currentPageGroup.value * 10 + 1
+  }
+}
+watchEffect(() => {
+  viewCurrentPage(currPage.value)
 })
-
-num.value = review / 5
-
-if (num.value <= 0) {
-  totalPages.value = 1
-} else if (num.value % 5 == 0) {
-  totalPages.value = num.value
-} else {
-  totalPages.value = Math.ceil(num.value) //소수 올림
-}
-
-const viewpageNum = async pageNum => {
-  const res = await axios.get(
-    `${GLOBAL_URL}/detail/review/1?pageNum=${pageNum}`,
-  )
-  console.log(pageNum, res.data)
-  ReviewList.value = res.data
-  return pageNum
-}
 </script>
 
 <template>
@@ -71,24 +133,17 @@ const viewpageNum = async pageNum => {
   </div>
 
   <ul id="totalPages">
-    <!-- <li @click="viewpageNum(pageNum.value - 1)" v-if="pageNum.value > 0">
-      이전
-    </li> -->
+    <li @click="backPage(startPage)">이전</li>
     <li
       class="totalPages"
-      v-for="pageNum in totalPages"
+      v-for="pageNum in endPage - startPage + 1"
       v-bind:key="pageNum"
-      @click="viewpageNum(pageNum - 1)"
-      :class="{ active: viewpageNum.value === pageNum - 1 }"
+      @click="currPage = pageNum"
+      :class="{ active: viewCurrentPage === pageNum - 1 }"
     >
-      {{ pageNum }}
+      {{ startPage + pageNum - 1 }}
     </li>
-    <!-- <li
-      @click="viewpageNum(pageNum.value + 1)"
-      v-if="pageNum.value < totalPages - 1"
-    >
-      다음
-    </li> -->
+    <li @click="nextPage(endPage)">다음</li>
   </ul>
 </template>
 
