@@ -8,7 +8,6 @@ import { useUserStore } from '@/stores/Login'
 
 // 로그인 pinia
 const userStore = useUserStore()
-const userID = computed(() => userStore.userId)
 const userLogin = computed(() => userStore.loginCheck)
 
 // 1. productList에서 axios 통신을 통해 데이테이베이스에서 온 정보, for구문으로 받아온다.
@@ -69,8 +68,11 @@ const addToCart = () => {
 
 // 찜목록 추가
 const redHeart = ref(false)
+const iconClick = ref(false) // 찜하트 css
+
 const addToWishlist = () => {
   redHeart.value = !redHeart.value
+  iconClick.value = !iconClick.value // 찜하트 css
 }
 
 // 단위 변경
@@ -90,22 +92,15 @@ const addToWishlist = () => {
       />
       <ul @click.stop>
         <li class="cart_push" @click.stop="addToCart">
-          <img
-            class="icon"
-            src="@/assets/img/icon/free-icon-font-shopping-cart.svg"
-            alt=""
-          />
+          <img class="icon" src="@/assets/img/icon/free-icon-font-shopping-cart.svg" alt=""/>
         </li>
         <li
           class="wish_push"
           :class="{ active: redHeart }"
           @click.stop="addToWishlist"
         >
-          <img
-            class="icon"
-            src="@/assets/img/icon/free-icon-font-heart-line.svg"
-            alt=""
-          />
+          <img class="icon" src="@/assets/img/icon/free-icon-font-heart-line.svg" alt="" :style="{ display: iconClick ? 'none' : 'flex' }"/>
+          <img class="icon" src="@/assets/img/icon/free-icon-font-heart.svg" alt="" :style="{ display: iconClick ? 'flex' : 'none' }"/>
         </li>
       </ul>
     </div>
@@ -120,12 +115,8 @@ const addToWishlist = () => {
         <li class="product_price">￦ {{ price.toLocaleString() }}</li>
         <li class="product_review">
           <span>
-            <img
-              class="star"
-              src="@/assets/img/icon/free-icon-font-star.svg"
-              alt=""
-            />
-            별점
+            <img class="star"src="@/assets/img/icon/free-icon-font-star.svg"alt=""/>
+            4.5
           </span>
           (<span>{{ reviewCount }}</span
           >)
@@ -183,16 +174,17 @@ const addToWishlist = () => {
   opacity: 0;
 }
 .product_img > ul > li:hover {
-  background-color: var(--color-main-bloode);
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  background-color: var(--color-main-gray);
+  /* background-color:#fdf4f1; */
+  border: 2px solid rgba(0, 0, 0, 0.05);
 }
 .product_img > ul > li:nth-child(1) {
   margin-right: -7px;
 }
 
 .wish_push.active {
-  background-color: var(--color-main-bloode);
-  border: 2px solid rgba(255, 255, 255, 0.6);
+  background-color: var(--color-main-gray);
+  border: 2px solid rgba(0, 0, 0, 0.05);
   opacity: 1;
 }
 
