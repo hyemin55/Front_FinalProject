@@ -1,18 +1,29 @@
 <script setup>
 import { GLOBAL_URL } from '@/api/util'
-import router from '@/router'
 import SalseChart from '@/views/product/productdetail/SalseChart.vue'
 import axios from 'axios'
 import { onMounted, ref, watchEffect } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import { formatPrice } from '@/FormatPrice'
 
 const route = useRoute()
+const router = useRouter()
 const idx = ref(route.params.idx)
 const size = ref(route.query.size)
-// console.log('사이즈', size.value)
 const productData = ref([])
 const reviewData = ref(0)
 const productDataOk = ref([])
+
+const productOptionselec = selectedOption => {
+  console.log(selectedOption.productId)
+  // console.log(props.productId)
+  // console.log(props.size)
+
+  router.push({
+    path: `/productsdetail/${selectedOption.productId}`,
+    query:{size:selectedOption.size}
+  })
+}
 
 watchEffect(async () => {
   try {
@@ -25,7 +36,7 @@ watchEffect(async () => {
     productData.value = res.data
     reviewData.value = res2.data
     if (res.status === 200 && res2.status === 200) {
-      // console.log(productData.value.length)
+      console.log(productData.value)
 
       for (let i = 0; i < productData.value.length; i++) {
         if (
@@ -49,15 +60,7 @@ watchEffect(async () => {
 
 const productOptions = ref(['30ml', '50ml', '100ml'])
 
-const productOptionselec = selectedOption => {
-  console.log(selectedOption.productId)
-  // console.log(props.productId)
-  // console.log(props.size)
 
-  router.push({
-    path: `/productsdetail/${selectedOption.productId}?size=${selectedOption.size}`,
-  })
-}
 
 const BuyNow = () => {}
 
@@ -100,7 +103,7 @@ const Average = data => {
           reviews)</span
         >
       </li>
-      <li>￦ {{ productDataOk.price }}</li>
+      <li>{{ formatPrice(productDataOk.price) }}</li>
     </ul>
 
     <p class="OptionSelect">옵션선택</p>

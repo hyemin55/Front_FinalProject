@@ -1,10 +1,10 @@
 <script setup>
 import { ref } from 'vue'
 import { Carousel, Pagination, Slide, Navigation } from 'vue3-carousel'
-import home_1 from '@/assets/img/editor_front_img.png'
+import home_1 from '@/assets/img/빵빵덕복숭아.png'
 import home_2 from '@/assets/img/p_003.png'
 import home_3 from '@/assets/img/빵빵덕세안.png'
-import home_4 from '@/assets/img/빵빵덕세안.png'
+import home_4 from '@/assets/img/빵빵덕토끼.png'
 
 import 'vue3-carousel/dist/carousel.css'
 import Queue from 'queue-fifo'
@@ -15,7 +15,7 @@ let queue = new Queue()
 let image_list = []
 // 1. img idx => q
 for (let i = 0; i < slides.value.length; i++) {
-  console.log('ddd ' + i)
+  // console.log('ddd ' + i)
   queue.enqueue(i)
   image_list.push(slides.value[i])
 }
@@ -25,7 +25,7 @@ const handleClick = index => {
   console.log('Clicked index:', index)
   // 클릭한 슬라이드의 index에 따른 로직 추가
 
-  console.log(queue.peek())
+  console.log('queuepeek',queue.peek())
   //
   if (queue.peek() == index) return
   while (queue.peek() != index) {
@@ -70,8 +70,12 @@ const handleClick = index => {
       >
         <div class="carousel__item">
           <img :class="{firstslideImg: index === 0, firstslideImgOne : index === 1, firstslideImgTwo : index === 2 }" :src="slide"></img>
-          <!-- <img class="firstslideImg" :src="slide" /> -->
-          <!-- <img :class="{lideImg: index === 2}" :src="slide" /> -->
+        </div>
+        
+        <div class="carousel__item_info" >
+            <p>브랜드명</p>
+            <p>빵빵덕</p>
+            <p>￦100,000</p>
         </div>
       </Slide>
 
@@ -103,26 +107,41 @@ const handleClick = index => {
   align-items: flex-end;
   /* padding: 20px; */
   justify-content: center;
-  /* position: relative;*/
+  position: relative;
   /* background-color: brown; */
   height: 500px;
   overflow: hidden;
 }
-
-.carousel__item > p {
+.carousel__item_info{
   position: absolute;
-  bottom: 10px; /* 바닥에서의 거리 설정 */
-  color: white; /* 글자 색상 설정 */
-  text-align: left;
+  /* display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column; */
+  bottom: 70px;
   font-size: 2.3rem;
-  /* text-shadow: 1px 1px 2px #5f5f5f; */
+  color: white;
+  text-shadow: 1px 1px 5px #333;
+  line-height: 1.5;
+  /* height: 200px; */
+  overflow: hidden;
+  /* color: white; */
+  transition: opacity 0.3s ease, visibility 0s 0.3s;
+  visibility: hidden;
+  opacity: 0;
 }
-
+.Slidebox:hover .carousel__item_info{
+  opacity: 1; /* 호버 시 상세 정보 표시 */
+  visibility: visible; /* 호버 시 보이도록 설정 */
+  transition: opacity 0.3s ease, visibility 0s; /* 상세 정보가 바로 보이도록 설정 */
+  /* background-color: aqua; */
+}
 .firstslideImg {
   width: 110%; /* 첫 번째 슬라이드 이미지의 너비 조정 */
   height: auto; /* 비율 유지 */
   background-color: var(--color-main-Lgray);
   padding: 3%;
+  position: relative;
 }
 
 .firstslideImgOne  {
