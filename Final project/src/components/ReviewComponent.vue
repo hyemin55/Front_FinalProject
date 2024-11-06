@@ -1,29 +1,95 @@
 <script setup>
 import { GLOBAL_URL } from '@/api/util'
 import axios from 'axios'
-import { computed, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
 const idx = ref(route.params.idx)
 const ReviewList = ref([])
-const reviewcount = ref(0)
-
-const totalPages = ref(10)
 
 const star_list = ['★', '★★', '★★★', '★★★★', '★★★★★']
 
-onMounted(async () => {
-  const res = await axios.get(`${GLOBAL_URL}/detail/review/1`)
-  // const res = await axios.get(`${GLOBAL_URL}/detail/review/${idx}`)
-  ReviewList.value = res.data
-  reviewcount.value = res.data.list
-  console.log(reviewcount.value)
-  // console.log('별이 5개 맞아?', ReviewList.value[0].star)
+let flag = 0
+// const reviewCount = ref(0)
+const totalPages = ref(10)
+const totalPageGroup = ref(0)
+const pageSize = 5
+const currentPage = ref(1)
+const currentPageGroup = ref(0)
+const startPage = ref(0)
+const endPage = ref(0)
+const reviewCount = ref(80)
 
-  const res2 = await axios.get(`${GLOBAL_URL}/detail/detailReviewInfo/1`)
-  totalPages = res2.data.reviewCount
+onMounted(async () => {
+  const res = await axios.get(`${GLOBAL_URL}/detail/review/${idx.value}`)
+  console.log('순서시작', res.data.length)
+  console.log('순서시작', res.data)
+  // reviewCount.value = res.data.length
+  totalPages.value = Math.ceil(reviewCount.value / pageSize)
+  totalPageGroup.value = Math.floor(totalPages.value / 10)
+  viewCurrentPage()
 })
+
+// 이전페이지
+const backPage = async () => {
+  currentPage.value = startPage.value - 10
+  if (currentPageGroup.value <= 0) {
+    console.log('첫페이지입니다.')
+    return
+  }
+  viewCurrentPage()
+}
+
+// 다음페이지
+const nextPage = async () => {
+  currentPage.value = endPage.value + 1
+  console.log('현재페이지그룹', currentPageGroup.value)
+  if (currentPageGroup.value >= totalPageGroup.value) {
+    console.log('마지막페이지입니다.')
+    return
+  }
+  viewCurrentPage()
+  console.log('현재페이지그룹후후후', currentPageGroup.value)
+}
+
+// 선택페이지
+const goToPage = page => {
+  if (currentPage.value == page) {
+    console.log('현재페이지입니다.')
+    return
+  }
+  currentPage.value = page
+  viewCurrentPage()
+}
+
+// 현재페이지
+const viewCurrentPage = async () => {
+  currentPageGroup.value = Math.floor((currentPage.value - 1) / 10)
+  // console.log('현재페이지', currentPage.value)
+  // console.log('현재페이지그룹', currentPageGroup.value)
+
+  if (currentPageGroup.value == currentPage.value - 1 && flag) {
+    flag = true
+    // console.log('처음이라..')
+    return
+  } else {
+    const res = await axios.get(
+      `${GLOBAL_URL}/detail/review/${idx.value}?pageNum=${currentPage.value - 1}`,
+    )
+    // console.log('리뷰리스트', res.data)
+    ReviewList.value = res.data
+    startPage.value = currentPageGroup.value * 10 + 1
+    endPage.value = Math.min(startPage.value + 9, totalPages.value)
+  }
+}
+const activePage = pageNum => {
+  if (currentPageGroup.value <= 0) {
+    return currentPage.value === pageNum
+  } else {
+    return currentPage.value - 1 - currentPageGroup.value * 10 === pageNum - 1
+  }
+}
 </script>
 
 <template>
@@ -55,26 +121,28 @@ onMounted(async () => {
     </ul>
   </div>
 
-  <!-- <ul id="totalPages">
-    <li @click="setPageNum(pageNum.value - 1)" v-if="pageNum.value > 0">
-      이전
-    </li>
+  <div
+    id="userReviewList"
+    class="border noUserReviewList"
+    v-if="reviewCount == 0 || reviewCount == null"
+  >
+    <img src="@/assets/img/free-icon-font-note-sticky-9798415.svg" alt="" />
+    <p>아직 리뷰가 등록되지 않았어요 ㅠㅡㅠ</p>
+  </div>
+
+  <ul id="totalPages">
+    <li @click="backPage">이전</li>
     <li
       class="totalPages"
-      v-for="num in totalPages"
-      v-bind:key="num"
-      @click="setPageNum(num - 1)"
-      :class="{ active: pageNum.value === num - 1 }"
+      v-for="pageNum in endPage - startPage + 1"
+      v-bind:key="pageNum"
+      @click="goToPage(startPage + pageNum - 1)"
+      :class="{ active: activePage(pageNum) }"
     >
-      {{ num }}
+      {{ startPage + pageNum - 1 }}
     </li>
-    <li
-      @click="setPageNum(pageNum.value + 1)"
-      v-if="pageNum.value < totalPages - 1"
-    >
-      다음
-    </li>
-  </ul> -->
+    <li @click="nextPage">다음</li>
+  </ul>
 </template>
 
 <style scoped>
@@ -88,6 +156,26 @@ onMounted(async () => {
   height: 0.1px;
   width: var(--main-max-width);
   display: flex;
+}
+.noUserReviewList > img {
+  width: 100px;
+  color: var(--color-main-Lgray);
+  filter: grayscale(100%);
+  margin-top: 20px;
+}
+.noUserReviewList::before {
+  position: absolute;
+  content: '';
+  border: 0.5px dashed var(--color-main-Lgray);
+  height: 0.1px;
+  width: var(--main-max-width);
+  display: flex;
+  /* top: 20px; */
+}
+.noUserReviewList {
+  text-align: center;
+  height: 150px;
+  background-color: antiquewhite;
 }
 .userReviewStar {
   font-size: 2rem;
@@ -145,15 +233,25 @@ onMounted(async () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 30%;
+  width: 100%;
   margin-top: 30px;
-  background-color: rgb(161, 160, 158);
+  /* background-color: rgb(161, 160, 158); */
+}
+#totalPages li {
+  cursor: pointer;
 }
 .totalPages {
-  background-color: rgb(236, 207, 172);
+  /* background-color: rgb(236, 207, 172); */
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 10%;
+  /* width: 10%; */
+  /* margin: 0 1%; */
+  padding: 1%;
+}
+.totalPages.active {
+  color: var(--color-main-bloode);
+  font-weight: 600;
+  text-decoration: underline;
 }
 </style>
