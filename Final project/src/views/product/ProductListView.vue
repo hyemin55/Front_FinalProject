@@ -2,23 +2,78 @@
 import { GLOBAL_URL } from '@/api/util'
 import ProductComponent from '@/components/ProductComponent.vue'
 import axios from 'axios'
-import { computed, ref, watchEffect } from 'vue'
+import { computed, onMounted, ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
 const categoryTitle = computed(() => route.params.title)
 const categoryId = computed(() => route.params.idx)
 const list = ref([])
-const sortedList = ref([])  // 정렬된 리스트를 저장할 변수
 
+const sortedList = ref([])  // 정렬된 리스트
 // 정렬버튼 텍스트
 const sortTitle = ref('추천순 ⇅')
 const hiddenItem = ref(0);
 
-// 데이터 스크롤 로딩
-const loading = ref(false); // 로딩 상태를 추적
-const pageNum = ref(1);  // 한 번에 불러올 데이터 개수
+// // 무한 스크롤 변수
+// const page = ref(1) // 페이지
+// const nextPage = ref(false) // 다음페이지 있는지?(로딩의 한계를 정함)
+// const pageParams = ref([]); // history 이미 호출했는지 여부를 확인
+// const loading = ref(false) // 로딩시
+// const loadingUi = ref(null) // 로딩 UI지정
 
+// // 무한스크롤 
+// const muhanScroll = (async(page)=>{
+//   if(pageParams.value.includes(page)) return; // 이미 호출되었나 확인.
+//   nextPage.value = true;
+//   loading.value = true; 
+//   try{
+//     const res = await axios.get(`${GLOBAL_URL}/api/categories/${categoryId.value}?page=${page}`)
+//     const data = res.data // 통신으로 받은 데이터
+//     list.value = [...list.value, ...data.value]; // 리스트에 데이터 추가
+
+//     // 데이터 초기화 및 정렬
+//     sortedList.value = [...list.value];  // 데이터를 불러온 후 정렬된 리스트 초기화
+//     sortTitle.value = '추천순 ⇅'; // 정렬 버튼 텍스트 초기화
+//     hiddenItem.value = 0; // 숨겨진 항목 초기화
+    
+//     pageParams.value = [...pageParams.value, page] // 페이지 추가
+//     page.value = data.page < data.totalPage ? page.value + 1 : page.value
+//     loading.value = false;
+
+//     sortList();
+//   }
+//   catch(error){
+//     console.error('error', error)
+//     loading.value = false;
+//     nextPage.value = false;
+//   }
+// })
+
+// // 페이지가 변경될때 마다 작동한다.
+// watchEffect((page)=>{
+//   muhanScroll(page.value);
+// })
+
+// // 페이지가 변경되는 부분이다. (아래의 로딩 페이지에 걸리면 작동)
+// watchEffect(()=>{
+//   const obsever = new IntersectionObserver((ent)=>{
+//     const firstEnt = ent[0]
+//     if(firstEnt.isIntersecting && nextPage.value && !loading){
+//       console.log('화면에 보인다.')
+//       page.value += 1;
+//     }
+//   })
+//   if(loadingUi.value){ 
+//     obsever.observe(loadingUi.value);
+//     return()=>{
+//       obsever.unobserve(loadingUi.value);
+//     }
+//   }
+// })
+
+
+// 기존 (완성)
 watchEffect(async () => {
   console.log('작동')
   try {
@@ -36,13 +91,6 @@ watchEffect(async () => {
     console.error('실패', e)
   }
 })
-const DataLoadScroll = ()=>{
-  const container = $refs.scrollContainer;
-  if (container.scrollTop + container.clientHeight >= container.scrollHeight - 50 && !loading.value) {
-    watchEffect();
-  }
-}
-
 
 // 정렬 함수들
 const latestDate = () => {sortedList.value = [...list.value].sort((a, b) => new Date(a.registerDate) - new Date(b.registerDate))}
@@ -75,12 +123,13 @@ const sortList = (order, index) => {
       sortedList.value = [...list.value]  // 기본적으로 원래 순서로 돌아감
       sortTitle.value = '추천순 ⇅'
   }
+  // muhanScroll(1);
 }
-
 </script>
 
+
 <template>
-  <section id="product_wrapper" @scroll="DataLoadScroll" ref="scrollContainer">
+  <section id="product_wrapper" class="scroll-target">
     <article class="product_gnb">
       <h1 class="product_category_title">{{ categoryTitle }}</h1>
       <ul class="product_category">
@@ -113,6 +162,8 @@ const sortList = (order, index) => {
       />
       <!-- props -->
     </article>
+
+    <h1 ref="loadingUi">loadong...</h1>
   </section>
 </template>
 
