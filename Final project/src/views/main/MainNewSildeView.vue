@@ -22,12 +22,11 @@ const getNewList = async () => {
     console.log(res)
     if (res.status == 200) {
       // New_list.value = res.data
-      console.log('나와랏',res.data)
+      console.log('나와랏', res.data)
       // for (let i = 0; i < res.data.length; i++) {
       //   slides.value.push(res.data[i].images[0])
       // }
       slides.value = res.data
-
     }
   } catch (e) {
     console.log('리스트 못 받아오는 오류에요 = ' + e)
@@ -37,12 +36,12 @@ const getNewList = async () => {
 watchEffect(() => {
   getNewList()
 })
-const navDetailProduct = (productId,size) => {
+const navDetailProduct = (productId, size) => {
   console.log(productId)
   router.push({
-    path:`/productsdetail/${productId}`,
-  query:{size:size}
- } )
+    path: `/productsdetail/${productId}`,
+    query: { size: size },
+  })
 }
 
 // getNewList()
@@ -57,11 +56,13 @@ const navDetailProduct = (productId,size) => {
       :wrap-around="true"
       :pause-autoplay-on-hover="true"
       :mouseDrag="false"
-      :i18n="iconArrowRight"
     >
       <Slide v-for="(slide, index) in slides" :key="index">
         <!-- <div v-for="productDtail in New_list" :key="productDtail.productId"> -->
-        <div class="carousel__item" @click="navDetailProduct(slide.productId, slide.size)">
+        <div
+          class="carousel__item"
+          @click="navDetailProduct(slide.productId, slide.size)"
+        >
           <p class="time_check">{{ slide.registerDate }} 등록상품</p>
           <img
             class="slideImg"
@@ -70,7 +71,7 @@ const navDetailProduct = (productId,size) => {
           <div class="item_info">
             <p>{{ slide.brandName }}</p>
             <p>{{ slide.productName }}</p>
-            <p>{{ formatPrice(slide.price) }}</p>
+            <p>￦ {{ slide.price.toLocaleString() }}</p>
           </div>
         </div>
         <!-- </div> -->
@@ -131,8 +132,8 @@ const navDetailProduct = (productId,size) => {
   bottom: 20px;
   left: 10px;
 }
-.item_info p:nth-child(1){
-  font-size: 2.0rem;
+.item_info p:nth-child(1) {
+  font-size: 2rem;
   color: var(--color-main-bloode);
 }
 .item_info p {
@@ -140,5 +141,4 @@ const navDetailProduct = (productId,size) => {
   /* height: 200px; */
   padding: 5px 20px;
 }
-
 </style>

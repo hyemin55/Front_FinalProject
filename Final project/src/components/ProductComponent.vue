@@ -93,15 +93,29 @@ const navDetailProduct = () => {
       />
       <ul @click.stop>
         <li class="cart_push" @click.stop="addToCart">
-          <img class="icon" src="@/assets/img/icon/free-icon-font-shopping-cart.svg" alt=""/>
+          <img
+            class="icon"
+            src="@/assets/img/icon/free-icon-font-shopping-cart.svg"
+            alt=""
+          />
         </li>
         <li
           class="wish_push"
           :class="{ active: redHeart }"
           @click.stop="addToWishlist"
         >
-          <img class="icon" src="@/assets/img/icon/free-icon-font-heart-line.svg" alt="" :style="{ display: iconClick ? 'none' : 'flex' }"/>
-          <img class="icon" src="@/assets/img/icon/free-icon-font-heart.svg" alt="" :style="{ display: iconClick ? 'flex' : 'none' }"/>
+          <img
+            class="icon"
+            src="@/assets/img/icon/free-icon-font-heart-line.svg"
+            alt=""
+            :style="{ display: iconClick ? 'none' : 'flex' }"
+          />
+          <img
+            class="icon"
+            src="@/assets/img/icon/free-icon-font-heart.svg"
+            alt=""
+            :style="{ display: iconClick ? 'flex' : 'none' }"
+          />
         </li>
       </ul>
     </div>
@@ -116,7 +130,11 @@ const navDetailProduct = () => {
         <li class="product_price">￦ {{ price.toLocaleString() }}</li>
         <li class="product_review">
           <span>
-            <img class="star"src="@/assets/img/icon/free-icon-font-star.svg"alt=""/>
+            <img
+              class="star"
+              src="@/assets/img/icon/free-icon-font-star.svg"
+              alt=""
+            />
             4.5
           </span>
           (<span>{{ reviewCount }}</span

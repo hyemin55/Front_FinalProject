@@ -1,12 +1,15 @@
 <script setup>
 import { GLOBAL_URL } from '@/api/util'
+import { productDetailStore } from '@/stores/productDetailStore'
 import axios from 'axios'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
-const idx = ref(route.params.idx)
 const ReviewList = ref([])
+const detailStore = productDetailStore()
+const idx = detailStore.productIdx
+const size = detailStore.productSize
 
 const star_list = ['★', '★★', '★★★', '★★★★', '★★★★★']
 
@@ -22,9 +25,9 @@ const endPage = ref(0)
 const reviewCount = ref(80)
 
 onMounted(async () => {
-  const res = await axios.get(`${GLOBAL_URL}/detail/review/${idx.value}`)
-  console.log('순서시작', res.data.length)
-  console.log('순서시작', res.data)
+  const res = await axios.get(`${GLOBAL_URL}/detail/review/${idx}`)
+  // console.log('순서시작', res.data.length)
+  // console.log('순서시작', res.data)
   // reviewCount.value = res.data.length
   totalPages.value = Math.ceil(reviewCount.value / pageSize)
   totalPageGroup.value = Math.floor(totalPages.value / 10)
@@ -36,6 +39,7 @@ const backPage = async () => {
   currentPage.value = startPage.value - 10
   if (currentPageGroup.value <= 0) {
     console.log('첫페이지입니다.')
+    alert('첫페이지입니다.')
     return
   }
   viewCurrentPage()
@@ -47,10 +51,11 @@ const nextPage = async () => {
   console.log('현재페이지그룹', currentPageGroup.value)
   if (currentPageGroup.value >= totalPageGroup.value) {
     console.log('마지막페이지입니다.')
+    alert('마지막페이지입니다.')
     return
   }
   viewCurrentPage()
-  console.log('현재페이지그룹후후후', currentPageGroup.value)
+  // console.log('현재페이지그룹후후후', currentPageGroup.value)
 }
 
 // 선택페이지
@@ -75,7 +80,7 @@ const viewCurrentPage = async () => {
     return
   } else {
     const res = await axios.get(
-      `${GLOBAL_URL}/detail/review/${idx.value}?pageNum=${currentPage.value - 1}`,
+      `${GLOBAL_URL}/detail/review/${idx}?pageNum=${currentPage.value - 1}`,
     )
     // console.log('리뷰리스트', res.data)
     ReviewList.value = res.data
