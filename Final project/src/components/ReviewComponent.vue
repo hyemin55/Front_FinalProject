@@ -10,9 +10,8 @@ const ReviewList = ref([])
 
 const star_list = ['★', '★★', '★★★', '★★★★', '★★★★★']
 
-
 let flag = 0
-const reviewCount = ref(0)
+// const reviewCount = ref(0)
 const totalPages = ref(10)
 const totalPageGroup = ref(0)
 const pageSize = 5
@@ -20,11 +19,13 @@ const currentPage = ref(1)
 const currentPageGroup = ref(0)
 const startPage = ref(0)
 const endPage = ref(0)
+const reviewCount = ref(80)
 
 onMounted(async () => {
   const res = await axios.get(`${GLOBAL_URL}/detail/review/${idx.value}`)
   console.log('순서시작', res.data.length)
-  reviewCount.value = res.data.length
+  console.log('순서시작', res.data)
+  // reviewCount.value = res.data.length
   totalPages.value = Math.ceil(reviewCount.value / pageSize)
   totalPageGroup.value = Math.floor(totalPages.value / 10)
   viewCurrentPage()
@@ -32,6 +33,7 @@ onMounted(async () => {
 
 // 이전페이지
 const backPage = async () => {
+  currentPage.value = startPage.value - 10
   if (currentPageGroup.value <= 0) {
     console.log('첫페이지입니다.')
     return
@@ -41,11 +43,14 @@ const backPage = async () => {
 
 // 다음페이지
 const nextPage = async () => {
+  currentPage.value = endPage.value + 1
+  console.log('현재페이지그룹', currentPageGroup.value)
   if (currentPageGroup.value >= totalPageGroup.value) {
     console.log('마지막페이지입니다.')
     return
   }
   viewCurrentPage()
+  console.log('현재페이지그룹후후후', currentPageGroup.value)
 }
 
 // 선택페이지
@@ -61,21 +66,28 @@ const goToPage = page => {
 // 현재페이지
 const viewCurrentPage = async () => {
   currentPageGroup.value = Math.floor((currentPage.value - 1) / 10)
-  console.log('현재페이지', currentPage.value)
-  console.log('현재페이지그룹', currentPageGroup.value)
+  // console.log('현재페이지', currentPage.value)
+  // console.log('현재페이지그룹', currentPageGroup.value)
 
   if (currentPageGroup.value == currentPage.value - 1 && flag) {
     flag = true
-    console.log('처음이라..')
+    // console.log('처음이라..')
     return
   } else {
     const res = await axios.get(
       `${GLOBAL_URL}/detail/review/${idx.value}?pageNum=${currentPage.value - 1}`,
     )
-    console.log('리뷰리스트', res.data)
+    // console.log('리뷰리스트', res.data)
     ReviewList.value = res.data
     startPage.value = currentPageGroup.value * 10 + 1
     endPage.value = Math.min(startPage.value + 9, totalPages.value)
+  }
+}
+const activePage = pageNum => {
+  if (currentPageGroup.value <= 0) {
+    return currentPage.value === pageNum
+  } else {
+    return currentPage.value - 1 - currentPageGroup.value * 10 === pageNum - 1
   }
 }
 </script>
@@ -109,6 +121,15 @@ const viewCurrentPage = async () => {
     </ul>
   </div>
 
+  <div
+    id="userReviewList"
+    class="border noUserReviewList"
+    v-if="reviewCount == 0 || reviewCount == null"
+  >
+    <img src="@/assets/img/free-icon-font-note-sticky-9798415.svg" alt="" />
+    <p>아직 리뷰가 등록되지 않았어요 ㅠㅡㅠ</p>
+  </div>
+
   <ul id="totalPages">
     <li @click="backPage">이전</li>
     <li
@@ -116,7 +137,7 @@ const viewCurrentPage = async () => {
       v-for="pageNum in endPage - startPage + 1"
       v-bind:key="pageNum"
       @click="goToPage(startPage + pageNum - 1)"
-      :class="{ active: currentPage === pageNum }"
+      :class="{ active: activePage(pageNum) }"
     >
       {{ startPage + pageNum - 1 }}
     </li>
@@ -135,6 +156,26 @@ const viewCurrentPage = async () => {
   height: 0.1px;
   width: var(--main-max-width);
   display: flex;
+}
+.noUserReviewList > img {
+  width: 100px;
+  color: var(--color-main-Lgray);
+  filter: grayscale(100%);
+  margin-top: 20px;
+}
+.noUserReviewList::before {
+  position: absolute;
+  content: '';
+  border: 0.5px dashed var(--color-main-Lgray);
+  height: 0.1px;
+  width: var(--main-max-width);
+  display: flex;
+  /* top: 20px; */
+}
+.noUserReviewList {
+  text-align: center;
+  height: 150px;
+  background-color: antiquewhite;
 }
 .userReviewStar {
   font-size: 2rem;
@@ -213,5 +254,4 @@ const viewCurrentPage = async () => {
   font-weight: 600;
   text-decoration: underline;
 }
-
 </style>

@@ -2,7 +2,7 @@
 import { GLOBAL_URL } from '@/api/util'
 import SalseChart from '@/views/product/productdetail/SalseChart.vue'
 import axios from 'axios'
-import { onMounted, ref, watchEffect } from 'vue'
+import { ref, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { formatPrice } from '@/FormatPrice'
 
@@ -13,17 +13,6 @@ const size = ref(route.query.size)
 const productData = ref([])
 const reviewData = ref(0)
 const productDataOk = ref([])
-
-const productOptionselec = selectedOption => {
-  console.log(selectedOption.productId)
-  // console.log(props.productId)
-  // console.log(props.size)
-
-  router.push({
-    path: `/productsdetail/${selectedOption.productId}`,
-    query:{size:selectedOption.size}
-  })
-}
 
 watchEffect(async () => {
   try {
@@ -57,10 +46,6 @@ watchEffect(async () => {
     console.log('실패' + err)
   }
 })
-
-const productOptions = ref(['30ml', '50ml', '100ml'])
-
-
 
 const BuyNow = () => {}
 
