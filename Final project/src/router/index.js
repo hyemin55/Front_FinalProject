@@ -7,6 +7,7 @@ import OauthView from '@/views/login/OauthView.vue'
 import MypageView from '@/views/mypage/_MypageView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import PaymentView from '@/views/payment/_PaymentView.vue'
+import NotFoundPage from '@/views/NotFoundPage.vue'
 
 const loginRouter = [
   {
@@ -67,6 +68,10 @@ const router = createRouter({
       name: 'mypage',
       component: MypageView,
     },
+    {
+      path: '/:catchAll(.*)',  // catch-all 경로를 정규 표현식으로 설정
+      component: NotFoundPage
+    }
   ],
   scrollBehavior(to, from, savedPosition) {
     return { top: 0 } // 모든 라우트 이동 시 스크롤을 맨 위로 이동

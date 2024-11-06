@@ -63,8 +63,9 @@ const BuyNow = () => {}
 
 const redHeart = ref(false)
 const addToWishlist = () => {
-  alert('༼ つ ◕_◕ ༽つ 찜~')
   redHeart.value = !redHeart.value
+  if(redHeart.value == true)
+  alert('༼ つ ◕_◕ ༽つ 찜~')
 }
 
 const urlShare = () => {
@@ -96,8 +97,7 @@ const Average = data => {
         <span style="color: orange"
           >★ {{ Average(reviewData.starAverage) }} ({{
             reviewData.reviewCount
-          }}
-          reviews)</span
+          }} reviews)</span
         >
       </li>
       <li>{{ formatPrice(productDataOk.price) }}</li>

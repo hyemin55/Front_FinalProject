@@ -20,6 +20,30 @@ const LatestHandle = () => {
 
 <template>
   <article id="detailReview">
+    <h1 id="detailReviewTitle">Reviews</h1>
+    <div>
+      <div>원형바</div>
+      <div>
+        <p>★★★★★</p>
+        <p>리뷰수</p>
+      </div>
+      <ul>
+        <li>5.0 <span>★</span><div>bar</div>별점별리뷰수</li>
+        <li>4.0 <span>★</span><div>bar</div>별점별리뷰수</li>
+        <li>3.0 <span>★</span><div>bar</div>별점별리뷰수</li>
+        <li>2.0 <span>★</span><div>bar</div>별점별리뷰수</li>
+        <li>1.0 <span>★</span><div>bar</div>별점별리뷰수</li>
+      </ul>
+    </div>
+
+    <!-- <div class="rating-bar">
+    <div class="star-label">{{ stars }} ★</div>
+    <div class="bar-background">
+      <div class="bar-fill" :style="{ width: `${percentage}%` }"></div>
+    </div>
+    <div class="review-count">{{ count }}</div>
+  </div> -->
+
     <h1 id="detailReviewTitle">Photo Lists</h1>
     <ProductDetailReviewSlide />
 
