@@ -111,8 +111,10 @@ const handleClick = index => {
   /* background-color: brown; */
   height: 500px;
   overflow: hidden;
+  cursor: pointer;
 }
 .carousel__item_info{
+  cursor: pointer;
   position: absolute;
   /* display: flex;
   align-items: center;
@@ -121,7 +123,7 @@ const handleClick = index => {
   bottom: 70px;
   font-size: 2.3rem;
   color: white;
-  text-shadow: 1px 1px 5px #333;
+  text-shadow: 1px 1px 5px var(--color-main-bloode);
   line-height: 1.5;
   /* height: 200px; */
   overflow: hidden;
