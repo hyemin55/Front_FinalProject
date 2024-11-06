@@ -67,7 +67,6 @@ const makeCartCheckList = () => {
 const emit = defineEmits(['update:isChecked'])
 const handleCheckboxChange = item => {
   emit('update:isChecked', cartCheck.value)
-  
 }
 watch(cartCheck, newValue => {
   emit('update:isChecked', newValue)
@@ -115,25 +114,30 @@ watch(
 )
 
 // 상품으로 이동
-const router = useRouter();
-const moveDetail =()=>{
-  router.push({path: `/productsdetail/${props.productInfo.productId}`,
-    query:{
-      size: cart_size.value
-    }
+const router = useRouter()
+const moveDetail = () => {
+  router.push({
+    path: `/productsdetail/${props.productInfo.productId}`,
+    query: {
+      size: cart_size.value,
+    },
   })
 }
 </script>
 
 <template v-for="item in cart" :key="item.idx">
-  <article id="cart_product_component_wrapper"
-    :class="{ 'check':cartCheck, 'notCheck':!cartCheck }">
+  <article
+    id="cart_product_component_wrapper"
+    :class="{ check: cartCheck, notCheck: !cartCheck }"
+  >
     <label class="product_check-ccartCheckontainer">
-      <input v-model="cartCheck"
+      <input
+        v-model="cartCheck"
         type="checkbox"
         name="check"
         class="product_check"
-        @change="handleCheckboxChange"/>
+        @change="handleCheckboxChange"
+      />
       <span class="custom-checkmark"></span>
     </label>
     <div class="img">
@@ -144,7 +148,9 @@ const moveDetail =()=>{
     </div>
     <div class="text">
       <div class="text_box">
-        <p class="title" @click="moveDetail">상품명 : {{ cart_product_name }}</p>
+        <p class="title" @click="moveDetail">
+          상품명 : {{ cart_product_name }}
+        </p>
         <p class="contents">옵션 : {{ cart_size }}ml</p>
         <p class="price">{{ cart_product_price.toLocaleString() }}원</p>
       </div>
@@ -203,7 +209,7 @@ const moveDetail =()=>{
   align-items: center;
   justify-content: center;
 }
-.img img{
+.img img {
   cursor: pointer;
   height: 90%;
 }
@@ -257,11 +263,10 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  
+
   cursor: pointer;
   font-size: 1.5rem;
 }
-
 .check {
   filter: grayscale(0);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);

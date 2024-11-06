@@ -10,36 +10,6 @@ import { useUserStore } from '@/stores/Login'
 const userStore = useUserStore()
 const userLogin = computed(() => userStore.loginCheck)
 
-// 1. productList에서 axios 통신을 통해 데이테이베이스에서 온 정보, for구문으로 받아온다.
-// 2. defineProps 는 받아온 정보를 사용하는 명령어, router로 오는 정보를 useRoute로 받아오는거랑 같은 맥락이다.
-// 상품리스트에 출력
-const props = defineProps({
-  // 받아오는props정의
-  productInfo: {
-    type: Object,
-    required: true,
-  }
-})
-
-// 3. defineProps으로 정의한 명령어를 변수로 정리하는 부분입니다.
-const productName = ref(props.productInfo.productName || '상품이름')
-const content = ref(props.productInfo.content || '상품설명')
-const price = ref(props.productInfo.price || '가격')
-const size = ref(props.productInfo.size || '사이즈')
-// const review_avr = ref('평점');
-const reviewCount = ref(props.productInfo.reviewCount || '0')
-
-// useNavigator
-const router = useRouter()
-const navDetailProduct = () => {
-  router.push({
-    path: `/productsdetail/${props.productInfo.productId}`,
-    query:{
-      size: size.value
-    }
-  })
-}
-
 // 장바구니 추가
 const cartStore = useCartStore()
 const addToCart = () => {
@@ -78,9 +48,40 @@ const addToWishlist = () => {
 // 단위 변경
 // const unit = ref('ml');
 // watch(() => categoryTitle.value, (newTitle) => {
-//   if (newTitle === 'Candle') {unit.value = 'g';} 
+//   if (newTitle === 'Candle') {unit.value = 'g';}
 //   else {unit.value = 'ml';}
 //   });
+
+// 1. productList에서 axios 통신을 통해 데이테이베이스에서 온 정보, for구문으로 받아온다.
+// 2. defineProps 는 받아온 정보를 사용하는 명령어, router로 오는 정보를 useRoute로 받아오는거랑 같은 맥락이다.
+// 상품리스트에 출력
+const props = defineProps({
+  // 받아오는props정의
+  productInfo: {
+    type: Object,
+    required: true,
+  },
+})
+
+// 3. defineProps으로 정의한 명령어를 변수로 정리하는 부분입니다.
+const productName = ref(props.productInfo.productName || '상품이름')
+const content = ref(props.productInfo.content || '상품설명')
+const price = ref(props.productInfo.price || '가격')
+const size = ref(props.productInfo.size || '사이즈')
+// const review_avr = ref('평점');
+const reviewCount = ref(props.productInfo.reviewCount || '0')
+
+// useNavigator
+const router = useRouter()
+const navDetailProduct = () => {
+  console.log('사이즈 값', size.value)
+  router.push({
+    path: `/productsdetail/${props.productInfo.productId}`,
+    query: {
+      size: size.value,
+    },
+  })
+}
 </script>
 
 <template>
@@ -244,7 +245,7 @@ const addToWishlist = () => {
   font-size: 1.85rem;
   color: #1f1f1f;
 }
-.size{
+.size {
   /* font-weight: 400; */
 }
 </style>
