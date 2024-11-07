@@ -2,7 +2,7 @@
 import { GLOBAL_URL } from '@/api/util';
 import { productDetailStore } from '@/stores/ProductDetailStore';
 import axios from 'axios';
-import { nextTick, onMounted, ref, watchEffect } from 'vue';
+import { ref, watch, watchEffect } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
@@ -21,40 +21,26 @@ const startPage = ref(0);
 const endPage = ref(0);
 const reviewCount = ref(detailStore.reviewCount);
 
-watchEffect(() => {
-  reviewCount.value = detailStore.reviewCount;
-});
-
-onMounted(async () => {
-  const reviewsData = await axios.get(`${GLOBAL_URL}/detail/review/${idx.value}`);
-  // console.log('순서시작', reviewsData.data.length)
-  // console.log('순서시작', reviewsData.data)
-  totalPages.value = Math.ceil(reviewCount.value / pageSize);
-  totalPageGroup.value = Math.floor(totalPages.value / 10);
-  viewCurrentPage();
-});
-console.log(reviewCount.value);
-
 // 이전페이지
-const backPage = async () => {
-  currentPage.value = startPage.value - 10;
+const backPage = () => {
   if (currentPageGroup.value <= 0) {
     console.log('첫페이지입니다.');
     alert('첫페이지입니다.');
     return;
   }
+  currentPage.value = startPage.value - 10;
   viewCurrentPage();
 };
 
 // 다음페이지
 const nextPage = async () => {
-  currentPage.value = endPage.value + 1;
   console.log('현재페이지그룹', currentPageGroup.value);
   if (currentPageGroup.value >= totalPageGroup.value) {
     console.log('마지막페이지입니다.');
     alert('마지막페이지입니다.');
     return;
   }
+  currentPage.value = endPage.value + 1;
   viewCurrentPage();
 };
 
@@ -71,16 +57,20 @@ const goToPage = page => {
 // 현재페이지
 const viewCurrentPage = async () => {
   currentPageGroup.value = Math.floor((currentPage.value - 1) / 10);
-  // console.log('현재페이지', currentPage.value)
-  // console.log('현재페이지그룹', currentPageGroup.value)
+  console.log('현재페이지', currentPage.value - 1);
+  console.log('현재페이지그룹', currentPageGroup.value);
 
   if (currentPageGroup.value == currentPage.value - 1 && flag) {
     flag = true;
     return;
   } else {
+    // console.log('idx = ',idx.value)
+    // console.log('currentPage = ',currentPage.value)
     const reviewsData = await axios.get(`${GLOBAL_URL}/detail/review/${idx.value}?pageNum=${currentPage.value - 1}`);
-    // console.log('리뷰리스트', res.data)
+    console.log('리뷰리스트', reviewsData.data);
     ReviewList.value = reviewsData.data;
+    totalPages.value = Math.ceil(reviewCount.value / pageSize);
+    totalPageGroup.value = Math.floor(totalPages.value / 10);
     startPage.value = currentPageGroup.value * 10 + 1;
     endPage.value = Math.min(startPage.value + 9, totalPages.value);
   }
@@ -94,6 +84,20 @@ const activePage = pageNum => {
     return currentPage.value - 1 - currentPageGroup.value * 10 === pageNum - 1;
   }
 };
+
+// idx를 ref로 했는데 피니아에서 바뀐 데이터가 실시간으로 변경되지 않아
+// 피니아의 idx변화값을 바로 추적해 강제로 idx와 reviewCount의 값을 변경함
+watch(
+  () => [detailStore.productIdx, detailStore.reviewCount],
+  ([newIdx, newreviewCount]) => {
+    idx.value = newIdx;
+    reviewCount.value = newreviewCount;
+    // console.log('reviewCount idx바뀐후 = ', reviewCount.value);
+    console.log('startPage', startPage.value);
+    viewCurrentPage();
+  },
+  { immediate: true },
+);
 </script>
 
 <template>
@@ -220,10 +224,13 @@ const activePage = pageNum => {
   justify-content: center;
   width: 100%;
   margin-top: 30px;
-  /* background-color: rgb(161, 160, 158); */
+  background-color: rgb(161, 160, 158);
+  font-size: 1.3rem;
+  /* gap: 1%; */
 }
 #totalPages li {
   cursor: pointer;
+  padding: 1%;
 }
 .totalPages {
   /* background-color: rgb(236, 207, 172); */
@@ -232,7 +239,6 @@ const activePage = pageNum => {
   justify-content: center;
   /* width: 10%; */
   /* margin: 0 1%; */
-  padding: 1%;
 }
 .totalPages.active {
   color: var(--color-main-bloode);

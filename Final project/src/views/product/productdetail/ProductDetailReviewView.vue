@@ -1,14 +1,14 @@
 <script setup>
 import { nextTick, ref, watch, watchEffect } from 'vue';
 import ReviewComponent from '@/components/ReviewComponent.vue';
-import ProductDetailReviewSlide from './ProductDetailReviewSlideView.vue';
+import ProductDetailReviewSlide from '@/views/product/productdetail/ProductDetailReviewSlideView.vue';
 import { productDetailStore } from '@/stores/ProductDetailStore';
 
 const SortStar = ref(true);
 const Latest = ref(true);
 const detailStore = productDetailStore();
 const idx = ref(detailStore.productIdx);
-const reviewCount = ref(0);
+const reviewCount = ref(detailStore.reviewCount);
 
 const SortStarHandle = () => {
   SortStar.value = !SortStar.value;
@@ -21,9 +21,8 @@ const LatestHandle = () => {
 const ratingData = () => {};
 
 // 리뷰 평균 점수 관리
-const rating = ref(3.7); // 예: 소수점 첫째 자리까지의 평균 점수
-const newRating = ref(detailStore.starAverage);
-console.log('newRating = ', newRating.value);
+const rating = ref(detailStore.starAverage);
+console.log('newRating = ', rating.value);
 
 const circumference = 2 * Math.PI * 45; // 원 둘레 (r = 45)
 
@@ -36,7 +35,6 @@ const emptyStars = () => {
 }; // 빈 별 개수
 
 watchEffect(async () => {
-  reviewCount.value = detailStore.reviewCount;
   await nextTick();
 });
 </script>
@@ -137,6 +135,8 @@ watchEffect(async () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin: 20px 0 50px 0;
+  /* background-color: #ffa500; */
 }
 /* 원형차트 */
 .progress-wrapper {
@@ -175,6 +175,7 @@ watchEffect(async () => {
   align-items: center;
   justify-content: left;
 }
+/* Review Lists section */
 #ShowReview {
   height: 60px;
   display: flex;

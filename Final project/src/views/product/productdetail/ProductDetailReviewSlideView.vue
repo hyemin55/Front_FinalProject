@@ -11,7 +11,7 @@ const idx = ref(detailStore.productIdx);
 const slides = ref([]);
 
 const reviewImgsData = async () => {
-  console.log(idx.value);
+  // console.log(idx.value);
   const reviewImageList = await axios.get(`${GLOBAL_URL}/detail/reviewImageList/${idx.value}`);
   // console.log('reviewImgsData', reviewImageList.data);
   // console.log('reviewImgsData', reviewImageList.data.length);
