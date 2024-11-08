@@ -1,25 +1,23 @@
 <script setup>
-import { GLOBAL_URL } from '@/api/util';
-import { productDetailStore } from '@/stores/ProductDetailStore';
-import axios from 'axios';
-import { ref, watch, watchEffect } from 'vue';
+import { getReviewsData, getViewCurrentPage } from '@/api/productDetail';
+import { onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
-const ReviewList = ref([]);
-const detailStore = productDetailStore();
-const idx = ref(detailStore.productIdx);
-const star_list = ['★', '★★', '★★★', '★★★★', '★★★★★'];
-
-let flag = 0;
+const idx = ref(route.params.idx);
+const reviewsData = ref([]);
+const currentPage = ref(1);
 const totalPages = ref(10);
+const currentPageGroup = ref(0);
+const reviewCount = ref(60);
+
+const ReviewList = ref([]);
+let flag = 0;
 const totalPageGroup = ref(0);
 const pageSize = 5;
-const currentPage = ref(1);
-const currentPageGroup = ref(0);
 const startPage = ref(0);
 const endPage = ref(0);
-const reviewCount = ref(detailStore.reviewCount);
+const star_list = ['★', '★★', '★★★', '★★★★', '★★★★★'];
 
 // 이전페이지
 const backPage = () => {
@@ -33,8 +31,7 @@ const backPage = () => {
 };
 
 // 다음페이지
-const nextPage = async () => {
-  console.log('현재페이지그룹', currentPageGroup.value);
+const nextPage = () => {
   if (currentPageGroup.value >= totalPageGroup.value) {
     console.log('마지막페이지입니다.');
     alert('마지막페이지입니다.');
@@ -57,17 +54,11 @@ const goToPage = page => {
 // 현재페이지
 const viewCurrentPage = async () => {
   currentPageGroup.value = Math.floor((currentPage.value - 1) / 10);
-  console.log('현재페이지', currentPage.value - 1);
-  console.log('현재페이지그룹', currentPageGroup.value);
-
   if (currentPageGroup.value == currentPage.value - 1 && flag) {
     flag = true;
     return;
   } else {
-    // console.log('idx = ',idx.value)
-    // console.log('currentPage = ',currentPage.value)
-    const reviewsData = await axios.get(`${GLOBAL_URL}/detail/review/${idx.value}?pageNum=${currentPage.value - 1}`);
-    console.log('리뷰리스트', reviewsData.data);
+    const reviewsData = await getViewCurrentPage(idx.value, currentPage.value - 1);
     ReviewList.value = reviewsData.data;
     totalPages.value = Math.ceil(reviewCount.value / pageSize);
     totalPageGroup.value = Math.floor(totalPages.value / 10);
@@ -87,22 +78,51 @@ const activePage = pageNum => {
 
 // idx를 ref로 했는데 피니아에서 바뀐 데이터가 실시간으로 변경되지 않아
 // 피니아의 idx변화값을 바로 추적해 강제로 idx와 reviewCount의 값을 변경함
-watch(
-  () => [detailStore.productIdx, detailStore.reviewCount],
-  ([newIdx, newreviewCount]) => {
-    idx.value = newIdx;
-    reviewCount.value = newreviewCount;
-    // console.log('reviewCount idx바뀐후 = ', reviewCount.value);
-    console.log('startPage', startPage.value);
-    viewCurrentPage();
-  },
-  { immediate: true },
-);
+// watch(
+//   () => [detailStore.productIdx, detailStore.reviewCount],
+//   ([newIdx, newreviewCount]) => {
+//     idx.value = newIdx;
+//     reviewCount.value = newreviewCount;
+//     // console.log('reviewCount idx바뀐후 = ', reviewCount.value);
+//     // console.log('startPage', startPage.value);
+//     viewCurrentPage();
+//   },
+//   { immediate: true },
+// );
+
+// 처음 렌더링 시 받아올 데이터.
+onMounted(async () => {
+  reviewsData = await getReviewsData(idx.value);
+  ReviewList.value = reviewsData.data;
+  totalPages.value = Math.ceil(reviewCount.value / pageSize);
+  totalPageGroup.value = Math.floor(totalPages.value / 10);
+  startPage.value = currentPageGroup.value * 10 + 1;
+  endPage.value = Math.min(startPage.value + 9, totalPages.value);
+});
+
+// 주소줄의 idx값이 바뀌면 리뷰리스트와 페이지네이션 변경을 위해 재통신 필요.
+watch(() => {
+  idx.value = route.params.idx;
+  viewCurrentPage();
+});
 </script>
 
 <template>
   <div id="userReviewList" class="border" v-for="(list, index) in ReviewList" :key="index">
-    <p class="userReviewStar">{{ star_list[list.star - 1] }}</p>
+    <ul class="userInfo">
+      <li>
+        <img :src="`${list.memberDetailReviewResDto.profileImage}`" alt="" class="userInfoImg" />
+      </li>
+      <div class="userInfoNicknameAndUserReviewStar">
+        <li class="userInfoNickname">
+          {{ list.memberDetailReviewResDto.nickName }}
+        </li>
+        <p class="userReviewStar">
+          {{ star_list[list.star - 1] }} <span style="color: #333; font-size: 1.5rem">{{ list.star }}</span>
+        </p>
+      </div>
+    </ul>
+
     <div class="userReviewImgs">
       <img :src="`${GLOBAL_URL}/api/file/download/${list.reviewImageResDto.filename}`" alt="" class="userReviewImg" />
     </div>
@@ -110,14 +130,6 @@ watch(
     <p class="userReviewTime">
       {{ list.reviewCreationDate }}
     </p>
-    <ul class="userInfo">
-      <li>
-        <img :src="`${list.memberDetailReviewResDto.profileImage}`" alt="" class="userInfoImg" />
-      </li>
-      <li class="userInfoNickname">
-        {{ list.memberDetailReviewResDto.nickName }}
-      </li>
-    </ul>
   </div>
 
   <div id="userReviewList" class="border noUserReviewList" v-if="reviewCount == 0 || reviewCount == null">
@@ -136,7 +148,7 @@ watch(
 
 <style scoped>
 #userReviewList {
-  line-height: 35px;
+  /* line-height: 35px; */
 }
 #userReviewList::after {
   position: absolute;
@@ -169,7 +181,7 @@ watch(
 .userReviewStar {
   font-size: 2rem;
   color: orange;
-  margin-top: 20px;
+  /* margin-top: 20px; */
 }
 .userReviewImgs {
   display: flex;
@@ -189,6 +201,15 @@ watch(
 .userReviewImg:last-child {
   margin-right: 0;
 }
+.userInfoNicknameAndUserReviewStar {
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.userReviewText {
+  margin-top: 10px;
+}
 .userReviewText,
 .userInfoNickname {
   font-size: 1.4rem;
@@ -196,24 +217,24 @@ watch(
 }
 .userReviewTime {
   font-size: 1.2rem;
-  margin-top: -15px;
+  margin: 10px 0;
   color: var(--color-text-gray);
 }
 .userInfo {
   display: flex;
   align-items: center;
   justify-content: left;
-  height: 40px;
+  height: 50px;
   width: auto;
   gap: 10px;
-  margin-bottom: 10px;
+  margin: 25px 0 7px 0;
   /* background-color: aqua; */
 }
 .userInfoImg {
   border: 0.5px solid var(--color-main-Lgray);
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   padding: 1px;
   object-fit: cover;
 }
@@ -224,7 +245,7 @@ watch(
   justify-content: center;
   width: 100%;
   margin-top: 30px;
-  background-color: rgb(161, 160, 158);
+  /* background-color: rgb(161, 160, 158); */
   font-size: 1.3rem;
   /* gap: 1%; */
 }

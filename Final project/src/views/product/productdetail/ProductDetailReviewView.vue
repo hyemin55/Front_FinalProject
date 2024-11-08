@@ -1,14 +1,18 @@
 <script setup>
-import { nextTick, ref, watch, watchEffect } from 'vue';
+import { ref, watchEffect } from 'vue';
 import ReviewComponent from '@/components/ReviewComponent.vue';
 import ProductDetailReviewSlide from '@/views/product/productdetail/ProductDetailReviewSlideView.vue';
-import { productDetailStore } from '@/stores/ProductDetailStore';
+import { useRoute } from 'vue-router';
+import { getstarCounting } from '@/api/productDetail';
 
 const SortStar = ref(true);
 const Latest = ref(true);
-const detailStore = productDetailStore();
-const idx = ref(detailStore.productIdx);
-const reviewCount = ref(detailStore.reviewCount);
+const idx = ref();
+const reviewCount = ref(80);
+
+const route = useRoute();
+
+const starCountData = ref({});
 
 const SortStarHandle = () => {
   SortStar.value = !SortStar.value;
@@ -17,25 +21,30 @@ const LatestHandle = () => {
   Latest.value = !Latest.value;
 };
 
-// rating, reviewCount
-const ratingData = () => {};
-
 // 리뷰 평균 점수 관리
-const rating = ref(detailStore.starAverage);
-console.log('newRating = ', rating.value);
+const starAverage = ref();
 
 const circumference = 2 * Math.PI * 45; // 원 둘레 (r = 45)
 
-// 별 개수 계산
-const fullStars = Math.floor(rating.value); // 정수 별 개수
-const hasHalfStar = rating.value % 1 !== 0; // 소수점이 있을 때 반 별 표시 여부
+// 총 별 개수 계산
+const fullStars = Math.floor(starAverage.value); // 정수 별 개수
+const hasHalfStar = starAverage.value % 1 !== 0; // 소수점이 있을 때 반 별 표시 여부
 const emptyStars = () => {
   const totalStars = fullStars.value + (hasHalfStar.value ? 1 : 0);
   return Math.max(5 - totalStars, 0); // 최소 0으로 설정
 }; // 빈 별 개수
 
-watchEffect(async () => {
-  await nextTick();
+// 별점별 리뷰수 계산
+const starCounting = async () => {
+  const starCountingData = await getstarCounting(idx.value);
+  console.log('starCountingData.value.data', starCountingData.value);
+  starCountData.value = starCountingData.data;
+  starAverage.value = starCountingData.data.starAverage;
+};
+
+watchEffect(() => {
+  idx.value = route.params.idx;
+  starCounting();
 });
 </script>
 
@@ -57,14 +66,14 @@ watchEffect(async () => {
             stroke-width="5"
             fill="none"
             stroke-dasharray="283"
-            :stroke-dashoffset="circumference - circumference * (rating / 5)"
+            :stroke-dashoffset="circumference - circumference * (starAverage / 5)"
             style="transition: stroke-dashoffset 0.5s ease"
           />
         </svg>
-        <div class="progress-text">{{ rating.toFixed(1) }}</div>
+        <div class="progress-text">{{ starAverage.toFixed(1) }}</div>
       </div>
 
-      <div class="starRating">
+      <div class="starAverage">
         <div>
           <span v-for="n in fullStars" :key="'full' + n">★</span>
           <span v-if="hasHalfStar">☆</span>
@@ -77,27 +86,27 @@ watchEffect(async () => {
         <li>
           5.0 <span>★</span>
           <div>bar</div>
-          별점별리뷰수
+          별점별리뷰수 {{ starCountData.data.fiveStarCount }}
         </li>
         <li>
           4.0 <span>★</span>
           <div>bar</div>
-          별점별리뷰수
+          별점별리뷰수 {{ starCountData.data.fourStarCount }}
         </li>
         <li>
           3.0 <span>★</span>
           <div>bar</div>
-          별점별리뷰수
+          별점별리뷰수 {{ starCountData.data.threeStarCount }}
         </li>
         <li>
           2.0 <span>★</span>
           <div>bar</div>
-          별점별리뷰수
+          별점별리뷰수 {{ starCountData.data.twoStarCount }}
         </li>
         <li>
           1.0 <span>★</span>
           <div>bar</div>
-          별점별리뷰수
+          별점별리뷰수 {{ starCountData.data.oneStarCount }}
         </li>
       </ul>
     </div>
@@ -156,7 +165,7 @@ watchEffect(async () => {
 }
 
 /* 총 리뷰수 & 별점 */
-.starRating {
+.starAverage {
   width: 15%;
   /* background-color: antiquewhite; */
   font-size: 1.5em;
@@ -169,11 +178,14 @@ watchEffect(async () => {
 }
 #starCounting {
   width: 75%;
+  line-height: 30px;
+  font-size: 1.4rem;
 }
 #starCounting > li {
   display: flex;
   align-items: center;
   justify-content: left;
+  gap: 5px;
 }
 /* Review Lists section */
 #ShowReview {
