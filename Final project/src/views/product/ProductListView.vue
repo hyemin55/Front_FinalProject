@@ -1,129 +1,147 @@
 <script setup>
 import { GLOBAL_URL } from '@/api/util'
 import ProductComponent from '@/components/ProductComponent.vue'
+import { useInfiniteQuery } from '@tanstack/vue-query'
 import axios from 'axios'
-import { computed, onMounted, ref, watchEffect } from 'vue'
-import { useRoute } from 'vue-router'
+import { computed, onMounted, ref, watch, watchEffect } from 'vue'
+import { onBeforeRouteLeave, useRoute } from 'vue-router'
+
+// const sortedList = ref([])  // 정렬된 리스트
+const sortTitle = ref('추천순 ⇅')
+const hiddenItem = ref(0);
 
 const route = useRoute()
 const categoryTitle = computed(() => route.params.title)
 const categoryId = computed(() => route.params.idx)
+const loadingUi = ref(null) // 로딩 UI지정
+
+// const fetchCategoryItems = async ({ pageParam = 0 }) => {
+//   const res = await axios.get(`${GLOBAL_URL}/api/categories/${categoryId.value}?pageNum=${pageParam}`);
+//   return res.data; // 데이터를 직접 반환하여 useInfiniteQuery에 적합하게 설정
+// };
+// // useInfiniteQuery 호출
+// const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(['categoryItems', categoryId],
+//   fetchCategoryItems,
+//   {
+//     getNextPageParam: (lastPage) => {
+//       return lastPage.length > 0 ? (data.value?.pages.length) + 1 : undefined;
+//     },
+//     initialPageParam: 0, 
+//   }
+// );
+// // 리스트 합치기
+// const list = computed(() => {
+//   console.log(data.value);
+//   return data.value ? data.value.pages.flat(1) : [];
+// });
+// // IntersectionObserver 설정
+// watchEffect(() => {
+//   const observer = new IntersectionObserver((entries) => {
+//     const firstEntry = entries[0];
+//     if (firstEntry.isIntersecting && hasNextPage.value && !isFetchingNextPage.value) {
+//       console.log('보이나요')
+//       fetchNextPage(); // 다음 페이지 요청
+//     }
+//   });
+//   if (loadingUi.value) {
+//     observer.observe(loadingUi.value);
+//     return () => {
+//       observer.unobserve(loadingUi.value);
+//     };
+//   }
+// });
+
+
 const list = ref([])
+// 무한 스크롤 변수
+const page = ref(0) // 페이지
+const nextPage = ref(false) // 다음페이지 있는지?(로딩의 한계를 정함)
+const pageParams = ref([]); // history 이미 호출했는지 여부를 확인
+const loading = ref(false) // 로딩시
 
-const sortedList = ref([])  // 정렬된 리스트
-// 정렬버튼 텍스트
-const sortTitle = ref('추천순 ⇅')
-const hiddenItem = ref(0);
+// 무한 스크롤 
+const muhanScroll = (async(page)=>{
+  if(pageParams.value.includes(page) || loading.value) return; // 이미 호출되었나 확인. 배열에 포함되어 있나
+  nextPage.value = true;
+  loading.value = true; 
+  
+  // console.log(`loading 중 - page: ${page}`);
+  // console.log('history 배열', pageParams.value)
+  try{
+    const res = await axios.get(`${GLOBAL_URL}/api/categories/${categoryId.value}?pageNum=${page}`)
+    const data = res.data // 통신으로 받은 데이터
+    list.value = [...list.value, ...data]; // 리스트에 데이터 추가
 
-// // 무한 스크롤 변수
-// const page = ref(1) // 페이지
-// const nextPage = ref(false) // 다음페이지 있는지?(로딩의 한계를 정함)
-// const pageParams = ref([]); // history 이미 호출했는지 여부를 확인
-// const loading = ref(false) // 로딩시
-// const loadingUi = ref(null) // 로딩 UI지정
-
-// // 무한스크롤 
-// const muhanScroll = (async(page)=>{
-//   if(pageParams.value.includes(page)) return; // 이미 호출되었나 확인.
-//   nextPage.value = true;
-//   loading.value = true; 
-//   try{
-//     const res = await axios.get(`${GLOBAL_URL}/api/categories/${categoryId.value}?page=${page}`)
-//     const data = res.data // 통신으로 받은 데이터
-//     list.value = [...list.value, ...data.value]; // 리스트에 데이터 추가
-
-//     // 데이터 초기화 및 정렬
-//     sortedList.value = [...list.value];  // 데이터를 불러온 후 정렬된 리스트 초기화
-//     sortTitle.value = '추천순 ⇅'; // 정렬 버튼 텍스트 초기화
-//     hiddenItem.value = 0; // 숨겨진 항목 초기화
     
-//     pageParams.value = [...pageParams.value, page] // 페이지 추가
-//     page.value = data.page < data.totalPage ? page.value + 1 : page.value
-//     loading.value = false;
 
-//     sortList();
-//   }
-//   catch(error){
-//     console.error('error', error)
-//     loading.value = false;
-//     nextPage.value = false;
-//   }
-// })
-
-// // 페이지가 변경될때 마다 작동한다.
-// watchEffect((page)=>{
-//   muhanScroll(page.value);
-// })
-
-// // 페이지가 변경되는 부분이다. (아래의 로딩 페이지에 걸리면 작동)
-// watchEffect(()=>{
-//   const obsever = new IntersectionObserver((ent)=>{
-//     const firstEnt = ent[0]
-//     if(firstEnt.isIntersecting && nextPage.value && !loading){
-//       console.log('화면에 보인다.')
-//       page.value += 1;
-//     }
-//   })
-//   if(loadingUi.value){ 
-//     obsever.observe(loadingUi.value);
-//     return()=>{
-//       obsever.unobserve(loadingUi.value);
-//     }
-//   }
-// })
-
-
-// 기존 (완성)
-watchEffect(async () => {
-  console.log('작동')
-  try {
-    const res = await axios.get(`${GLOBAL_URL}/api/categories/${categoryId.value}`)
-    console.log(res)
-    if (res.status == 200) {
-      list.value = res.data
-      
-      sortedList.value = [...list.value]  // 데이터를 불러온 후 초기화
-      sortTitle.value = '추천순 ⇅'
-      hiddenItem.value = 0;
+    pageParams.value = [...pageParams.value, page] // 페이지를 배열에 추가. 중복확인을 위해
+    nextPage.value = data.length > 0; // 빈 배열이면 다음 페이지가 없다고 설정
+    loading.value = false;
+    // console.log('loading 끝')
+  }
+  catch(error){
+    console.error('error', error)
+    loading.value = false;
+    nextPage.value = false;
+  }
+})
+watch([page, categoryId], ([newPage, newCategoryId], [oldPage, oldCategoryId])=>{
+  // console.log('newCategoryId:', newCategoryId);
+  if (oldCategoryId !== newCategoryId) {
+      list.value = [];
+      page.value = 0; 
+      pageParams.value = []; 
+      muhanScroll(0, newCategoryId);
+  } 
+  else {
+      muhanScroll(newPage, oldCategoryId);
+  }
+  }, {immediate: true,}
+)
+// 페이지가 증가되는 부분이다. (아래의 로딩UI에 걸리면 작동)
+watchEffect(()=>{
+  const obsever = new IntersectionObserver((entries)=>{
+    const firstEnt = entries[0]
+    if(firstEnt.isIntersecting && nextPage.value && !loading.value){
+      page.value += 1;
     }
-    return res
-  } catch (e) {
-    console.error('실패', e)
+  })
+  if(loadingUi.value){ 
+    obsever.observe(loadingUi.value);
+    return()=>{
+      obsever.unobserve(loadingUi.value);
+    }
   }
 })
 
+
+
+
 // 정렬 함수들
-const latestDate = () => {sortedList.value = [...list.value].sort((a, b) => new Date(a.registerDate) - new Date(b.registerDate))}
-const oldeDate = () => {sortedList.value = [...list.value].sort((a, b) => new Date(b.registerDate) - new Date(a.registerDate))}
-const highPrice = () => {sortedList.value = [...list.value].sort((a, b) => b.price - a.price)}
-const lowPrice = () => {sortedList.value = [...list.value].sort((a, b) => a.price - b.price)}
+// const latestDate = () => {sortedList.value = [...list.value].sort((a, b) => new Date(a.registerDate) - new Date(b.registerDate))}
+// const oldeDate = () => {sortedList.value = [...list.value].sort((a, b) => new Date(b.registerDate) - new Date(a.registerDate))}
+// const highPrice = () => {sortedList.value = [...list.value].sort((a, b) => b.price - a.price)}
+// const lowPrice = () => {sortedList.value = [...list.value].sort((a, b) => a.price - b.price)}
 
 // 정렬 기준을 바꿀 때 호출되는 함수
 const sortList = (order, index) => {
   hiddenItem.value = index;
   switch (order) {
-    case 'latestDate':
-      latestDate()
-      sortTitle.value = '최신순'
+    case 'latestDate': sortTitle.value = '최신순'
+      // latestDate()
       break
-    case 'oldeDate':
-      oldeDate()
-      sortTitle.value = '오래된 순'
+    case 'oldeDate': sortTitle.value = '오래된 순'
+      // oldeDate()
       break
-    case 'highPrice':
-      highPrice()
-      sortTitle.value = '높은 가격순'
+    case 'highPrice': sortTitle.value = '높은 가격순'
+      // highPrice()
       break
-    case 'lowPrice':
-      lowPrice()
-      sortTitle.value = '낮은 가격순'
+    case 'lowPrice': sortTitle.value = '낮은 가격순'
+      // lowPrice()
       break
     case 'basic':
-    default:
-      sortedList.value = [...list.value]  // 기본적으로 원래 순서로 돌아감
-      sortTitle.value = '추천순 ⇅'
-  }
-  // muhanScroll(1);
+    default: sortTitle.value = '추천순 ⇅'
+  }// sortedList.value = [...list.value]  // 기본적으로 원래 순서로 돌아감
 }
 </script>
 
@@ -140,7 +158,7 @@ const sortList = (order, index) => {
       </ul>
 
       <div class="product_dropdown">
-        <p class="product_mount">총 '{{ sortedList.length }}개' 제품</p>
+        <p class="product_mount">총 '{{ list.length }}개' 제품</p>
         <div class="sort_container">
           <p class="sort_trigger">{{ sortTitle }}</p>
           <ul class="product_sort">
@@ -156,7 +174,7 @@ const sortList = (order, index) => {
 
     <article class="product_list">
       <ProductComponent
-        v-for="product in sortedList"
+        v-for="product in list"
         :key="product.productId"
         :productInfo="product"
       />

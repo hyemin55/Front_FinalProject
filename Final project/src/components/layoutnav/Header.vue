@@ -1,6 +1,6 @@
 <script setup>
 import { useUserStore } from '@/stores/Login'
-import { ref, watchEffect, onMounted, onUpdated } from 'vue'
+import { ref, watchEffect, onMounted, onUpdated, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { logout } from '@/api/KakaoLoginApi'
 import { eventBus } from '@/eventBus'
@@ -65,6 +65,22 @@ onMounted(() => {
     HeaderMode.value = false
   }
 })
+
+const isSearchVisible = ref(false); // 검색창의 표시 여부
+const searchQuery = ref(''); // 검색어 저장
+const searchInput = ref(null); // 검색창 참조
+// 검색창 토글 함수
+const toggleSearch = () => {
+  isSearchVisible.value = !isSearchVisible.value;
+  // 검색창이 열리면 포커스, 닫히면 포커스 제거
+  nextTick(() => {
+    if (isSearchVisible.value) {
+      searchInput.value.focus(); // 포커스 처리
+    } else {
+      searchInput.value.blur(); // 포커스 해제
+    }
+  });
+};
 </script>
 
 <template>
@@ -108,7 +124,15 @@ onMounted(() => {
         </li>
       </ul>
       <ul class="gnb02">
-        <li>
+        <input
+      v-show="isSearchVisible"
+      v-model="searchQuery"
+      type="text"
+      placeholder="검색..."
+      class="search-input"
+      ref="searchInput" 
+    />
+        <li  @click="toggleSearch">
           <img
             class="icon"
             src="@/assets/img/icon/free-icon-font-search-3917132.png"
@@ -219,6 +243,19 @@ onMounted(() => {
   width: 2rem;
   height: auto;
 }
+
+
+/* 검색창 설정 */
+.icon {cursor: pointer;}
+.search-input {
+  width: 0;
+  transition: width 0.3s ease;
+  border: 1px solid #ccc;
+  margin-left: 10px;
+}
+.search-input:focus {width: 200px;}
+.search-input {width: 0;}
+
 
 /* 반응현 구간 설정 */
 /* @media (max-width: 1280px) {} */

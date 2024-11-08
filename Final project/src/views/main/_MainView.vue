@@ -4,20 +4,25 @@
       <!-- <video autoplay muted loop src="../../img/main.mp4"></video> -->
     </article>
 
-    <MainBestView></MainBestView>
-    <MainListView></MainListView>
-    <MainPromotionBannerView></MainPromotionBannerView>
-    <MainEditorView></MainEditorView>
-    <MainNewView></MainNewView>
+    <MainBestView/>
+    <MainListView/>
+    <MainPromotionBannerView/>
+    <MainEditorView/>
+    <MainNewView/>
+    
   </section>
 </template>
 
 <script setup>
+import { defineAsyncComponent } from 'vue'
 import MainBestView from './MainBestView.vue'
-import MainEditorView from './MainEditorView.vue'
 import MainListView from './MainListView.vue'
-import MainNewView from './MainNewView.vue'
 import MainPromotionBannerView from './MainPromotionBannerView.vue'
+import MainEditorView from './MainEditorView.vue'
+import MainNewView from './MainNewView.vue'
+
+// const MainEditorView = defineAsyncComponent(() => import('./MainEditorView.vue'));
+// const MainNewView = defineAsyncComponent(() => import('./MainNewView.vue'));
 
 // main_editor_list
 // const editor_images = [

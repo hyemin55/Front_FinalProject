@@ -52,8 +52,7 @@ const addToWishlist = () => {
 //   else {unit.value = 'ml';}
 //   });
 
-// 1. productList에서 axios 통신을 통해 데이테이베이스에서 온 정보, for구문으로 받아온다.
-// 2. defineProps 는 받아온 정보를 사용하는 명령어, router로 오는 정보를 useRoute로 받아오는거랑 같은 맥락이다.
+
 // 상품리스트에 출력
 const props = defineProps({
   // 받아오는props정의
