@@ -4,6 +4,7 @@ import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel';
 import { ref, watchEffect } from 'vue';
 import { useRoute } from 'vue-router';
 import { getReviewImageList } from '@/api/productDetail';
+import { GLOBAL_URL } from '@/api/util';
 
 const route = useRoute();
 const idx = ref(route.params.idx);

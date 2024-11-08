@@ -10,7 +10,7 @@ const route = useRoute();
 const router = useRouter();
 
 const productData = ref([]);
-const reviewData = ref(0);
+const reviewData = ref(null);
 const productDataOk = ref([]);
 
 const idx = ref(route.params.idx);
@@ -37,12 +37,12 @@ const doLoad = async () => {
     reviewData.value = await getReviewData(idx.value);
 
     // console.log('productData 값 : ', productData.value.data[0].productId);
-    // console.log('reviewData 값 : ', reviewData.value.data);
+    // console.log('reviewData 값 : ', reviewData.value.length);
 
     if (productData.value.status === 200 && reviewData.value.status === 200) {
       // console.log('productData.value.status === 200', productData.value);
       for (let i = 0; i < productData.value.data.length; i++) {
-        console.log('조건에 맞는 아이는? ', productData.value.data[i].size);
+        // console.log('조건에 맞는 아이는? ', productData.value.data[i].size);
         if (productData.value.data[i].productId == idx.value && productData.value.data[i].size == size.value) {
           productDataOk.value = productData.value.data[i];
           // console.log('데이터내용들', productDataOk.value);
@@ -102,9 +102,9 @@ watchEffect(() => {
     <ul id="productInfo">
       <li>{{ productDataOk.brandName }}</li>
       <li>{{ productDataOk.productName }}</li>
-      <li>
+      <li v-if="reviewData">
         1,222찜 수
-        <span style="color: orange">★ {{ Average(reviewData.starAverage) }} ({{ reviewData.reviewCount }} reviews)</span>
+        <span style="color: orange">★ {{ Average(reviewData.data.starAverage) }} ({{ reviewData.data.reviewCount }} reviews)</span>
       </li>
       <li>{{ formatPrice(productDataOk.price) }}</li>
     </ul>

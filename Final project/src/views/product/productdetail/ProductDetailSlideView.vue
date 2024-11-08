@@ -28,10 +28,10 @@ const thumbnailsConfig = {
 onMounted(async () => {
   try {
     const slideImages = await getSlideImages(idx.value);
-    console.log('slideImages', slideImages);
+    // console.log('slideImages', slideImages);
     if (slideImages.status == 200) {
       list.value = slideImages.data;
-      console.log('list.value', list.value);
+      // console.log('list.value', list.value);
       // console.log('리스트파일이름' + list.value)
       // console.log('리스트파일이름' + list.value.images.length)
     }

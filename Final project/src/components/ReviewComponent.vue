@@ -1,17 +1,17 @@
 <script setup>
 import { getReviewsData, getViewCurrentPage } from '@/api/productDetail';
+import { GLOBAL_URL } from '@/api/util';
 import { onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
 const idx = ref(route.params.idx);
-const reviewsData = ref([]);
 const currentPage = ref(1);
 const totalPages = ref(10);
 const currentPageGroup = ref(0);
 const reviewCount = ref(60);
 
-const ReviewList = ref([]);
+const reviewList = ref([]);
 let flag = 0;
 const totalPageGroup = ref(0);
 const pageSize = 5;
@@ -58,8 +58,10 @@ const viewCurrentPage = async () => {
     flag = true;
     return;
   } else {
-    const reviewsData = await getViewCurrentPage(idx.value, currentPage.value - 1);
-    ReviewList.value = reviewsData.data;
+    console.log(idx.value);
+    console.log(currentPage.value);
+    const reviewList = await getViewCurrentPage(idx.value, currentPage.value - 1);
+    console.log('reviewsData.data 옵션선택시', reviewList);
     totalPages.value = Math.ceil(reviewCount.value / pageSize);
     totalPageGroup.value = Math.floor(totalPages.value / 10);
     startPage.value = currentPageGroup.value * 10 + 1;
@@ -92,8 +94,8 @@ const activePage = pageNum => {
 
 // 처음 렌더링 시 받아올 데이터.
 onMounted(async () => {
-  reviewsData = await getReviewsData(idx.value);
-  ReviewList.value = reviewsData.data;
+  reviewList.value = await getReviewsData(idx.value);
+  console.log('reviewsData.data 로딩 시', reviewList.value.data);
   totalPages.value = Math.ceil(reviewCount.value / pageSize);
   totalPageGroup.value = Math.floor(totalPages.value / 10);
   startPage.value = currentPageGroup.value * 10 + 1;
@@ -108,7 +110,7 @@ watch(() => {
 </script>
 
 <template>
-  <div id="userReviewList" class="border" v-for="(list, index) in ReviewList" :key="index">
+  <div id="userReviewList" class="border" v-for="(list, index) in reviewList.data" :key="index">
     <ul class="userInfo">
       <li>
         <img :src="`${list.memberDetailReviewResDto.profileImage}`" alt="" class="userInfoImg" />
@@ -138,11 +140,11 @@ watch(() => {
   </div>
 
   <ul id="totalPages">
-    <li @click="backPage">이전</li>
+    <li @click="backPage()">이전</li>
     <li class="totalPages" v-for="pageNum in endPage - startPage + 1" v-bind:key="pageNum" @click="goToPage(startPage + pageNum - 1)" :class="{ active: activePage(pageNum) }">
       {{ startPage + pageNum - 1 }}
     </li>
-    <li @click="nextPage">다음</li>
+    <li @click="nextPage()">다음</li>
   </ul>
 </template>
 

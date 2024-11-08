@@ -6,7 +6,7 @@ export const getReviewsData = async idx => {
   try {
     const reviewsData = await axios.get(`${GLOBAL_URL}/detail/review/${idx}`);
     console.log('getReviewsData = ', reviewsData);
-    return reviewsData.data;
+    return reviewsData;
   } catch (error) {
     console.log('getReviewsData : ', error);
     throw error;
@@ -18,7 +18,7 @@ export const getViewCurrentPage = async (idx, currentPage) => {
   try {
     const reviewsData = await axios.get(`${GLOBAL_URL}/detail/review/${idx}?pageNum=${currentPage}`);
     console.log('getViewCurrentPage = ', reviewsData);
-    return reviewsData.data;
+    return reviewsData;
   } catch (error) {
     console.log('getViewCurrentPage : ', error);
     return null;
@@ -30,7 +30,7 @@ export const getReviewImageList = async idx => {
   try {
     const reviewImageList = await axios.get(`${GLOBAL_URL}/detail/reviewImageList/${idx}`);
     console.log('getReviewImageList = ', reviewImageList);
-    return reviewImageList.data;
+    return reviewImageList;
   } catch (error) {
     console.log('getReviewImageList', error);
     throw error;
@@ -42,7 +42,7 @@ export const getstarCounting = async idx => {
   try {
     const starCountingData = await axios.get(`${GLOBAL_URL}/detail/detailReviewInfo/${idx}`);
     console.log('getstarCounting = ', starCountingData);
-    return starCountingData.data;
+    return starCountingData;
   } catch (error) {
     console.log('getstarCounting', error);
     throw error;

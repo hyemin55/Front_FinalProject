@@ -5,12 +5,11 @@ import ProductDetailReviewSlide from '@/views/product/productdetail/ProductDetai
 import { useRoute } from 'vue-router';
 import { getstarCounting } from '@/api/productDetail';
 
+const route = useRoute();
 const SortStar = ref(true);
 const Latest = ref(true);
-const idx = ref();
-const reviewCount = ref(80);
-
-const route = useRoute();
+const idx = ref(route.params.idx);
+const reviewCount = ref(0);
 
 const starCountData = ref({});
 
@@ -22,8 +21,8 @@ const LatestHandle = () => {
 };
 
 // 리뷰 평균 점수 관리
-const starAverage = ref();
-
+const starAverage = ref(0);
+// console.log('idx.value', idx.value);
 const circumference = 2 * Math.PI * 45; // 원 둘레 (r = 45)
 
 // 총 별 개수 계산
@@ -37,9 +36,18 @@ const emptyStars = () => {
 // 별점별 리뷰수 계산
 const starCounting = async () => {
   const starCountingData = await getstarCounting(idx.value);
-  console.log('starCountingData.value.data', starCountingData.value);
+  // console.log('starCountingData.value.data', starCountingData);
   starCountData.value = starCountingData.data;
-  starAverage.value = starCountingData.data.starAverage;
+  // console.log('starCountData.value', starCountData.value.starAverage);
+  starAverage.value = starCountData.value.starAverage;
+  reviewCount.value = starCountData.value.reviewCount;
+};
+
+const Average = data => {
+  data = data * 10;
+  data = Math.round(data);
+  data = data / 10;
+  return data;
 };
 
 watchEffect(() => {
@@ -70,7 +78,7 @@ watchEffect(() => {
             style="transition: stroke-dashoffset 0.5s ease"
           />
         </svg>
-        <div class="progress-text">{{ starAverage.toFixed(1) }}</div>
+        <div class="progress-text">{{ Average(starAverage) }}</div>
       </div>
 
       <div class="starAverage">
@@ -86,27 +94,27 @@ watchEffect(() => {
         <li>
           5.0 <span>★</span>
           <div>bar</div>
-          별점별리뷰수 {{ starCountData.data.fiveStarCount }}
+          별점별리뷰수 {{ starCountData.fiveStarCount }}
         </li>
         <li>
           4.0 <span>★</span>
           <div>bar</div>
-          별점별리뷰수 {{ starCountData.data.fourStarCount }}
+          별점별리뷰수 {{ starCountData.fourStarCount }}
         </li>
         <li>
           3.0 <span>★</span>
           <div>bar</div>
-          별점별리뷰수 {{ starCountData.data.threeStarCount }}
+          별점별리뷰수 {{ starCountData.threeStarCount }}
         </li>
         <li>
           2.0 <span>★</span>
           <div>bar</div>
-          별점별리뷰수 {{ starCountData.data.twoStarCount }}
+          별점별리뷰수 {{ starCountData.twoStarCount }}
         </li>
         <li>
           1.0 <span>★</span>
           <div>bar</div>
-          별점별리뷰수 {{ starCountData.data.oneStarCount }}
+          별점별리뷰수 {{ starCountData.oneStarCount }}
         </li>
       </ul>
     </div>
