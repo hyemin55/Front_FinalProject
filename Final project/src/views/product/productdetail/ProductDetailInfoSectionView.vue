@@ -10,13 +10,13 @@ const route = useRoute();
 const router = useRouter();
 
 const productData = ref([]);
-const reviewData = ref(0);
+const reviewData = ref(null);
 const productDataOk = ref([]);
 
 const idx = ref(route.params.idx);
 const size = ref(route.query.size);
 
-// const emit = defineEmits();
+const emit = defineEmits();
 
 // 1. 클릭한 옵션값을 idx에 담아준다.
 const productOptionSelect = item => {
@@ -50,8 +50,8 @@ const doLoad = async () => {
       }
       // console.log('reviewData.value', reviewData.value);
 
-      // const newStatus = true;
-      // emit('onProductInfoLoaded', newStatus);
+      const newStatus = true;
+      emit('onProductInfoLoaded', newStatus);
     } else {
       console.log('실패1');
     }
@@ -102,9 +102,9 @@ watchEffect(() => {
     <ul id="productInfo">
       <li>{{ productDataOk.brandName }}</li>
       <li>{{ productDataOk.productName }}</li>
-      <li>
+      <li v-if="reviewData">
         1,222찜 수
-        <span style="color: orange">★ {{ Average(reviewData.starAverage) }} ({{ reviewData.reviewCount }} reviews)</span>
+        <span style="color: orange">★ {{ Average(reviewData.data.starAverage) }} ({{ reviewData.reviewCount }} reviews)</span>
       </li>
       <li>{{ formatPrice(productDataOk.price) }}</li>
     </ul>

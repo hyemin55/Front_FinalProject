@@ -1,7 +1,17 @@
 <script setup>
 import { getReviewsData, getViewCurrentPage } from '@/api/productDetail';
+import { GLOBAL_URL } from '@/api/util';
+import { watchEffect } from 'vue';
 import { onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
+
+const props = defineProps({
+  // 받아오는props의 정의 방법
+  reviewCount: {
+    type: Number,
+    required: true,
+  },
+});
 
 const route = useRoute();
 const idx = ref(route.params.idx);
@@ -9,9 +19,9 @@ const reviewsData = ref([]);
 const currentPage = ref(1);
 const totalPages = ref(10);
 const currentPageGroup = ref(0);
-const reviewCount = ref(60);
+const reviewCount = ref(props.reviewCount);
 
-const ReviewList = ref([]);
+const ReviewList = ref(null);
 let flag = 0;
 const totalPageGroup = ref(0);
 const pageSize = 5;
@@ -58,12 +68,14 @@ const viewCurrentPage = async () => {
     flag = true;
     return;
   } else {
-    const reviewsData = await getViewCurrentPage(idx.value, currentPage.value - 1);
-    ReviewList.value = reviewsData.data;
+    reviewsData.value = await getViewCurrentPage(idx.value, currentPage.value - 1);
+    ReviewList.value = reviewsData.value;
+    console.log(ReviewList.value);
     totalPages.value = Math.ceil(reviewCount.value / pageSize);
     totalPageGroup.value = Math.floor(totalPages.value / 10);
     startPage.value = currentPageGroup.value * 10 + 1;
     endPage.value = Math.min(startPage.value + 9, totalPages.value);
+    console.log(reviewCount.value);
   }
 };
 
@@ -92,17 +104,19 @@ const activePage = pageNum => {
 
 // 처음 렌더링 시 받아올 데이터.
 onMounted(async () => {
-  reviewsData = await getReviewsData(idx.value);
+  reviewsData.value = await getReviewsData(idx.value);
   ReviewList.value = reviewsData.data;
   totalPages.value = Math.ceil(reviewCount.value / pageSize);
   totalPageGroup.value = Math.floor(totalPages.value / 10);
   startPage.value = currentPageGroup.value * 10 + 1;
   endPage.value = Math.min(startPage.value + 9, totalPages.value);
+  viewCurrentPage();
 });
 
 // 주소줄의 idx값이 바뀌면 리뷰리스트와 페이지네이션 변경을 위해 재통신 필요.
-watch(() => {
+watchEffect(() => {
   idx.value = route.params.idx;
+  reviewCount.value = props.reviewCount;
   viewCurrentPage();
 });
 </script>

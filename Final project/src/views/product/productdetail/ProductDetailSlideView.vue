@@ -32,10 +32,9 @@ onMounted(async () => {
     if (slideImages.status == 200) {
       list.value = slideImages.data;
       console.log('list.value', list.value);
-      // console.log('리스트파일이름' + list.value)
-      // console.log('리스트파일이름' + list.value.images.length)
+      console.log('리스트파일이름', list.value.images);
+      console.log('리스트파일이름' + list.value.images.length);
     }
-    return slideImages;
   } catch (e) {
     console.error('실패', e);
   }

@@ -4,13 +4,12 @@ import ReviewComponent from '@/components/ReviewComponent.vue';
 import ProductDetailReviewSlide from '@/views/product/productdetail/ProductDetailReviewSlideView.vue';
 import { useRoute } from 'vue-router';
 import { getstarCounting } from '@/api/productDetail';
+const route = useRoute();
 
 const SortStar = ref(true);
 const Latest = ref(true);
 const idx = ref();
-const reviewCount = ref(80);
-
-const route = useRoute();
+const reviewCount = ref(null);
 
 const starCountData = ref({});
 
@@ -22,7 +21,7 @@ const LatestHandle = () => {
 };
 
 // 리뷰 평균 점수 관리
-const starAverage = ref();
+const starAverage = ref(null);
 
 const circumference = 2 * Math.PI * 45; // 원 둘레 (r = 45)
 
@@ -36,10 +35,9 @@ const emptyStars = () => {
 
 // 별점별 리뷰수 계산
 const starCounting = async () => {
-  const starCountingData = await getstarCounting(idx.value);
-  console.log('starCountingData.value.data', starCountingData.value);
-  starCountData.value = starCountingData.data;
-  starAverage.value = starCountingData.data.starAverage;
+  starCountData.value = await getstarCounting(idx.value);
+  starAverage.value = starCountData.value.starAverage;
+  reviewCount.value = starCountData.value.reviewCount;
 };
 
 watchEffect(() => {
@@ -70,7 +68,7 @@ watchEffect(() => {
             style="transition: stroke-dashoffset 0.5s ease"
           />
         </svg>
-        <div class="progress-text">{{ starAverage.toFixed(1) }}</div>
+        <div v-if="starAverage" class="progress-text">{{ starAverage.toFixed(1) }}</div>
       </div>
 
       <div class="starAverage">
@@ -86,27 +84,27 @@ watchEffect(() => {
         <li>
           5.0 <span>★</span>
           <div>bar</div>
-          별점별리뷰수 {{ starCountData.data.fiveStarCount }}
+          별점별리뷰수 {{ starCountData.fiveStarCount }}
         </li>
         <li>
           4.0 <span>★</span>
           <div>bar</div>
-          별점별리뷰수 {{ starCountData.data.fourStarCount }}
+          별점별리뷰수 {{ starCountData.fourStarCount }}
         </li>
         <li>
           3.0 <span>★</span>
           <div>bar</div>
-          별점별리뷰수 {{ starCountData.data.threeStarCount }}
+          별점별리뷰수 {{ starCountData.threeStarCount }}
         </li>
         <li>
           2.0 <span>★</span>
           <div>bar</div>
-          별점별리뷰수 {{ starCountData.data.twoStarCount }}
+          별점별리뷰수 {{ starCountData.twoStarCount }}
         </li>
         <li>
           1.0 <span>★</span>
           <div>bar</div>
-          별점별리뷰수 {{ starCountData.data.oneStarCount }}
+          별점별리뷰수 {{ starCountData.oneStarCount }}
         </li>
       </ul>
     </div>
@@ -128,7 +126,7 @@ watchEffect(() => {
     </ul>
 
     <!-- mypage에서 component로 만들어서 재사용하기! -->
-    <ReviewComponent />
+    <ReviewComponent v-if="reviewCount" :reviewCount="reviewCount" />
   </article>
 </template>
 
