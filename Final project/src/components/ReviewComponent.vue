@@ -1,144 +1,159 @@
 <script setup>
-import { GLOBAL_URL } from '@/api/util'
-import axios from 'axios'
-import { onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { getReviewsData, getViewCurrentPage } from '@/api/productDetail';
+import { GLOBAL_URL } from '@/api/util';
+import { watchEffect } from 'vue';
+import { onMounted, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 
-const route = useRoute()
-const idx = ref(route.params.idx)
-const ReviewList = ref([])
+const props = defineProps({
+  // 받아오는props의 정의 방법
+  reviewCount: {
+    type: Number,
+    required: true,
+  },
+});
 
-const star_list = ['★', '★★', '★★★', '★★★★', '★★★★★']
+const route = useRoute();
+const idx = ref(route.params.idx);
+const reviewsData = ref([]);
+const currentPage = ref(1);
+const totalPages = ref(10);
+const currentPageGroup = ref(0);
+const reviewCount = ref(props.reviewCount);
 
-let flag = 0
-// const reviewCount = ref(0)
-const totalPages = ref(10)
-const totalPageGroup = ref(0)
-const pageSize = 5
-const currentPage = ref(1)
-const currentPageGroup = ref(0)
-const startPage = ref(0)
-const endPage = ref(0)
-const reviewCount = ref(80)
-
-onMounted(async () => {
-  const res = await axios.get(`${GLOBAL_URL}/detail/review/${idx.value}`)
-  console.log('순서시작', res.data.length)
-  console.log('순서시작', res.data)
-  // reviewCount.value = res.data.length
-  totalPages.value = Math.ceil(reviewCount.value / pageSize)
-  totalPageGroup.value = Math.floor(totalPages.value / 10)
-  viewCurrentPage()
-})
+const ReviewList = ref(null);
+let flag = 0;
+const totalPageGroup = ref(0);
+const pageSize = 5;
+const startPage = ref(0);
+const endPage = ref(0);
+const star_list = ['★', '★★', '★★★', '★★★★', '★★★★★'];
 
 // 이전페이지
-const backPage = async () => {
-  currentPage.value = startPage.value - 10
+const backPage = () => {
   if (currentPageGroup.value <= 0) {
-    console.log('첫페이지입니다.')
-    return
+    console.log('첫페이지입니다.');
+    alert('첫페이지입니다.');
+    return;
   }
-  viewCurrentPage()
-}
+  currentPage.value = startPage.value - 10;
+  viewCurrentPage();
+};
 
 // 다음페이지
-const nextPage = async () => {
-  currentPage.value = endPage.value + 1
-  console.log('현재페이지그룹', currentPageGroup.value)
+const nextPage = () => {
   if (currentPageGroup.value >= totalPageGroup.value) {
-    console.log('마지막페이지입니다.')
-    return
+    console.log('마지막페이지입니다.');
+    alert('마지막페이지입니다.');
+    return;
   }
-  viewCurrentPage()
-  console.log('현재페이지그룹후후후', currentPageGroup.value)
-}
+  currentPage.value = endPage.value + 1;
+  viewCurrentPage();
+};
 
 // 선택페이지
 const goToPage = page => {
   if (currentPage.value == page) {
-    console.log('현재페이지입니다.')
-    return
+    console.log('현재페이지입니다.');
+    return;
   }
-  currentPage.value = page
-  viewCurrentPage()
-}
+  currentPage.value = page;
+  viewCurrentPage();
+};
 
 // 현재페이지
 const viewCurrentPage = async () => {
-  currentPageGroup.value = Math.floor((currentPage.value - 1) / 10)
-  // console.log('현재페이지', currentPage.value)
-  // console.log('현재페이지그룹', currentPageGroup.value)
-
+  currentPageGroup.value = Math.floor((currentPage.value - 1) / 10);
   if (currentPageGroup.value == currentPage.value - 1 && flag) {
-    flag = true
-    // console.log('처음이라..')
-    return
+    flag = true;
+    return;
   } else {
-    const res = await axios.get(
-      `${GLOBAL_URL}/detail/review/${idx.value}?pageNum=${currentPage.value - 1}`,
-    )
-    // console.log('리뷰리스트', res.data)
-    ReviewList.value = res.data
-    startPage.value = currentPageGroup.value * 10 + 1
-    endPage.value = Math.min(startPage.value + 9, totalPages.value)
+    reviewsData.value = await getViewCurrentPage(idx.value, currentPage.value - 1);
+    ReviewList.value = reviewsData.value;
+    console.log(ReviewList.value);
+    totalPages.value = Math.ceil(reviewCount.value / pageSize);
+    totalPageGroup.value = Math.floor(totalPages.value / 10);
+    startPage.value = currentPageGroup.value * 10 + 1;
+    endPage.value = Math.min(startPage.value + 9, totalPages.value);
+    console.log(reviewCount.value);
   }
-}
+};
+
+// 선택된 페이지번호에 CSS 설정
 const activePage = pageNum => {
   if (currentPageGroup.value <= 0) {
-    return currentPage.value === pageNum
+    return currentPage.value === pageNum;
   } else {
-    return currentPage.value - 1 - currentPageGroup.value * 10 === pageNum - 1
+    return currentPage.value - 1 - currentPageGroup.value * 10 === pageNum - 1;
   }
-}
+};
+
+// idx를 ref로 했는데 피니아에서 바뀐 데이터가 실시간으로 변경되지 않아
+// 피니아의 idx변화값을 바로 추적해 강제로 idx와 reviewCount의 값을 변경함
+// watch(
+//   () => [detailStore.productIdx, detailStore.reviewCount],
+//   ([newIdx, newreviewCount]) => {
+//     idx.value = newIdx;
+//     reviewCount.value = newreviewCount;
+//     // console.log('reviewCount idx바뀐후 = ', reviewCount.value);
+//     // console.log('startPage', startPage.value);
+//     viewCurrentPage();
+//   },
+//   { immediate: true },
+// );
+
+// 처음 렌더링 시 받아올 데이터.
+onMounted(async () => {
+  reviewsData.value = await getReviewsData(idx.value);
+  ReviewList.value = reviewsData.data;
+  totalPages.value = Math.ceil(reviewCount.value / pageSize);
+  totalPageGroup.value = Math.floor(totalPages.value / 10);
+  startPage.value = currentPageGroup.value * 10 + 1;
+  endPage.value = Math.min(startPage.value + 9, totalPages.value);
+  viewCurrentPage();
+});
+
+// 주소줄의 idx값이 바뀌면 리뷰리스트와 페이지네이션 변경을 위해 재통신 필요.
+watchEffect(() => {
+  idx.value = route.params.idx;
+  reviewCount.value = props.reviewCount;
+  viewCurrentPage();
+});
 </script>
 
 <template>
-  <div
-    id="userReviewList"
-    class="border"
-    v-for="(list, index) in ReviewList"
-    :key="index"
-  >
-    <p class="userReviewStar">{{ star_list[list.star - 1] }}</p>
+  <div id="userReviewList" class="border" v-for="(list, index) in ReviewList" :key="index">
+    <ul class="userInfo">
+      <li>
+        <img :src="`${list.memberDetailReviewResDto.profileImage}`" alt="" class="userInfoImg" />
+      </li>
+      <div class="userInfoNicknameAndUserReviewStar">
+        <li class="userInfoNickname">
+          {{ list.memberDetailReviewResDto.nickName }}
+        </li>
+        <p class="userReviewStar">
+          {{ star_list[list.star - 1] }} <span style="color: #333; font-size: 1.5rem">{{ list.star }}</span>
+        </p>
+      </div>
+    </ul>
+
     <div class="userReviewImgs">
-      <img src="@/assets/img/p_003.png" alt="" class="userReviewImg" />
+      <img :src="`${GLOBAL_URL}/api/file/download/${list.reviewImageResDto.filename}`" alt="" class="userReviewImg" />
     </div>
     <p class="userReviewText">{{ list.content }}</p>
     <p class="userReviewTime">
       {{ list.reviewCreationDate }}
     </p>
-    <ul class="userInfo">
-      <li>
-        <img
-          :src="`${list.memberDetailReviewResDto.profileImage}`"
-          alt=""
-          class="userInfoImg"
-        />
-      </li>
-      <li class="userInfoNickname">
-        {{ list.memberDetailReviewResDto.nickName }}
-      </li>
-    </ul>
   </div>
 
-  <div
-    id="userReviewList"
-    class="border noUserReviewList"
-    v-if="reviewCount == 0 || reviewCount == null"
-  >
+  <div id="userReviewList" class="border noUserReviewList" v-if="reviewCount == 0 || reviewCount == null">
     <img src="@/assets/img/free-icon-font-note-sticky-9798415.svg" alt="" />
     <p>아직 리뷰가 등록되지 않았어요 ㅠㅡㅠ</p>
   </div>
 
   <ul id="totalPages">
     <li @click="backPage">이전</li>
-    <li
-      class="totalPages"
-      v-for="pageNum in endPage - startPage + 1"
-      v-bind:key="pageNum"
-      @click="goToPage(startPage + pageNum - 1)"
-      :class="{ active: activePage(pageNum) }"
-    >
+    <li class="totalPages" v-for="pageNum in endPage - startPage + 1" v-bind:key="pageNum" @click="goToPage(startPage + pageNum - 1)" :class="{ active: activePage(pageNum) }">
       {{ startPage + pageNum - 1 }}
     </li>
     <li @click="nextPage">다음</li>
@@ -147,7 +162,7 @@ const activePage = pageNum => {
 
 <style scoped>
 #userReviewList {
-  line-height: 35px;
+  /* line-height: 35px; */
 }
 #userReviewList::after {
   position: absolute;
@@ -180,7 +195,7 @@ const activePage = pageNum => {
 .userReviewStar {
   font-size: 2rem;
   color: orange;
-  margin-top: 20px;
+  /* margin-top: 20px; */
 }
 .userReviewImgs {
   display: flex;
@@ -200,6 +215,15 @@ const activePage = pageNum => {
 .userReviewImg:last-child {
   margin-right: 0;
 }
+.userInfoNicknameAndUserReviewStar {
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.userReviewText {
+  margin-top: 10px;
+}
 .userReviewText,
 .userInfoNickname {
   font-size: 1.4rem;
@@ -207,24 +231,24 @@ const activePage = pageNum => {
 }
 .userReviewTime {
   font-size: 1.2rem;
-  margin-top: -15px;
+  margin: 10px 0;
   color: var(--color-text-gray);
 }
 .userInfo {
   display: flex;
   align-items: center;
   justify-content: left;
-  height: 40px;
+  height: 50px;
   width: auto;
   gap: 10px;
-  margin-bottom: 10px;
+  margin: 25px 0 7px 0;
   /* background-color: aqua; */
 }
 .userInfoImg {
   border: 0.5px solid var(--color-main-Lgray);
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   padding: 1px;
   object-fit: cover;
 }
@@ -236,9 +260,12 @@ const activePage = pageNum => {
   width: 100%;
   margin-top: 30px;
   /* background-color: rgb(161, 160, 158); */
+  font-size: 1.3rem;
+  /* gap: 1%; */
 }
 #totalPages li {
   cursor: pointer;
+  padding: 1%;
 }
 .totalPages {
   /* background-color: rgb(236, 207, 172); */
@@ -247,7 +274,6 @@ const activePage = pageNum => {
   justify-content: center;
   /* width: 10%; */
   /* margin: 0 1%; */
-  padding: 1%;
 }
 .totalPages.active {
   color: var(--color-main-bloode);

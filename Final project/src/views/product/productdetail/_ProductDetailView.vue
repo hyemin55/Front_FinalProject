@@ -1,13 +1,28 @@
 <script setup>
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
-import ProductSlide from '@/views/product/productdetail/ProductDetailSlideView.vue'
-import ProductDescription from '@/views/product/productdetail/ProductDescriptionView.vue'
-import ProductDetailReview from '@/views/product/productdetail/ProductDetailReviewView.vue'
-import ProductInfoSection from '@/views/product/productdetail/ProductDetailInfoSectionView.vue'
+import { ref, watchEffect } from 'vue';
+import { useRoute } from 'vue-router';
+import ProductSlide from '@/views/product/productdetail/ProductDetailSlideView.vue';
+import ProductDescription from '@/views/product/productdetail/ProductDescriptionView.vue';
+import ProductDetailReview from '@/views/product/productdetail/ProductDetailReviewView.vue';
+import ProductInfoSection from '@/views/product/productdetail/ProductDetailInfoSectionView.vue';
 
-const route = useRoute()
-const productId = computed(() => route.params.idx)
+const route = useRoute();
+
+const productId = ref(route.params.idx);
+const productSize = ref(route.query.size);
+
+const isProductInfoLoaded = ref(false); // 상태 변수
+
+// ProductInfoSection이 로드 완료된 후 호출되는 메소드
+const handleProductInfoLoaded = newStatus => {
+  isProductInfoLoaded.value = newStatus;
+  console.log(isProductInfoLoaded.value);
+};
+
+watchEffect(() => {
+  productId.value = route.params.idx;
+  productSize.value = route.query.size;
+});
 </script>
 
 <template>
@@ -16,10 +31,14 @@ const productId = computed(() => route.params.idx)
   <section id="product">
     <main id="productMain">
       <ProductSlide :productId="productId" />
-      <ProductInfoSection />
+
+      <!-- ProductInfoSection이 로드되었을 때 나머지 컴포넌트를 렌더링 -->
+      <ProductInfoSection @onProductInfoLoaded="handleProductInfoLoaded" />
     </main>
-    <ProductDescription id="ProductDescription" />
-    <ProductDetailReview id="ProductDetailReview" />
+
+    <!-- 조건부 렌더링: ProductInfoSection이 로드되면 나머지 컴포넌트를 렌더링 -->
+    <ProductDescription v-if="isProductInfoLoaded" id="ProductDescription" />
+    <ProductDetailReview v-if="isProductInfoLoaded" id="ProductDetailReview" />
   </section>
 </template>
 
