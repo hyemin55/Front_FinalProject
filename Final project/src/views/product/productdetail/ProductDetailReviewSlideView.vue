@@ -4,6 +4,7 @@ import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel';
 import { ref, watchEffect } from 'vue';
 import { useRoute } from 'vue-router';
 import { getReviewImageList } from '@/api/productDetail';
+import { GLOBAL_URL } from '@/api/util';
 
 const route = useRoute();
 const idx = ref(route.params.idx);
@@ -11,7 +12,8 @@ const slides = ref([]);
 
 const reviewImgsData = async () => {
   const reviewImageList = await getReviewImageList(idx.value);
-  slides.value = reviewImageList.data;
+  slides.value = reviewImageList;
+  console.log(slides.value)
 };
 
 const config = {
@@ -21,7 +23,7 @@ const config = {
 };
 
 watchEffect(() => {
-  idx;
+  idx.value;
   reviewImgsData();
 });
 </script>

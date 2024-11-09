@@ -19,7 +19,7 @@ const reviewsData = ref([]);
 const currentPage = ref(1);
 const totalPages = ref(10);
 const currentPageGroup = ref(0);
-const reviewCount = ref(props.reviewCount);
+const reviewCount = ref(0);
 
 const ReviewList = ref(null);
 let flag = 0;
@@ -70,12 +70,12 @@ const viewCurrentPage = async () => {
   } else {
     reviewsData.value = await getViewCurrentPage(idx.value, currentPage.value - 1);
     ReviewList.value = reviewsData.value;
-    console.log(ReviewList.value);
+    // console.log(ReviewList.value);
     totalPages.value = Math.ceil(reviewCount.value / pageSize);
     totalPageGroup.value = Math.floor(totalPages.value / 10);
     startPage.value = currentPageGroup.value * 10 + 1;
     endPage.value = Math.min(startPage.value + 9, totalPages.value);
-    console.log(reviewCount.value);
+    // console.log(reviewCount.value);
   }
 };
 
@@ -106,11 +106,11 @@ const activePage = pageNum => {
 onMounted(async () => {
   reviewsData.value = await getReviewsData(idx.value);
   ReviewList.value = reviewsData.data;
-  totalPages.value = Math.ceil(reviewCount.value / pageSize);
-  totalPageGroup.value = Math.floor(totalPages.value / 10);
-  startPage.value = currentPageGroup.value * 10 + 1;
-  endPage.value = Math.min(startPage.value + 9, totalPages.value);
-  viewCurrentPage();
+  // totalPages.value = Math.ceil(reviewCount.value / pageSize);
+  // totalPageGroup.value = Math.floor(totalPages.value / 10);
+  // startPage.value = currentPageGroup.value * 10 + 1;
+  // endPage.value = Math.min(startPage.value + 9, totalPages.value);
+  // viewCurrentPage();
 });
 
 // 주소줄의 idx값이 바뀌면 리뷰리스트와 페이지네이션 변경을 위해 재통신 필요.

@@ -126,7 +126,7 @@ watchEffect(() => {
     </ul>
 
     <!-- mypage에서 component로 만들어서 재사용하기! -->
-    <ReviewComponent v-if="reviewCount" :reviewCount="reviewCount" />
+    <ReviewComponent :reviewCount="reviewCount" />
   </article>
 </template>
 

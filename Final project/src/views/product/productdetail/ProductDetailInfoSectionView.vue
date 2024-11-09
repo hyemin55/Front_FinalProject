@@ -48,7 +48,7 @@ const doLoad = async () => {
           // console.log('데이터내용들', productDataOk.value);
         }
       }
-      // console.log('reviewData.value', reviewData.value);
+      console.log('reviewData.value', reviewData.value);
 
       const newStatus = true;
       emit('onProductInfoLoaded', newStatus);

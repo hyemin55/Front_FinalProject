@@ -40,7 +40,6 @@ onMounted(async () => {
   }
 });
 </script>
-0
 
 <template>
   <article id="productSlide">
