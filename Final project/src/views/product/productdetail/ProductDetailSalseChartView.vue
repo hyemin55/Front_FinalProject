@@ -1,24 +1,22 @@
 <script setup>
 import { GLOBAL_URL } from '@/api/util';
 import axios from 'axios';
-import { ref } from 'vue';
+import { ref, watchEffect } from 'vue';
 import { useRoute } from 'vue-router';
-import { errorMessages } from 'vue/compiler-sfc';
+import Chart from 'chart.js/auto';
 // 1, 25 상품 데이터
 
 const route = useRoute();
-const idx = ref(route.params.idx);
-const size = ref(0);
+const idx = ref(0);
+const totalSalseList = ref([null]);
 console.log(idx.value);
 const doLode = async () => {
   try {
-    const res = await axios.get(`${GLOBAL_URL}/detail/chart/${idx.value}`);
-    if (res.status == 404) {
-      console.log('구매내역이 없어요');
-    }
+    totalSalseList.value = await axios.get(`${GLOBAL_URL}/detail/chart/${idx.value}`);
+    console.log(totalSalseList.value.data);
   } catch (error) {
     if (error.response && error.response.status === 404) {
-      console.error('상품을 찾을 수 없습니다.'); // 404 오류일 때
+      console.error('상품을 찾을 수 없습니다.', totalSalseList.value); // 404 오류일 때
       // 필요에 따라 사용자에게 알림을 띄우거나, 기본 데이터를 반환할 수도 있습니다.
       return { message: '해당 상품을 찾을 수 없습니다.' };
     } else {
@@ -27,7 +25,33 @@ const doLode = async () => {
   }
 };
 
-doLode();
+const ctx = document.getElementById('myChart');
+
+new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+    datasets: [
+      {
+        label: '# of Votes',
+        data: [12, 19, 3, 5, 2, 3],
+        borderWidth: 1,
+      },
+    ],
+  },
+  options: {
+    scales: {
+      y: {
+        beginAtZero: true,
+      },
+    },
+  },
+});
+
+watchEffect(() => {
+  idx.value = route.params.idx;
+  doLode();
+});
 </script>
 
 <template>
@@ -38,7 +62,7 @@ doLode();
       <p>6개월</p>
       <p>전체</p>
     </div>
-    <figcaption>차트상자</figcaption>
+    <figcaption>차트상자 <canvas id="myChart"></canvas></figcaption>
 
     <h2 class="TransactionHistory">체결 거래</h2>
     <div class="TransactionHistoryPosition">
@@ -47,16 +71,13 @@ doLode();
         <li>가격</li>
         <li>거래일</li>
       </ul>
-      <ul class="TransactionHistoryContent">
-        <li>30ml</li>
-        <li>￦ 500,000</li>
-        <li>2024-10-28</li>
-        <li>30ml</li>
-        <li>￦ 500,000</li>
-        <li>2024-10-28</li>
-        <li>30ml</li>
-        <li>￦ 500,000</li>
-        <li>2024-10-28</li>
+      <ul class="TransactionHistoryContent" v-for="(list, index) in totalSalseList.data" :key="index">
+        <li>{{ list.size }} ml</li>
+        <li>￦ {{ list.tradePrice.toLocaleString() }}</li>
+        <li>{{ list.tradeCompletedDate }}</li>
+      </ul>
+      <ul class="TransactionHistoryContent" v-if="totalSalseList.data == null || totalSalseList.data == 0">
+        <p>체결거래 내역이 없습니다 ㅠㅡㅠ</p>
       </ul>
     </div>
   </figure>

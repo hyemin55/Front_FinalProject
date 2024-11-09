@@ -17,7 +17,7 @@ import { GLOBAL_URL } from '@/api/util';
 export const getViewCurrentPage = async (idx, currentPage) => {
   try {
     const reviewsData = await axios.get(`${GLOBAL_URL}/detail/review/${idx}?pageNum=${currentPage}`);
-    console.log('getViewCurrentPage = ', reviewsData);
+    // console.log('getViewCurrentPage = ', reviewsData);
     return reviewsData;
   } catch (error) {
     console.log('getViewCurrentPage : ', error);
@@ -29,7 +29,7 @@ export const getViewCurrentPage = async (idx, currentPage) => {
 export const getReviewImageList = async idx => {
   try {
     const reviewImageList = await axios.get(`${GLOBAL_URL}/detail/reviewImageList/${idx}`);
-    console.log('getReviewImageList = ', reviewImageList);
+    // console.log('getReviewImageList = ', reviewImageList);
     return reviewImageList;
   } catch (error) {
     console.log('getReviewImageList', error);
@@ -41,7 +41,7 @@ export const getReviewImageList = async idx => {
 export const getstarCounting = async idx => {
   try {
     const starCountingData = await axios.get(`${GLOBAL_URL}/detail/detailReviewInfo/${idx}`);
-    console.log('getstarCounting = ', starCountingData);
+    // console.log('getstarCounting = ', starCountingData);
     return starCountingData;
   } catch (error) {
     console.log('getstarCounting', error);
@@ -53,7 +53,7 @@ export const getstarCounting = async idx => {
 export const getProductData = async idx => {
   try {
     const productData = await axios.get(`${GLOBAL_URL}/detail/detailProductInfo/${idx}`);
-    console.log('getProductData = ', productData);
+    // console.log('getProductData = ', productData);
     return productData;
   } catch (error) {
     if (error.response && error.response.status === 500) {
@@ -73,7 +73,7 @@ export const getProductData = async idx => {
 export const getReviewData = async idx => {
   try {
     const reviewData = await axios.get(`${GLOBAL_URL}/detail/detailReviewInfo/${idx}`);
-    console.log('getReviewData = ', reviewData);
+    // console.log('getReviewData = ', reviewData);
     return reviewData;
   } catch (error) {
     console.log('', error);
@@ -85,7 +85,7 @@ export const getReviewData = async idx => {
 export const getSlideImages = async idx => {
   try {
     const slideImagesData = await axios.get(`${GLOBAL_URL}/detail/images/${idx}`);
-    console.log('getSlideImages = ', slideImagesData);
+    // console.log('getSlideImages = ', slideImagesData);
     return slideImagesData;
   } catch (error) {
     console.log('', error);
