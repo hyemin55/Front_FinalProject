@@ -1,10 +1,10 @@
 <script setup>
-import SalseChart from '@/views/product/productdetail/SalseChart.vue';
 import { ref, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { formatPrice } from '@/FormatPrice';
 import _ProductDetailView from '@/views/product/productdetail/_ProductDetailView.vue';
 import { getProductData, getReviewData } from '@/api/productDetail';
+import ProductDetailSalseChartViewVue from './ProductDetailSalseChartView.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -20,8 +20,8 @@ const size = ref(route.query.size);
 
 // 1. 클릭한 옵션값을 idx에 담아준다.
 const productOptionSelect = item => {
-  console.log('item', item.productId);
-  console.log('item', item.size);
+  // console.log('item', item.productId);
+  // console.log('item', item.size);
   router.push({
     name: 'productsdetail',
     params: { idx: item.productId },
@@ -52,6 +52,9 @@ const doLoad = async () => {
 
       // const newStatus = true;
       // emit('onProductInfoLoaded', newStatus);
+    } else if (productData.value.status == 500) {
+      console.log(productData.value.status);
+      router.push({ name: 'main' });
     } else {
       console.log('실패1');
     }
@@ -132,7 +135,7 @@ watchEffect(() => {
       </button>
     </div>
 
-    <SalseChart />
+    <ProductDetailSalseChartViewVue />
   </article>
 </template>
 

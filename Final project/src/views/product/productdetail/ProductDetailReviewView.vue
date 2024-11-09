@@ -35,12 +35,14 @@ const emptyStars = () => {
 
 // 별점별 리뷰수 계산
 const starCounting = async () => {
+  console.log('starCountingData.value.data', reviewCount.value);
   const starCountingData = await getstarCounting(idx.value);
-  // console.log('starCountingData.value.data', starCountingData);
+  console.log('starCountingData.value.data', starCountingData);
   starCountData.value = starCountingData.data;
   // console.log('starCountData.value', starCountData.value.starAverage);
   starAverage.value = starCountData.value.starAverage;
   reviewCount.value = starCountData.value.reviewCount;
+  console.log('starCountingData.value.data', reviewCount.value);
 };
 
 const Average = data => {
@@ -136,13 +138,13 @@ watchEffect(() => {
     </ul>
 
     <!-- mypage에서 component로 만들어서 재사용하기! -->
-    <ReviewComponent />
+    <ReviewComponent v-if="reviewCount || reviewCount == 0" :reviewCount="reviewCount" />
   </article>
 </template>
 
 <style scoped>
 #detailReview {
-  height: 200px;
+  /* height: 200px; */
   margin: 0 auto;
 }
 #detailReviewTitle {

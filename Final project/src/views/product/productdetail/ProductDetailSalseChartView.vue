@@ -1,4 +1,34 @@
-<script setup></script>
+<script setup>
+import { GLOBAL_URL } from '@/api/util';
+import axios from 'axios';
+import { ref } from 'vue';
+import { useRoute } from 'vue-router';
+import { errorMessages } from 'vue/compiler-sfc';
+// 1, 25 상품 데이터
+
+const route = useRoute();
+const idx = ref(route.params.idx);
+const size = ref(0);
+console.log(idx.value);
+const doLode = async () => {
+  try {
+    const res = await axios.get(`${GLOBAL_URL}/detail/chart/${idx.value}`);
+    if (res.status == 404) {
+      console.log('구매내역이 없어요');
+    }
+  } catch (error) {
+    if (error.response && error.response.status === 404) {
+      console.error('상품을 찾을 수 없습니다.'); // 404 오류일 때
+      // 필요에 따라 사용자에게 알림을 띄우거나, 기본 데이터를 반환할 수도 있습니다.
+      return { message: '해당 상품을 찾을 수 없습니다.' };
+    } else {
+      console.error('오류가 발생했습니다:', error.message); // 다른 오류 처리
+    }
+  }
+};
+
+doLode();
+</script>
 
 <template>
   <figure id="salseChart">
@@ -9,6 +39,7 @@
       <p>전체</p>
     </div>
     <figcaption>차트상자</figcaption>
+
     <h2 class="TransactionHistory">체결 거래</h2>
     <div class="TransactionHistoryPosition">
       <ul class="TransactionHistoryTitle">

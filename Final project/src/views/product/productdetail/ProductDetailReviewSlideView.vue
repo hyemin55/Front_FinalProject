@@ -29,10 +29,15 @@ watchEffect(() => {
 
 <template>
   <Carousel v-bind="config" id="ReviewSlide">
-    <Slide v-for="(slide, index) in slides" :key="index">
-      <div class="carousel__item"><img :src="`${GLOBAL_URL}/api/file/download/${slide.filename}`" alt="" /></div>
-    </Slide>
-
+    <template v-if="slides.length == 0 || slides.length == null">
+      <div class="carousel__item"><img src="" alt="" /></div>
+      <p>아직 등록된 사진이 없어요ㅠㅡㅠ</p>
+    </template>
+    <template v-else>
+      <Slide v-for="(slide, index) in slides" :key="index">
+        <div class="carousel__item"><img :src="`${GLOBAL_URL}/api/file/download/${slide.filename}`" alt="" /></div>
+      </Slide>
+    </template>
     <template #addons>
       <Navigation />
     </template>

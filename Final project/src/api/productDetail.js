@@ -2,16 +2,16 @@ import axios from 'axios';
 import { GLOBAL_URL } from '@/api/util';
 
 // ReviewComponent 처음 렌더링 시 사용할 상품리스트 정보 Api
-export const getReviewsData = async idx => {
-  try {
-    const reviewsData = await axios.get(`${GLOBAL_URL}/detail/review/${idx}`);
-    console.log('getReviewsData = ', reviewsData);
-    return reviewsData;
-  } catch (error) {
-    console.log('getReviewsData : ', error);
-    throw error;
-  }
-};
+// export const getReviewsData = async idx => {
+//   try {
+//     const reviewsData = await axios.get(`${GLOBAL_URL}/detail/review/${idx}`);
+//     console.log('getReviewsData = ', reviewsData);
+//     return reviewsData;
+//   } catch (error) {
+//     console.log('getReviewsData : ', error);
+//     throw error;
+//   }
+// };
 
 // ReviewComponent 주소줄의 idx가 바뀔때 리뷰내용, 페이지네이션 변경할 데이터 Api
 export const getViewCurrentPage = async (idx, currentPage) => {
@@ -56,7 +56,15 @@ export const getProductData = async idx => {
     console.log('getProductData = ', productData);
     return productData;
   } catch (error) {
-    console.log('', error);
+    if (error.response && error.response.status === 500) {
+      const NotFound = error.response && error.response.status === 500;
+      console.error('상품을 찾을 수 없습니다.');
+      alert('해당 상품을 찾을 수 없습니다.'); // 404 오류일 때
+      // 필요에 따라 사용자에게 알림을 띄우거나, 기본 데이터를 반환할 수도 있습니다.
+      return NotFound;
+    } else {
+      console.error('오류가 발생했습니다:', error.message); // 다른 오류 처리
+    }
     throw error;
   }
 };
