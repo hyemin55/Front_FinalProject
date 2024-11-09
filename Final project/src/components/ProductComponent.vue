@@ -5,6 +5,7 @@ import { computed, ref, watch } from 'vue'
 import { useCartStore } from '@/stores/CartStore'
 import axios from 'axios'
 import { useUserStore } from '@/stores/Login'
+import { useQueryClient } from '@tanstack/vue-query'
 
 // 로그인 pinia
 const userStore = useUserStore()
@@ -36,6 +37,9 @@ const addToCart = () => {
   }
 }
 
+
+// const productClient = useQueryClient();
+
 // 찜목록 추가
 const redHeart = ref(false)
 const iconClick = ref(false) // 찜하트 css
@@ -43,6 +47,11 @@ const iconClick = ref(false) // 찜하트 css
 const addToWishlist = () => {
   redHeart.value = !redHeart.value
   iconClick.value = !iconClick.value // 찜하트 css
+  
+  // productClient.prefetchQuery(['product', props.productInfo.productId], ()=>{
+  //   getReviewData(props.productInfo.productId)
+  // })
+
 }
 
 // 단위 변경

@@ -67,12 +67,11 @@ onMounted(() => {
 })
 
 const isSearchVisible = ref(false); // 검색창의 표시 여부
-const searchQuery = ref(''); // 검색어 저장
 const searchInput = ref(null); // 검색창 참조
+const searchQuery = ref(''); // 검색어 저장
 // 검색창 토글 함수
 const toggleSearch = () => {
   isSearchVisible.value = !isSearchVisible.value;
-  // 검색창이 열리면 포커스, 닫히면 포커스 제거
   nextTick(() => {
     if (isSearchVisible.value) {
       searchInput.value.focus(); // 포커스 처리
@@ -81,6 +80,7 @@ const toggleSearch = () => {
     }
   });
 };
+
 </script>
 
 <template>
@@ -124,16 +124,16 @@ const toggleSearch = () => {
         </li>
       </ul>
       <ul class="gnb02">
-        <input
-      v-show="isSearchVisible"
-      v-model="searchQuery"
-      type="text"
-      placeholder="검색..."
-      class="search-input"
-      ref="searchInput" 
-    />
-        <li  @click="toggleSearch">
-          <img
+        <li>
+          <input
+            v-show="isSearchVisible"
+            type="text"
+            placeholder="검색어를 입력해주세요."
+            class="search-input"
+            v-model="searchQuery"
+            ref="searchInput" 
+          />
+          <img @click="toggleSearch"
             class="icon"
             src="@/assets/img/icon/free-icon-font-search-3917132.png"
             alt=""
@@ -236,6 +236,7 @@ const toggleSearch = () => {
   color: rgb(19, 19, 19);
 }
 .gnb02 li {
+  position: relative;
   font-size: 1.5rem;
   margin-left: 1.8rem;
 }
@@ -244,17 +245,18 @@ const toggleSearch = () => {
   height: auto;
 }
 
-
 /* 검색창 설정 */
 .icon {cursor: pointer;}
 .search-input {
-  width: 0;
+  z-index: 999;
+  position: absolute;
+  right: 2.5rem;
+  width: 200px;
+  height: 2rem;
   transition: width 0.3s ease;
   border: 1px solid #ccc;
   margin-left: 10px;
 }
-.search-input:focus {width: 200px;}
-.search-input {width: 0;}
 
 
 /* 반응현 구간 설정 */
