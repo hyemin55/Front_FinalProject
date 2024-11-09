@@ -1,3 +1,37 @@
+<script setup>
+import { getBestProducts } from '@/api/mainApi';
+import { GLOBAL_URL } from '@/api/util';
+import { onBeforeUnmount, onMounted, ref, watchEffect } from 'vue';
+
+const bestListRef = ref([])
+const bestListImagesRef = ref([])
+const currentIdxRef = ref(0);
+let intervalId = null;
+
+onMounted(async() => {
+  bestListRef.value = await getBestProducts()
+  console.log(bestListRef.value)
+  bestListRef.value.forEach(best_product => {
+    bestListImagesRef.value.push(best_product.mainImage.filename)
+  })
+})
+
+const changeIdx = setInterval(() => {
+  currentIdxRef.value = (currentIdxRef.value + 1) % 3;
+}, 2000)
+
+watchEffect(() => {
+  changeIdx
+})
+
+onBeforeUnmount(() => {
+  if(intervalId) {
+    clearInterval(intervalId)
+    console.log("setInterval 끝났음")
+  }
+})
+</script>
+
 <template>
   <article id="main_best">
     <h1>BEST</h1>
@@ -7,17 +41,22 @@
           <p class="best_product_category">Perfume</p>
           <p class="best_product_page">
             <button @click="best_page_left">&lt;</button>
-            1 / 3
+            {{ currentIdxRef + 1 }} / 3
             <button @click="best_page_right">&gt;</button>
           </p>
         </div>
         <div class="best_product">
-          <img class="best_product_img" src="@/assets/img/p_003.png" alt="" />
+          <img class="best_product_img" :src="`${GLOBAL_URL}/api/file/download/${bestListImagesRef[currentIdxRef]}`" alt="" />
+          
           <ul class="best_left_text">
-            <li>Dior</li>
-            <li>향수제품명자리니조금길게적어볼게요</li>
+            <!-- 조건부 렌더링을 통해 데이터를 확인한 후 접근 -->
+            <li v-if="bestListRef.length > 0">{{ bestListRef[currentIdxRef].brandName }} </li>
+            <li v-if="bestListRef.length > 0">{{ bestListRef[currentIdxRef].productName }}</li>
+            <!-- 데이터를 아직 받아오지 않았다면 로딩 중 표시 -->
+            <li v-else>Loading...</li>
           </ul>
         </div>
+
       </div>
       <div class="best_right_box">
         <p class="best_right_text">
@@ -33,8 +72,6 @@
     </div>
   </article>
 </template>
-
-<script setup></script>
 
 <style scoped>
 /* ====BEST===== */
