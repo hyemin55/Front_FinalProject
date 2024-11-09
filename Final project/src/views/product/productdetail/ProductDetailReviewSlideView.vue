@@ -1,58 +1,43 @@
 <script setup>
-import 'vue3-carousel/dist/carousel.css'
-import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
-import { ref } from 'vue'
-import img1 from '@/assets/img/빵빵덕세안.png'
-import img2 from '@/assets/img/빵빵덕세안핑크.png'
+import 'vue3-carousel/dist/carousel.css';
+import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel';
+import { ref, watchEffect } from 'vue';
+import { useRoute } from 'vue-router';
+import { getReviewImageList } from '@/api/productDetail';
+import { GLOBAL_URL } from '@/api/util';
 
-const slides = ref([
-  img1,
-  img2,
-  img1,
-  img2,
-  img1,
-  img2,
-  img1,
-  img2,
-  img1,
-  img2,
-  img1,
-  img2,
-  img1,
-  img2,
-  img1,
-  img2,
-  img1,
-  img2,
-  img1,
-  img2,
-  img1,
-  img2,
-  img1,
-  img2,
-  img1,
-  img2,
-  img1,
-  img2,
-  img1,
-  img2,
-  img1,
-  img2,
-])
+const route = useRoute();
+const idx = ref(route.params.idx);
+const slides = ref([]);
+
+const reviewImgsData = async () => {
+  const reviewImageList = await getReviewImageList(idx.value);
+  slides.value = reviewImageList.data;
+};
 
 const config = {
   itemsToShow: 7.5,
   snapAlign: 'start',
   wrapAround: true,
-}
+};
+
+watchEffect(() => {
+  idx;
+  reviewImgsData();
+});
 </script>
 
 <template>
   <Carousel v-bind="config" id="ReviewSlide">
-    <Slide v-for="(slide, index) in slides" :key="index">
-      <div class="carousel__item"><img :src="slide" alt="" /></div>
-    </Slide>
-
+    <template v-if="slides.length == 0 || slides.length == null">
+      <div class="carousel__item"><img src="" alt="" /></div>
+      <p>아직 등록된 사진이 없어요ㅠㅡㅠ</p>
+    </template>
+    <template v-else>
+      <Slide v-for="(slide, index) in slides" :key="index">
+        <div class="carousel__item"><img :src="`${GLOBAL_URL}/api/file/download/${slide.filename}`" alt="" /></div>
+      </Slide>
+    </template>
     <template #addons>
       <Navigation />
     </template>
@@ -67,6 +52,7 @@ const config = {
   justify-content: center;
   align-items: center;
   margin-bottom: 20px;
+  /* background-color: aqua; */
 }
 .carousel__item {
   /* background-color: aqua; */
@@ -74,6 +60,7 @@ const config = {
   width: 150px;
   border: 0.5px solid var(--color-main-Lgray);
   border-radius: 10px;
+  gap: 10px;
 }
 .carousel__item > img {
   padding: 3px;

@@ -1,12 +1,13 @@
-import CartView from '@/views/CartView.vue'
-import LoginView from '@/views/login/LoginView.vue'
-import MainView from '@/views/main/_MainView.vue'
-import ProductDetailView from '@/views/product/productdetail/_ProductDetailView.vue'
-import ProductListView from '@/views/product/ProductListView.vue'
-import OauthView from '@/views/login/OauthView.vue'
-import MypageView from '@/views/mypage/_MypageView.vue'
-import { createRouter, createWebHistory } from 'vue-router'
-import PaymentView from '@/views/payment/_PaymentView.vue'
+import CartView from '@/views/CartView.vue';
+import LoginView from '@/views/login/LoginView.vue';
+import MainView from '@/views/main/_MainView.vue';
+import ProductDetailView from '@/views/product/productdetail/_ProductDetailView.vue';
+import ProductListView from '@/views/product/ProductListView.vue';
+import OauthView from '@/views/login/OauthView.vue';
+import MypageView from '@/views/mypage/_MypageView.vue';
+import { createRouter, createWebHistory } from 'vue-router';
+import PaymentView from '@/views/payment/_PaymentView.vue';
+import NotFoundPage from '@/views/loding/NotFoundPage.vue';
 
 const loginRouter = [
   {
@@ -19,7 +20,7 @@ const loginRouter = [
     name: 'login',
     component: OauthView,
   },
-]
+];
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -41,16 +42,16 @@ const router = createRouter({
       name: 'search',
       component: ProductListView,
     },
-    {
-      path: '/productsdetail/:idx',
-      name: 'productsdetail',
-      component: ProductDetailView,
-    },
     // {
     //   path: '/productsdetail/:idx',
     //   name: 'productsdetail',
-    //   component: () => import('@/views/ProductDetailView.vue'),
+    //   component: ProductDetailView,
     // },
+    {
+      path: '/productsdetail/:idx',
+      name: 'productsdetail',
+      component: () => import('@/views/product/productdetail/_ProductDetailView.vue'),
+    },
 
     {
       path: '/cart',
@@ -67,6 +68,10 @@ const router = createRouter({
       name: 'mypage',
       component: MypageView,
     },
+    {
+      path: '/:catchAll(.*)', // catch-all 경로를 정규 표현식으로 설정
+      component: NotFoundPage,
+    },
   ],
   scrollBehavior(to, from, savedPosition) {
     // 뒤로가기나 새로고침이 아닌 경우(savedPosition이 있으면 해당 위치로 복원)
@@ -74,10 +79,7 @@ const router = createRouter({
       return savedPosition;
     }
     // 모든 라우트 이동 시 스크롤을 맨 위로 이동
-    return { top: 0 } 
-  }
-
-  
-
-})
-export default router
+    return { top: 0 };
+  },
+});
+export default router;

@@ -1,77 +1,103 @@
 <script setup>
-import { GLOBAL_URL } from '@/api/util'
-import SalseChart from '@/views/product/productdetail/SalseChart.vue'
-import axios from 'axios'
-import { ref, watchEffect } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { formatPrice } from '@/FormatPrice'
+import { ref, watchEffect } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { formatPrice } from '@/FormatPrice';
+import _ProductDetailView from '@/views/product/productdetail/_ProductDetailView.vue';
+import { getProductData, getReviewData } from '@/api/productDetail';
+import ProductDetailSalseChartViewVue from './ProductDetailSalseChartView.vue';
 
-const route = useRoute()
-const router = useRouter()
-const idx = ref(route.params.idx)
-const size = ref(route.query.size)
-const productData = ref([])
-const reviewData = ref(0)
-const productDataOk = ref([])
+const route = useRoute();
+const router = useRouter();
 
-watchEffect(async () => {
+const productData = ref([]);
+const reviewData = ref(null);
+const productDataOk = ref([]);
+
+const idx = ref(route.params.idx);
+const size = ref(route.query.size);
+
+// const emit = defineEmits();
+
+// 1. 클릭한 옵션값을 idx에 담아준다.
+const productOptionSelect = item => {
+  // console.log('item', item.productId);
+  // console.log('item', item.size);
+  router.push({
+    name: 'productsdetail',
+    params: { idx: item.productId },
+    query: { size: item.size },
+  });
+};
+
+// 3. 옵션값을 클릭하면 watch에서 추적하는 idx값이 바뀌고 doLoad를 호출한다.
+const doLoad = async () => {
+  // console.log(`doLoad = ${idx.value}`);
   try {
-    const res = await axios.get(
-      `${GLOBAL_URL}/detail/detailProductInfo/${idx.value}`,
-    )
-    const res2 = await axios.get(
-      `${GLOBAL_URL}/detail/detailReviewInfo/${idx.value}`,
-    )
-    productData.value = res.data
-    reviewData.value = res2.data
-    if (res.status === 200 && res2.status === 200) {
-      console.log(productData.value)
+    productData.value = await getProductData(idx.value);
+    reviewData.value = await getReviewData(idx.value);
 
-      for (let i = 0; i < productData.value.length; i++) {
-        if (
-          productData.value[i].productId == idx.value &&
-          productData.value[i].size == size.value
-        ) {
-          // 여기닷! 수정수정필요
-          console.log('조건에 맞는 아이는? ', productData.value[i])
-          productDataOk.value = productData.value[i]
+    // console.log('productData 값 : ', productData.value.data[0].productId);
+    // console.log('reviewData 값 : ', reviewData.value.length);
 
-          // console.log('데이터내용들', productData.value)
+    if (productData.value.status === 200 && reviewData.value.status === 200) {
+      // console.log('productData.value.status === 200', productData.value);
+      for (let i = 0; i < productData.value.data.length; i++) {
+        // console.log('조건에 맞는 아이는? ', productData.value.data[i].size);
+        if (productData.value.data[i].productId == idx.value && productData.value.data[i].size == size.value) {
+          productDataOk.value = productData.value.data[i];
+          // console.log('데이터내용들', productDataOk.value);
         }
       }
+      // console.log('reviewData.value', reviewData.value);
+
+      // const newStatus = true;
+      // emit('onProductInfoLoaded', newStatus);
+    } else if (productData.value.status == 500) {
+      console.log(productData.value.status);
+      router.push({ name: 'main' });
     } else {
-      console.log('실패')
+      console.log('실패1');
     }
   } catch (err) {
-    console.log('실패' + err)
+    console.log('실패2' + err);
   }
-})
+};
 
-const BuyNow = () => {}
+const BuyNow = () => {};
 
-const redHeart = ref(false)
+// 찜 클릭 이벤트
+const redHeart = ref(false);
 const addToWishlist = () => {
-  alert('༼ つ ◕_◕ ༽つ 찜~')
-  redHeart.value = !redHeart.value
-}
+  redHeart.value = !redHeart.value;
+  if (redHeart.value == true) alert('༼ つ ◕_◕ ༽つ 찜~');
+};
 
+// URL 공유 클릭 이벤트
 const urlShare = () => {
-  const url = window.location.href
+  const url = window.location.href;
   navigator.clipboard
     .writeText(url)
     .then(() => {
-      alert('URL이 클립보드에 복사되었습니다.')
+      alert('URL이 클립보드에 복사되었습니다.');
     })
     .catch(err => {
-      console.error('URL 복사를 실패했어요ㅠㅡㅠ', err)
-    })
-}
+      console.error('URL 복사를 실패했어요ㅠㅡㅠ', err);
+    });
+};
+
+// 리뷰별점평균을 소수점 1자리만 남긴다.
 const Average = data => {
-  data = data * 10
-  data = Math.round(data)
-  data = data / 10
-  return data
-}
+  data = data * 10;
+  data = Math.round(data);
+  data = data / 10;
+  return data;
+};
+
+watchEffect(() => {
+  idx.value = route.params.idx;
+  size.value = route.query.size;
+  doLoad();
+});
 </script>
 
 <template>
@@ -79,27 +105,16 @@ const Average = data => {
     <ul id="productInfo">
       <li>{{ productDataOk.brandName }}</li>
       <li>{{ productDataOk.productName }}</li>
-      <li>
+      <li v-if="reviewData">
         1,222찜 수
-        <span style="color: orange"
-          >★ {{ Average(reviewData.starAverage) }} ({{
-            reviewData.reviewCount
-          }}
-          reviews)</span
-        >
+        <span style="color: orange">★ {{ Average(reviewData.data.starAverage) }} ({{ reviewData.data.reviewCount }} reviews)</span>
       </li>
       <li>{{ formatPrice(productDataOk.price) }}</li>
     </ul>
 
     <p class="OptionSelect">옵션선택</p>
     <div id="productOption">
-      <button
-        @click="productOptionselec(size)"
-        v-for="(size, index) in productData"
-        :key="index"
-      >
-        {{ size.size }} ml
-      </button>
+      <button @click="productOptionSelect(size)" v-for="(size, index) in productData.data" :key="index">{{ size.size }} ml</button>
     </div>
     <div>
       <p>제조일자 : 2024-11-01</p>
@@ -112,27 +127,15 @@ const Average = data => {
         <img src="@/assets/img/icon/free-icon-font-shopping-cart.svg" alt="" />
         장바구니 추가
       </button>
-      <button
-        class="wish_push"
-        :class="{ active: redHeart }"
-        @click.stop="addToWishlist"
-      >
-        <img
-          class="icon"
-          src="@/assets/img/icon/free-icon-font-heart-line.svg"
-          alt=""
-        />
+      <button class="wish_push" :class="{ active: redHeart }" @click.stop="addToWishlist">
+        <img class="icon" src="@/assets/img/icon/free-icon-font-heart-line.svg" alt="" />
       </button>
       <button class="wish_push" @click="urlShare">
-        <img
-          src="@/assets/img/icon/free-icon-font-share-3917574.png"
-          class="icon"
-          alt=""
-        />
+        <img src="@/assets/img/icon/free-icon-font-share-3917574.png" class="icon" alt="" />
       </button>
     </div>
 
-    <SalseChart />
+    <ProductDetailSalseChartViewVue />
   </article>
 </template>
 
@@ -141,7 +144,7 @@ const Average = data => {
 #productInfoSection {
   /* background-color: aquamarine; */
   width: 50%;
-  margin: 20px 0 25px 0;
+  margin: 20px 0 25px 30px;
   /* background-color: yellow; */
 }
 #productInfo {

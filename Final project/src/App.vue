@@ -20,7 +20,9 @@ onBeforeUnmount(() => {window.removeEventListener('scroll', scrollHeight);});
 <template>
   <Header></Header>
 
-  <RouterView class="min-height" />
+  <div class="min-height">
+    <RouterView />
+  </div>
 
   <Footer></Footer>
 
