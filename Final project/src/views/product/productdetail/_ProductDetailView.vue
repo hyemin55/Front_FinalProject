@@ -37,7 +37,7 @@ watchEffect(() => {
     </main>
     <!-- v-if="isProductInfoLoaded" id="ProductDescription" -->
     <!-- 조건부 렌더링: ProductInfoSection이 로드되면 나머지 컴포넌트를 렌더링 -->
-    <!-- <ProductDescription /> -->
+    <ProductDescription />
     <ProductDetailReview />
   </section>
 </template>

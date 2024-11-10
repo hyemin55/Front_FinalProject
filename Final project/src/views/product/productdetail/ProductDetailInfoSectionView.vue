@@ -1,10 +1,12 @@
 <script setup>
-import { ref, watchEffect } from 'vue';
+import { computed, ref, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { formatPrice } from '@/FormatPrice';
 import _ProductDetailView from '@/views/product/productdetail/_ProductDetailView.vue';
 import { getProductData, getReviewData } from '@/api/productDetail';
 import ProductDetailSalseChartViewVue from './ProductDetailSalseChartView.vue';
+import { useCartStore } from '@/stores/CartStore'
+import { useUserStore } from '@/stores/Login'
 
 const route = useRoute();
 const router = useRouter();
@@ -45,7 +47,7 @@ const doLoad = async () => {
         // console.log('조건에 맞는 아이는? ', productData.value.data[i].size);
         if (productData.value.data[i].productId == idx.value && productData.value.data[i].size == size.value) {
           productDataOk.value = productData.value.data[i];
-          // console.log('데이터내용들', productDataOk.value);
+          console.log('데이터내용들', productDataOk.value);
         }
       }
       // console.log('reviewData.value', reviewData.value);
@@ -64,6 +66,36 @@ const doLoad = async () => {
 };
 
 const BuyNow = () => {};
+
+// 로그인 pinia
+const userStore = useUserStore()
+const userLogin = computed(() => userStore.loginCheck)
+console.log(productDataOk)
+
+// 장바구니 추가
+const cartStore = useCartStore()
+const addToCart = async () => {
+  cartStore.addItem(productDataOk)
+  alert("장바구니에 담았습니다.")
+
+  if (userLogin.value) {
+    const data = {
+      memberId: 1,
+      productId: idx.value,
+      quantity: 1,
+    }
+    try {
+      const res = axios.post(`${GLOBAL_URL}/cart/add`, data, {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+      })
+      console.log(res)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+}
 
 // 찜 클릭 이벤트
 const redHeart = ref(false);
@@ -84,7 +116,9 @@ const urlShare = () => {
       console.error('URL 복사를 실패했어요ㅠㅡㅠ', err);
     });
 };
-
+const isselectedSize = (size)=>{
+  return route.query.size === size.size.toString() && route.params.idx === size.productId.toString()
+}
 // 리뷰별점평균을 소수점 1자리만 남긴다.
 const Average = data => {
   data = data * 10;
@@ -114,7 +148,9 @@ watchEffect(() => {
 
     <p class="OptionSelect">옵션선택</p>
     <div id="productOption">
-      <button @click="productOptionSelect(size)" v-for="(size, index) in productData.data" :key="index">{{ size.size }} ml</button>
+      <button @click="productOptionSelect(size)" 
+      v-for="(size, index) in productData.data" :key="index"
+      :class="{'selectedSize':isselectedSize(size)}">{{ size.size }} ml</button>
     </div>
     <div>
       <p>제조일자 : 2024-11-01</p>
@@ -123,7 +159,7 @@ watchEffect(() => {
 
     <div class="addButtonGroub">
       <button class="addToCart BuyNow" @click="BuyNow">바로 구매하기</button>
-      <button class="addToCart">
+      <button class="addToCart" @click="addToCart">
         <img src="@/assets/img/icon/free-icon-font-shopping-cart.svg" alt="" />
         장바구니 추가
       </button>
@@ -183,7 +219,7 @@ watchEffect(() => {
   border-radius: 10px;
   cursor: pointer;
 }
-#productOption button:hover {
+button.selectedSize {
   background-color: var(--color-main-bloode);
   color: white;
   border: 0.5px solid var(--color-main-bloode);

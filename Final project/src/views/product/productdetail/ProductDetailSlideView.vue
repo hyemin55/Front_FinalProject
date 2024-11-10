@@ -68,7 +68,7 @@ onMounted(async () => {
 #productSlide {
   width: 50%;
   height: 700px;
-  margin: 20px 5px 25px 0;
+  margin: 20px 0px 25px 0;
   text-align: center;
 }
 /* 보여지는 슬라이드의 메인사진 1장 */

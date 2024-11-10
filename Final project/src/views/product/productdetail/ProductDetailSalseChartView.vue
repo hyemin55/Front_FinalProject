@@ -1,51 +1,133 @@
 <script setup>
 import { GLOBAL_URL } from '@/api/util';
 import axios from 'axios';
-import { ref, watchEffect } from 'vue';
+import { computed, ref, watchEffect, onMounted, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
 import Chart from 'chart.js/auto';
-// 1, 25 상품 데이터
 
 const route = useRoute();
 const idx = ref(0);
-const totalSalseList = ref([null]);
-console.log(idx.value);
+const totalSalseList = ref([]);
+const displayedList = ref([]);
+const chartRef = ref(null); // chart element 참조
+let chartInstance = null;
+const showMore = ref(5)
+
+// 데이터 로드 함수
 const doLode = async () => {
   try {
-    totalSalseList.value = await axios.get(`${GLOBAL_URL}/detail/chart/${idx.value}`);
-    console.log(totalSalseList.value.data);
-  } catch (error) {
-    if (error.response && error.response.status === 404) {
-      console.error('상품을 찾을 수 없습니다.', totalSalseList.value); // 404 오류일 때
-      // 필요에 따라 사용자에게 알림을 띄우거나, 기본 데이터를 반환할 수도 있습니다.
-      return { message: '해당 상품을 찾을 수 없습니다.' };
+    const response = await axios.get(`${GLOBAL_URL}/detail/chart/${idx.value}`);
+    totalSalseList.value = response.data.sort((a, b) => new Date(b.tradeCompletedDate) - new Date(a.tradeCompletedDate));;
+    console.log(response.data[0].tradeCompletedDate)
+    displayedList.value = totalSalseList.value.slice(0, showMore.value);
+    if (totalSalseList.value.length > 0) {
+      initializeChart();
     } else {
-      console.error('오류가 발생했습니다:', error.message); // 다른 오류 처리
+      console.warn("No transaction history found.");
     }
+  } catch (error) {
+    console.error("오류가 발생했습니다:", error.message);
   }
 };
 
-const ctx = document.getElementById('myChart');
+// x축은 첫 거래일부터 현재까지의 날짜
+const generateDateLabels = (startDate) => {
+  console.log(startDate)
+  const labels = [];
+  let date = new Date(startDate);
+  const today = new Date();
+  while (date <= today) {
+    labels.push(new Intl.DateTimeFormat('ko-KR', { month: 'short', day: 'numeric' }).format(date));
+    date.setDate(date.getDate() + 30); // 한 달 간격으로 라벨 추가
+  }
+  return labels;
+};
 
-new Chart(ctx, {
-  type: 'bar',
-  data: {
-    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-    datasets: [
-      {
-        label: '# of Votes',
-        data: [12, 19, 3, 5, 2, 3],
-        borderWidth: 1,
+// 차트 초기화 함수
+const initializeChart = async() => {
+  await nextTick();
+  // 기존 차트 인스턴스가 있으면 제거 (재설정)
+  if (chartInstance) {
+    chartInstance.destroy();
+  }
+    // 데이터가 존재할 때만 차트를 생성
+    if (totalSalseList.value.length > 0) {
+      const firstTradeDate = new Date(totalSalseList.value[totalSalseList.value.length - 1].tradeCompletedDate);
+      const maxPrice = Math.ceil(Math.max(...totalSalseList.value.map((item) => item.tradePrice)) * 1.1) // 최대 가격의 110%
+
+  chartInstance = new Chart(chartRef.value, {
+    type: 'line',
+    data: {
+      labels: generateDateLabels(firstTradeDate), // X축 라벨
+      datasets: [
+        {
+          label: 'Sales Figures',
+          data: totalSalseList.value.map((item) => item.tradePrice),
+          borderColor: '#4CAF50',
+          backgroundColor: 'rgba(76, 175, 80, 0.2)',
+          borderWidth: 2,
+          pointRadius: 3,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: true,
+          labels: {
+            font: { size: 14 },
+          },
+        },
       },
-    ],
-  },
-  options: {
-    scales: {
-      y: {
-        beginAtZero: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: maxPrice,
+          grid: {
+            color: 'rgba(200, 200, 200, 0.3)',
+          },
+          title: {
+            display: true,
+            text: 'Sales',
+            text: 'Sales (₩)',
+          },
+        },
+        x: {
+          grid: {
+            color: 'rgba(200, 200, 200, 0.3)',
+          },
+          title: {
+              display: true,
+              text: 'Date',
+            },
+        },
       },
     },
-  },
+  });
+}
+};
+
+const loadMore = ()=>{
+  console.log(totalSalseList.value.length)
+  if(totalSalseList.value.length>showMore.value){
+  showMore.value += 5
+  displayedList.value = totalSalseList.value.slice(0, showMore.value);
+  }
+}
+const closeList = () =>{
+  showMore.value == 5
+  console.log(showMore.value)
+  displayedList.value = totalSalseList.value.slice(0, showMore.value);
+}
+onMounted(() => {
+  doLode();
+  watchEffect(() => {
+    if (totalSalseList.value.length > 0) {
+      initializeChart();
+    }
+  });
 });
 
 watchEffect(() => {
@@ -55,14 +137,17 @@ watchEffect(() => {
 </script>
 
 <template>
-  <figure id="salseChart">
+  <figure id="salseChart" v-if="
+                                totalSalseList.length > 0">
     <h1>시세</h1>
     <div class="chartCycle">
       <p>1개월</p>
       <p>6개월</p>
       <p>전체</p>
     </div>
-    <figcaption>차트상자 <canvas id="myChart"></canvas></figcaption>
+    <figcaption>차트상자 
+      <canvas ref="chartRef" style="height: 250px; width: 100%;"></canvas>
+    </figcaption>
 
     <h2 class="TransactionHistory">체결 거래</h2>
     <div class="TransactionHistoryPosition">
@@ -71,30 +156,25 @@ watchEffect(() => {
         <li>가격</li>
         <li>거래일</li>
       </ul>
-      <ul class="TransactionHistoryContent" v-for="(list, index) in totalSalseList.data" :key="index">
+      <ul class="TransactionHistoryContent" v-for="(list, index) in displayedList" :key="index">
         <li>{{ list.size }} ml</li>
         <li>￦ {{ list.tradePrice.toLocaleString() }}</li>
         <li>{{ list.tradeCompletedDate }}</li>
       </ul>
-      <ul class="TransactionHistoryContent" v-if="totalSalseList.data == null || totalSalseList.data == 0">
-        <p>체결거래 내역이 없습니다 ㅠㅡㅠ</p>
-      </ul>
+      <button v-if="showMore && totalSalseList.length > showMore" @click="loadMore">더보기</button>
+      <button v-if="showMore && totalSalseList.length <= showMore" @click="closeList">닫기</button>
     </div>
   </figure>
 </template>
 
 <style scoped>
 #salseChart {
-}
-#salseChart h1 {
-  font-size: 2rem;
-  margin: 10px 0;
+  /* 스타일 수정 */
 }
 .chartCycle {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  /* height: 30px; */
   gap: 2%;
 }
 .chartCycle p:hover {
@@ -118,7 +198,7 @@ watchEffect(() => {
 figcaption {
   height: 250px;
   margin: 10px 0;
-  background-color: rgb(245, 206, 206);
+  /* background-color: rgb(245, 206, 206); */
 }
 .TransactionHistory {
   margin: 10px 0 0 10px;
@@ -126,32 +206,12 @@ figcaption {
 }
 .TransactionHistoryPosition {
   margin: 15px 0;
-  /* background-color: blueviolet; */
 }
-.TransactionHistoryTitle {
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  /* background-color: pink; */
-  margin: 10px 0 15px 0;
-  padding: 0 3%;
-  font-size: 1.4rem;
-}
-.TransactionHistoryTitle::after {
-  position: absolute;
-  content: '';
-  border: 0.1px dashed var(--color-main-gray);
-  width: 100%;
-  bottom: -10px;
-}
+.TransactionHistoryTitle,
 .TransactionHistoryContent {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   padding: 0 3%;
   font-size: 1.4rem;
-}
-.TransactionHistoryContent li {
-  margin: 5px 0;
-  /* background-color: aquamarine; */
 }
 </style>

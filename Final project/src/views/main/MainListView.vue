@@ -103,11 +103,12 @@ watchEffect(() => {
   flex-direction: column;
 }
 .expanded {
-  height: 1020px !important;
+  height: 1080px !important;
 }
 .main_product_list_btn {
   font-size: 1.5rem;
   margin: 10px 0;
+  padding: 1%;
   color: var(--color-text-gray);
 }
 .main_product_Com,

@@ -19,10 +19,10 @@ const getNewList = async () => {
     const res = await axios.get(
       `${GLOBAL_URL}/api/products/new?pageNum=${pageNum}&size=${size}`,
     )
-    console.log(res)
+    // console.log(res)
     if (res.status == 200) {
       // New_list.value = res.data
-      console.log('나와랏', res.data)
+      // console.log('나와랏', res.data)
       // for (let i = 0; i < res.data.length; i++) {
       //   slides.value.push(res.data[i].images[0])
       // }
