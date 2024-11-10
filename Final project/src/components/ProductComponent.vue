@@ -6,6 +6,7 @@ import { useCartStore } from '@/stores/CartStore'
 import axios from 'axios'
 import { useUserStore } from '@/stores/Login'
 import { useQueryClient } from '@tanstack/vue-query'
+import { getProductData, getReviewData, getReviewImageList, getSlideImages, getstarCounting } from '@/api/productDetail'
 
 // 로그인 pinia
 const userStore = useUserStore()
@@ -37,9 +38,7 @@ const addToCart = () => {
   }
 }
 
-
 // const productClient = useQueryClient();
-
 // 찜목록 추가
 const redHeart = ref(false)
 const iconClick = ref(false) // 찜하트 css
@@ -48,10 +47,22 @@ const addToWishlist = () => {
   redHeart.value = !redHeart.value
   iconClick.value = !iconClick.value // 찜하트 css
   
-  // productClient.prefetchQuery(['product', props.productInfo.productId], ()=>{
+  // productClient.prefetchQuery(['productSlideImage', props.productInfo.productId], ()=>{
+  //   getSlideImages(props.productInfo.productId)
+  // })
+  // productClient.prefetchQuery(['productProductData', props.productInfo.productId], ()=>{
+  //   getProductData(props.productInfo.productId)
+  // })
+  // productClient.prefetchQuery(['productStarCount', props.productInfo.productId], ()=>{
+  //   getstarCounting(props.productInfo.productId)
+  // })
+  // productClient.prefetchQuery(['productReviewImage', props.productInfo.productId], ()=>{
+  //   getReviewImageList(props.productInfo.productId)
+  // })
+  // productClient.prefetchQuery(['productReviewData', props.productInfo.productId], ()=>{
   //   getReviewData(props.productInfo.productId)
   // })
-
+  
 }
 
 // 단위 변경

@@ -69,14 +69,17 @@ onMounted(() => {
 const isSearchVisible = ref(false); // 검색창의 표시 여부
 const searchInput = ref(null); // 검색창 참조
 const searchQuery = ref(''); // 검색어 저장
+const searchStyle = ref({ width: '0px'});
 // 검색창 토글 함수
 const toggleSearch = () => {
   isSearchVisible.value = !isSearchVisible.value;
   nextTick(() => {
     if (isSearchVisible.value) {
-      searchInput.value.focus(); // 포커스 처리
+      searchInput.value.focus(); 
+      searchStyle.value = { width: '200px' };
     } else {
-      searchInput.value.blur(); // 포커스 해제
+      searchInput.value.blur(); 
+      searchStyle.value = { width: '0px' };
     }
   });
 };
@@ -127,6 +130,7 @@ const toggleSearch = () => {
         <li>
           <input
             v-show="isSearchVisible"
+            v-bind:style="searchStyle"
             type="text"
             placeholder="검색어를 입력해주세요."
             class="search-input"
@@ -251,11 +255,11 @@ const toggleSearch = () => {
   z-index: 999;
   position: absolute;
   right: 2.5rem;
-  width: 200px;
   height: 2rem;
   transition: width 0.3s ease;
   border: 1px solid #ccc;
   margin-left: 10px;
+  transition: width 0.3s ease ;
 }
 
 

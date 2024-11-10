@@ -7,6 +7,7 @@ import axios from 'axios'
 import { computed, ref, watchEffect, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { eventBus } from '@/eventBus'
+import { usePayMentStore } from '@/stores/PayMentStore'
 // import { storeToRefs } from 'pinia'
 
 // 전체 선택 체크박스 토글
@@ -101,9 +102,8 @@ const fetchMemberCart = async () => {
   }
 }
 
+// const payMentStore = usePayMentStore();
 // 결제 하러가기
-
-
 const payRouter = useRouter()
 const doPayment = () => {
   if(sessionStorage.getItem('token')){
@@ -117,8 +117,8 @@ const doPayment = () => {
         purchaseProductDtos: purchaseProducttDtos,
         totalPrice: total_amount.value,
       }
-      console.log(data)
-  
+      // payMentStore.payProductScan(data)
+      
       payRouter.push({
         path: '/payment',
         query: { item: encodeURIComponent(JSON.stringify(data)) },
@@ -262,7 +262,7 @@ const doPayment = () => {
   position: relative;
   height: 100%;
   /* background-color: var(--color-main-Lgray); */
-  background-color:#fdf4f1;
+  background-color:var(--color-main-pink);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -348,10 +348,17 @@ const doPayment = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid rgb(146, 146, 146);
+  background-color: #101010;
+  border: 2px solid #101010;
+  color: #fff;
   border-radius: 5px;
   font-size: 16px;
 }
+/* .payment:hover{
+  color: #030303;
+  background-color: #f5f5f5;
+  border: 2px solid #030303;
+} */
 
 /* 체크박스 설정 */
 .product_check {
@@ -365,13 +372,13 @@ const doPayment = () => {
 }
 .product_check:checked {
   background-color: var(--color-main-bloode); /* 체크 시 배경색 */
-  border: solid 1px #8f8f8f;
+  border: solid 1px var(--color-main-bloode);
 }
 .product_check:checked::before {
   content: '';
   position: absolute;
-  top: 2px;
-  left: 6px;
+  top: 2.5px;
+  left: 6.5px;
   width: 4px;
   height: 8px;
   border: solid white;
