@@ -1,44 +1,44 @@
 <script setup>
-import { useUserStore } from '@/stores/Login'
-import { ref, watchEffect, onMounted, onUpdated, nextTick } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { logout } from '@/api/KakaoLoginApi'
-import { eventBus } from '@/eventBus'
-import { useCartStore } from '@/stores/CartStore'
+import { useUserStore } from '@/stores/Login';
+import { ref, watchEffect, onMounted, onUpdated, nextTick } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { logout } from '@/api/KakaoLoginApi';
+import { eventBus } from '@/eventBus';
+import { useCartStore } from '@/stores/CartStore';
 
-const cartStore = useCartStore()
-const route = useRoute()
-const router = useRouter()
-const HeaderMode = ref(false)
+const cartStore = useCartStore();
+const route = useRoute();
+const router = useRouter();
+const HeaderMode = ref(false);
 
-const useStore = useUserStore()
+const useStore = useUserStore();
 
-const loginCheck = ref(false)
-const token = ref(false)
+const loginCheck = ref(false);
+const token = ref(false);
 watchEffect(() => {
-  HeaderMode.value = route.path === '/'
-  cartStore.cartCheckList = [] // 계산 중첩 방지
-})
+  HeaderMode.value = route.path === '/';
+  cartStore.cartCheckList = []; // 계산 중첩 방지
+});
 
 const kakaoLogout = async () => {
   // await logout(sessionStorage.getItem('token'))
-  useStore.logout()
+  useStore.logout();
   // console.log('로그아웃 성공')
   // console.log(token.value)
   // token.value = false
-  eventBus.emit('logout')
-  router.push({ name: 'login2' })
-}
+  eventBus.emit('logout');
+  router.push({ name: 'login2' });
+};
 
 onMounted(() => {
-  const savedToken = sessionStorage.getItem('token')
+  const savedToken = sessionStorage.getItem('token');
   if (savedToken) {
-    token.value = true
-    useStore.loginCheck = true // 스토어에 로그인 상태 설정
+    token.value = true;
+    useStore.loginCheck = true; // 스토어에 로그인 상태 설정
   } else {
-    useStore.loginCheck = false
+    useStore.loginCheck = false;
   }
-})
+});
 // onMounted(() => {
 //   token.value = localStorage.getItem('token')
 // })
@@ -46,25 +46,25 @@ const categories = [
   { title: 'Perfume', path: '/category/Perfume/3' },
   { title: 'Diffuser', path: '/category/Diffuser/2' },
   { title: 'Candle', path: '/category/Candle/1' },
-]
+];
 
-const isTransparent = ref(true)
+const isTransparent = ref(true);
 const handleScroll = () => {
   if (window.scrollY >= window.innerHeight) {
-    isTransparent.value = false
+    isTransparent.value = false;
   } else {
-    isTransparent.value = true
+    isTransparent.value = true;
   }
-}
+};
 
 onMounted(() => {
   if (route.path === '/') {
-    HeaderMode.value = true
-    window.addEventListener('scroll', handleScroll)
+    HeaderMode.value = true;
+    window.addEventListener('scroll', handleScroll);
   } else {
-    HeaderMode.value = false
+    HeaderMode.value = false;
   }
-})
+});
 
 const isSearchVisible = ref(false); // 검색창의 표시 여부
 const searchQuery = ref(''); // 검색어 저장
@@ -118,34 +118,17 @@ const toggleSearch = () => {
 
       <ul class="gnb01">
         <li v-for="(category, index) in categories" :key="index">
-          <RouterLink :to="category.path" class="link_title">{{
-            category.title
-          }}</RouterLink>
+          <RouterLink :to="category.path" class="link_title">{{ category.title }}</RouterLink>
         </li>
       </ul>
       <ul class="gnb02">
-        <input
-      v-show="isSearchVisible"
-      v-model="searchQuery"
-      type="text"
-      placeholder="검색..."
-      class="search-input"
-      ref="searchInput" 
-    />
-        <li  @click="toggleSearch">
-          <img
-            class="icon"
-            src="@/assets/img/icon/free-icon-font-search-3917132.png"
-            alt=""
-          />
+        <input v-show="isSearchVisible" v-model="searchQuery" type="text" placeholder="검색..." class="search-input" ref="searchInput" />
+        <li @click="toggleSearch">
+          <img class="icon" src="@/assets/img/icon/free-icon-font-search-3917132.png" alt="" />
         </li>
         <li>
           <RouterLink to="/cart">
-            <img
-              class="icon"
-              src="@/assets/img/icon/free-icon-font-basket-shopping-simple-9768421.png"
-              alt=""
-            />
+            <img class="icon" src="@/assets/img/icon/free-icon-font-basket-shopping-simple-9768421.png" alt="" />
           </RouterLink>
         </li>
       </ul>
@@ -180,7 +163,7 @@ const toggleSearch = () => {
   background-color: white;
 }
 .fixed:not(.transparent) {
-  background-color: rgb(255, 255, 255, 0.2);
+  background-color: rgb(255, 255, 255, 0.8);
 }
 #header > article {
   max-width: var(--main-max-width);
@@ -244,18 +227,22 @@ const toggleSearch = () => {
   height: auto;
 }
 
-
 /* 검색창 설정 */
-.icon {cursor: pointer;}
+.icon {
+  cursor: pointer;
+}
 .search-input {
   width: 0;
   transition: width 0.3s ease;
   border: 1px solid #ccc;
   margin-left: 10px;
 }
-.search-input:focus {width: 200px;}
-.search-input {width: 0;}
-
+.search-input:focus {
+  width: 200px;
+}
+.search-input {
+  width: 0;
+}
 
 /* 반응현 구간 설정 */
 /* @media (max-width: 1280px) {} */
