@@ -5,8 +5,6 @@ import ProductDetailReviewSlide from '@/views/product/productdetail/ProductDetai
 import { useRoute } from 'vue-router';
 import { getstarCounting } from '@/api/productDetail';
 const route = useRoute();
-
-const route = useRoute();
 const SortStar = ref(true);
 const Latest = ref(true);
 const idx = ref(route.params.idx);

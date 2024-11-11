@@ -19,14 +19,6 @@ onMounted(async() => {
 
 const changeIdx = setInterval(() => {
   currentIdxRef.value = (currentIdxRef.value + 1) % 3;
-<<<<<<< HEAD
-}, 2000)
-
-watchEffect(() => {
-  changeIdx
-})
-
-=======
 }, 10000)
 
 const nextchangeIdx = (() => {
@@ -38,7 +30,6 @@ const prevchangeIdx = (() => {
 
 
 watchEffect(() => {changeIdx})
->>>>>>> main
 onBeforeUnmount(() => {
   if(intervalId) {
     clearInterval(intervalId)
