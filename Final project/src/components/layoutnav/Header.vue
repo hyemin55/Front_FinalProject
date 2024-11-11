@@ -96,16 +96,16 @@ const toggleSearch = () => {
       <template v-if="useStore.loginCheck">
         <ul class="login">
           <li @click="kakaoLogout()">로그아웃</li>
-          <li>|</li>
+          <li class="noCursor">&nbsp;|&nbsp;</li>
           <li><router-link to="/mypage">마이페이지</router-link></li>
-          <li>|</li>
+          <li class="noCursor">&nbsp;|&nbsp;</li>
           <li>고객센터</li>
         </ul>
       </template>
       <template v-else>
         <ul class="login">
           <li><RouterLink to="/login2">로그인</RouterLink></li>
-          <li>|</li>
+          <li class="noCursor">&nbsp;|&nbsp;</li>
           <li>고객센터</li>
         </ul>
       </template>
@@ -163,7 +163,7 @@ const toggleSearch = () => {
   background-color: white;
 }
 .fixed:not(.transparent) {
-  background-color: rgb(255, 255, 255, 0.8);
+  background-color: rgb(255, 255, 255, 0.4);
 }
 #header > article {
   max-width: var(--main-max-width);
@@ -194,6 +194,9 @@ const toggleSearch = () => {
   margin-left: 0.4rem;
   cursor: pointer;
 }
+.noCursor {
+  cursor: default !important;
+}
 #header_top::after {
   content: '';
   position: absolute;
@@ -217,6 +220,8 @@ const toggleSearch = () => {
   font-weight: 500;
   font-family: 'JacquesFrancois-Regular';
   color: rgb(19, 19, 19);
+  padding: 15%;
+  /* background-color: antiquewhite; */
 }
 .gnb02 li {
   font-size: 1.5rem;

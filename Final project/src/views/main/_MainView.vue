@@ -4,22 +4,21 @@
       <video autoplay muted loop src="@/assets/img/main.mp4"></video>
     </article>
 
-    <MainBestView/>
-    <MainListView/>
-    <MainPromotionBannerView/>
-    <MainEditorView/>
-    <MainNewView/>
-    
+    <MainBestView />
+    <MainListView />
+    <MainPromotionBannerView />
+    <MainEditorView />
+    <MainNewView />
   </section>
 </template>
 
 <script setup>
-import { defineAsyncComponent } from 'vue'
-import MainBestView from './MainBestView.vue'
-import MainListView from './MainListView.vue'
-import MainPromotionBannerView from './MainPromotionBannerView.vue'
-import MainEditorView from './MainEditorView.vue'
-import MainNewView from './MainNewView.vue'
+import { defineAsyncComponent } from 'vue';
+import MainBestView from './MainBestView.vue';
+import MainListView from './MainListView.vue';
+import MainPromotionBannerView from './MainPromotionBannerView.vue';
+import MainEditorView from './MainEditorView.vue';
+import MainNewView from './MainNewView.vue';
 
 // const MainEditorView = defineAsyncComponent(() => import('./MainEditorView.vue'));
 // const MainNewView = defineAsyncComponent(() => import('./MainNewView.vue'));
@@ -63,5 +62,6 @@ import MainNewView from './MainNewView.vue'
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border: 1px solid white;
 }
 </style>

@@ -1,20 +1,31 @@
 <script setup>
-import { RouterLink, RouterView, useRoute } from 'vue-router'
-import Header from './components/layoutnav/Header.vue'
-import Footer from './components/layoutnav/Footer.vue'
+import { RouterLink, RouterView, useRoute } from 'vue-router';
+import Header from './components/layoutnav/Header.vue';
+import Footer from './components/layoutnav/Footer.vue';
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 
-const route = useRoute()
+const route = useRoute();
+
+// window height의 높이에서 scrollTop 을 뺀 값을 변수로 잡아서
+// 20000 px 있는곳에 넣어라
 
 const isScrolled = ref(false);
 const scrollHeight = () => {
-  isScrolled.value = window.scrollY >= 500; 
+  isScrolled.value = window.scrollY >= 500;
 };
-const pageUp = ()=>{window.scrollTo({ top: 0, behavior: 'smooth' });}
-onMounted(() => {window.addEventListener('scroll', scrollHeight);});
-onBeforeUnmount(() => {window.removeEventListener('scroll', scrollHeight);});
+const pageUp = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+const pageDown = () => {
+  window.scrollTo({ top: 30000, behavior: 'smooth' });
+};
 
-
+onMounted(() => {
+  window.addEventListener('scroll', scrollHeight);
+});
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', scrollHeight);
+});
 </script>
 
 <template>
@@ -26,8 +37,11 @@ onBeforeUnmount(() => {window.removeEventListener('scroll', scrollHeight);});
 
   <Footer></Footer>
 
-  <div class="pagaUp" v-if="isScrolled" @click="pageUp">
-    <img  src="../src/assets/img/icon/up.svg" alt="">
+  <div class="scroll_btn pagaUp" v-if="isScrolled" @click="pageUp">
+    <img src="../src/assets/img/icon/up.svg" alt="" />
+  </div>
+  <div class="scroll_btn pagaDown" v-if="isScrolled" @click="pageDown">
+    <img src="../src/assets/img/icon/up.svg" alt="" />
   </div>
 </template>
 
@@ -35,19 +49,28 @@ onBeforeUnmount(() => {window.removeEventListener('scroll', scrollHeight);});
 .min-height {
   min-height: calc(100vh - 320px);
 }
-.pagaUp{
+.scroll_btn {
   position: fixed;
   right: 30px;
-  bottom: 50px;
-  width: 40px; 
+  width: 40px;
   height: 40px;
-  background-color: var(--color-main-bloode);
+  background-color: white;
+  border: 0.5px solid var(--color-main-gray);
   border-radius: 50%;
   cursor: pointer;
   overflow: hidden;
   z-index: 999;
 }
-.pagaUp img{
+.pagaUp {
+  bottom: 100px;
+}
+.pagaDown {
+  bottom: 50px;
+}
+.pagaDown img {
+  transform: rotate(180deg);
+}
+.pagaUp img {
   width: 100%;
   height: auto;
 }

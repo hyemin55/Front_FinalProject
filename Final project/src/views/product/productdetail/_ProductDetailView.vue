@@ -26,7 +26,7 @@ watchEffect(() => {
 </script>
 
 <template>
-  <nav class="productRoute">{{ productId }}번 상품 상세페이지 경로</nav>
+  <!-- <nav class="productRoute">{{ productId }}번 상품 상세페이지 경로</nav> -->
 
   <section id="product">
     <main id="productMain">
