@@ -5,6 +5,7 @@ import { onBeforeUnmount, onMounted, ref, watchEffect } from 'vue';
 
 const bestListRef = ref([])
 const bestListImagesRef = ref([])
+const bestCartegoryRef = ref(['Perfume', 'Diffuser', 'Candle']);
 const currentIdxRef = ref(0);
 let intervalId = null;
 
@@ -18,12 +19,26 @@ onMounted(async() => {
 
 const changeIdx = setInterval(() => {
   currentIdxRef.value = (currentIdxRef.value + 1) % 3;
+<<<<<<< HEAD
 }, 2000)
 
 watchEffect(() => {
   changeIdx
 })
 
+=======
+}, 10000)
+
+const nextchangeIdx = (() => {
+  currentIdxRef.value = (currentIdxRef.value + 1) % 3;
+})
+const prevchangeIdx = (() => {
+  currentIdxRef.value = (currentIdxRef.value - 1 + 3) % 3;
+})
+
+
+watchEffect(() => {changeIdx})
+>>>>>>> main
 onBeforeUnmount(() => {
   if(intervalId) {
     clearInterval(intervalId)
@@ -35,40 +50,37 @@ onBeforeUnmount(() => {
 <template>
   <article id="main_best">
     <h1>BEST</h1>
+    
     <div id="best_position">
+
       <div class="best_left_box">
         <div class="best_product_banner">
-          <p class="best_product_category">Perfume</p>
+          <p class="best_product_category">{{ bestCartegoryRef[currentIdxRef] }}</p>
           <p class="best_product_page">
-            <button @click="best_page_left">&lt;</button>
-            {{ currentIdxRef + 1 }} / 3
-            <button @click="best_page_right">&gt;</button>
+            <div class="page_btn">
+              <button @click="prevchangeIdx">&lt;</button>
+              {{ currentIdxRef + 1 }} / {{ bestListRef.length }}
+              <button @click="nextchangeIdx">&gt;</button>
+            </div>
           </p>
         </div>
+
         <div class="best_product">
           <img class="best_product_img" :src="`${GLOBAL_URL}/api/file/download/${bestListImagesRef[currentIdxRef]}`" alt="" />
-          
           <ul class="best_left_text">
-            <!-- 조건부 렌더링을 통해 데이터를 확인한 후 접근 -->
-            <li v-if="bestListRef.length > 0">{{ bestListRef[currentIdxRef].brandName }} </li>
-            <li v-if="bestListRef.length > 0">{{ bestListRef[currentIdxRef].productName }}</li>
-            <!-- 데이터를 아직 받아오지 않았다면 로딩 중 표시 -->
+            <li class="best_brand_name" v-if="bestListRef.length > 0">{{ bestListRef[currentIdxRef].brandName }} </li>
+            <li class="best_product_name" v-if="bestListRef.length > 0">{{ bestListRef[currentIdxRef].productName }}</li>
             <li v-else>Loading...</li>
           </ul>
         </div>
 
       </div>
+
       <div class="best_right_box">
-        <p class="best_right_text">
-          가장 인기 많은 향수<br />&nbsp;&nbsp;&nbsp;&nbsp;시원한 오이향에
-          빠져보세요*^.^*
-        </p>
-        <img
-          class="best_promotion_img"
-          src="@/assets/img/best_img.png"
-          alt=""
-        />
+        <p class="best_right_text">피렌체의 소중한 기억을 간직한, <br />&nbsp;&nbsp;&nbsp;&nbsp; 아름다운 꽃과 식물들의 이야기</p>
+        <img class="best_promotion_img" src="@/assets/img/best_img.png" alt="" />
       </div>
+    
     </div>
   </article>
 </template>
@@ -92,6 +104,7 @@ onBeforeUnmount(() => {
   display: flex;
   height: 467px;
 }
+/* 좌측설정 1 */
 .best_left_box {
   /* background-color: rgb(250, 183, 183); */
   position: relative;
@@ -123,6 +136,10 @@ onBeforeUnmount(() => {
   font-size: 2rem;
   color: var(--color-main-Lgray);
 }
+.best_product_page button{
+  padding: 10px;
+}
+/* 좌측설정 2 */
 .best_product {
   position: absolute;
   left: 50%;
@@ -135,14 +152,24 @@ onBeforeUnmount(() => {
 }
 .best_left_text {
   text-align: center;
-  font-size: 2rem;
+  letter-spacing: -0.034rem;
+}
+.best_brand_name{
+  font-size: 1.9rem;
+  font-weight: 600;
+  color: var(--color-main-bloode);
+}
+.best_product_name{
+  font-size: 2.8rem;
+  margin-top: 3px;
 }
 
+
+/* 우측설정 */
 .best_right_box {
   width: 47.5%;
   position: relative;
   top: 20px;
-  font-size: 2rem;
   right: 5%;
 }
 .best_promotion_img {
@@ -152,5 +179,7 @@ onBeforeUnmount(() => {
 }
 .best_right_text {
   margin-left: 24%;
+  font-size: 2rem;
+  line-height: 24px;
 }
 </style>
