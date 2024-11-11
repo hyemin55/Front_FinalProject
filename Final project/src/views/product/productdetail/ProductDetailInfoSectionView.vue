@@ -1,10 +1,12 @@
 <script setup>
-import SalseChart from '@/views/product/productdetail/SalseChart.vue';
-import { ref, watchEffect } from 'vue';
+import { computed, ref, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { formatPrice } from '@/FormatPrice';
 import _ProductDetailView from '@/views/product/productdetail/_ProductDetailView.vue';
 import { getProductData, getReviewData } from '@/api/productDetail';
+import ProductDetailSalseChartViewVue from './ProductDetailSalseChartView.vue';
+// import { useCartStore } from '@/stores/CartStore';
+// import { useUserStore } from '@/stores/Login';
 
 const route = useRoute();
 const router = useRouter();
@@ -16,12 +18,17 @@ const productDataOk = ref([]);
 const idx = ref(route.params.idx);
 const size = ref(route.query.size);
 
-const emit = defineEmits();
+// const cartStore = useCartStore();
+
+// 로그인 pinia
+// const userStore = useUserStore();
+// const userLogin = computed(() => userStore.loginCheck);
+// const emit = defineEmits();
 
 // 1. 클릭한 옵션값을 idx에 담아준다.
 const productOptionSelect = item => {
-  console.log('item', item.productId);
-  console.log('item', item.size);
+  // console.log('item', item.productId);
+  // console.log('item', item.size);
   router.push({
     name: 'productsdetail',
     params: { idx: item.productId },
@@ -37,21 +44,29 @@ const doLoad = async () => {
     reviewData.value = await getReviewData(idx.value);
 
     // console.log('productData 값 : ', productData.value.data[0].productId);
-    // console.log('reviewData 값 : ', reviewData.value.data);
+    // console.log('reviewData 값 : ', reviewData.value.length);
 
     if (productData.value.status === 200 && reviewData.value.status === 200) {
       // console.log('productData.value.status === 200', productData.value);
       for (let i = 0; i < productData.value.data.length; i++) {
-        console.log('조건에 맞는 아이는? ', productData.value.data[i].size);
+        // console.log('조건에 맞는 아이는? ', productData.value.data[i].size);
         if (productData.value.data[i].productId == idx.value && productData.value.data[i].size == size.value) {
           productDataOk.value = productData.value.data[i];
-          // console.log('데이터내용들', productDataOk.value);
+          console.log('데이터내용들', productDataOk.value);
         }
       }
       console.log('reviewData.value', reviewData.value);
 
+<<<<<<< HEAD
       const newStatus = true;
       emit('onProductInfoLoaded', newStatus);
+=======
+      // const newStatus = true;
+      // emit('onProductInfoLoaded', newStatus);
+    } else if (productData.value.status == 500) {
+      console.log(productData.value.status);
+      router.push({ name: 'main' });
+>>>>>>> jo
     } else {
       console.log('실패1');
     }
@@ -59,8 +74,33 @@ const doLoad = async () => {
     console.log('실패2' + err);
   }
 };
-
 const BuyNow = () => {};
+
+console.log(productDataOk);
+
+// 장바구니 추가
+// const addToCart = async () => {
+//   cartStore.addItem(productDataOk);
+//   console.log('찍었다.', productDataOk);
+//   alert('장바구니에 담았습니다.');
+
+//   if (userLogin.value) {
+//     const data = {
+//       productId: idx.value,
+//       quantity: 1,
+//     };
+//     try {
+//       const res = axios.post(`${GLOBAL_URL}/cart/add`, data, {
+//         headers: {
+//           Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+//         },
+//       });
+//       console.log(res);
+//     } catch (e) {
+//       console.log(e);
+//     }
+//   }
+// };
 
 // 찜 클릭 이벤트
 const redHeart = ref(false);
@@ -81,7 +121,9 @@ const urlShare = () => {
       console.error('URL 복사를 실패했어요ㅠㅡㅠ', err);
     });
 };
-
+const isselectedSize = size => {
+  return route.query.size === size.size.toString() && route.params.idx === size.productId.toString();
+};
 // 리뷰별점평균을 소수점 1자리만 남긴다.
 const Average = data => {
   data = data * 10;
@@ -103,23 +145,27 @@ watchEffect(() => {
       <li>{{ productDataOk.brandName }}</li>
       <li>{{ productDataOk.productName }}</li>
       <li v-if="reviewData">
-        1,222찜 수
+        1,222찜 수 <<<<<<< HEAD
         <span style="color: orange">★ {{ Average(reviewData.data.starAverage) }} ({{ reviewData.reviewCount }} reviews)</span>
+        =======
+        <span style="color: orange">★ {{ Average(reviewData.data.starAverage) }} ({{ reviewData.data.reviewCount }} reviews)</span>
+        >>>>>>> jo
       </li>
       <li>{{ formatPrice(productDataOk.price) }}</li>
     </ul>
 
     <p class="OptionSelect">옵션선택</p>
     <div id="productOption">
-      <button @click="productOptionSelect(size)" v-for="(size, index) in productData.data" :key="index">{{ size.size }} ml</button>
+      <button @click="productOptionSelect(size)" v-for="(size, index) in productData.data" :key="index" :class="{ selectedSize: isselectedSize(size) }">{{ size.size }} ml</button>
     </div>
-    <div>
+    <!-- <div>
       <p>제조일자 : 2024-11-01</p>
       <p>유통기한 : 2029-11-01</p>
-    </div>
+    </div> -->
 
     <div class="addButtonGroub">
       <button class="addToCart BuyNow" @click="BuyNow">바로 구매하기</button>
+      <!-- <button class="addToCart" @click="addToCart"> -->
       <button class="addToCart">
         <img src="@/assets/img/icon/free-icon-font-shopping-cart.svg" alt="" />
         장바구니 추가
@@ -132,7 +178,7 @@ watchEffect(() => {
       </button>
     </div>
 
-    <SalseChart />
+    <ProductDetailSalseChartViewVue />
   </article>
 </template>
 
@@ -180,7 +226,7 @@ watchEffect(() => {
   border-radius: 10px;
   cursor: pointer;
 }
-#productOption button:hover {
+button.selectedSize {
   background-color: var(--color-main-bloode);
   color: white;
   border: 0.5px solid var(--color-main-bloode);

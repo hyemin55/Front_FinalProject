@@ -1,8 +1,7 @@
 <script setup>
-import { getReviewsData, getViewCurrentPage } from '@/api/productDetail';
+import { getViewCurrentPage } from '@/api/productDetail';
 import { GLOBAL_URL } from '@/api/util';
-import { watchEffect } from 'vue';
-import { onMounted, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 const props = defineProps({
@@ -15,13 +14,12 @@ const props = defineProps({
 
 const route = useRoute();
 const idx = ref(route.params.idx);
-const reviewsData = ref([]);
 const currentPage = ref(1);
 const totalPages = ref(10);
 const currentPageGroup = ref(0);
-const reviewCount = ref(0);
 
-const ReviewList = ref(null);
+const reviewCount = ref(props.reviewCount);
+const reviewList = ref([null]);
 let flag = 0;
 const totalPageGroup = ref(0);
 const pageSize = 5;
@@ -53,6 +51,7 @@ const nextPage = () => {
 
 // 선택페이지
 const goToPage = page => {
+  console.log('page', page);
   if (currentPage.value == page) {
     console.log('현재페이지입니다.');
     return;
@@ -68,9 +67,7 @@ const viewCurrentPage = async () => {
     flag = true;
     return;
   } else {
-    reviewsData.value = await getViewCurrentPage(idx.value, currentPage.value - 1);
-    ReviewList.value = reviewsData.value;
-    // console.log(ReviewList.value);
+    reviewList.value = await getViewCurrentPage(idx.value, currentPage.value - 1);
     totalPages.value = Math.ceil(reviewCount.value / pageSize);
     totalPageGroup.value = Math.floor(totalPages.value / 10);
     startPage.value = currentPageGroup.value * 10 + 1;
@@ -88,30 +85,18 @@ const activePage = pageNum => {
   }
 };
 
-// idx를 ref로 했는데 피니아에서 바뀐 데이터가 실시간으로 변경되지 않아
-// 피니아의 idx변화값을 바로 추적해 강제로 idx와 reviewCount의 값을 변경함
-// watch(
-//   () => [detailStore.productIdx, detailStore.reviewCount],
-//   ([newIdx, newreviewCount]) => {
-//     idx.value = newIdx;
-//     reviewCount.value = newreviewCount;
-//     // console.log('reviewCount idx바뀐후 = ', reviewCount.value);
-//     // console.log('startPage', startPage.value);
-//     viewCurrentPage();
-//   },
-//   { immediate: true },
-// );
-
+// 없어도 잘 돌아간다.....
 // 처음 렌더링 시 받아올 데이터.
-onMounted(async () => {
-  reviewsData.value = await getReviewsData(idx.value);
-  ReviewList.value = reviewsData.data;
-  // totalPages.value = Math.ceil(reviewCount.value / pageSize);
-  // totalPageGroup.value = Math.floor(totalPages.value / 10);
-  // startPage.value = currentPageGroup.value * 10 + 1;
-  // endPage.value = Math.min(startPage.value + 9, totalPages.value);
-  // viewCurrentPage();
-});
+// onMounted(async () => {
+//   console.log(reviewCount.value);
+//   reviewCount.value = props.reviewCount;
+//   reviewList.value = await getReviewsData(idx.value);
+//   totalPages.value = Math.ceil(reviewCount.value / pageSize);
+//   totalPageGroup.value = Math.floor(totalPages.value / 10);
+//   startPage.value = currentPageGroup.value * 10 + 1;
+//   endPage.value = Math.min(startPage.value + 9, totalPages.value);
+//   console.log(reviewCount.value);
+// });
 
 // 주소줄의 idx값이 바뀌면 리뷰리스트와 페이지네이션 변경을 위해 재통신 필요.
 watchEffect(() => {
@@ -122,7 +107,7 @@ watchEffect(() => {
 </script>
 
 <template>
-  <div id="userReviewList" class="border" v-for="(list, index) in ReviewList" :key="index">
+  <div id="userReviewList" class="border" v-for="(list, index) in reviewList.data" :key="index">
     <ul class="userInfo">
       <li>
         <img :src="`${list.memberDetailReviewResDto.profileImage}`" alt="" class="userInfoImg" />
@@ -146,10 +131,12 @@ watchEffect(() => {
     </p>
   </div>
 
-  <div id="userReviewList" class="border noUserReviewList" v-if="reviewCount == 0 || reviewCount == null">
-    <img src="@/assets/img/free-icon-font-note-sticky-9798415.svg" alt="" />
-    <p>아직 리뷰가 등록되지 않았어요 ㅠㅡㅠ</p>
-  </div>
+  <template v-if="reviewCount == 0 || reviewCount == null">
+    <div id="userReviewList" class="border noUserReviewList">
+      <img src="@/assets/img/free-icon-font-note-sticky-9798415.svg" alt="" />
+      <p>아직 리뷰가 등록되지 않았어요 ㅠㅡㅠ</p>
+    </div>
+  </template>
 
   <ul id="totalPages">
     <li @click="backPage">이전</li>
@@ -190,7 +177,9 @@ watchEffect(() => {
 .noUserReviewList {
   text-align: center;
   height: 150px;
-  background-color: antiquewhite;
+  font-size: 1.4rem;
+  line-height: 40px;
+  /* background-color: antiquewhite; */
 }
 .userReviewStar {
   font-size: 2rem;
