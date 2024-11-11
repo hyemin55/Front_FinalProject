@@ -5,9 +5,11 @@ import { formatPrice } from '@/FormatPrice';
 import _ProductDetailView from '@/views/product/productdetail/_ProductDetailView.vue';
 import { getProductData, getReviewData } from '@/api/productDetail';
 import ProductDetailSalseChartViewVue from './ProductDetailSalseChartView.vue';
-// import { useCartStore } from '@/stores/CartStore';
-// import { useUserStore } from '@/stores/Login';
-
+import { useCartStore } from '@/stores/CartStore';
+import { useUserStore } from '@/stores/Login';
+import axios from 'axios';
+import { GLOBAL_URL } from '@/api/util';
+import { fetchMemeberCart, mergeMemberCart } from '@/api/cartApi';
 const route = useRoute();
 const router = useRouter();
 
@@ -18,11 +20,11 @@ const productDataOk = ref([]);
 const idx = ref(route.params.idx);
 const size = ref(route.query.size);
 
-// const cartStore = useCartStore();
+const cartStore = useCartStore();
 
 // 로그인 pinia
-// const userStore = useUserStore();
-// const userLogin = computed(() => userStore.loginCheck);
+const userStore = useUserStore();
+const userLogin = computed(() => userStore.loginCheck);
 // const emit = defineEmits();
 
 // 1. 클릭한 옵션값을 idx에 담아준다.
@@ -57,16 +59,11 @@ const doLoad = async () => {
       }
       console.log('reviewData.value', reviewData.value);
 
-<<<<<<< HEAD
-      const newStatus = true;
-      emit('onProductInfoLoaded', newStatus);
-=======
       // const newStatus = true;
       // emit('onProductInfoLoaded', newStatus);
     } else if (productData.value.status == 500) {
       console.log(productData.value.status);
       router.push({ name: 'main' });
->>>>>>> jo
     } else {
       console.log('실패1');
     }
@@ -79,28 +76,42 @@ const BuyNow = () => {};
 console.log(productDataOk);
 
 // 장바구니 추가
-// const addToCart = async () => {
-//   cartStore.addItem(productDataOk);
-//   console.log('찍었다.', productDataOk);
-//   alert('장바구니에 담았습니다.');
+const addToCart = async () => {
+  const data = {
+    productId: Number(idx.value),
+    productName: productDataOk.value.productName,
+    price: productDataOk.value.price,
+    brandName: productDataOk.value.brandName,
+    size: productDataOk.value.size,
+    images: [productDataOk.value.mainImage],
+    mainImage: productDataOk.value.mainImage,
+    quantity: 1,
+  };
 
-//   if (userLogin.value) {
-//     const data = {
-//       productId: idx.value,
-//       quantity: 1,
-//     };
-//     try {
-//       const res = axios.post(`${GLOBAL_URL}/cart/add`, data, {
-//         headers: {
-//           Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-//         },
-//       });
-//       console.log(res);
-//     } catch (e) {
-//       console.log(e);
-//     }
-//   }
-// };
+  cartStore.addItem(data);
+  alert('장바구니에 담았습니다.');
+
+  if (userLogin.value) {
+    try {
+      const res = axios.post(`${GLOBAL_URL}/cart/add`, data, {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+      });
+      console.log(res);
+      const pushData = cart.value.map(item => ({
+        productId: item.productId,
+        quantity: item.quantity,
+      }));
+      await mergeMemberCart(pushData);
+      const fetchRes = await fetchMemeberCart();
+      // 스토어에서 장바구니 업데이트(store 랜더링)
+      cartStore.updateCart(fetchRes.data);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+};
 
 // 찜 클릭 이벤트
 const redHeart = ref(false);
@@ -145,11 +156,8 @@ watchEffect(() => {
       <li>{{ productDataOk.brandName }}</li>
       <li>{{ productDataOk.productName }}</li>
       <li v-if="reviewData">
-        1,222찜 수 <<<<<<< HEAD
-        <span style="color: orange">★ {{ Average(reviewData.data.starAverage) }} ({{ reviewData.reviewCount }} reviews)</span>
-        =======
+        1,222찜 수
         <span style="color: orange">★ {{ Average(reviewData.data.starAverage) }} ({{ reviewData.data.reviewCount }} reviews)</span>
-        >>>>>>> jo
       </li>
       <li>{{ formatPrice(productDataOk.price) }}</li>
     </ul>
@@ -165,8 +173,8 @@ watchEffect(() => {
 
     <div class="addButtonGroub">
       <button class="addToCart BuyNow" @click="BuyNow">바로 구매하기</button>
-      <!-- <button class="addToCart" @click="addToCart"> -->
-      <button class="addToCart">
+      <button class="addToCart" @click="addToCart">
+        <!-- <button class="addToCart"> -->
         <img src="@/assets/img/icon/free-icon-font-shopping-cart.svg" alt="" />
         장바구니 추가
       </button>
