@@ -42,7 +42,6 @@ watchEffect(async()=>{
 
 <template>
     <section id="pay_product">
-
         <article class="pay_product_set" v-for="(item) in list" :key="item.productId">
             <div class="pay_product_compnents">
                 <div class="pay_product_img">
@@ -55,14 +54,14 @@ watchEffect(async()=>{
                         <li class="pro_content">상세 : {{ item.content }}</li>
                         <li><b>옵션 : {{ item.size }}</b> / <b>수량 : {{ item.quantity }}개</b></li>
                     </ul>
-                    <p>가격 : {{ item.price }}원</p>
+                    <p>가격 : {{ item.price.toLocaleString() }}원</p>
                 </div>
                 <div class="line"></div>
             </div>
         </article>
 
         <article class="pay_product_total_prcie">
-            <p>총 상품 금액 : {{payProductMoney}} 원</p>
+            <p>총 상품 금액 : {{payProductMoney.toLocaleString()}} 원</p>
         </article>
     </section>
 </template>

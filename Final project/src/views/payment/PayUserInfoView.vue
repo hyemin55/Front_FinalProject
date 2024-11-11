@@ -114,9 +114,9 @@ watchEffect(async () => {
 
 /* 인포박스 설정 */
 .info_box{
-  font-size: 1.9rem;
+  font-size: 1.5rem;
   /* letter-spacing: -0.034rem; */
-  padding: 25px 0 0 20px;
+  padding: 27px 0 0 20px;
   color: #121212;
 }
 .info_box>p{
