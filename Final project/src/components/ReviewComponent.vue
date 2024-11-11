@@ -1,5 +1,5 @@
 <script setup>
-import { getViewCurrentPage } from '@/api/productDetail';
+import { getViewCurrentPage } from '@/api/productDetailApi';
 import { GLOBAL_URL } from '@/api/util';
 import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';

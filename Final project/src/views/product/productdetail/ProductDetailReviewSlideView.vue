@@ -3,7 +3,7 @@ import 'vue3-carousel/dist/carousel.css';
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel';
 import { ref, watchEffect } from 'vue';
 import { useRoute } from 'vue-router';
-import { getReviewImageList } from '@/api/productDetail';
+import { getReviewImageList } from '@/api/productDetailApi';
 import { GLOBAL_URL } from '@/api/util';
 import ProductPhotoModalView from './ProductPhotoModalView.vue';
 

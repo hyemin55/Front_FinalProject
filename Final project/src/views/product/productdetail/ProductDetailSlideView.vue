@@ -3,7 +3,7 @@ import { onMounted, ref } from 'vue';
 import { Carousel, Slide, Navigation } from 'vue3-carousel';
 import 'vue3-carousel/dist/carousel.css';
 import { useRoute } from 'vue-router';
-import { getSlideImages } from '@/api/productDetail';
+import { getSlideImages } from '@/api/productDetailApi';
 import { GLOBAL_URL } from '@/api/util';
 
 const route = useRoute();

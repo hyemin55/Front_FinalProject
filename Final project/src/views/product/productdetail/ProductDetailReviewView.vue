@@ -3,7 +3,7 @@ import { ref, watchEffect } from 'vue';
 import ReviewComponent from '@/components/ReviewComponent.vue';
 import ProductDetailReviewSlide from '@/views/product/productdetail/ProductDetailReviewSlideView.vue';
 import { useRoute } from 'vue-router';
-import { getstarCounting } from '@/api/productDetail';
+import { getstarCounting } from '@/api/productDetailApi';
 
 const route = useRoute();
 const SortStar = ref(true);
@@ -34,7 +34,7 @@ const emptyStars = () => {
 
 // 별점별 리뷰수 계산
 const starCounting = async () => {
-  const starCountingData = await getstarCounting(idx.value);
+  const starCountingData = await (idx.value);
   starCountData.value = starCountingData.data;
   starAverage.value = starCountData.value.starAverage;
   reviewCount.value = starCountData.value.reviewCount;
