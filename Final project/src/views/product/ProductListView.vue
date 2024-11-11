@@ -44,6 +44,7 @@ watchEffect(() => {
     totalDataLength.value = list.value.pages.reduce((total, page) => total + page.data.length, 0);
   }
 });
+
 // IntersectionObserver로 ui가 뷰포트에 걸리시 페이지 증가
 watchEffect(() => {
   const observer = new IntersectionObserver(entries => {
@@ -124,7 +125,9 @@ const sortList = (order, index) => {
       />
     </article>
 
-    <h1 ref="loadingUi">loadong...</h1>
+    <h1 class="loadingUi" ref="loadingUi" v-if="hasNextPage">
+      <img src="../../assets/img/icon/loading.gif" alt="">
+    </h1>
   </section>
 </template>
 
@@ -204,6 +207,17 @@ const sortList = (order, index) => {
   background-color: #f0f0f0;
 }
 
+/* 로딩 UI설정 */
+.loadingUi{
+  width: 100%;
+  height: 65px;
+  text-align: center;
+  margin-top: 50px;
+}
+.loadingUi img{
+  height: 100%;
+  width: auto;
+}
 /* 상품 리스트 설정 */
 .product_list {
   width: 100%;
