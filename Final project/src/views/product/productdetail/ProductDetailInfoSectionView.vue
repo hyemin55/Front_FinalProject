@@ -52,7 +52,7 @@ const doLoad = async () => {
         // console.log('조건에 맞는 아이는? ', productData.value.data[i].size);
         if (productData.value.data[i].productId == idx.value && productData.value.data[i].size == size.value) {
           productDataOk.value = productData.value.data[i];
-          console.log('데이터내용들', productDataOk.value);
+          // console.log('데이터내용들', productDataOk.value);
         }
       }
       // console.log('reviewData.value', reviewData.value);
@@ -71,7 +71,7 @@ const doLoad = async () => {
 };
 const BuyNow = () => {};
 
-console.log(productDataOk);
+// console.log(productDataOk);
 
 // 장바구니 추가
 // const addToCart = async () => {

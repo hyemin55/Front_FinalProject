@@ -45,7 +45,7 @@ onMounted(async () => {
 
 <template>
   <article id="productSlide">
-    <Carousel id="gallery" v-bind="galleryConfig" v-model="currentSlide">
+    <Carousel id="gallery" v-bind="galleryConfig" v-model="currentSlide" :autoplay="3000">
       <Slide v-for="(image, index) in list.images" :key="index">
         <img :src="`${GLOBAL_URL}/api/file/download/${image.filename}`" alt="" class="carousel_image" />
       </Slide>

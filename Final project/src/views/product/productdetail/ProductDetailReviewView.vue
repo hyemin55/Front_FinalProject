@@ -25,8 +25,8 @@ const starAverage = ref(0);
 // console.log('idx.value', idx.value);
 const circumference = 2 * Math.PI * 45; // 원 둘레 (r = 45)
 
-const fullStars = ref(0)
-const hasHalfStar = ref(0)
+const fullStars = ref(0);
+const hasHalfStar = ref(0);
 const emptyStars = () => {
   const totalStars = fullStars.value + (hasHalfStar.value ? 1 : 0);
   return Math.max(5 - totalStars, 0); // 최소 0으로 설정
@@ -34,21 +34,21 @@ const emptyStars = () => {
 
 // 별점별 리뷰수 계산
 const starCounting = async () => {
-  const starCountingData = await (idx.value);
+  const starCountingData = await getstarCounting(idx.value);
   starCountData.value = starCountingData.data;
-  starAverage.value = starCountData.value.starAverage;
   reviewCount.value = starCountData.value.reviewCount;
+  starAverage.value = starCountData.value.starAverage;
   starCounts.value = [
     starCountData.value.fiveStarCount || 0,
     starCountData.value.fourStarCount || 0,
     starCountData.value.threeStarCount || 0,
     starCountData.value.twoStarCount || 0,
-    starCountData.value.oneStarCount || 0
+    starCountData.value.oneStarCount || 0,
   ];
   // 총 별 개수 계산
-    fullStars.value = Math.floor(starAverage.value); // 정수 별 개수
-    hasHalfStar.value = starAverage.value % 1 !== 0; // 소수점이 있을 때 반 별 표시 여부
-    emptyStars();
+  fullStars.value = Math.floor(starAverage.value); // 정수 별 개수
+  hasHalfStar.value = starAverage.value % 1 !== 0; // 소수점이 있을 때 반 별 표시 여부
+  emptyStars();
 };
 
 const Average = data => {
@@ -74,7 +74,7 @@ watchEffect(() => {
           <circle cx="50" cy="50" r="45" stroke="#ddd" stroke-width="5" fill="none" />
           <!-- 진행률 원 -->
           <!-- stroke="#FFD700"  별점 색상 설정 -->
-           
+
           <circle
             cx="50"
             cy="50"
@@ -100,18 +100,14 @@ watchEffect(() => {
       </div>
 
       <ul id="starCounting">
-        <li v-for="(count, index) in starCounts" :key="index">
-          ★ {{ 5-index }}.0 
-        <li class="bar-container">
-          <div 
-            class="bar" 
-            :style="{ width: `${(count/ reviewCount) * 100}%` }"
-          ></div>
-        </li>
-        <li> {{ count }} reviews</li>
-        </li>
-       </ul>
-
+        <div v-for="(count, index) in starCounts" :key="index">
+          ★ {{ 5 - index }}.0
+          <li class="bar-container">
+            <div class="bar" :style="{ width: `${(count / reviewCount) * 100}%` }"></div>
+          </li>
+          <li>{{ count }} reviews</li>
+        </div>
+      </ul>
     </div>
 
     <h1 id="detailReviewTitle">Photo Lists</h1>

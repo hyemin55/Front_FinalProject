@@ -98,11 +98,14 @@ const activePage = pageNum => {
 // });
 
 // 주소줄의 idx값이 바뀌면 리뷰리스트와 페이지네이션 변경을 위해 재통신 필요.
-watch(() => {
-  idx.value = route.params.idx;
-  reviewCount.value = props.reviewCount;
-  viewCurrentPage();
-});
+watch(
+  () => [route.params.idx, props.reviewCount], // source로 배열을 사용하여 다중 변수를 추적
+  ([newIdx, newReviewCount]) => {
+    idx.value = newIdx;
+    reviewCount.value = newReviewCount;
+    viewCurrentPage();
+  },
+);
 </script>
 
 <template>

@@ -1,7 +1,7 @@
 <script setup>
 import { GLOBAL_URL } from '@/api/util';
 import axios from 'axios';
-import { computed, ref, watchEffect, onMounted, nextTick } from 'vue';
+import { ref, watchEffect, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
 import Chart from 'chart.js/auto';
 
@@ -12,14 +12,23 @@ const displayedList = ref([]);
 const chartRef = ref(null); // chart element 참조
 let chartInstance = null;
 const showMore = ref(5);
-
+const size = ref(route.query.size);
+let sortTotalSaleTradeList = [];
 // 데이터 로드 함수
 const doLode = async () => {
   try {
     const response = await axios.get(`${GLOBAL_URL}/detail/chart/${idx.value}`);
-    totalSalseList.value = response.data.sort((a, b) => new Date(b.tradeCompletedDate) - new Date(a.tradeCompletedDate));
-    console.log(response.data[0].tradeCompletedDate);
+    // console.log(response.data);
+    totalSalseList.value = response.data;
+    // console.log(response.data[0].tradeCompletedDate);
     displayedList.value = totalSalseList.value.slice(0, showMore.value);
+
+    // Call by Reference vs call by value
+    //  sortTotalSaleTradeList.reverse();를 하면 totalSalseList과 같은 곳을 바라보기때문에
+    // JSON.stringify로 문자열로 바꾼뒤 다시 JSON.parse로 객채를 만들어 sortTotalSaleTradeList가 다른곳을 바라보게 만든다.
+    sortTotalSaleTradeList = JSON.parse(JSON.stringify(totalSalseList.value));
+    sortTotalSaleTradeList.reverse();
+
     if (totalSalseList.value.length > 0) {
       initializeChart();
     } else {
@@ -32,14 +41,25 @@ const doLode = async () => {
 
 // x축은 첫 거래일부터 현재까지의 날짜
 const generateDateLabels = startDate => {
-  console.log(startDate);
   const labels = [];
   let date = new Date(startDate);
   const today = new Date();
-  while (date <= today) {
-    labels.push(new Intl.DateTimeFormat('ko-KR', { month: 'short', day: 'numeric' }).format(date));
-    date.setDate(date.getDate() + 30); // 한 달 간격으로 라벨 추가
-  }
+
+  // totalSalseList.value.forEach(item => {
+  //   sortTotalSaleTradeList.push(item.tradeCompletedDate);
+  // });
+  // sortTotalSaleTradeList.sort();
+  // sortTotalSaleTradeList.forEach(item => {
+  //   console.log(item);
+  // });
+  sortTotalSaleTradeList.forEach(item => {
+    labels.push(new Intl.DateTimeFormat('ko-KR', { month: 'numeric', day: 'numeric' }).format(Date.parse(item.tradeCompletedDate)));
+  });
+
+  // while (date <= today) {
+  //   labels.push(new Intl.DateTimeFormat('ko-KR', { month: 'numeric', day: 'numeric' }).format(totalSalseList.value.tradeCompletedDate));
+  //   date.setDate(date.getDate() + 30);
+  // }
   return labels;
 };
 
@@ -52,9 +72,14 @@ const initializeChart = async () => {
   }
   // 데이터가 존재할 때만 차트를 생성
   if (totalSalseList.value.length > 0) {
-    const firstTradeDate = new Date(totalSalseList.value[totalSalseList.value.length - 1].tradeCompletedDate);
+    const firstTradeDate = totalSalseList.value[totalSalseList.value.length - 1].tradeCompletedDate;
     const maxPrice = Math.ceil(Math.max(...totalSalseList.value.map(item => item.tradePrice)) * 1.1); // 최대 가격의 110%
 
+    // console.log(totalSalseList.value);
+    // console.log(
+    //   'totalSalseList',
+    //   sortTotalSaleTradeList.map(item => item.tradePrice),
+    // );
     chartInstance = new Chart(chartRef.value, {
       type: 'line',
       data: {
@@ -62,7 +87,7 @@ const initializeChart = async () => {
         datasets: [
           {
             label: 'Sales Figures',
-            data: totalSalseList.value.map(item => item.tradePrice),
+            data: sortTotalSaleTradeList.map(item => item.tradePrice),
             borderColor: 'orange',
             backgroundColor: 'orange',
             borderWidth: 1,
@@ -102,6 +127,9 @@ const initializeChart = async () => {
               display: true,
               text: '거래날짜',
             },
+            ticks: {
+              maxTicksLimit: 5, // X축 레이블을 4개로 제한하여 YY-MM 형식으로 표시
+            },
           },
         },
       },
@@ -118,17 +146,11 @@ const loadMore = () => {
 };
 const closeList = () => {
   showMore.value = 5;
-  console.log(showMore.value);
   displayedList.value = totalSalseList.value.slice(0, showMore.value);
 };
-onMounted(() => {
-  doLode();
-  watchEffect(() => {
-    if (totalSalseList.value.length > 0) {
-      initializeChart();
-    }
-  });
-});
+// onMounted(() => {
+//   doLode();
+// });
 
 watchEffect(() => {
   idx.value = route.params.idx;
@@ -148,11 +170,14 @@ watchEffect(() => {
       <canvas ref="chartRef" style="height: 250px; width: 100%"></canvas>
     </figcaption>
 
-    <h2 class="TransactionHistory">체결 내역</h2>
+    <div class="TransactionHistory">
+      <h1>체결 내역</h1>
+      <p>(최근거래순)</p>
+    </div>
     <div class="TransactionHistoryPosition">
       <ul class="TransactionHistoryTitle">
-        <li>옵션</li>
-        <li>가격</li>
+        <li>옵션 ({{ size }} ml)</li>
+        <li>거래가격</li>
         <li>거래날짜</li>
       </ul>
       <ul class="TransactionHistoryContent" v-for="(list, index) in displayedList" :key="index">
@@ -177,7 +202,10 @@ watchEffect(() => {
       <canvas ref="chartRef" style="height: 250px; width: 100%"></canvas>
     </figcaption>
 
-    <h2 class="TransactionHistory">체결 내역</h2>
+    <div class="TransactionHistory">
+      <h2>체결 내역</h2>
+      <p>(최근거래순)</p>
+    </div>
     <div class="TransactionHistoryPosition">
       <ul class="TransactionHistoryTitle">
         <li>옵션</li>
@@ -235,7 +263,17 @@ figcaption {
 }
 .TransactionHistory {
   margin: 20px 0 -10px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.TransactionHistory > h1 {
   font-size: 1.6rem;
+}
+.TransactionHistory > p {
+  margin: 5px 7px 0 0;
+  font-size: 1.2rem;
+  color: var(--color-text-gray);
 }
 .TransactionHistoryPosition {
   margin: 15px 0;
@@ -264,7 +302,7 @@ figcaption {
 .TransactionHistoryContent {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  padding: 0 3%;
+  /* padding: 0 1%; */
   font-size: 1.4rem;
   /* background-color: antiquewhite; */
 }
