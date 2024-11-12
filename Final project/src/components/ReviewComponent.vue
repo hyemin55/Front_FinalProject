@@ -1,5 +1,5 @@
 <script setup>
-import { getViewCurrentPage } from '@/api/productDetail';
+import { getViewCurrentPage } from '@/api/productDetailApi';
 import { GLOBAL_URL } from '@/api/util';
 import { ref, watch, watchEffect } from 'vue';
 import { useRoute } from 'vue-router';
@@ -99,11 +99,14 @@ const activePage = pageNum => {
 // });
 
 // 주소줄의 idx값이 바뀌면 리뷰리스트와 페이지네이션 변경을 위해 재통신 필요.
-watchEffect(() => {
-  idx.value = route.params.idx;
-  reviewCount.value = props.reviewCount;
-  viewCurrentPage();
-});
+watch(
+  () => [route.params.idx, props.reviewCount], // source로 배열을 사용하여 다중 변수를 추적
+  ([newIdx, newReviewCount]) => {
+    idx.value = newIdx;
+    reviewCount.value = newReviewCount;
+    viewCurrentPage();
+  },
+);
 </script>
 
 <template>

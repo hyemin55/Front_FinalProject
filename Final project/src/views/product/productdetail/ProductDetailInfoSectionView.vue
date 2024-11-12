@@ -3,7 +3,7 @@ import { computed, ref, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { formatPrice } from '@/FormatPrice';
 import _ProductDetailView from '@/views/product/productdetail/_ProductDetailView.vue';
-import { getProductData, getReviewData } from '@/api/productDetail';
+import { getProductData, getReviewData } from '@/api/productDetailApi';
 import ProductDetailSalseChartViewVue from './ProductDetailSalseChartView.vue';
 import { useCartStore } from '@/stores/CartStore';
 import { useUserStore } from '@/stores/Login';
@@ -54,7 +54,7 @@ const doLoad = async () => {
         // console.log('조건에 맞는 아이는? ', productData.value.data[i].size);
         if (productData.value.data[i].productId == idx.value && productData.value.data[i].size == size.value) {
           productDataOk.value = productData.value.data[i];
-          console.log('데이터내용들', productDataOk.value);
+          // console.log('데이터내용들', productDataOk.value);
         }
       }
       console.log('reviewData.value', reviewData.value);
@@ -73,7 +73,7 @@ const doLoad = async () => {
 };
 const BuyNow = () => {};
 
-console.log(productDataOk);
+// console.log(productDataOk);
 
 // 장바구니 추가
 const addToCart = async () => {
