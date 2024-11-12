@@ -28,12 +28,12 @@ const thumbnailsConfig = {
 onMounted(async () => {
   try {
     const slideImages = await getSlideImages(idx.value);
-    console.log('slideImages', slideImages);
+    // console.log('slideImages', slideImages);
     if (slideImages.status == 200) {
       list.value = slideImages.data;
-      console.log('list.value', list.value);
-      console.log('리스트파일이름', list.value.images);
-      console.log('리스트파일이름' + list.value.images.length);
+      // console.log('list.value', list.value);
+      // console.log('리스트파일이름' + list.value)
+      // console.log('리스트파일이름' + list.value.images.length)
     }
   } catch (e) {
     console.error('실패', e);
@@ -66,7 +66,7 @@ onMounted(async () => {
 #productSlide {
   width: 50%;
   height: 700px;
-  margin: 20px 5px 25px 0;
+  margin: 20px 0px 25px 0;
   text-align: center;
 }
 /* 보여지는 슬라이드의 메인사진 1장 */

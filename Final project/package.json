@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@flaticon/flaticon-uicons": "^3.3.1",
+    "@tanstack/vue-query": "^4.37.1",
+    "aos": "^2.3.4",
     "axios": "^1.7.7",
     "chart.js": "^4.4.6",
     "mitt": "^3.0.1",
