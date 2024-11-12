@@ -212,7 +212,7 @@ watchEffect(() => {
         <li>가격</li>
         <li>거래날짜</li>
       </ul>
-      <ul>
+      <ul class="NoTransactionHistory">
         <li>거래 내역이 없어요</li>
       </ul>
     </div>
@@ -305,6 +305,10 @@ figcaption {
   /* padding: 0 1%; */
   font-size: 1.4rem;
   /* background-color: antiquewhite; */
+}
+.NoTransactionHistory {
+  padding: 1%;
+  font-size: 1.4rem;
 }
 .showButtonBox {
   position: relative;

@@ -100,13 +100,13 @@ watchEffect(() => {
       </div>
 
       <ul id="starCounting">
-        <div v-for="(count, index) in starCounts" :key="index">
+        <li v-for="(count, index) in starCounts" :key="index">
           ★ {{ 5 - index }}.0
           <li class="bar-container">
             <div class="bar" :style="{ width: `${(count / reviewCount) * 100}%` }"></div>
           </li>
           <li>{{ count }} reviews</li>
-        </div>
+        </li>
       </ul>
     </div>
 
@@ -188,7 +188,7 @@ watchEffect(() => {
 }
 
 .bar-container {
-  width: 80%;
+  width: 75%;
   background-color: #ddd;
   border-radius: 5px;
   overflow: hidden;
