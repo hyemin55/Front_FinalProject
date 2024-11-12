@@ -3,7 +3,7 @@ import { onMounted, ref } from 'vue';
 import { Carousel, Slide, Navigation } from 'vue3-carousel';
 import 'vue3-carousel/dist/carousel.css';
 import { useRoute } from 'vue-router';
-import { getSlideImages } from '@/api/productDetail';
+import { getSlideImages } from '@/api/productDetailApi';
 import { GLOBAL_URL } from '@/api/util';
 
 const route = useRoute();
@@ -45,7 +45,7 @@ onMounted(async () => {
 
 <template>
   <article id="productSlide">
-    <Carousel id="gallery" v-bind="galleryConfig" v-model="currentSlide">
+    <Carousel id="gallery" v-bind="galleryConfig" v-model="currentSlide" :autoplay="3000">
       <Slide v-for="(image, index) in list.images" :key="index">
         <img :src="`${GLOBAL_URL}/api/file/download/${image.filename}`" alt="" class="carousel_image" />
       </Slide>
