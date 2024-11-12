@@ -18,7 +18,15 @@ onMounted(async() => {
 
 const changeIdx = setInterval(() => {
   currentIdxRef.value = (currentIdxRef.value + 1) % 3;
-}, 2000)
+}, 10000)
+
+const prevChangeIdx = () => {
+  currentIdxRef.value = (currentIdxRef.value - 1 + 3) % 3;
+}
+
+const nextChangeIdx = () => {
+  currentIdxRef.value = (currentIdxRef.value + 1) % 3;
+}
 
 watchEffect(() => {
   changeIdx
@@ -40,9 +48,9 @@ onBeforeUnmount(() => {
         <div class="best_product_banner">
           <p class="best_product_category">Perfume</p>
           <p class="best_product_page">
-            <button @click="best_page_left">&lt;</button>
+            <button @click="prevChangeIdx">&lt;</button>
             {{ currentIdxRef + 1 }} / 3
-            <button @click="best_page_right">&gt;</button>
+            <button @click="nextChangeIdx">&gt;</button>
           </p>
         </div>
         <div class="best_product">
