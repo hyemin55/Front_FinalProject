@@ -85,9 +85,16 @@ watchEffect(() => {
 .expanded {
   height: 1060px !important;
 }
+.main_product_list_btn_box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  /* background-color: aqua; */
+}
 .main_product_list_btn {
   height: 45px;
-  width: 12%;
+  width: 13%;
   font-size: 1.5rem;
   margin: 10px 0;
   padding: 1%;
