@@ -6,6 +6,7 @@ import { onBeforeUnmount, onMounted, ref, watchEffect } from 'vue';
 const bestListRef = ref([])
 const bestListImagesRef = ref([])
 const bestCartegoryRef = ref(['Perfume', 'Diffuser', 'Candle']);
+const bestCartegoryColorRef = ref(['112, 56, 129, 0.5','30, 145, 153, 0.5','0, 96, 16, 0.5'])
 const currentIdxRef = ref(0);
 let intervalId = null;
 
@@ -46,7 +47,7 @@ onBeforeUnmount(() => {
     <div id="best_position">
 
       <div class="best_left_box">
-        <div class="best_product_banner">
+        <div class="best_product_banner" :style="`background-color: rgba(${bestCartegoryColorRef[currentIdxRef]})`">
           <p class="best_product_category">{{ bestCartegoryRef[currentIdxRef] }}</p>
           <p class="best_product_page">
             <div class="page_btn">
@@ -105,7 +106,7 @@ onBeforeUnmount(() => {
 }
 .best_product_banner {
   position: absolute;
-  background-color: rgba(96, 0, 0, 0.5);
+  background-color: rgba(112, 56, 129, 0.5);
   width: 100%;
   height: 275px;
 }
@@ -160,15 +161,17 @@ onBeforeUnmount(() => {
 .best_right_box {
   width: 47.5%;
   position: relative;
-  top: 20px;
+  top: 45px;
   right: 5%;
+  /* background-color: antiquewhite; */
 }
 .best_promotion_img {
   width: 100%;
   height: auto;
-  margin-top: 100px;
+  margin-top: 60px;
 }
 .best_right_text {
+  margin-top: -20px;
   margin-left: 24%;
   font-size: 2rem;
   line-height: 24px;

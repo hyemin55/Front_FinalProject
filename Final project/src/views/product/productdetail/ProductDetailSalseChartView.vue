@@ -118,6 +118,9 @@ const initializeChart = async () => {
               // text: 'Sales',
               text: '거래가격 (₩)',
             },
+            ticks: {
+              maxTicksLimit: 10, // X축 레이블을 4개로 제한하여 YY-MM 형식으로 표시
+            },
           },
           x: {
             // grid: {
