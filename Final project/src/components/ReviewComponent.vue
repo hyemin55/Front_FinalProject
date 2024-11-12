@@ -1,7 +1,7 @@
 <script setup>
 import { getViewCurrentPage } from '@/api/productDetail';
 import { GLOBAL_URL } from '@/api/util';
-import { ref, watch } from 'vue';
+import { ref, watch, watchEffect } from 'vue';
 import { useRoute } from 'vue-router';
 
 const props = defineProps({
