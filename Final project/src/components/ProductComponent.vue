@@ -9,7 +9,7 @@ import { useUserStore } from '@/stores/Login';
 // import { getProductData, getReviewData, getReviewImageList, getSlideImages, getstarCounting } from '@/api/productDetail';
 
 // 로그인 pinia
-const userStore = useUserStore();
+const userStore = useUserStore(); 
 const userLogin = computed(() => userStore.loginCheck);
 
 // 장바구니 추가
