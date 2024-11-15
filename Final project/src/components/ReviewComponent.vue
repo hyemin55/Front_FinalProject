@@ -164,8 +164,6 @@ watch(
 }
 .noUserReviewList > img {
   width: 100px;
-  color: var(--color-main-Lgray);
-  filter: grayscale(100%);
   margin-top: 20px;
 }
 .noUserReviewList::before {

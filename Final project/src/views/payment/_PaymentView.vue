@@ -242,7 +242,7 @@ const payData = JSON.parse(decodeURIComponent(payroute.query.item));
     
     <h2>결제금액</h2>
     <div class="line"></div>
-    <PayMoney></PayMoney>
+    <PayMoney :productInfo="payData"></PayMoney>
 
     <div class="line"></div>
 
