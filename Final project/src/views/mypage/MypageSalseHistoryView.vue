@@ -1,9 +1,22 @@
+<script setup>
+import HistoryProduct from '@/components/HistoryProduct.vue';
+
+</script>
+
 <template>
-  <div>
-    <h1>mySalseHistory</h1>
-  </div>
+  <h1 class="orderHistory_title">전체 판매 내역</h1>
+  <HistoryProduct></HistoryProduct>
+
 </template>
 
-<script setup></script>
+<style scoped>
+.orderHistory_title {
+  font-size: 3.2rem;
+  font-weight: 400;
+  border-bottom: solid 1px #000;
+  padding: 20px 0;
+  margin-top: 32px;
+}
 
-<style lang="scss" scoped></style>
+
+</style>
