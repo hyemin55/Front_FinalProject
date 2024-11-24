@@ -104,18 +104,7 @@ const addToWishlist = () => {
   if (redHeart.value == true) alert('༼ つ ◕_◕ ༽つ 찜~');
 };
 
-// URL 공유 클릭 이벤트
-const urlShare = () => {
-  const url = window.location.href;
-  navigator.clipboard
-    .writeText(url)
-    .then(() => {
-      alert('URL이 클립보드에 복사되었습니다.');
-    })
-    .catch(err => {
-      console.error('URL 복사를 실패했어요ㅠㅡㅠ', err);
-    });
-};
+
 const isselectedSize = size => {
   return route.query.size === size.size.toString() && route.params.idx === size.productId.toString();
 };
@@ -159,16 +148,12 @@ watchEffect(() => {
       <button class="addToCart Sell​​Now">바로 판매하기</button>
       <button class="addToCart BuyNow" @click="BuyNow">바로 구매하기</button>
       <!-- <button class="addToCart" @click="addToCart"> -->
-      <button>
+      <button class="icon_box">
         <img class="icon" src="@/assets/img/icon/free-icon-font-shopping-cart.svg" alt="" />
       </button>
-      <button>
-        <img class="icon" :class="{ active: redHeart }" @click.stop="addToWishlist" src="@/assets/img/icon/free-icon-font-heart-line.svg" alt="" />
+      <button class="icon_box" :class="{ active: redHeart }" @click.stop="addToWishlist">
+        <img class="icon" src="@/assets/img/icon/free-icon-font-heart-line.svg" alt="" />
       </button>
-      <!-- 슬라이드 이미지 우측하단으로 이동하기 -->
-      <!-- <button>
-          <img class="icon" @click="urlShare" src="@/assets/img/icon/free-icon-font-share-3917574.png" alt="" />
-        </button> -->
     </div>
 
     <ProductDetailSalseChartViewVue />
@@ -180,7 +165,7 @@ watchEffect(() => {
 #productInfoSection {
   /* background-color: aquamarine; */
   width: 50%;
-  margin: 20px 0 25px 30px;
+  margin: 20px -10px 25px 30px;
   /* background-color: yellow; */
 }
 #productInfo {
@@ -232,6 +217,7 @@ button.selectedSize {
 } */
 .addButtonGroub {
   display: flex;
+  align-items: flex-end;
   justify-content: left;
   margin: 15px 0;
   height: 45px;
@@ -241,48 +227,43 @@ button.selectedSize {
 }
 .addToCart {
   /* background-color: antiquewhite; */
-  width: 35%;
-  height: auto;
+  width: 70%;
+  height: 100%;
   border-radius: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--color-main-gray);
   font-size: 1.6rem;
   font-family: 'Pretendard-SemiBold';
 }
 .Sell​​Now {
+  width: 100%;
   background-color: orange;
 }
 .BuyNow {
+  width: 100%;
   background-color: var(--color-main-bloode);
   color: white;
 }
-/* .addToCart > img {
-  width: 15%;
-  margin-right: 5px;
-  background-color: antiquewhite;
-} */
-.wish_push {
-  width: 100%;
-  height: auto;
-  background-color: aqua;
+.icon_box{
+  width: 85px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0.5px solid var(--color-main-gray);
+  border-radius: 50%;
 }
 .icon {
   text-align: center;
-  border: 0.5px solid var(--color-main-gray);
-  width: 25%;
-  /* background-color: antiquewhite; */
+  width: 80%;
   height: auto;
-  border-radius: 50%;
-  padding: 4%;
+  padding: 10%;
   transition: filter 0.4s;
 }
-.icon.active {
+.icon_box.active {
   background-color: var(--color-main-bloode);
   border: 0.5px solid var(-color-main-bloode);
 }
-/* .wish_push.active .icon {
-  filter: brightness(0) saturate(100%) invert(0.5);
-} */
+
 </style>

@@ -25,13 +25,14 @@ import MainEditorPicksSlideView from './MainEditorPicksSlideView.vue'
   width: var(--main-max-width);
   margin: 0 auto;
   height: 800px;
-  /* background-color: #f3eed9; */
   overflow: hidden;
+  /* background-color: #f3eed9; */
 }
 #main_editor > h1 {
   font-size: 4rem;
   font-family: var(--font-JacquesFrancois);
   text-align: center;
   padding-top: 40px;
+  margin-bottom: 20px;
 }
 </style>

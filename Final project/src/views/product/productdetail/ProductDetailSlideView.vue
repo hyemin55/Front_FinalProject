@@ -25,6 +25,19 @@ const thumbnailsConfig = {
   wrapAround: true,
 };
 
+// URL 공유 클릭 이벤트
+const urlShare = () => {
+  const url = window.location.href;
+  navigator.clipboard
+    .writeText(url)
+    .then(() => {
+      alert('URL이 클립보드에 복사되었습니다.');
+    })
+    .catch(err => {
+      console.error('URL 복사를 실패했어요ㅠㅡㅠ', err);
+    });
+};
+
 onMounted(async () => {
   try {
     const slideImages = await getSlideImages(idx.value);
@@ -45,11 +58,15 @@ onMounted(async () => {
 
 <template>
   <article id="productSlide">
-    <Carousel id="gallery" v-bind="galleryConfig" v-model="currentSlide" :autoplay="3000">
-      <Slide v-for="(image, index) in list.images" :key="index">
-        <img :src="`${GLOBAL_URL}/api/file/download/${image.filename}`" alt="" class="carousel_image" />
-      </Slide>
-    </Carousel>
+    <div class="iconPosition">
+      <Carousel id="gallery" v-bind="galleryConfig" v-model="currentSlide" :autoplay="3000">
+        <Slide v-for="(image, index) in list.images" :key="index">
+          <img :src="`${GLOBAL_URL}/api/file/download/${image.filename}`" alt="" class="carousel_image" />
+        </Slide>
+      </Carousel>
+      <img class="icon" @click="urlShare" src="@/assets/img/icon/free-icon-font-share-3917574.png" alt="" />
+    </div>
+
     <!-- :autoplay="2000" -->
     <Carousel id="thumbnails" v-bind="thumbnailsConfig" v-model="currentSlide" :pause-autoplay-on-hover="true" :mouse-drag="false">
       <Slide v-for="(image, index) in list.images" :key="index">
@@ -68,7 +85,7 @@ onMounted(async () => {
 #productSlide {
   width: 50%;
   height: 700px;
-  margin: 20px 0px 25px 0;
+  margin: 20px 0px 25px 0px;
   text-align: center;
 }
 /* 보여지는 슬라이드의 메인사진 1장 */
@@ -82,7 +99,20 @@ onMounted(async () => {
   border-radius: 20px;
   /* background-color: antiquewhite; */
 }
-
+.iconPosition{
+  position: relative;
+}
+.icon{
+  position: absolute;
+  bottom: 20px;
+  right: 3%;
+  width: 6%;
+  border: 0.5px solid var(--color-main-Lgray);
+  background-color: var(--color-main-Lgray);
+  border-radius: 50%;
+  padding: 0.5%;
+  cursor: pointer;
+}
 .carousel_image {
   padding: 1%;
   width: 100%;

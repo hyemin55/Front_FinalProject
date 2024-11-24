@@ -107,9 +107,9 @@ watchEffect(() => {
 .main_product_Com,
 .main_add_product_Com {
   width: var(--main-max-width);
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2%;
   padding: 15px 0;
 }
 </style>

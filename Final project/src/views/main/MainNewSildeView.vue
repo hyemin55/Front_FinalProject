@@ -64,8 +64,7 @@ const navDetailProduct = (productId, size) => {
       </Slide>
 
       <template #addons>
-        <!-- <Pagination /> -->
-        <Navigation class="slideNavigation" />
+        <Navigation />
       </template>
     </Carousel>
   </div>
