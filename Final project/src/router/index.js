@@ -9,8 +9,9 @@ import { createRouter, createWebHistory } from 'vue-router';
 import PaymentView from '@/views/user/payment/_PaymentView.vue';
 import NotFoundPage from '@/views/loding/NotFoundPage.vue';
 import MainAdminView from '@/views/admin/_MainAdminView.vue';
+import { useUserStore } from '@/stores/Login';
 
-const loginRouter = [
+const loginRouters = [
   {
     path: '/login2',
     name: 'login2',
@@ -23,10 +24,10 @@ const loginRouter = [
   },
 ];
 
-const router = createRouter({
+const routers = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    ...loginRouter,
+    ...loginRouters,
     {
       path: '/',
       name: 'main',
@@ -73,10 +74,10 @@ const router = createRouter({
       component: NotFoundPage,
     },
     {
-      path: '/mainadmin',
+      path: '/',
       name: 'mainadmin',
       component: MainAdminView,
-      // meta: { role: 'admin' },
+      meta: { nickName: '민이♡' },
     },
   ],
   scrollBehavior(to, from, savedPosition) {
@@ -88,4 +89,12 @@ const router = createRouter({
     return { top: 0 };
   },
 });
-export default router;
+routers.beforeEach((to, from, next) => {
+  const userStore = useUserStore();
+  const userRole = userStore.nickName;
+  if (to.meta.nickName && to.meta.nickName !== userRole) {
+    return next('/main');
+  }
+  next();
+});
+export default routers;

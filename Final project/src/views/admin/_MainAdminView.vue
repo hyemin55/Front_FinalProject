@@ -1,7 +1,9 @@
 <template>
-  <div></div>
+  <div>
+    <h1>MainAdmin</h1>
+  </div>
 </template>
 
 <script setup></script>
 
-<style lang="scss" scoped></style>
+<style scoped></style>
