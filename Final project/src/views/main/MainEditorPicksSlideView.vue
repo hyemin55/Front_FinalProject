@@ -21,7 +21,7 @@ for (let i = 0; i < slides.value.length; i++) {
 // 2. 클릭 시 제일 앞으로
 // 클릭 시 index 값을 받아오는 함수
 const handleClick = index => {
-  .0
+  0.0;
   console.log('Clicked index:', index);
   // 클릭한 슬라이드의 index에 따른 로직 추가
 
@@ -54,7 +54,7 @@ const handleClick = index => {
 
 <template>
   <div class="wrapper">
-    <img
+    <div
       v-for="(slide, index) in slides"
       :key="index"
       class="Slidebox"
@@ -65,15 +65,14 @@ const handleClick = index => {
         thirdSlideImg: index === 2,
         otherSlideImg: index >= 3,
       }"
-      :src="slide"
-    />
-
-    <div class="slides_info" v-for="(slide, index) in slides"
-    :key="index" @click="handleClick(index)">
+    >
+      <img :src="slide" />
+      <div class="slides_info">
         <p>브랜드명</p>
         <p>빵빵덕</p>
         <p>￦100,000</p>
       </div>
+    </div>
   </div>
 </template>
 
@@ -86,71 +85,72 @@ const handleClick = index => {
   height: auto;
   margin-top: 40px;
   gap: 1.5%; /* 슬라이드 간격 */
-  position: relative;
   /* background-color: rgb(121, 121, 121); */
 }
 .Slidebox {
-  /* background-color: aqua; */
+  position: relative;
   cursor: pointer;
   object-fit: cover;
   transition:
     opacity 0.3s ease,
     visibility 0s 0.3s;
 }
-
+.Slidebox > img {
+  width: 100%;
+  height: auto;
+}
 .firstSlideImg {
-  width: 30%; 
-  height: auto; 
+  width: 30%;
+  height: auto;
   padding: 1%;
   background-color: var(--color-main-Lgray);
+  font-size: 3.5rem;
 }
-
 .secondSlideImg,
 .thirdSlideImg {
-  width: 18%; 
-  height: auto; 
+  width: 18%;
+  height: auto;
   background-color: var(--color-main-Lgray);
   padding: 1%;
+  font-size: 2.5rem;
 }
 .otherSlideImg {
-  width: 20%; 
+  width: 20%;
   padding: 1%;
   display: none;
 }
 .slides_info {
   position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-around;
-  bottom: 70px;
-  font-size: 2.3rem;
-  color: rgb(161, 80, 80);
+  justify-content: center;
+
+  color: white;
   text-shadow: 2px 2px 5px #333;
   line-height: 1.5;
-  /* overflow: hidden; */
-  transition:
-    opacity 0.3s ease,
-    visibility 0s 0.3s;
+
+  transition: all 0.3s ease;
   visibility: hidden;
   opacity: 0;
 }
+.slides_info p {
+  transition: all 0.3s ease;
+  transform: translateY(20px);
+}
+
+.Slidebox:hover .slides_info p {
+  transform: translateY(0px);
+}
 .Slidebox:hover .slides_info {
-  opacity: 1; /* 호버 시 상세 정보 표시 */
-  visibility: visible; /* 호버 시 보이도록 설정 */
-  transition:
-    opacity 0.3s ease,
-    visibility 0s; /* 상세 정보가 바로 보이도록 설정 */
-  /* background-color: aqua; */
+  opacity: 1;
+  visibility: visible;
 }
-
-.Slidebox:hover {
-  transition:
-    opacity 0.3s ease,
-    visibility 0s; /* 상세 정보가 바로 보이도록 설정 */
-  opacity: 0.5; /* 투명도 설정 (0은 완전 투명, 1은 불투명) */
+.Slidebox:hover img {
   filter: saturate(0.5);
-  background-color: rgba(0, 0, 0, 0.4);
 }
-
 </style>
