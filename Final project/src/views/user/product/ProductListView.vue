@@ -1,43 +1,38 @@
 <script setup>
-import { GLOBAL_URL } from '@/api/util'
-import ProductComponent from '@/components/ProductComponent.vue'
-import { useInfiniteQuery } from '@tanstack/vue-query'
-import axios from 'axios'
-import { computed, onMounted, ref, watch, watchEffect } from 'vue'
-import { onBeforeRouteLeave, useRoute } from 'vue-router'
-
+import { GLOBAL_URL } from '@/api/util';
+import ProductComponent from '@/components/ProductComponent.vue';
+import { useInfiniteQuery } from '@tanstack/vue-query';
+import axios from 'axios';
+import { computed, onMounted, ref, watch, watchEffect } from 'vue';
+import { onBeforeRouteLeave, useRoute } from 'vue-router';
+// ../../product/productFilter.vue
 // const sortedList = ref([])  // 정렬된 리스트
-const sortTitle = ref('추천순 ⇅')
-const hiddenItem = ref(0)
+const sortTitle = ref('추천순 ⇅');
+const hiddenItem = ref(0);
 const totalDataLength = ref(0);
 
-const route = useRoute()
-const categoryTitle = computed(() => route.params.title)
-const categoryId = computed(() => route.params.idx)
-const loadingUi = ref(null) // 로딩 UI지정
+const route = useRoute();
+const categoryTitle = computed(() => route.params.title);
+const categoryId = computed(() => route.params.idx);
+const loadingUi = ref(null); // 로딩 UI지정
 
 // 무한 스크롤 데이터 패칭 함수
 const fetchCategoryData = async ({ pageParam = 0 }) => {
-  const res = await axios.get(
-    `${GLOBAL_URL}/api/categories/${categoryId.value}?pageNum=${pageParam}`,
-  )
-  const data = res.data
-  return { data, nextPage: data.length > 0 ? pageParam + 1 : undefined }
-}
+  const res = await axios.get(`${GLOBAL_URL}/api/categories/${categoryId.value}?pageNum=${pageParam}`);
+  const data = res.data;
+  return { data, nextPage: data.length > 0 ? pageParam + 1 : undefined };
+};
 // useInfiniteQuery로 무한 스크롤 쿼리 설정
 const {
   data: list,
   fetchNextPage, // (호출시)자동으로 페이지를 증가시킨다. (이 부분 증가시 getNextPageParam 자동으로 작동)
   hasNextPage, // 다음페이지가 있는지 확인하는 변수
   isFetchingNextPage, // 로딩중인지 확인한는 변수
-} = useInfiniteQuery(
-  ['categoryData', categoryId], 
-  fetchCategoryData, {
-    getNextPageParam: lastPage => lastPage.nextPage,
-    refetchOnWindowFocus: false,
-    cacheTime: 1000 * 60 * 10, // 데이터 캐싱 시간 설정
-  }
-)
+} = useInfiniteQuery(['categoryData', categoryId], fetchCategoryData, {
+  getNextPageParam: lastPage => lastPage.nextPage,
+  refetchOnWindowFocus: false,
+  cacheTime: 1000 * 60 * 10, // 데이터 캐싱 시간 설정
+});
 
 watchEffect(() => {
   if (list.value && list.value.pages && list.value.pages.length > 0) {
@@ -48,14 +43,20 @@ watchEffect(() => {
 // IntersectionObserver로 ui가 뷰포트에 걸리시 페이지 증가
 watchEffect(() => {
   const observer = new IntersectionObserver(entries => {
-    const firstEntry = entries[0]
+    const firstEntry = entries[0];
     if (firstEntry.isIntersecting && hasNextPage.value && !isFetchingNextPage.value) {
-      fetchNextPage()
+      fetchNextPage();
     }
-  })
-  if (loadingUi.value) { observer.observe(loadingUi.value) }
-  return () => {if (loadingUi.value) { observer.unobserve(loadingUi.value) }}
-})
+  });
+  if (loadingUi.value) {
+    observer.observe(loadingUi.value);
+  }
+  return () => {
+    if (loadingUi.value) {
+      observer.unobserve(loadingUi.value);
+    }
+  };
+});
 
 // 정렬 함수들
 // const latestDate = () => {sortedList.value = [...list.value].sort((a, b) => new Date(a.registerDate) - new Date(b.registerDate))}
@@ -65,31 +66,29 @@ watchEffect(() => {
 
 // 정렬 기준을 바꿀 때 호출되는 함수
 const sortList = (order, index) => {
-  hiddenItem.value = index
+  hiddenItem.value = index;
   switch (order) {
     case 'latestDate':
-      sortTitle.value = '최신순'
+      sortTitle.value = '최신순';
       // latestDate()
-      break
+      break;
     case 'oldeDate':
-      sortTitle.value = '오래된 순'
+      sortTitle.value = '오래된 순';
       // oldeDate()
-      break
+      break;
     case 'highPrice':
-      sortTitle.value = '높은 가격순'
+      sortTitle.value = '높은 가격순';
       // highPrice()
-      break
+      break;
     case 'lowPrice':
-      sortTitle.value = '낮은 가격순'
+      sortTitle.value = '낮은 가격순';
       // lowPrice()
-      break
+      break;
     case 'basic':
     default:
-      sortTitle.value = '추천순 ⇅'
+      sortTitle.value = '추천순 ⇅';
   } // sortedList.value = [...list.value]  // 기본적으로 원래 순서로 돌아감
-}
-
-
+};
 </script>
 
 <template>
@@ -108,7 +107,7 @@ const sortList = (order, index) => {
         <div class="sort_container">
           <p class="sort_trigger">{{ sortTitle }}</p>
           <ul class="product_sort">
-            <li @click="sortList('basic', 0)" :style="{ display: hiddenItem === 0 ? 'none' : '' }"> 추천순 ⇅</li>
+            <li @click="sortList('basic', 0)" :style="{ display: hiddenItem === 0 ? 'none' : '' }">추천순 ⇅</li>
             <li @click="sortList('latestDate', 1)" :style="{ display: hiddenItem === 1 ? 'none' : '' }">최신순</li>
             <li @click="sortList('oldeDate', 2)" :style="{ display: hiddenItem === 2 ? 'none' : '' }">오래된 순</li>
             <li @click="sortList('highPrice', 3)" :style="{ display: hiddenItem === 3 ? 'none' : '' }">높은 가격순</li>
@@ -119,17 +118,12 @@ const sortList = (order, index) => {
     </article>
 
     <article class="product_list" v-if="list && list.pages && list.pages[0]">
-      <ProductComponent
-        v-for="product in list.pages.flatMap(page => page.data)"
-        :key="product.productId"
-        :productInfo="product"
-      />
+      <ProductComponent v-for="product in list.pages.flatMap(page => page.data)" :key="product.productId" :productInfo="product" />
     </article>
 
     <h1 class="loadingUi" ref="loadingUi" v-if="hasNextPage">
-      <img src="../../assets/img/icon/loading.gif" alt="">
+      <img src="../../assets/img/icon/loading.gif" alt="" />
     </h1>
-
   </section>
 </template>
 
@@ -210,13 +204,13 @@ const sortList = (order, index) => {
 }
 
 /* 로딩 UI설정 */
-.loadingUi{
+.loadingUi {
   width: 100%;
   height: 65px;
   text-align: center;
   margin-top: 50px;
 }
-.loadingUi img{
+.loadingUi img {
   height: 100%;
   width: auto;
 }

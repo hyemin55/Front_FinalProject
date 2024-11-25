@@ -1,13 +1,14 @@
-import CartView from '@/views/CartView.vue';
-import LoginView from '@/views/login/LoginView.vue';
-import MainView from '@/views/main/_MainView.vue';
-import ProductDetailView from '@/views/product/productdetail/_ProductDetailView.vue';
-import ProductListView from '@/views/product/ProductListView.vue';
-import OauthView from '@/views/login/OauthView.vue';
-import MypageView from '@/views/mypage/_MypageView.vue';
+import CartView from '@/views/user/CartView.vue';
+import LoginView from '@/views/user/login/LoginView.vue';
+import MainView from '@/views/user/main/_MainView.vue';
+import ProductDetailView from '@/views/user/product/productdetail/_ProductDetailView.vue';
+import ProductListView from '@/views/user/product/ProductListView.vue';
+import OauthView from '@/views/user/login/OauthView.vue';
+import MypageView from '@/views/user/mypage/_MypageView.vue';
 import { createRouter, createWebHistory } from 'vue-router';
-import PaymentView from '@/views/payment/_PaymentView.vue';
+import PaymentView from '@/views/user/payment/_PaymentView.vue';
 import NotFoundPage from '@/views/loding/NotFoundPage.vue';
+import MainAdminView from '@/views/admin/_MainAdminView.vue';
 
 const loginRouter = [
   {
@@ -26,7 +27,6 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     ...loginRouter,
-
     {
       path: '/',
       name: 'main',
@@ -50,7 +50,7 @@ const router = createRouter({
     {
       path: '/productsdetail/:idx',
       name: 'productsdetail',
-      component: () => import('@/views/product/productdetail/_ProductDetailView.vue'),
+      component: () => import('@/views/user/product/productdetail/_ProductDetailView.vue'),
     },
 
     {
@@ -71,6 +71,12 @@ const router = createRouter({
     {
       path: '/:catchAll(.*)', // catch-all 경로를 정규 표현식으로 설정
       component: NotFoundPage,
+    },
+    {
+      path: '/mainadmin',
+      name: 'mainadmin',
+      component: MainAdminView,
+      // meta: { role: 'admin' },
     },
   ],
   scrollBehavior(to, from, savedPosition) {

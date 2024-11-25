@@ -1,10 +1,10 @@
 <script setup>
 import { ref, watchEffect } from 'vue';
 import { useRoute } from 'vue-router';
-import ProductSlide from '@/views/product/productdetail/ProductDetailSlideView.vue';
-import ProductDescription from '@/views/product/productdetail/ProductDescriptionView.vue';
-import ProductDetailReview from '@/views/product/productdetail/ProductDetailReviewView.vue';
-import ProductInfoSection from '@/views/product/productdetail/ProductDetailInfoSectionView.vue';
+import ProductSlide from '@/views/user/product/productdetail/ProductDetailSlideView.vue';
+import ProductDescription from '@/views/user/product/productdetail/ProductDescriptionView.vue';
+import ProductDetailReview from '@/views/user/product/productdetail/ProductDetailReviewView.vue';
+import ProductInfoSection from '@/views/user/product/productdetail/ProductDetailInfoSectionView.vue';
 
 const route = useRoute();
 

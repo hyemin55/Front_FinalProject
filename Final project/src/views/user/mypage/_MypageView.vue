@@ -1,27 +1,27 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue'
-import { useUserStore } from '../../stores/Login'
-import MypageInformationView from './MypageInformationView.vue'
-import MypageOrderHistoryView from './MypageOrderHistoryView.vue'
-import MypageSalseHistoryView from './MypageSalseHistoryView.vue'
-import MypageWishlistView from './MypageWishlistView.vue'
-import MypageReviewView from './MypageReviewView.vue'
-import MypageCurrentSituationView from './MypageCurrentSituationView.vue'
+import { computed, onMounted, ref } from 'vue';
+import { useUserStore } from '@/stores/Login';
+import MypageInformationView from '@/views/user/mypage/MypageInformationView.vue';
+import MypageOrderHistoryView from '@/views/user/mypage/MypageOrderHistoryView.vue';
+import MypageSalseHistoryView from '@/views/user/mypage/MypageSalseHistoryView.vue';
+import MypageWishlistView from '@/views/user/mypage/MypageWishlistView.vue';
+import MypageReviewView from '@/views/user/mypage/MypageReviewView.vue';
+import MypageCurrentSituationView from '@/views/user/mypage/MypageCurrentSituationView.vue';
 
-const user = useUserStore()
+const user = useUserStore();
 
-onMounted(() => {})
-const profileImage = sessionStorage.getItem('profileImage')
+onMounted(() => {});
+const profileImage = sessionStorage.getItem('profileImage');
 
-const selectpage = ref('myOrderHistory')
+const selectpage = ref('myOrderHistory');
 const componentMap = {
   myOrderHistory: MypageOrderHistoryView,
   mySalseHistory: MypageSalseHistoryView,
   myWishlist: MypageWishlistView,
   myReview: MypageReviewView,
   myInformation: MypageInformationView,
-}
-const currentComponent = computed(() => componentMap[selectpage.value])
+};
+const currentComponent = computed(() => componentMap[selectpage.value]);
 </script>
 
 <template>

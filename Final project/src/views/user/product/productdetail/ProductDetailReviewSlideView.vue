@@ -5,7 +5,7 @@ import { ref, watchEffect } from 'vue';
 import { useRoute } from 'vue-router';
 import { getReviewImageList } from '@/api/productDetailApi';
 import { GLOBAL_URL } from '@/api/util';
-import ProductPhotoModalView from './ProductPhotoModalView.vue';
+import ProductPhotoModalView from '@/views/user/product/productdetail/ProductPhotoModalView.vue';
 
 const route = useRoute();
 const idx = ref(route.params.idx);

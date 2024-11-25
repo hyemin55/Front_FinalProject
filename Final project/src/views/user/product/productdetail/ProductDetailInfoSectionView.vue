@@ -2,9 +2,9 @@
 import { computed, ref, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { formatPrice } from '@/FormatPrice';
-import _ProductDetailView from '@/views/product/productdetail/_ProductDetailView.vue';
+import _ProductDetailView from '@/views/user/product/productdetail/_ProductDetailView.vue';
 import { getProductData, getReviewData } from '@/api/productDetailApi';
-import ProductDetailSalseChartViewVue from './ProductDetailSalseChartView.vue';
+import ProductDetailSalseChartViewVue from '@/views/user/product/productdetail/ProductDetailSalseChartView.vue';
 import { useCartStore } from '@/stores/CartStore';
 import { useUserStore } from '@/stores/Login';
 

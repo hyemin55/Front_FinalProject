@@ -14,11 +14,11 @@
 
 <script setup>
 import { defineAsyncComponent } from 'vue';
-import MainBestView from './MainBestView.vue';
-import MainListView from './MainListView.vue';
-import MainPromotionBannerView from './MainPromotionBannerView.vue';
-import MainEditorView from './MainEditorView.vue';
-import MainNewView from './MainNewView.vue';
+import MainBestView from '@/views/user/main/MainBestView.vue';
+import MainListView from '@/views/user/main/MainListView.vue';
+import MainPromotionBannerView from '@/views/user/main/MainPromotionBannerView.vue';
+import MainEditorView from '@/views/user/main/MainEditorView.vue';
+import MainNewView from '@/views/user/main/MainNewView.vue';
 
 // const MainEditorView = defineAsyncComponent(() => import('./MainEditorView.vue'));
 // const MainNewView = defineAsyncComponent(() => import('./MainNewView.vue'));
