@@ -1,12 +1,17 @@
 <script setup>
 import HistoryProduct from '@/components/HistoryProduct.vue';
+import { ref } from 'vue';
 
+const props = ref({
+  text01:'주문',
+  text02:'주문',
+  text03:'배송'
+})
 </script>
 
 <template>
   <h1 class="orderHistory_title">전체 주문 내역</h1>
-  <HistoryProduct></HistoryProduct>
-
+  <HistoryProduct :propstext="props" :showBtn="true"></HistoryProduct>
 </template>
 
 <style scoped>
@@ -17,6 +22,4 @@ import HistoryProduct from '@/components/HistoryProduct.vue';
   padding: 20px 0;
   margin-top: 32px;
 }
-
-
 </style>

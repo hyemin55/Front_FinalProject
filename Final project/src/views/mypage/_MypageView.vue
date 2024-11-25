@@ -46,11 +46,10 @@ const currentComponent = computed(() => componentMap[selectpage.value])
 
       <article id="myDetailInfo">
         <component :is="currentComponent"></component>
-
-        
       </article>
     </main>
-  </section>
+
+</section>
 </template>
 
 <style scoped>
