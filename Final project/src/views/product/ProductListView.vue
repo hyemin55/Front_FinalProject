@@ -89,6 +89,7 @@ const sortList = (order, index) => {
   } // sortedList.value = [...list.value]  // 기본적으로 원래 순서로 돌아감
 }
 
+
 </script>
 
 <template>
@@ -128,6 +129,7 @@ const sortList = (order, index) => {
     <h1 class="loadingUi" ref="loadingUi" v-if="hasNextPage">
       <img src="../../assets/img/icon/loading.gif" alt="">
     </h1>
+
   </section>
 </template>
 

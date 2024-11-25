@@ -27,7 +27,6 @@ const reviewImgsData = async () => {
   const reviewImageList = await getReviewImageList(idx.value);
   console.log(reviewImageList.data);
   slides.value = reviewImageList.data;
-  console.log(slides.value.length);
 };
 
 const config = {
@@ -37,7 +36,7 @@ const config = {
 };
 
 watchEffect(() => {
-  idx;
+  idx.value;
   reviewImgsData();
 });
 </script>

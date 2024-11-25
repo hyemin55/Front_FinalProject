@@ -65,6 +65,7 @@ onBeforeUnmount(() => {
             <li v-else>Loading...</li>
           </ul>
         </div>
+
       </div>
 
       <div class="best_right_box">

@@ -87,7 +87,8 @@ const requestPay = async () => {
       pg: 'html5_inicis',
       pay_method: 'card',
       merchant_uid: merchant_uid,
-      name: cartData.purchaseProductDtos.map((item) => item.name).join(','),
+      // name: cartData.purchaseProductDtos.map((item) => item.name).join(','),
+      name: 'test',
       amount: cartData.totalPrice,
       buyer_email: 'kdh7313@naver.com',
       buyer_name: '김태영',
@@ -241,7 +242,7 @@ const payData = JSON.parse(decodeURIComponent(payroute.query.item));
     
     <h2>결제금액</h2>
     <div class="line"></div>
-    <PayMoney></PayMoney>
+    <PayMoney :productInfo="payData"></PayMoney>
 
     <div class="line"></div>
 

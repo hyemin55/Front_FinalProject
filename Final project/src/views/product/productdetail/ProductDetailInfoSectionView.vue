@@ -8,6 +8,9 @@ import ProductDetailSalseChartViewVue from './ProductDetailSalseChartView.vue';
 import { useCartStore } from '@/stores/CartStore';
 import { useUserStore } from '@/stores/Login';
 
+import axios from 'axios';
+import { GLOBAL_URL } from '@/api/util';
+import { fetchMemeberCart, mergeMemberCart } from '@/api/cartApi';
 const route = useRoute();
 const router = useRouter();
 
@@ -24,6 +27,7 @@ const cartStore = useCartStore();
 const userStore = useUserStore();
 const userLogin = computed(() => userStore.loginCheck);
 const emit = defineEmits();
+// const emit = defineEmits();
 
 // 1. 클릭한 옵션값을 idx에 담아준다.
 const productOptionSelect = item => {
@@ -55,7 +59,7 @@ const doLoad = async () => {
           // console.log('데이터내용들', productDataOk.value);
         }
       }
-      // console.log('reviewData.value', reviewData.value);
+      console.log('reviewData.value', reviewData.value);
 
       // const newStatus = true;
       // emit('onProductInfoLoaded', newStatus);
@@ -74,29 +78,42 @@ const BuyNow = () => {};
 // console.log(productDataOk);
 
 // 장바구니 추가
-// const addToCart = async () => {
-//   cartStore.addItem(productDataOk._value);
-//   console.log('찍었다.', productDataOk);
-//   alert('장바구니에 담았습니다.');
+const addToCart = async () => {
+  const data = {
+    productId: Number(idx.value),
+    productName: productDataOk.value.productName,
+    price: productDataOk.value.price,
+    brandName: productDataOk.value.brandName,
+    size: productDataOk.value.size,
+    images: [productDataOk.value.mainImage],
+    mainImage: productDataOk.value.mainImage,
+    quantity: 1,
+  };
 
-//   if (userLogin.value) {
-//     const data = {
-//       productId: idx.value,
-//       quantity: 1,
-//       content: '내용담아보내기',
-//     };
-//     try {
-//       const res = axios.post(`${GLOBAL_URL}/cart/add`, data, {
-//         headers: {
-//           Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-//         },
-//       });
-//       console.log(res);
-//     } catch (e) {
-//       console.log(e);
-//     }
-//   }
-// };
+  cartStore.addItem(data);
+  alert('장바구니에 담았습니다.');
+
+  if (userLogin.value) {
+    try {
+      const res = axios.post(`${GLOBAL_URL}/cart/add`, data, {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+      });
+      console.log(res);
+      const pushData = cart.value.map(item => ({
+        productId: item.productId,
+        quantity: item.quantity,
+      }));
+      await mergeMemberCart(pushData);
+      const fetchRes = await fetchMemeberCart();
+      // 스토어에서 장바구니 업데이트(store 랜더링)
+      cartStore.updateCart(fetchRes.data);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+};
 
 // 찜 클릭 이벤트
 const redHeart = ref(false);
