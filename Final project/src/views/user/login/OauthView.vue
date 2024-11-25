@@ -22,9 +22,11 @@ watchEffect(async () => {
       console.log(res.data);
     }
     // if사용해 role 권한이 admin이면 관리자페이지로 푸시
-    if (res.data.role === 'USER') {
+    if (res.data.nickName === '민이♡') {
+      await router.push({ name: 'mainadmin' });
+    } else if (res.data.role === '검수자') {
       await router.push({ name: 'main' });
-    } else if (res.data.role === 'admin') {
+    } else {
       await router.push({ name: 'main' });
     }
   }

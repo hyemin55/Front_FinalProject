@@ -5,6 +5,7 @@ import Footer from '@/components/layoutnav/Footer.vue';
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import AdminHeader from '@/components/admin/AdminHeader.vue';
 import { useUserStore } from '@/stores/Login';
+import MainAdminView from './views/admin/_MainAdminView.vue';
 
 const role = useUserStore();
 console.log(role.nickName);
@@ -37,7 +38,7 @@ onBeforeUnmount(() => {
     <div v-if="role.nickName === '민이♡'">
       <div>
         <AdminHeader></AdminHeader>
-        <RouterView />
+        <MainAdminView />
       </div>
     </div>
 

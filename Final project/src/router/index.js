@@ -74,7 +74,7 @@ const routers = createRouter({
       component: NotFoundPage,
     },
     {
-      path: '/',
+      path: '/mainadmin',
       name: 'mainadmin',
       component: MainAdminView,
       meta: { nickName: '민이♡' },
