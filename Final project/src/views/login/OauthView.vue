@@ -1,28 +1,34 @@
 <script setup>
-import { watchEffect } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { login, loginCheck } from '@/api/KakaoLoginApi'
-import { useUserStore } from '@/stores/Login'
-import LodingView from '@/views/loding/LodingView.vue'
+import { watchEffect } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { login, loginCheck } from '@/api/KakaoLoginApi';
+import { useUserStore } from '@/stores/Login';
+import LodingView from '@/views/loding/LodingView.vue';
 
-const route = useRoute()
-const router = useRouter()
-const useStore = useUserStore()
+const route = useRoute();
+const router = useRouter();
+const useStore = useUserStore();
 
 // 받은 인가코드로 토큰받아오기
 watchEffect(async () => {
   // console.log('code = ', route.query.code)
   if (route.query.code) {
-    let res = await login(route.query.code)
-    if (!res.status.toString().startsWith('2')) return
-    res = await loginCheck()
+    let res = await login(route.query.code);
+    if (!res.status.toString().startsWith('2')) return;
+    res = await loginCheck();
     if (res.status.toString().startsWith('2')) {
-      console.log(res.data)
-      await useStore.login(res.data)
+      console.log(res.data);
+      await useStore.login(res.data);
+      console.log(res.data);
     }
-    await router.push({ name: 'main' })
+    // if사용해 role 권한이 admin이면 관리자페이지로 푸시
+    if (res.data.role === 'USER') {
+      await router.push({ name: 'main' });
+    } else if (res.data.role === 'admin') {
+      await router.push({ name: 'main' });
+    }
   }
-})
+});
 
 // 프론트에서 모두 통신할때 사용한다.
 //   watchEffect(async () => {

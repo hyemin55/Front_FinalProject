@@ -5,8 +5,8 @@ import { formatPrice } from '@/FormatPrice';
 import _ProductDetailView from '@/views/product/productdetail/_ProductDetailView.vue';
 import { getProductData, getReviewData } from '@/api/productDetailApi';
 import ProductDetailSalseChartViewVue from './ProductDetailSalseChartView.vue';
-// import { useCartStore } from '@/stores/CartStore';
-// import { useUserStore } from '@/stores/Login';
+import { useCartStore } from '@/stores/CartStore';
+import { useUserStore } from '@/stores/Login';
 
 const route = useRoute();
 const router = useRouter();
@@ -18,12 +18,12 @@ const productDataOk = ref([]);
 const idx = ref(route.params.idx);
 const size = ref(route.query.size);
 
-// const cartStore = useCartStore();
+const cartStore = useCartStore();
 
 // 로그인 pinia
-// const userStore = useUserStore();
-// const userLogin = computed(() => userStore.loginCheck);
-// const emit = defineEmits();
+const userStore = useUserStore();
+const userLogin = computed(() => userStore.loginCheck);
+const emit = defineEmits();
 
 // 1. 클릭한 옵션값을 idx에 담아준다.
 const productOptionSelect = item => {
@@ -75,7 +75,7 @@ const BuyNow = () => {};
 
 // 장바구니 추가
 // const addToCart = async () => {
-//   cartStore.addItem(productDataOk);
+//   cartStore.addItem(productDataOk._value);
 //   console.log('찍었다.', productDataOk);
 //   alert('장바구니에 담았습니다.');
 
@@ -83,6 +83,7 @@ const BuyNow = () => {};
 //     const data = {
 //       productId: idx.value,
 //       quantity: 1,
+//       content: '내용담아보내기',
 //     };
 //     try {
 //       const res = axios.post(`${GLOBAL_URL}/cart/add`, data, {
@@ -103,7 +104,6 @@ const addToWishlist = () => {
   redHeart.value = !redHeart.value;
   if (redHeart.value == true) alert('༼ つ ◕_◕ ༽つ 찜~');
 };
-
 
 const isselectedSize = size => {
   return route.query.size === size.size.toString() && route.params.idx === size.productId.toString();
@@ -148,7 +148,7 @@ watchEffect(() => {
       <button class="addToCart Sell​​Now">바로 판매하기</button>
       <button class="addToCart BuyNow" @click="BuyNow">바로 구매하기</button>
       <!-- <button class="addToCart" @click="addToCart"> -->
-      <button class="icon_box">
+      <button class="icon_box" @click="addToCart">
         <img class="icon" src="@/assets/img/icon/free-icon-font-shopping-cart.svg" alt="" />
       </button>
       <button class="icon_box" :class="{ active: redHeart }" @click.stop="addToWishlist">
@@ -235,6 +235,7 @@ button.selectedSize {
   justify-content: center;
   font-size: 1.6rem;
   font-family: 'Pretendard-SemiBold';
+  color: white;
 }
 .Sell​​Now {
   width: 100%;
@@ -243,9 +244,8 @@ button.selectedSize {
 .BuyNow {
   width: 100%;
   background-color: var(--color-main-bloode);
-  color: white;
 }
-.icon_box{
+.icon_box {
   width: 85px;
   height: 35px;
   display: flex;
@@ -262,8 +262,7 @@ button.selectedSize {
   transition: filter 0.4s;
 }
 .icon_box.active {
-  background-color: var(--color-main-bloode);
+  background-color: orange;
   border: 0.5px solid var(-color-main-bloode);
 }
-
 </style>

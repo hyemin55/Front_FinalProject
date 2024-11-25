@@ -201,9 +201,11 @@ watchEffect(() => {
       <p>6개월</p>
       <p class="chartCycleFix">전체</p>
     </div>
-    <figcaption>
-      <canvas ref="chartRef" style="height: 250px; width: 100%"></canvas>
-    </figcaption>
+    <div class="elseChartImg">
+      <img src="@/assets/img/chartImg.png" alt="" />
+      <p class="overlay_text">거래 내역이 없어요</p>
+      <!-- <canvas ref="chartRef" style="height: 250px; width: 100%"></canvas> -->
+    </div>
 
     <div class="TransactionHistory">
       <h2>체결 내역</h2>
@@ -257,12 +259,37 @@ watchEffect(() => {
   cursor: pointer;
 }
 figcaption {
+  width: 100%;
   height: 250px;
   margin: 10px 0;
   border-radius: 5px;
-  background-color: var(--color-main-Lgray);
+  background-color: var(--color-main-pink);
   padding: 1%;
   /* background-color: rgb(245, 206, 206); */
+}
+.elseChartImg {
+  width: 100%;
+  height: 250px;
+  margin: 10px 0;
+  border-radius: 5px;
+  background-color: var(--color-main-pink);
+  padding: 1%;
+  position: relative;
+}
+.elseChartImg > img {
+  width: 100%;
+  height: auto;
+  filter: blur(3px);
+}
+.overlay_text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.5rem;
+  /* background-color: var(--color-main-gray); */
+  padding: 1%;
+  border-radius: 10px;
 }
 .TransactionHistory {
   margin: 20px 0 -10px 10px;

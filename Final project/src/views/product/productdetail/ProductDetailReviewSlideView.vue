@@ -7,7 +7,6 @@ import { getReviewImageList } from '@/api/productDetailApi';
 import { GLOBAL_URL } from '@/api/util';
 import ProductPhotoModalView from './ProductPhotoModalView.vue';
 
-
 const route = useRoute();
 const idx = ref(route.params.idx);
 const slides = ref([]);
@@ -26,7 +25,9 @@ function closeModal() {
 
 const reviewImgsData = async () => {
   const reviewImageList = await getReviewImageList(idx.value);
+  console.log(reviewImageList.data);
   slides.value = reviewImageList.data;
+  console.log(slides.value.length);
 };
 
 const config = {
@@ -44,12 +45,12 @@ watchEffect(() => {
 <template>
   <Carousel v-bind="config" id="ReviewSlide">
     <template v-if="slides.length == 0 || slides.length == null">
-      <div class="carousel__item"><img src="" alt="" /></div>
+      {{ slides.length }}
       <p>아직 등록된 사진이 없어요ㅠㅡㅠ</p>
     </template>
     <template v-else>
       <Slide v-for="(slide, index) in slides" :key="index">
-        <div class="carousel__item"><img :src="`${GLOBAL_URL}/api/file/download/${slide.filename}`" alt="" @click="openModal(slide.filename)"/></div>
+        <div class="carousel__item"><img :src="`${GLOBAL_URL}/api/file/download/${slide.filename}`" alt="" @click="openModal(slide.filename)" /></div>
       </Slide>
     </template>
     <template #addons>
