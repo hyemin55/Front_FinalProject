@@ -1,7 +1,7 @@
 <script setup>
 import { RouterLink, RouterView, useRoute } from 'vue-router';
-import Header from '@/components/layoutnav/Header.vue';
-import Footer from '@/components/layoutnav/Footer.vue';
+import Header from '@/components/user/layoutnav/Header.vue';
+import Footer from '@/components/user/layoutnav/Footer.vue';
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import AdminHeader from '@/components/admin/AdminHeader.vue';
 import { useUserStore } from '@/stores/Login';
@@ -38,7 +38,7 @@ onBeforeUnmount(() => {
     <div v-if="role.nickName === '민이♡'">
       <div>
         <AdminHeader></AdminHeader>
-        <MainAdminView />
+        <RouterView />
       </div>
     </div>
 

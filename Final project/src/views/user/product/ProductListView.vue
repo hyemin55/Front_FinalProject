@@ -1,6 +1,6 @@
 <script setup>
 import { GLOBAL_URL } from '@/api/util';
-import ProductComponent from '@/components/ProductComponent.vue';
+import ProductComponent from '@/components/user/ProductComponent.vue';
 import { useInfiniteQuery } from '@tanstack/vue-query';
 import axios from 'axios';
 import { computed, onMounted, ref, watch, watchEffect } from 'vue';
