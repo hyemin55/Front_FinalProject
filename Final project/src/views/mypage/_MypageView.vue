@@ -10,6 +10,7 @@ import MypageCurrentSituationView from './MypageCurrentSituationView.vue'
 
 const user = useUserStore()
 onMounted(() => {})
+
 const profileImage = sessionStorage.getItem('profileImage')
 
 const selectpage = ref('myOrderHistory')
