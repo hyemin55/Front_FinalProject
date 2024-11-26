@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <h1>MainAdmin</h1>
-  </div>
+  <div>orderManagement</div>
 </template>
 
 <script setup></script>

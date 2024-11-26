@@ -2,7 +2,6 @@
 import { useUserStore } from '@/stores/Login';
 import { ref, watchEffect, onMounted, onUpdated, nextTick } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { logout } from '@/api/KakaoLoginApi';
 import { eventBus } from '@/eventBus';
 import { useCartStore } from '@/stores/CartStore';
 
