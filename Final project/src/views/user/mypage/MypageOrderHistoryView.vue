@@ -1,12 +1,12 @@
 <script setup>
-import HistoryProduct from '@/components/HistoryProduct.vue';
+import HistoryProduct from '@/components/user/HistoryProduct.vue';
 import { ref } from 'vue';
 
 const props = ref({
-  text01:'주문',
-  text02:'주문',
-  text03:'배송'
-})
+  text01: '주문',
+  text02: '주문',
+  text03: '배송',
+});
 </script>
 
 <template>
