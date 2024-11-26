@@ -9,8 +9,8 @@ import MypageReviewView from './MypageReviewView.vue'
 import MypageCurrentSituationView from './MypageCurrentSituationView.vue'
 
 const user = useUserStore()
-
 onMounted(() => {})
+
 const profileImage = sessionStorage.getItem('profileImage')
 
 const selectpage = ref('myOrderHistory')
@@ -49,7 +49,8 @@ const currentComponent = computed(() => componentMap[selectpage.value])
         <component :is="currentComponent"></component>
       </article>
     </main>
-  </section>
+
+</section>
 </template>
 
 <style scoped>
@@ -119,14 +120,15 @@ const currentComponent = computed(() => componentMap[selectpage.value])
 }
 #currentSituation {
   /* position: relative; */
-  padding: 15px 3%;
-  /* background-color: aquamarine; */
-  height: 400px;
+  margin: 15px 0 15px 3%;
+  /* background-color: rgb(247, 247, 247); */
+  height: 300px;
 }
 #myDetailInfo {
   /* position: relative; */
-  padding: 15px 3%;
-  /* background-color: brown; */
-  height: 400px;
+  /* padding: 15px 3%; */
+  margin: 15px 0 15px 3%;
+  /* background-color: rgb(207, 232, 255); */
+  height: auto;
 }
 </style>
