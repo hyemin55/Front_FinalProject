@@ -13,7 +13,7 @@
 }
 a {
   text-decoration: none;
-  color: black;
+  color: white;
 }
 ul,
 ol {
@@ -40,7 +40,7 @@ button {
   text-decoration: none;
   box-sizing: border-box;
 }
-input[type="checkbox"] {
+input[type='checkbox'] {
   cursor: pointer;
 }
 

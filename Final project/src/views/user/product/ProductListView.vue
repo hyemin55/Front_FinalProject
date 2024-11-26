@@ -4,7 +4,7 @@ import ProductComponent from '@/components/user/ProductComponent.vue';
 import { useInfiniteQuery } from '@tanstack/vue-query';
 import axios from 'axios';
 import { computed, onMounted, ref, watch, watchEffect } from 'vue';
-import { onBeforeRouteLeave, useRoute } from 'vue-router';
+import { useRoute } from 'vue-router';
 // ../../product/productFilter.vue
 // const sortedList = ref([])  // 정렬된 리스트
 const sortTitle = ref('추천순 ⇅');

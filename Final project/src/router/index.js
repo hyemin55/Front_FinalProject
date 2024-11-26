@@ -92,7 +92,7 @@ const routers = createRouter({
 routers.beforeEach((to, from, next) => {
   const userStore = useUserStore();
   const userRole = userStore.nickName;
-  if (to.meta.nickName && to.meta.nickName !== userRole) {
+  if (to.meta.nickName && to.meta.nickName !== '민이♡') {
     return next('/main');
   }
   next();
