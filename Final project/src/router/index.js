@@ -39,6 +39,7 @@ const adminRouters = [
       {
         path: 'mainDashboard',
         name: 'mainDashboard',
+        meta: {role:'admin'},
         component: _MainDashboardView,
       },
       {
@@ -137,14 +138,16 @@ const routers = createRouter({
 });
 
 routers.beforeEach(async (to, from, next) => {
-  const userStore = useUserStore();
-  if (to.meta.nickName) {
+  const useStore = useUserStore();
+ let res = [null];
+  if (to.meta.nickName) { // 관리자페이지들어가면 무조건 작동
+    
     if (sessionStorage.getItem('token')) {
-      const res = await loginCheck();
-      userStore.login(res.data);
-      const userRole = userStore.nickName;
+      res = await loginCheck();
+      useStore.login(res.data); //스토어 등록
+      const userRole = useStore.nickName;
       if (to.meta.nickName === '민이♡' && userRole !== '민이♡') {
-        console.log('index 경로이동실패', userStore.nickName);
+        console.log('index 경로이동실패', useStore.nickName);
         alert('관리자 권한이 없습니다.');
         return next('/');
       } else if (to.meta.nickName === '민이♡' && userRole === '민이♡') {
@@ -153,9 +156,14 @@ routers.beforeEach(async (to, from, next) => {
       }
     }
     alert('로그인이 필요한 페이지입니다.');
-    return next('/');
+    return next('/login2');
+
+  }
+  else if(useStore.loginCheck){
+  // useStore.login(); //스토어 등록
+  return next();
   }
   next();
-  console.log('next로 이동', userStore.nickName);
+  console.log('next로 이동', useStore.nickName);
 });
 export default routers;

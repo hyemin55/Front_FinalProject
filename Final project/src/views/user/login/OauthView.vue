@@ -18,6 +18,7 @@ watchEffect(async () => {
     let res = await login(route.query.code);
     if (!res.status.toString().startsWith('2')) return;
     res = await loginCheck();
+    useStore.login(res.data); //스토어 등록
     console.log(res.data);
     if (res.status.toString().startsWith('2')) {
       console.log(res.data);

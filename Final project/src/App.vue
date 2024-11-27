@@ -2,13 +2,13 @@
 import { RouterView, useRoute } from 'vue-router';
 import Header from '@/components/user/layoutnav/Header.vue';
 import Footer from '@/components/user/layoutnav/Footer.vue';
-import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { onBeforeMount, onBeforeUnmount, onMounted, ref } from 'vue';
 import AdminHeader from '@/components/admin/layoutnav/AdminHeader.vue';
 import { useUserStore } from '@/stores/Login';
 import Adminnav from '@/components/admin/layoutnav/Adminnav.vue';
 
-const role = useUserStore();
-console.log(role.nickName);
+const data = useUserStore();
+// console.log(role.nickName);
 const route = useRoute();
 
 // window height의 높이에서 scrollTop 을 뺀 값을 변수로 잡아서
@@ -24,7 +24,10 @@ const pageUp = () => {
 const pageDown = () => {
   window.scrollTo({ top: 30000, behavior: 'smooth' });
 };
-
+onBeforeMount(()=>{
+  // data.loginCheck === 'true'
+  
+})
 onMounted(() => {
   window.addEventListener('scroll', scrollHeight);
 });
@@ -34,8 +37,8 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div>
-    <div v-if="role.nickName === '민이♡'">
+  <div> 
+    <div v-if="data.nickName === '민이♡'">
       <div>
         <AdminHeader></AdminHeader>
         <div class="adminLayout">
@@ -47,11 +50,11 @@ onBeforeUnmount(() => {
 
     <div v-else>
       <Header></Header>
-
+      
       <div class="min-height">
         <RouterView />
       </div>
-
+      
       <Footer></Footer>
     </div>
 
