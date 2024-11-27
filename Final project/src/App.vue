@@ -5,7 +5,7 @@ import Footer from '@/components/user/layoutnav/Footer.vue';
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import AdminHeader from '@/components/admin/layoutnav/AdminHeader.vue';
 import { useUserStore } from '@/stores/Login';
-import Adminnav from './components/admin/layoutnav/Adminnav.vue';
+import Adminnav from '@/components/admin/layoutnav/Adminnav.vue';
 
 const role = useUserStore();
 console.log(role.nickName);

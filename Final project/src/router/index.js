@@ -9,13 +9,14 @@ import { createRouter, createWebHistory } from 'vue-router';
 import PaymentView from '@/views/user/payment/_PaymentView.vue';
 import NotFoundPage from '@/views/loding/NotFoundPage.vue';
 import { useUserStore } from '@/stores/Login';
-import AnnouncementView from '@/views/admin/announcementVIew.vue';
 import OrderManagementView from '@/views/admin/OrderManagementView.vue';
 import ProductManagementView from '@/views/admin/ProductManagementView.vue';
 import ReviewManagementView from '@/views/admin/ReviewManagementView.vue';
 import StatisticsView from '@/views/admin/StatisticsView.vue';
 import UserManagementView from '@/views/admin/UserManagementView.vue';
 import _MainDashboardView from '@/views/admin/_MainDashboardView.vue';
+import AnnouncementView from '@/views/admin/AnnouncementView.vue';
+import { loginCheck } from '@/api/KakaoLoginApi';
 
 const loginRouters = [
   {
@@ -36,7 +37,7 @@ const adminRouters = [
     meta: { nickName: '민이♡' }, // 공통 meta
     children: [
       {
-        path: '/mainDashboard',
+        path: 'mainDashboard',
         name: 'mainDashboard',
         component: _MainDashboardView,
       },
@@ -134,12 +135,27 @@ const routers = createRouter({
     return { top: 0 };
   },
 });
-// routers.beforeEach((to, from, next) => {
-//   const userStore = useUserStore();
-//   const userRole = userStore.nickName;
-//   if (to.meta.nickName && to.meta.nickName !== '민이♡') {
-//     return next('/main');
-//   }
-//   next();
-// });
+
+routers.beforeEach(async (to, from, next) => {
+  const userStore = useUserStore();
+  if (to.meta.nickName) {
+    if (sessionStorage.getItem('token')) {
+      const res = await loginCheck();
+      userStore.login(res.data);
+      const userRole = userStore.nickName;
+      if (to.meta.nickName === '민이♡' && userRole !== '민이♡') {
+        console.log('index 경로이동실패', userStore.nickName);
+        alert('관리자 권한이 없습니다.');
+        return next('/');
+      } else if (to.meta.nickName === '민이♡' && userRole === '민이♡') {
+        alert('관리자 페이지로 이동합니다.');
+        return next();
+      }
+    }
+    alert('로그인이 필요한 페이지입니다.');
+    return next('/');
+  }
+  next();
+  console.log('next로 이동', userStore.nickName);
+});
 export default routers;
