@@ -6,6 +6,7 @@ import { useCartStore } from '@/stores/CartStore';
 import axios from 'axios';
 import { useUserStore } from '@/stores/Login';
 import { wishClick } from '@/api/wishApi';
+import { addCartDatabase } from '@/api/cartApi';
 // import { useQueryClient } from '@tanstack/vue-query';
 // import { getProductData, getReviewData, getReviewImageList, getSlideImages, getstarCounting } from '@/api/productDetail';
 
@@ -24,16 +25,7 @@ const addToCart = () => {
       productId: props.productInfo.productId,
       quantity: 1,
     };
-    try {
-      const res = axios.post(`${GLOBAL_URL}/cart/add`, data, {
-        headers: {
-          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-        },
-      });
-      console.log(res);
-    } catch (e) {
-      console.log(e);
-    }
+    addCartDatabase(data);
   }
 };
 

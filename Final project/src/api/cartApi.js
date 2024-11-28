@@ -28,3 +28,18 @@ export const mergeMemberCart = async pushData => {
     console.error(error);
   }
 };
+
+// DB 장바구니에 데이터 추가
+export const addCartDatabase=(data)=>{
+  try {
+    const res = axios.post(`${GLOBAL_URL}/cart/add`, data, {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+      },
+    });
+    console.log(res);
+  } catch (e) {
+    console.log(e);
+  }
+}
+

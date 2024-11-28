@@ -2,11 +2,20 @@
 import { GLOBAL_URL } from '@/api/util';
 import { wishClick, wishList } from '@/api/wishApi';
 import { useCartStore } from '@/stores/CartStore';
-import { ref, watchEffect } from 'vue';
+import { useUserStore } from '@/stores/Login';
+import { computed, ref, watch, watchEffect } from 'vue';
 
-const cartStore = useCartStore();
+// 로그인 pinia
+const userStore = useUserStore();
+const userLogin = computed(() => userStore.loginCheck);
+// 장바구니 pinia
+// const cartStore = useCartStore();
+
 const isChecked = ref(false);
-
+const allChecked = ref(false);
+const allCheck=()=>{
+  isChecked.value = allChecked.value;
+}
 
 
 // 찜 목록 정보를 DB에서 가져옴.
@@ -24,16 +33,28 @@ watchEffect(()=>{
 
 // 찜목록 삭제
 const wishDelete = async(productId)=>{
-  await wishClick(productId)
-  console.log('찜목록 삭제')  
-  await LoadingwishList();
+  if(isChecked.value == true){
+    await wishClick(productId)
+    console.log('찜목록 삭제')  
+    await LoadingwishList();
+  }else{
+    alert("선택된 제품이 없습니다.")
+  }
 }
-
+  
 // 장바구니 담기
-// 로그인 되고 마이페이지에서 진행이 때문에 무조건 DB로 들어가고 머지, 안그럼 오류
 const addCart = (productId)=>{
-  console.log('장바구니 담기')
-  // cartStore.addItem(productId);
+  // cartStore.addItem(props.productInfo); - pinia에 정보를 담아야함. productInfo 뭐가 들어오는지 봐야함.
+  if (userLogin.value && isChecked.value == true) {
+    const data = {
+      productId: productId,
+      quantity: 1,
+    };
+    alert('장바구니에 담았습니다.');
+    addCartDatabase(data);
+  }else{
+    alert('선택된 제품이 없습니다.');
+  }
 }
 </script>
 
@@ -42,13 +63,13 @@ const addCart = (productId)=>{
   <div>
     <h1 class="wishlist_title">찜 목록</h1>
     <div class="product_select">
-      <p><input id="allcheck" type="checkbox" /><label for="allcheck">전체 선택</label></p>
+      <p><input id="allcheck" type="checkbox" @change="allCheck" v-model="allChecked"/><label for="allcheck">전체 선택</label></p>
       <p>선택 삭제하기</p>
     </div>
 
     <!-- 상품 컴포넌트 -->
     <div class="wish_product" v-for="(product, index) in data" key="index">
-      <input class="pro_check" type="checkbox" v-model="isChecked"/>
+      <input class="pro_check" @change="isCheck" type="checkbox" v-model="isChecked"/>
 
       <div class="product_box">
         <div class="img_box">
@@ -60,6 +81,7 @@ const addCart = (productId)=>{
           <li>옵션 : {{ product.size }}</li>
         </ul>
       </div>
+
       <div class="btn">
         <div class="cart_btn" @click="addCart(product.productId)">장바구니 담기</div>
         <div class="delet_btn" @click="wishDelete(product.productId)">삭제</div>
