@@ -250,7 +250,7 @@ const filterData = [
 .product_fillter_form {
   position: sticky;
   top: 200px;
-  width: 305px;
+  width: 270px;
   height: 700px;
   background-color: #e9e9e9;
   /* background-color: indianred; */

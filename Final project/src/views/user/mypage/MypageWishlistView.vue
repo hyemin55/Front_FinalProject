@@ -1,14 +1,42 @@
 <script setup>
+import { GLOBAL_URL } from '@/api/util';
+import { wishClick, wishList } from '@/api/wishApi';
+import { useCartStore } from '@/stores/CartStore';
+import { ref, watchEffect } from 'vue';
 
-const addCart = ()=>{
+const cartStore = useCartStore();
+const isChecked = ref(false);
+
+
+
+// 찜 목록 정보를 DB에서 가져옴.
+const data = ref();
+const LoadingwishList = async()=>{
+  const wishListData = await wishList();
+  data.value = wishListData; 
+  console.log(data.value)
+}
+
+// 화면 랜더링
+watchEffect(()=>{
+  LoadingwishList();
+})
+
+// 찜목록 삭제
+const wishDelete = async(productId)=>{
+  await wishClick(productId)
+  console.log('찜목록 삭제')  
+  await LoadingwishList();
+}
+
+// 장바구니 담기
+// 로그인 되고 마이페이지에서 진행이 때문에 무조건 DB로 들어가고 머지, 안그럼 오류
+const addCart = (productId)=>{
   console.log('장바구니 담기')
+  // cartStore.addItem(productId);
 }
-const wishDelete = ()=>{
-  console.log('찜목록 삭제')
-}
-
-
 </script>
+
 
 <template>
   <div>
@@ -19,22 +47,22 @@ const wishDelete = ()=>{
     </div>
 
     <!-- 상품 컴포넌트 -->
-    <div class="wish_product">
-      <input class="pro_check" type="checkbox" />
+    <div class="wish_product" v-for="(product, index) in data" key="index">
+      <input class="pro_check" type="checkbox" v-model="isChecked"/>
 
       <div class="product_box">
         <div class="img_box">
-          <img src="@/assets/img/빵빵덕복숭아.png" alt="" />
+          <img :src="`${GLOBAL_URL}/api/file/download/${product.mainImage}`" alt="" />
         </div>
         <ul class="content_box">
-          <li>상품명 :</li>
-          <li>가격 :</li>
-          <li>옵션 :</li>
+          <li>상품명 : {{ product.productName }}</li>
+          <li>가격 : {{ product.productPrice }}</li>
+          <li>옵션 : {{ product.size }}</li>
         </ul>
       </div>
       <div class="btn">
-        <div class="cart_btn" @click="addCart">장바구니 담기</div>
-        <div class="delet_btn" @click="wishDelete">삭제</div>
+        <div class="cart_btn" @click="addCart(product.productId)">장바구니 담기</div>
+        <div class="delet_btn" @click="wishDelete(product.productId)">삭제</div>
       </div>
     </div>
   

@@ -5,18 +5,18 @@ import { computed, ref, watch } from 'vue';
 import { useCartStore } from '@/stores/CartStore';
 import axios from 'axios';
 import { useUserStore } from '@/stores/Login';
+import { wishClick } from '@/api/wishApi';
 // import { useQueryClient } from '@tanstack/vue-query';
 // import { getProductData, getReviewData, getReviewImageList, getSlideImages, getstarCounting } from '@/api/productDetail';
 
 // 로그인 pinia
-const userStore = useUserStore(); 
+const userStore = useUserStore();
 const userLogin = computed(() => userStore.loginCheck);
 
 // 장바구니 추가
 const cartStore = useCartStore();
 const addToCart = () => {
-  
-  alert("장바구니에 담았습니다.")
+  alert('장바구니에 담았습니다.');
   console.log('props.productInfo', props.productInfo);
   cartStore.addItem(props.productInfo);
   if (userLogin.value) {
@@ -37,32 +37,6 @@ const addToCart = () => {
   }
 };
 
-// const productClient = useQueryClient();
-// 찜목록 추가
-const redHeart = ref(false);
-const iconClick = ref(false); // 찜하트 css
-
-const addToWishlist = () => {
-  redHeart.value = !redHeart.value;
-  iconClick.value = !iconClick.value; // 찜하트 css
-
-  // productClient.prefetchQuery(['productSlideImage', props.productInfo.productId], ()=>{
-  //   getSlideImages(props.productInfo.productId)
-  // })
-  // productClient.prefetchQuery(['productProductData', props.productInfo.productId], ()=>{
-  //   getProductData(props.productInfo.productId)
-  // })
-  // productClient.prefetchQuery(['productStarCount', props.productInfo.productId], ()=>{
-  //   getstarCounting(props.productInfo.productId)
-  // })
-  // productClient.prefetchQuery(['productReviewImage', props.productInfo.productId], ()=>{
-  //   getReviewImageList(props.productInfo.productId)
-  // })
-  // productClient.prefetchQuery(['productReviewData', props.productInfo.productId], ()=>{
-  //   getReviewData(props.productInfo.productId)
-  // })
-};
-
 // 단위 변경
 // const unit = ref('ml');
 // watch(() => categoryTitle.value, (newTitle) => {
@@ -79,7 +53,6 @@ const props = defineProps({
   },
 });
 
-// 3. defineProps으로 정의한 명령어를 변수로 정리하는 부분입니다.
 const productName = ref(props.productInfo.productName || '상품이름');
 const content = ref(props.productInfo.content || '상품설명');
 const price = ref(props.productInfo.price || '가격');
@@ -99,11 +72,16 @@ const navDetailProduct = () => {
   });
 };
 
-const popup = document.querySelector('.cart_pop')
-// const popup_close = document.querySelector('.cart_pop_close')
+// 찜목록 추가
+const redHeart = ref(false);
+const iconClick = ref(false); // 찜하트 css
 
- 
+const addToWishlist = async () => {
+  redHeart.value = !redHeart.value;
+  iconClick.value = !iconClick.value; // 찜하트 css
 
+  wishClick(props.productInfo.productId);
+};
 </script>
 
 <template>
@@ -143,12 +121,6 @@ const popup = document.querySelector('.cart_pop')
 </template>
 
 <style scoped>
-.cart_pop{
-  width: 500px;
-  height: 500px;
-  background-color: antiquewhite;
-}
-
 /* 전체설정 */
 .products {
   max-width: 305px;
