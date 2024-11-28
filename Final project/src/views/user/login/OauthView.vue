@@ -22,7 +22,7 @@ watchEffect(async () => {
     console.log(res.data);
     if (res.status.toString().startsWith('2')) {
       console.log(res.data);
-    }
+    } else return;
     // if사용해 role 권한이 admin이면 관리자페이지로 푸시
     if (res.data.nickName === '민이♡') {
       console.log('관리자페이지로이동');

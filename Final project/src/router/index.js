@@ -39,7 +39,7 @@ const adminRouters = [
       {
         path: 'mainDashboard',
         name: 'mainDashboard',
-        meta: {role:'admin'},
+        meta: { role: 'admin' },
         component: _MainDashboardView,
       },
       {
@@ -139,9 +139,10 @@ const routers = createRouter({
 
 routers.beforeEach(async (to, from, next) => {
   const useStore = useUserStore();
- let res = [null];
-  if (to.meta.nickName) { // 관리자페이지들어가면 무조건 작동
-    
+  let res = [null];
+  if (to.meta.nickName) {
+    // 관리자페이지들어가면 무조건 작동
+
     if (sessionStorage.getItem('token')) {
       res = await loginCheck();
       useStore.login(res.data); //스토어 등록
@@ -151,17 +152,15 @@ routers.beforeEach(async (to, from, next) => {
         alert('관리자 권한이 없습니다.');
         return next('/');
       } else if (to.meta.nickName === '민이♡' && userRole === '민이♡') {
-        alert('관리자 페이지로 이동합니다.');
+        // alert('관리자 페이지로 이동합니다.');
         return next();
       }
     }
     alert('로그인이 필요한 페이지입니다.');
     return next('/login2');
-
-  }
-  else if(useStore.loginCheck){
-  // useStore.login(); //스토어 등록
-  return next();
+  } else if (useStore.loginCheck) {
+    // useStore.login(); //스토어 등록
+    return next();
   }
   next();
   console.log('next로 이동', useStore.nickName);

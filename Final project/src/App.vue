@@ -24,10 +24,7 @@ const pageUp = () => {
 const pageDown = () => {
   window.scrollTo({ top: 30000, behavior: 'smooth' });
 };
-onBeforeMount(()=>{
-  // data.loginCheck === 'true'
-  
-})
+
 onMounted(() => {
   window.addEventListener('scroll', scrollHeight);
 });
@@ -37,7 +34,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div> 
+  <div>
     <div v-if="data.nickName === '민이♡'">
       <div>
         <AdminHeader></AdminHeader>
@@ -50,11 +47,11 @@ onBeforeUnmount(() => {
 
     <div v-else>
       <Header></Header>
-      
+
       <div class="min-height">
         <RouterView />
       </div>
-      
+
       <Footer></Footer>
     </div>
 
