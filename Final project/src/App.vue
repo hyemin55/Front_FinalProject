@@ -6,7 +6,6 @@ import { onBeforeMount, onBeforeUnmount, onMounted, ref } from 'vue';
 import AdminHeader from '@/components/admin/layoutnav/AdminHeader.vue';
 import { useUserStore } from '@/stores/Login';
 import AdminNav from '@/components/admin/layoutnav/AdminNav.vue';
-import AppraiserNav from './components/appraiser/layoutnav/AppraiserNav.vue';
 
 const data = useUserStore();
 // console.log(role.nickName);
@@ -39,24 +38,14 @@ onBeforeUnmount(() => {
     <div v-if="data.role === 'ADMIN'">
       <div>
         <AdminHeader></AdminHeader>
-        <div class="adminLayout">
+        <div>
           <AdminNav></AdminNav>
           <RouterView class="MainAdmin" />
         </div>
       </div>
     </div>
 
-    <div v-if="data.nickName === '민이♡'">
-      <div>
-        <AdminHeader></AdminHeader>
-        <div class="adminLayout">
-          <AppraiserNav></AppraiserNav>
-          <RouterView class="MainAdmin" />
-        </div>
-      </div>
-    </div>
-
-    <div v-else>
+    <!-- <div v-else>
       <Header></Header>
 
       <div class="min-height">
@@ -64,7 +53,7 @@ onBeforeUnmount(() => {
       </div>
 
       <Footer></Footer>
-    </div>
+    </div> -->
 
     <div class="scroll_btn pagaUp" v-if="isScrolled" @click="pageUp">
       <img src="@/assets/img/icon/up.svg" alt="" />
@@ -76,9 +65,6 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
-.adminLayout {
-  display: flex;
-}
 .min-height {
   min-height: calc(100vh - 320px);
 }

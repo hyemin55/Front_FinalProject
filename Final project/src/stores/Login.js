@@ -4,13 +4,13 @@ import image1234 from '@/assets/img/빵빵덕세안.png';
 export const useUserStore = defineStore('member', {
   state: () => ({
     loginCheck: false,
-    nickName: '',
+    nickName: '민이♡',
     thumbnail: '',
     profileImage: '',
     email: '',
     userId: '',
     snsType: '',
-    role: '',
+    role: 'ADMIN',
   }),
   //   data를 받아오면 위의 상태안에 값을 넣고 레이아웃네비뷰의 watchEffect로 다시 넘겨준다.
   actions: {

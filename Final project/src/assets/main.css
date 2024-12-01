@@ -53,8 +53,8 @@ input[type='checkbox'] {
   min-height: calc(100vh - 70px);
   width: calc(100vw - 200px);
   margin: 70px 0 0 200px;
-  padding: 10px 0 0 10px;
-  /* background-color: brown; */
+  padding: 10px 10px 0 10px;
+  background-color: var(--color-main-Lgray);
 }
 /* @media (hover: hover) {
   a:hover {

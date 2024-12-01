@@ -148,7 +148,7 @@ watch(
 
   <template v-if="reviewCount == 0 || reviewCount == null">
     <div id="userReviewList" class="border noUserReviewList">
-      <img src="@/assets/img/free-icon-font-note-sticky-9798415.svg" alt="" />
+      <img src="@/assets/img/icon/free-icon-font-note-sticky-9798415.svg" alt="" />
       <p>아직 리뷰가 등록되지 않았어요 ㅠㅡㅠ</p>
     </div>
   </template>

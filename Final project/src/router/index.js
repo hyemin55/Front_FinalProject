@@ -14,9 +14,9 @@ import ProductManagementView from '@/views/admin/ProductManagementView.vue';
 import ReviewManagementView from '@/views/admin/ReviewManagementView.vue';
 import StatisticsView from '@/views/admin/StatisticsView.vue';
 import UserManagementView from '@/views/admin/UserManagementView.vue';
-import _MainDashboardView from '@/views/admin/_MainDashboardView.vue';
+import MainDashboardView from '@/views/admin/_MainDashboardView.vue';
 import { loginCheck } from '@/api/KakaoLoginApi';
-import _MainInspectionListView from '@/views/appraiser/_MainInspectionListView.vue';
+import MainInspectionListView from '@/views/appraiser/_MainInspectionListView.vue';
 import ApprovedListView from '@/views/appraiser/ApprovedListView.vue';
 import PetListView from '@/views/appraiser/PetListView.vue';
 import AnnouncementView from '@/views/admin/AnnouncementView.vue';
@@ -39,12 +39,12 @@ const loginRouters = [
 const adminRouters = [
   {
     path: '/',
-    meta: { role: 'admin' }, // 공통 meta
+    // meta: { role: 'admin' }, // 공통 meta
     children: [
       {
         path: 'mainDashboard',
         name: 'mainDashboard',
-        component: _MainDashboardView,
+        component: MainDashboardView,
       },
       {
         path: 'announcement',
@@ -84,12 +84,12 @@ const adminRouters = [
 const appraiserRouters = [
   {
     path: '/',
-    meta: { role: 'appraiser' }, // 공통 meta
+    // meta: { role: 'appraiser' }, // 공통 meta
     children: [
       {
         path: 'mainInspectionList',
         name: 'mainInspectionList',
-        component: _MainInspectionListView,
+        component: MainInspectionListView,
       },
       {
         path: 'approvedList',
@@ -173,35 +173,35 @@ const routers = createRouter({
   },
 });
 
-routers.beforeEach(async (to, from, next) => {
-  const useStore = useUserStore();
-  let res = [null];
-  if (to.meta.role) {
-    // 관리자페이지들어가면 무조건 작동
+// routers.beforeEach(async (to, from, next) => {
+//   const useStore = useUserStore();
+//   let res = [null];
+//   if (to.meta.role) {
+//     // 관리자페이지들어가면 무조건 작동
 
-    if (sessionStorage.getItem('token')) {
-      res = await loginCheck();
-      useStore.login(res.data); //스토어 등록
-      const userRole = useStore.role;
-      if ((to.meta.role === 'admin' && userRole !== 'ADMIN') || useStore.nickName !== '민이♡') {
-        console.log('index 경로이동실패', useStore.role);
-        alert('관리자 권한이 없습니다.');
-        return next('/');
-      } else if (to.meta.role === 'admin' && userRole === 'ADMIN') {
-        alert('관리자 페이지로 이동합니다.');
-        return next();
-      } else if (to.meta.role === 'appraiser' && useStore.nickName === '민이♡') {
-        alert('검수자 페이지로 이동합니다.');
-        return next();
-      }
-    }
-    alert('로그인이 필요한 페이지입니다.');
-    return next('/login2');
-  } else if (useStore.loginCheck) {
-    // useStore.login(); //스토어 등록
-    return next();
-  }
-  next();
-  console.log('next로 이동', useStore.role);
-});
+//     if (sessionStorage.getItem('token')) {
+//       res = await loginCheck();
+//       useStore.login(res.data); //스토어 등록
+//       const userRole = useStore.role;
+//       if ((to.meta.role === 'admin' && userRole !== 'ADMIN') || useStore.nickName !== '민이♡') {
+//         console.log('index 경로이동실패', useStore.role);
+//         alert('관리자 권한이 없습니다.');
+//         return next('/');
+//       } else if (to.meta.role === 'admin' && userRole === 'ADMIN') {
+//         alert('관리자 페이지로 이동합니다.');
+//         return next();
+//       } else if (to.meta.role === 'appraiser' && useStore.nickName === '민이♡') {
+//         alert('검수자 페이지로 이동합니다.');
+//         return next();
+//       }
+//     }
+//     alert('로그인이 필요한 페이지입니다.');
+//     return next('/login2');
+//   } else if (useStore.loginCheck) {
+//     // useStore.login(); //스토어 등록
+//     return next();
+//   }
+//   next();
+//   console.log('next로 이동', useStore.role);
+// });
 export default routers;
