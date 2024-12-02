@@ -11,39 +11,39 @@ const userLogin = computed(() => userStore.loginCheck);
 // 장바구니 pinia
 // const cartStore = useCartStore();
 
-const isChecked = ref(false);
 const allChecked = ref(false);
-const allCheck=()=>{
-  isChecked.value = allChecked.value;
-}
-
+const allCheck = () => {
+  data.value.forEach(product => {
+    product.isChecked = allChecked.value;
+  });
+};
 
 // 찜 목록 정보를 DB에서 가져옴.
-const data = ref();
-const LoadingwishList = async()=>{
+const data = ref([]);
+const LoadingwishList = async () => {
   const wishListData = await wishList();
-  data.value = wishListData; 
-  console.log(data.value)
-}
+  data.value = wishListData;
+  console.log(data.value);
+};
 
 // 화면 랜더링
-watchEffect(()=>{
+watchEffect(() => {
   LoadingwishList();
-})
+});
 
 // 찜목록 삭제
-const wishDelete = async(productId)=>{
-  if(isChecked.value == true){
-    await wishClick(productId)
-    console.log('찜목록 삭제')  
+const wishDelete = async productId => {
+  if (product.isChecked == true) {
+    await wishClick(productId);
+    console.log('찜목록 삭제');
     await LoadingwishList();
-  }else{
-    alert("선택된 제품이 없습니다.")
+  } else {
+    alert('선택된 제품이 없습니다.');
   }
-}
-  
+};
+
 // 장바구니 담기
-const addCart = (productId)=>{
+const addCart = productId => {
   // cartStore.addItem(props.productInfo); - pinia에 정보를 담아야함. productInfo 뭐가 들어오는지 봐야함.
   if (userLogin.value && isChecked.value == true) {
     const data = {
@@ -52,24 +52,24 @@ const addCart = (productId)=>{
     };
     alert('장바구니에 담았습니다.');
     addCartDatabase(data);
-  }else{
+  } else {
     alert('선택된 제품이 없습니다.');
   }
-}
-</script>
+};
 
+</script>
 
 <template>
   <div>
     <h1 class="wishlist_title">찜 목록</h1>
     <div class="product_select">
-      <p><input id="allcheck" type="checkbox" @change="allCheck" v-model="allChecked"/><label for="allcheck">전체 선택</label></p>
+      <p><input id="allcheck" type="checkbox" @change="allCheck" v-model="allChecked" /><label for="allcheck">전체 선택</label></p>
       <p>선택 삭제하기</p>
     </div>
 
     <!-- 상품 컴포넌트 -->
-    <div class="wish_product" v-for="(product, index) in data" key="index">
-      <input class="pro_check" @change="isCheck" type="checkbox" v-model="isChecked"/>
+    <div class="wish_product" v-for="product in data" :key="product.productId">
+      <input class="pro_check" @change="isCheck" type="checkbox" v-model="product.isChecked" />
 
       <div class="product_box">
         <div class="img_box">
@@ -87,7 +87,6 @@ const addCart = (productId)=>{
         <div class="delet_btn" @click="wishDelete(product.productId)">삭제</div>
       </div>
     </div>
-  
   </div>
 </template>
 

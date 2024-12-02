@@ -1,189 +1,329 @@
 <script setup>
+import { GLOBAL_URL } from '@/api/util';
+import axios from 'axios';
 import { ref } from 'vue';
 
 // 모달창 닫기(부모로 event 전달)
-const emit = defineEmits()
-const closeModal = ()=>{
-    emit('closeModal')
+const emit = defineEmits();
+const closeModal = () => {
+  emit('closeModal');
+};
+
+// 판매신청 보내기
+const sucsess = async()=>{
+    // const files = [
+    //     {
+    //         user : user
+    //     },
+    //     {
+    //         bank : 
+    //         bankNumber :
+    //     },
+    //     {
+    //         brand : 
+    //     },
+    //     {}
+    // ]
+    try{
+        const res = await axios.post(`${GLOBAL_URL}/api/pendingSale/create/${files}`, {
+            headers:{
+                'Content-type' : 'application/json',
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            }
+        })
+    }catch(error){
+        console.error("판매신청 실패", error)
+    }
 }
-
-// 신청 성공시 성공페이지
-// const applicationForm = ref(false)
-// const sucsess = ()=>{
-//     applicationForm = applicationForm
-// }
-
 
 </script>
 
 <template>
-    <section class="sale_modal">
-        <article @click.stop="closeModal" class="modal_background"></article>
+  <section class="sale_modal">
+    <article @click.stop="closeModal" class="modal_background"></article>
 
-        <article class="modal_page">
-            <h2 class="modal_title">판매 등록 신청</h2>
-            <div class="line"></div>
-            <form>
-                <div class="form-group">
-                    <label label for="user">판매 신청자 확인</label>
-                    <input type="text" id="user" value="강도현" required readonly/>
-                </div>
-                <div class="form-group">
-                    <label label for="name">상품명 <small><span>*</span>필수사항</small></label>
-                    <input type="text" id="name" placeholder="상품명을 입력해 주세요." maxlength="20" required/>
-                </div>
-                <div class="form-group">
-                    <label label for="price">판매가격 <small><span>*</span>필수사항</small></label>
-                    <input type="number" id="price" placeholder="￦ 희망 판매 가격을 입력해 주세요." min="50" max="9999999999" step="1" maxlength="11" required/>
-                </div>
-                <div class="form-group">
-                    <label label for="content">상세 설명</label>
-                    <textarea maxlength="300" rows="10" id="content" placeholder="상품명의 상세한 설명을 입력해 주세요.(자세할수록 판매 등록에 도움이 됩니다.)"></textarea>
-                </div>
-                <div class="form-group">
-                    <label label for="photo">상품 사진 <small><span>*</span>필수사항</small></label>
-                    <input type="file" id="photo" required/>
-                </div>
-                <input @submit="sucsess" type="submit" value="신청하기">
-            </form>
+    <article class="modal_page">
+      <h2 class="modal_title">판매 등록 신청</h2>
+      <div class="line"></div>
+      <form>
+        <div class="form_group">
+          <label label for="user">판매 신청자 확인</label>
+          <input type="text" id="user" value="강도현" required readonly />
+        </div>
+        <div class="form_group">
+          <label label for="account">계좌번호 입력 <small><span>*</span>필수사항</small></label>
+          <select id="bank" name="bank" required>
+            <option value="" disabled selected>은행을 선택해 주세요</option>
+            <option value="kb">국민은행</option>
+            <option value="shinhan">신한은행</option>
+            <option value="woori">우리은행</option>
+            <option value="hana">하나은행</option>
+            <option value="kakao">카카오뱅크</option>
+            <option value="kb_savings">KB국민카드</option>
+            <option value="ibk">기업은행</option>
+            <option value="nh">농협은행</option>
+            <option value="samsung">삼성증권</option>
+            <option value="citibank">씨티은행</option>
+            <option value="scbank">스탠다드차타드은행</option>
+            <option value="busan">부산은행</option>
+            <option value="daegu">대구은행</option>
+            <option value="gwangju">광주은행</option>
+            <option value="industrial">산업은행</option>
+          </select>
+          <input type="number" id="account" placeholder="계좌번호를 ' - ' 을 제외하고 입력해 주세요." min="0" max="9999999999" step="1" maxlength="11" required />
+        </div>
 
-            <p @click.stop="closeModal" class="close_btn"><i class="fi fi-br-x"></i></p>
-        </article>
+        <div class="line02"></div>
+
+        <div class="form_group">
+          <label label for="">카테고리 <small><span>*</span>필수사항</small></label>
+          <div class="radio_box radio_category">
+            <label class="radio_label" for="Perfume">
+                <input class="radio_input" type="radio" name="category" id="Perfume" required />
+                <span class="radio_btn">향수(Perfume)</span>
+            </label>
+            <label class="radio_label" for="Diffuser">
+                <input class="radio_input" type="radio" name="category" id="Diffuser" required />
+                <span class="radio_btn">디퓨저(Diffuser)</span>
+            </label>
+            <label class="radio_label" for="Candle">
+                <input class="radio_input" type="radio" name="category" id="Candle" required />
+                <span class="radio_btn">향초(Candle)</span>
+            </label>
+          </div>
+        </div>
         
-        <!-- <article class="modal_page" v-if="applicationForm">
-            신청성공!
-        </article> -->
-    </section>
+        <div class="form_group">
+          <label label for="name">상품명 <small><span>*</span>필수사항</small></label>
+          <input type="text" id="name" placeholder="상품명을 입력해 주세요." maxlength="20" required />
+        </div>
+        <div class="form_group">
+          <label label for="brand">브랜드명 <small><span>*</span>필수사항</small></label>
+          <input type="text" id="brand" placeholder="브랜드명을 입력해 주세요." maxlength="20" required />
+        </div>
+
+        <div class="form_group">
+          <label label for="">제품 사용 유무 <small><span>*</span>필수사항</small></label>
+          <div class="radio_box radio_use">
+            <label class="radio_label" for="notuse">
+                <input class="radio_input" type="radio" name="use" id="notuse" required />
+                <span class="radio_btn">미사용 제품</span>
+            </label>
+            <label class="radio_label" for="use">
+                <input class="radio_input" type="radio" name="use" id="use" required />
+                <span class="radio_btn">사용 제품</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form_group">
+          <label label for="size">용량 <small><span>*</span>필수사항</small></label>
+          <input type="number" id="size" placeholder="상품의 용량을 입력해 주세요. (ml)" min="50" max="99999" step="1" maxlength="11" required />
+        </div>
+        <div class="form_group">
+          <label label for="price">희망 판매가격 <small><span>*</span>필수사항</small></label>
+          <input type="number" id="price" placeholder="희망 판매 가격을 입력해 주세요. (￦)" min="50" max="9999999999" step="1" maxlength="11" required />
+        </div>
+        <div class="form_group">
+          <label label for="content">상세 설명</label>
+          <textarea maxlength="300" rows="10" id="content" placeholder="상품명의 상세한 설명을 입력해 주세요.(자세할수록 판매 등록에 도움이 됩니다.)"></textarea>
+        </div>
+        <div class="form_group">
+          <label label for="photo">상품 사진 <small><span>*</span>필수사항</small></label>
+          <input type="file" id="photo" multiple required  />
+        </div>
+        <input @submit="sucsess" type="submit" value="신청하기" />
+      </form>
+
+      <p @click.stop="closeModal" class="close_btn"><i class="fi fi-br-x"></i></p>
+    </article>
+
+  </section>
 </template>
 
 <style scoped>
 @import url('https://cdn-uicons.flaticon.com/2.6.0/uicons-bold-rounded/css/uicons-bold-rounded.css');
-/* 모달 전체 설정 */
-.sale_modal{
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    z-index: 950;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* 모달 전체 설정 ##################*/
+.sale_modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 950;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 /* 모달배경 설정 */
-.modal_background{
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 10;
+.modal_background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 10;
 }
 /* 모달창 설정 */
-.modal_title{
-    width: 100%;
-    height: 100px;
-    padding: 50px;
-    font-size: 2.6rem;
+.modal_title {
+  width: 100%;
+  height: 100px;
+  padding: 50px;
+  font-size: 2.6rem;
 }
-.line{
-    width: calc(100% - 100px);
-    height: 2px;
-    background-color: #333;
-    margin-left: 50px;
+.line {
+  width: calc(100% - 100px);
+  height: 2px;
+  background-color: #333;
+  margin-left: 50px;
 }
-.modal_page{
-    position: relative;
-    width: 600px;
-    height: 800px;
-    background-color: rgb(255, 255, 255);
-    z-index: 11;
-    border: 5px solid var(--color-main-bloode);
+.line02 {
+  margin-top: 32px;
+  margin-bottom: 32px;
+  width: 100%;
+  height: 1px;
+  background-color: #e7e7e7;
 }
-form{
-    width: 100%;
-    height: calc(100% - 100px);
-    padding: 35px 50px;
-    text-align: center;
+.modal_page {
+  position: relative;
+  width: 600px;
+  height: 800px;
+  background-color: rgb(255, 255, 255);
+  z-index: 11;
+  border: 5px solid var(--color-main-bloode);
+  overflow-y: scroll;
 }
-.form-group {
-    margin-bottom: 20px; /* 각 폼 그룹 사이에 여백 */
+.modal_page::-webkit-scrollbar {width: 1px;}
+
+form {
+  width: 100%;
+  height: calc(100% - 100px);
+  padding: 35px 50px;
+  text-align: center;
 }
-/* 라벨 스타일 */
-.form-group label {
-    float: left;
-    display: block; 
-    margin-bottom: 8px; 
-    font-weight: bold;
-    font-size: 1.5rem;
-    color: #333;
-}
-.form-group label small{
-    font-weight: 400;
-    color: #9e9e9e;
-    margin-left: 10px;
-    font-size: 1.1rem;
-}
-.form-group label small span{
-    color: red;
+.form_group {
+  margin-bottom: 24px; /* 각 폼 그룹 사이에 여백 */
+  display: flex;
+  flex-direction: column;
+  align-items: start;
 }
 
-/* 텍스트 입력 필드 스타일 */
-.form-group input[type="text"],
-.form-group input[type="file"],
-.form-group input[type="number"],
-.form-group textarea {
-    width: 100%; 
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px; 
-    font-size: 1.4rem; 
-    background-color: #f9f9f9;
+/* 라벨 스타일 ############################################## */
+.form_group label {
+  float: left;
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: #333;
 }
-.form-group textarea {
-    height: 150px; 
-    resize: none;
+.form_group label small {
+  font-weight: 400;
+  color: #9e9e9e;
+  margin-left: 10px;
+  font-size: 1.1rem;
 }
-/* .form-group textarea::placeholder {
+.form_group label small span {
+  color: red;
+}
+/* 텍스트 입력 필드 스타일  */
+.form_group input[type='text'],
+.form_group input[type='file'],
+.form_group input[type='number'],
+.form_group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1.4rem;
+  background-color: #f9f9f9;
+}
+.form_group textarea {
+  height: 150px;
+  resize: none;
+}
+/* .form_group textarea::placeholder {
   white-space: pre-wrap;
 } */
-
-.form-group input[type="text"]:focus,
-.form-group textarea:focus {
-    border-color: var(--color-main-bloode); 
-    outline: none;
+.form_group input[type='text']:focus,
+.form_group textarea:focus {
+  border-color: var(--color-main-bloode);
+  outline: none;
 }
 
-/* 파일 입력 필드 스타일 */
-.form-group input[type="file"] {
-    padding: 10px;
-    background-color: #f9f9f9;
-}
 
-/* 제출 버튼 */
-input[type="submit"] {
-    margin-top: 10px;
-    padding: 12px 20px;
-    background-color: var(--color-main-bloode);
-    color: white;
-    border: none;
-    border-radius: 0.7rem;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.1s;
+/* 라디오버튼 설정 ############################################*/
+.radio_box {
+    width: 100%;
+    display: grid;
 }
-input[type="submit"]:hover {
-    background-color: var(--color-main-red);
-}
-
-/* 닫기 버튼 */
-.close_btn{
-    position: absolute;
-    right: 15px;
-    top: 15px;
-    font-size: 1.8rem;
+.radio_category{grid-template-columns: repeat(3, 1fr);}
+.radio_use{grid-template-columns: repeat(2, 1fr);}
+.radio_input {display: none}
+.radio_label {
+    display: inline-block;
     cursor: pointer;
 }
+.radio_btn {
+    display: inline-block;
+    width: 100%;
+    padding: 10px 0;
+    background-color: #ccc; 
+    color: #fff;
+    border-radius: 0.2rem;
+    text-align: center;
+}
+.radio_input:checked + .radio_btn {
+    background-color: rgb(96, 0, 0);
+    color: #fff;
+}
+
+/* select 설정 ############################################# */
+select{
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1.4rem;
+  background-color: #f9f9f9;
+  margin-bottom: 10px;
+}
+select > option{
+  font-size: 1.4rem;
+}
+
+/* 파일 입력 필드 스타일 #################################### */
+.form_group input[type='file'] {
+  padding: 10px;
+  background-color: #f9f9f9;
+}
+
+/* 제출 버튼 ############################################### */
+input[type='submit'] {
+  margin-top: 20px;
+  margin-bottom: 40px;
+  padding: 12px 20px;
+  background-color: var(--color-main-bloode);
+  color: white;
+  border: none;
+  border-radius: 0.7rem;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.1s;
+}
+input[type='submit']:hover {
+  background-color: var(--color-main-red);
+}
+
+/* 닫기 버튼 ############################################# */
+.close_btn {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  font-size: 1.8rem;
+  cursor: pointer;
+}
+
 
 </style>
