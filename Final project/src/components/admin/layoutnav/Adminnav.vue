@@ -1,5 +1,5 @@
 <template>
-  <article id="Adminnav" v-if="role === ADMIN">
+  <article id="Adminnav" v-if="role === 'ADMIN'">
     <ul>
       <RouterLink to="/mainDashboard"
         ><li><img src="@/assets/img/icon/free-icon-font-apps-3917482.svg" alt="" />대시보드</li></RouterLink
@@ -35,19 +35,19 @@
     </ul>
   </article>
 
-  <!-- <article id="Adminnav" v-if="appraiserRole === '민이♡'">
+  <article id="Adminnav" v-if="role === 'APPRAISER'">
     <ul>
-      <RouterLink to="/mainDashboard"
+      <RouterLink to="/mainInspectionList"
         ><li><img src="@/assets/img/icon/free-icon-font-clipboard-list-7857488.svg" alt="" />판매신청목록</li></RouterLink
       >
-      <RouterLink to="/reviewManagement"
+      <RouterLink to="/approvedList"
         ><li><img src="@/assets/img/icon/free-icon-font-clipboard-list-7857488.svg" alt="" />승인목록</li></RouterLink
       >
-      <RouterLink to="/orderManagement"
+      <RouterLink to="/petList"
         ><li><img src="@/assets/img/icon/free-icon-font-clipboard-list-7857488.svg" alt="" />반려목록</li></RouterLink
       >
     </ul>
-  </article> -->
+  </article>
 </template>
 
 <script setup>
@@ -55,8 +55,8 @@ import { useUserStore } from '@/stores/Login';
 import { watch } from 'vue';
 
 const useStore = useUserStore();
-// const appraiserRole = ref(useStore.nickName);
-// const role = ref(useStore.role);
+const role = useStore.role;
+console.log(role);
 watch(useStore.role, _new => {
   console.log(_new);
 });
@@ -84,7 +84,7 @@ li:hover {
   transition: all 0.3s;
 }
 
-li:hover img{
+li:hover img {
   filter: invert(100%) brightness(200%);
 }
 li img {

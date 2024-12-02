@@ -35,7 +35,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div>
-    <div v-if="data.role === 'ADMIN'">
+    <div v-if="data.role === 'ADMIN' || data.role === 'APPRAISER'">
       <div>
         <AdminHeader></AdminHeader>
         <div>
@@ -45,7 +45,7 @@ onBeforeUnmount(() => {
       </div>
     </div>
 
-    <!-- <div v-else>
+    <div v-else>
       <Header></Header>
 
       <div class="min-height">
@@ -53,7 +53,7 @@ onBeforeUnmount(() => {
       </div>
 
       <Footer></Footer>
-    </div> -->
+    </div>
 
     <div class="scroll_btn pagaUp" v-if="isScrolled" @click="pageUp">
       <img src="@/assets/img/icon/up.svg" alt="" />

@@ -39,7 +39,7 @@ const loginRouters = [
 const adminRouters = [
   {
     path: '/',
-    // meta: { role: 'admin' }, // 공통 meta
+    meta: { role: 'admin' }, // 공통 meta
     children: [
       {
         path: 'mainDashboard',
@@ -84,7 +84,8 @@ const adminRouters = [
 const appraiserRouters = [
   {
     path: '/',
-    // meta: { role: 'appraiser' }, // 공통 meta
+    meta: { role: 'appraiser' },
+    // 공통 meta
     children: [
       {
         path: 'mainInspectionList',
@@ -173,35 +174,35 @@ const routers = createRouter({
   },
 });
 
-// routers.beforeEach(async (to, from, next) => {
-//   const useStore = useUserStore();
-//   let res = [null];
-//   if (to.meta.role) {
-//     // 관리자페이지들어가면 무조건 작동
+routers.beforeEach(async (to, from, next) => {
+  const useStore = useUserStore();
+  let res = [null];
+  if (to.meta.role) {
+    // 관리자페이지들어가면 무조건 작동
 
-//     if (sessionStorage.getItem('token')) {
-//       res = await loginCheck();
-//       useStore.login(res.data); //스토어 등록
-//       const userRole = useStore.role;
-//       if ((to.meta.role === 'admin' && userRole !== 'ADMIN') || useStore.nickName !== '민이♡') {
-//         console.log('index 경로이동실패', useStore.role);
-//         alert('관리자 권한이 없습니다.');
-//         return next('/');
-//       } else if (to.meta.role === 'admin' && userRole === 'ADMIN') {
-//         alert('관리자 페이지로 이동합니다.');
-//         return next();
-//       } else if (to.meta.role === 'appraiser' && useStore.nickName === '민이♡') {
-//         alert('검수자 페이지로 이동합니다.');
-//         return next();
-//       }
-//     }
-//     alert('로그인이 필요한 페이지입니다.');
-//     return next('/login2');
-//   } else if (useStore.loginCheck) {
-//     // useStore.login(); //스토어 등록
-//     return next();
-//   }
-//   next();
-//   console.log('next로 이동', useStore.role);
-// });
+    if (sessionStorage.getItem('token')) {
+      res = await loginCheck();
+      useStore.login(res.data); //스토어 등록
+      const userRole = useStore.role;
+      if ((to.meta.role === 'admin' && userRole !== 'ADMIN') || (to.meta.role === 'appraiser' && useStore.role !== 'APPRAISER')) {
+        console.log('index 경로이동실패', useStore.role);
+        alert('페이지 권한이 없습니다.');
+        return next('/');
+      } else if (to.meta.role === 'admin' && userRole === 'ADMIN') {
+        // alert('관리자 페이지로 이동합니다.');
+        return next();
+      } else if (to.meta.role === 'appraiser' && useStore.role === 'APPRAISER') {
+        // alert('검수자 페이지로 이동합니다.');
+        return next();
+      }
+    }
+    alert('로그인이 필요한 페이지입니다.');
+    return next('/login2');
+  } else if (useStore.loginCheck) {
+    // useStore.login(); //스토어 등록
+    return next();
+  }
+  next();
+  console.log('next로 이동', useStore.role);
+});
 export default routers;

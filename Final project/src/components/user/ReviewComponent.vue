@@ -3,7 +3,7 @@ import { getViewCurrentPage } from '@/api/productDetailApi';
 import { GLOBAL_URL } from '@/api/util';
 import { useUserStore } from '@/stores/Login';
 import axios from 'axios';
-import { ref, watch, watchEffect } from 'vue';
+import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 const useStore = useUserStore();
 const props = defineProps({
@@ -30,16 +30,36 @@ const endPage = ref(0);
 const star_list = ['★', '★★', '★★★', '★★★★', '★★★★★'];
 const GoodIcon = ref(true);
 
+const dolode = async () => {
+  const reviewListRes = await axios.get(`${GLOBAL_URL}/detail/favorite/${idx.value}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+    },
+  });
+  console.log(reviewListRes.data);
+  GoodIcon.value = reviewListRes.data;
+};
+
 // 도움돼요
-const GoodIconState = async reviewId => {
+const GoodIconState = async (reviewId, index) => {
   console.log(reviewId);
   if (!useStore.loginCheck) {
     alert('로그인이 필요한 기능입니다.');
     return;
   }
-  const reviewListRes = await axios.get(`${GLOBAL_URL}/detail/favorite/${idx.value}`);
-  console.log(reviewListRes.data);
-  GoodIcon.value = ([reviewIdShow]) => {};
+  const reviewListRes = await axios.get(`${GLOBAL_URL}/detail/favorite/clickFavorite/reviewId?${reviewId}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+    },
+    params: { reviewId: reviewId },
+  });
+  console.log(reviewListRes.data.checked);
+  console.log(reviewList.value);
+  console.log(GoodIcon.value.checked);
+  dolode();
+  viewCurrentPage();
 };
 
 // 이전페이지
@@ -108,6 +128,7 @@ watch(
     reviewCount.value = newReviewCount;
     viewCurrentPage();
   },
+  dolode(),
 );
 </script>
 
@@ -127,7 +148,7 @@ watch(
           </p>
         </div>
       </div>
-      <li class="reviewGoodIcon" v-if="GoodIcon" @click="GoodIconState(list.reviewId)">
+      <li class="reviewGoodIconTrue" v-if="GoodIcon[index].checked" @click="GoodIconState(list.reviewId, index)">
         <img src="@/assets/img/icon/free-icon-font-hand-holding-heart-17766584.svg" alt="" />
         {{ list.favoriteCount }} 도움되요
       </li>
@@ -217,6 +238,25 @@ watch(
   /* background-color: antiquewhite; */
 }
 .reviewGoodIcon > img {
+  width: auto;
+  height: 100%;
+}
+.reviewGoodIconTrue {
+  width: 10%;
+  height: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  right: 0;
+  padding: 0.5%;
+  gap: 10%;
+  font-size: 1.5rem;
+  border: 0.5px solid var(--color-main-gray);
+  border-radius: 30px;
+  cursor: pointer;
+  /* background-color: orange; */
+}
+.reviewGoodIconTrue > img {
   width: auto;
   height: 100%;
 }
