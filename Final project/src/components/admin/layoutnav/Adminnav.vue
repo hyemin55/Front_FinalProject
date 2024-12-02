@@ -19,7 +19,6 @@
       <RouterLink to="/announcement"
         ><li><img src="@/assets/img/icon/free-icon-font-megaphone-3914404.svg" alt="" />공지사항</li></RouterLink
       >
-
       <RouterLink to="/mainInspectionList"
         ><li><img src="@/assets/img/icon/free-icon-font-clipboard-list-7857488.svg" alt="" />판매신청목록</li></RouterLink
       >

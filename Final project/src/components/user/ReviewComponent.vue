@@ -148,7 +148,7 @@ watch(
           </p>
         </div>
       </div>
-      <li class="reviewGoodIconTrue" v-if="GoodIcon[index].checked" @click="GoodIconState(list.reviewId, index)">
+      <li class="reviewGoodIcon reviewGoodIconTrue" v-if="GoodIcon[index].checked" @click="GoodIconState(list.reviewId, index)">
         <img src="@/assets/img/icon/free-icon-font-hand-holding-heart-17766584.svg" alt="" />
         {{ list.favoriteCount }} 도움되요
       </li>
@@ -242,23 +242,7 @@ watch(
   height: 100%;
 }
 .reviewGoodIconTrue {
-  width: 10%;
-  height: 70%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  right: 0;
-  padding: 0.5%;
-  gap: 10%;
-  font-size: 1.5rem;
-  border: 0.5px solid var(--color-main-gray);
-  border-radius: 30px;
-  cursor: pointer;
-  /* background-color: orange; */
-}
-.reviewGoodIconTrue > img {
-  width: auto;
-  height: 100%;
+  color: orange;
 }
 .userReviewImgs {
   display: flex;
