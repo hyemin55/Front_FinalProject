@@ -9,50 +9,80 @@ const closeModal = () => {
   emit('closeModal');
 };
 
+const bankName = ref("");
+const accountNumber = ref("");
+const productName = ref("");
+const categoryName = ref("");
+const productSize = ref(0);
+const expectedSellingPrice = ref(0);
+const brandName = ref("");
+const use = ref(false);
+const productContent = ref("");
+const uploadedFiles = ref([]);
+
 // 판매신청 보내기
 const sucsess = async()=>{
-    // const files = [
-    //     {
-    //         user : user
-    //     },
-    //     {
-    //         bank : 
-    //         bankNumber :
-    //     },
-    //     {
-    //         brand : 
-    //     },
-    //     {}
-    // ]
+
+    const pendingSaleCreateReqDto = {
+      "seller": "강도현",
+      "bankName": bankName.value,
+      "accountNumber": accountNumber.value,
+      "productName": productName.value,
+      "categoryName": categoryName.value,
+      "productSize": Number(productSize.value), //number
+      "expectedSellingPrice": Number(expectedSellingPrice.value), //number
+      "brandName": brandName.value,
+      "usedOrNot": use.value, //boolean
+      "productContent": productContent.value,
+      "quantity": 1,
+      "userSaleReqImageDtos": uploadedFiles.value.map((file, index) => ({
+          name: file.name,
+          desc: `image-${index + 1}`,
+        })
+      ),
+    }
+
+    const formdata = new FormData();
+    formdata.append('pendingSaleCreateReqDto',
+      new Blob([JSON.stringify(pendingSaleCreateReqDto)], {type:'application/json'})
+    )
+    if(uploadedFiles.value.length>0){
+      uploadedFiles.value.forEach(image => {
+        formdata.append('files', image.file)
+      })
+    }else{
+      formdata.append('files', 
+      new Blob([], { type: 'application/octet-stream' })); // 빈 Blob 추가
+    }
+
     try{
-        const res = await axios.post(`${GLOBAL_URL}/api/pendingSale/create/${files}`, {
+        const res = await axios.post(`${GLOBAL_URL}/api/pendingSale/create`, formdata,{
             headers:{
-                'Content-type' : 'application/json',
+                'Content-type' : 'multipart/form-data',
                 Authorization: `Bearer ${sessionStorage.getItem('token')}`,
             }
         })
+        alert('성공!!!')
     }catch(error){
         console.error("판매신청 실패", error)
+        alert('실패ㅠㅠ')
     }
 }
-
 </script>
 
 <template>
   <section class="sale_modal">
-    <article @click.stop="closeModal" class="modal_background"></article>
-
     <article class="modal_page">
       <h2 class="modal_title">판매 등록 신청</h2>
       <div class="line"></div>
-      <form>
+      <form @submit.prevent="sucsess">
         <div class="form_group">
           <label label for="user">판매 신청자 확인</label>
           <input type="text" id="user" value="강도현" required readonly />
         </div>
         <div class="form_group">
           <label label for="account">계좌번호 입력 <small><span>*</span>필수사항</small></label>
-          <select id="bank" name="bank" required>
+          <select id="bank" name="bank" required v-model="bankName">
             <option value="" disabled selected>은행을 선택해 주세요</option>
             <option value="kb">국민은행</option>
             <option value="shinhan">신한은행</option>
@@ -70,7 +100,7 @@ const sucsess = async()=>{
             <option value="gwangju">광주은행</option>
             <option value="industrial">산업은행</option>
           </select>
-          <input type="number" id="account" placeholder="계좌번호를 ' - ' 을 제외하고 입력해 주세요." min="0" max="9999999999" step="1" maxlength="11" required />
+          <input type="number" id="account" placeholder="계좌번호를 ' - ' 을 제외하고 입력해 주세요." v-model="accountNumber" min="0" max="999999999999999999" step="1" maxlength="18" required />
         </div>
 
         <div class="line02"></div>
@@ -79,15 +109,15 @@ const sucsess = async()=>{
           <label label for="">카테고리 <small><span>*</span>필수사항</small></label>
           <div class="radio_box radio_category">
             <label class="radio_label" for="Perfume">
-                <input class="radio_input" type="radio" name="category" id="Perfume" required />
+                <input class="radio_input" type="radio" name="category" id="Perfume" value="Perfume" v-model="categoryName" required />
                 <span class="radio_btn">향수(Perfume)</span>
             </label>
             <label class="radio_label" for="Diffuser">
-                <input class="radio_input" type="radio" name="category" id="Diffuser" required />
+                <input class="radio_input" type="radio" name="category" id="Diffuser" value="Diffuser" v-model="categoryName" required />
                 <span class="radio_btn">디퓨저(Diffuser)</span>
             </label>
             <label class="radio_label" for="Candle">
-                <input class="radio_input" type="radio" name="category" id="Candle" required />
+                <input class="radio_input" type="radio" name="category" id="Candle" value="Candle" v-model="categoryName" required />
                 <span class="radio_btn">향초(Candle)</span>
             </label>
           </div>
@@ -95,22 +125,22 @@ const sucsess = async()=>{
         
         <div class="form_group">
           <label label for="name">상품명 <small><span>*</span>필수사항</small></label>
-          <input type="text" id="name" placeholder="상품명을 입력해 주세요." maxlength="20" required />
+          <input type="text" id="name" placeholder="상품명을 입력해 주세요." maxlength="20" v-model="productName" required />
         </div>
         <div class="form_group">
           <label label for="brand">브랜드명 <small><span>*</span>필수사항</small></label>
-          <input type="text" id="brand" placeholder="브랜드명을 입력해 주세요." maxlength="20" required />
+          <input type="text" id="brand" placeholder="브랜드명을 입력해 주세요." maxlength="20" v-model="brandName" required />
         </div>
 
         <div class="form_group">
           <label label for="">제품 사용 유무 <small><span>*</span>필수사항</small></label>
           <div class="radio_box radio_use">
             <label class="radio_label" for="notuse">
-                <input class="radio_input" type="radio" name="use" id="notuse" required />
+                <input class="radio_input" type="radio" name="use" id="notuse" :value="true" v-model="use" required />
                 <span class="radio_btn">미사용 제품</span>
             </label>
             <label class="radio_label" for="use">
-                <input class="radio_input" type="radio" name="use" id="use" required />
+                <input class="radio_input" type="radio" name="use" id="use" :value="false" v-model="use" required />
                 <span class="radio_btn">사용 제품</span>
             </label>
           </div>
@@ -118,25 +148,27 @@ const sucsess = async()=>{
 
         <div class="form_group">
           <label label for="size">용량 <small><span>*</span>필수사항</small></label>
-          <input type="number" id="size" placeholder="상품의 용량을 입력해 주세요. (ml)" min="50" max="99999" step="1" maxlength="11" required />
+          <input type="number" id="size" placeholder="상품의 용량을 입력해 주세요. (ml)" min="50" max="99999" step="1" maxlength="11" v-model="productSize" required />
         </div>
         <div class="form_group">
           <label label for="price">희망 판매가격 <small><span>*</span>필수사항</small></label>
-          <input type="number" id="price" placeholder="희망 판매 가격을 입력해 주세요. (￦)" min="50" max="9999999999" step="1" maxlength="11" required />
+          <input type="number" id="price" placeholder="희망 판매 가격을 입력해 주세요. (￦)" min="50" max="9999999999" step="1" maxlength="11" v-model="expectedSellingPrice" required />
         </div>
         <div class="form_group">
           <label label for="content">상세 설명</label>
-          <textarea maxlength="300" rows="10" id="content" placeholder="상품명의 상세한 설명을 입력해 주세요.(자세할수록 판매 등록에 도움이 됩니다.)"></textarea>
+          <textarea maxlength="300" rows="10" id="content" placeholder="상품명의 상세한 설명을 입력해 주세요.(자세할수록 판매 등록에 도움이 됩니다.)" v-model="productContent"></textarea>
         </div>
         <div class="form_group">
           <label label for="photo">상품 사진 <small><span>*</span>필수사항</small></label>
-          <input type="file" id="photo" multiple required  />
+          <input type="file" id="photo" multiple @change="handleFileUpload"/>
         </div>
-        <input @submit="sucsess" type="submit" value="신청하기" />
+        <input type="submit" value="신청하기" />
       </form>
 
       <p @click.stop="closeModal" class="close_btn"><i class="fi fi-br-x"></i></p>
     </article>
+
+    <article @click.stop="closeModal" class="modal_background"></article>
 
   </section>
 </template>
@@ -251,7 +283,6 @@ form {
   border-color: var(--color-main-bloode);
   outline: none;
 }
-
 
 /* 라디오버튼 설정 ############################################*/
 .radio_box {
