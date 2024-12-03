@@ -8,12 +8,10 @@
   </article>
 </template>
 
-<script setup>
-
-</script>
+<script setup></script>
 
 <style scoped>
-.Announcement{
+.Announcement {
   background-color: white;
   width: 100%;
   height: auto;
@@ -23,13 +21,13 @@
   text-overflow: ellipsis;
   line-height: 1.5;
 }
-.AnnouncementTitle{
+.AnnouncementTitle {
   font-size: 1.5rem;
   /* background-color: antiquewhite; */
   border-bottom: 1px solid var(--color-main-gray);
   line-height: 1.8;
-  }
-  .AnnouncementText{
-    margin-top: 5px;
-  }
+}
+.AnnouncementText {
+  margin-top: 5px;
+}
 </style>

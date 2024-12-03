@@ -30,6 +30,7 @@ const endPage = ref(0);
 const star_list = ['★', '★★', '★★★', '★★★★', '★★★★★'];
 const GoodIcon = ref(true);
 
+// 유저별 리뷰 도움되요 표시
 const dolode = async () => {
   const reviewListRes = await axios.get(`${GLOBAL_URL}/detail/favorite/${idx.value}`, {
     headers: {
@@ -41,7 +42,7 @@ const dolode = async () => {
   GoodIcon.value = reviewListRes.data;
 };
 
-// 도움돼요
+// 유저별 도움돼요 클릭 시 서버로 데이터 넘기기
 const GoodIconState = async (reviewId, index) => {
   console.log(reviewId);
   if (!useStore.loginCheck) {
