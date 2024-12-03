@@ -20,6 +20,11 @@ const use = ref(false);
 const productContent = ref("");
 const uploadedFiles = ref([]);
 
+const handleFileUpload = (event) => {
+  const files = event.target.files;
+  uploadedFiles.value = Array.from(files);  // 선택한 파일들을 반응형 변수에 저장
+};
+
 // 판매신청 보내기
 const sucsess = async()=>{
 
@@ -48,7 +53,7 @@ const sucsess = async()=>{
     )
     if(uploadedFiles.value.length>0){
       uploadedFiles.value.forEach(image => {
-        formdata.append('files', image.file)
+        formdata.append('files', image)
       })
     }else{
       formdata.append('files', 
