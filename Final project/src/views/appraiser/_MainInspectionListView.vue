@@ -3,7 +3,37 @@
     <article>
       <AnnouncementComponent />
     </article>
-    <article></article>
+    <article>
+      <h4>판매 등급</h4>
+      <p>
+        - A: 새상품과 거의 동일한 상태
+        <br />
+        - B: 새상품이나 박스가 훼손된 상태
+        <br />
+        - C: 사용한 흔적이 있거나 상품에 흠집이나 스크래치가 있는 상태
+        <br />
+        - D: 사용한 흔적이 많고 상품에 흠집이나 스크래치, 약간의 파손이 있는 상태
+        <br />
+        - E: 사용한 흔적이 많고 상품에 흠집이나 스크래치, 파손, 훼손이 있지만 사용하기엔 문제가 없는 상태
+      </p>
+      <br />
+      <h4>판매 불가 사유</h4>
+      <p>
+        - 파손 또는 훼손이 심해 판매할 수 없는 상태입니다.
+        <br />
+        - 정품이 아닙니다.
+        <br />
+        - 유통기한이 지났습니다.
+        <br />
+        - 유통기한은 문제가 없으나 내용물 변질이 일어났습니다.
+        <br />
+        - 판매 기준 용량 미달입니다.
+        <br />
+        - 향수, 캔들, 디퓨저에 해당하지 않는 제품입니다.
+        <br />
+        - 그 외
+      </p>
+    </article>
     <article id="Inspection" v-for="(list, index) in InspectionList" :key="index">
       <table>
         <thead>
@@ -44,31 +74,54 @@
             </td>
             <!-- 브랜드 검색 -->
             <td rowspan="2">
-              <input type="text" v-model="list.brandKeyword" placeholder="브랜드 검색" @input="fetchSuggestions('brand', list)" /><br />
-              <select v-if="list.brandSuggestions.length" v-model="list.selectedBrand">
-                <option :value="brand.brandId + '.' + brand.brandName" v-for="(brand, index) in list.brandSuggestions" :key="index">{{ brand.brandId }}.{{ brand.brandName }}</option>
+              <input
+                type="text"
+                v-model="list.brandKeyword"
+                placeholder="브랜드 검색"
+                @input="fetchSuggestions('brand', list)"
+              /><br />
+              <select v-model="list.selectedBrand">
+                <option
+                  :value="brand.brandId + '.' + brand.brandName"
+                  v-for="(brand, index) in list.brandSuggestions"
+                  :key="index"
+                >
+                  {{ brand.brandId }}.{{ brand.brandName }}
+                </option>
+                <option :value="brandNameInput">직접입력</option>
               </select>
-              <input v-else type="text" placeholder="직접입력" />
             </td>
             <td rowspan="2">
-              기존값: {{ list.brand }}
-              <br />
-              수정값:{{ list.selectedBrand }}
+              <p>기존값: {{ list.brand }}</p>
+              <p class="InputDisplay" v-if="list.selectedBrand != ''">
+                수정값:
+                <input v-if="list.selectedBrand === brandNameInput" type="text" placeholder="직접입력" />
+                <span v-else>{{ list.selectedBrand }}</span>
+              </p>
             </td>
             <!-- 상품명 검색 => 추후 브랜드 선택하면 select창이 뜨도록-->
             <td>
-              <input type="text" v-model="list.productKeyword" placeholder="상품명 검색" @input="fetchSuggestions('product', list)" /><br />
-              <select v-if="list.productSuggestions.length" v-model="list.selectedProduct">
-                <option :value="product.productName" v-for="(product, index) in list.productSuggestions" :key="index">
-                  {{ product.productName }}
+              <input
+                type="text"
+                v-model="list.productKeyword"
+                placeholder="상품명 검색"
+                @input="fetchSuggestions('product', list)"
+              /><br />
+              <select v-model="list.selectedProduct">
+                <option :value="product" v-for="(product, index) in list.productSuggestions" :key="index">
+                  {{ product.productName }}ㆍ{{ product.size }} ml
                 </option>
+                <option :value="productNameInput">직접입력</option>
               </select>
-              <input v-else type="text" placeholder="직접입력" />
             </td>
             <td rowspan="2">
-              기존값: {{ list.productName }}
-              <br />
-              수정값:{{ list.selectedBrand }}
+              <p>기존값: {{ list.productName }}ㆍ{{ list.size }} ml</p>
+
+              <p class="InputDisplay" v-if="list.selectedProduct != ''">
+                수정값:
+                <input v-if="list.selectedProduct === productNameInput" type="text" placeholder="직접입력" />
+                <span v-else>{{ list.selectedProduct.productName }}ㆍ{{ list.selectedProduct.size }} ml</span>
+              </p>
             </td>
           </tr>
         </tbody>
@@ -85,10 +138,10 @@
             <td rowspan="2">
               기존값: {{ list.size }} ml
               <br />
-              <input type="number" max="10000" placeholder="용량" required />
+              <input type="number" max="10000" placeholder="용량(ml)" required />
             </td>
             <td><img src="@/assets/img/빵빵덕세안핑크.png" alt="" style="width: 50px" /></td>
-            <td><img src="@/assets/img/빵빵덕세안핑크.png" alt="" style="width: 50px" /></td>
+            <td><img src="@/assets/img/빵빵덕세안.png" alt="" style="width: 50px" /></td>
             <td colspan="2">{{ list.userContent }}</td>
           </tr>
         </tbody>
@@ -104,7 +157,7 @@
         </thead>
         <tbody>
           <tr>
-            <td>{{ list.expectedSellingPrice }}</td>
+            <td>￦ {{ list.expectedSellingPrice.toLocaleString() }}</td>
             <td><input type="number" min="5000" placeholder="권장판매가격(5,000원 이상)" /></td>
             <td>
               <select name="TestResults" id="" v-model="TestResult">
@@ -115,27 +168,26 @@
               </select>
             </td>
             <td v-if="TestResult == 'Y' || TestResult == ''">
-              <select name="Rating" id="" v-model="Rating">
+              <select name="Rating" id="" v-model="PassGradeId">
                 <option value="" selected disabled>상품 등급 선택</option>
                 <option value="" disabled>-------</option>
-                <option value="A">A</option>
-                <option value="B">B</option>
-                <option value="C">C</option>
-                <option value="D">D</option>
-                <option value="E">E</option>
+                <option :value="PassGrade.gradeId" v-for="PassGrade in PassGradeList" :key="PassGrade">
+                  {{ PassGrade.gradeType }}. {{ PassGrade.gradeDescription }}
+                </option>
               </select>
             </td>
             <td v-if="TestResult == 'N'">
-              <select name="NotForSale" id="" v-model="NotForSale">
+              <select name="NotForSale" id="" v-model="FailReasonId">
                 <option value="" selected disabled>판매불가 사유 선택</option>
                 <option value="" disabled>-------</option>
-                <option value="">1.</option>
-                <option value="">2.</option>
-                <option value="">3.</option>
-                <option value="">4.</option>
+                <option value="FailReason.rejectionReasonId" v-for="FailReason in FailReasonList" :key="FailReason">
+                  {{ FailReason.rejectionReasonId }}. {{ FailReason.rejectionReason }}
+                </option>
               </select>
             </td>
-            <td><textarea name="" id="" maxlength="1000" placeholder="기타사항을 입력해주세요(최대 1000자)"></textarea></td>
+            <td>
+              <textarea name="" id="" maxlength="1000" placeholder="기타사항을 입력해주세요(최대 1000자)"></textarea>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -150,48 +202,50 @@
 import { GLOBAL_URL } from '@/api/util';
 import AnnouncementComponent from '@/components/admin/AnnouncementComponent.vue';
 import axios from 'axios';
-import { ref, watch, watchEffect } from 'vue';
+import { ref } from 'vue';
 
-const InspectionList = ref();
+const InspectionList = ref([]);
 
-// 검색어와 검색 결과를 상태로 관리
-// const brandKeyword = ref([]);
-// const productKeyword = ref([]);
-// const brandSuggestions = ref([]);
-// const productSuggestions = ref([]);
-// const selectedBrand = ref();
-// const selectedProduct = ref();
 const TestResult = ref('');
-const Rating = ref('');
-const NotForSale = ref('');
+const PassGradeId = ref('');
+const FailReasonId = ref('');
+const PassGradeList = ref([]);
+const FailReasonList = ref([]);
 
-// 검색 로직
-// const selected = (type, event) => {
-//   console.log(type, event.target.value);
-//   if (type === 'brand') selectedBrand.value = event.target.value;
-//   else if (type === 'product') selectedProduct.value = event.target.value;
-//   else return;
-// };
-
+// 브랜드, 상품명 검색 입력 시 호출
 const fetchSuggestions = async (type, list) => {
   // 검색어가 변경될 때만 API를 호출하는 명령어
   // clearTimeout(debounceTimeout);
-
   if (type === 'brand' && list.brandKeyword.length > 1) {
     // 최소 2자 입력 후 검색
     console.log(list.brandKeyword);
     try {
-      const brandResponse = await axios.get(`${GLOBAL_URL}/api/inspection/search-brands`, { params: { keyword: list.brandKeyword } });
+      const brandResponse = await axios.get(`${GLOBAL_URL}/api/inspection/search-brands`, {
+        params: { keyword: list.brandKeyword },
+      });
       console.log(brandResponse);
       list.brandSuggestions = brandResponse.data;
+      if (list.brandSuggestions.length > 0) {
+        list.selectedBrand = `${list.brandSuggestions[0].brandId}.${list.brandSuggestions[0].brandName}`;
+      } else {
+        list.selectedBrand = '';
+      }
     } catch (error) {
       console.error('Error fetching brandSuggestions:', error);
     }
   } else if (type === 'product' && list.productKeyword.length > 1) {
     try {
-      const productResponse = await axios.get(`${GLOBAL_URL}/api/inspection/search-products`, { params: { keyword: list.productKeyword } });
+      const productResponse = await axios.get(`${GLOBAL_URL}/api/inspection/search-products`, {
+        params: { keyword: list.productKeyword },
+      });
       console.log(productResponse);
       list.productSuggestions = productResponse.data;
+      if (list.productSuggestions.length > 0) {
+        console.log(list.productSuggestions);
+        list.selectedProduct = list.productSuggestions[0];
+      } else {
+        list.selectedProduct = '';
+      }
     } catch (error) {
       console.error('Error fetching productSuggestions:', error);
     }
@@ -202,6 +256,7 @@ const fetchSuggestions = async (type, list) => {
 
 const dolode = async () => {
   try {
+    // 판매 신청 리스트
     const InspectionListRes = await axios.get(`${GLOBAL_URL}/api/inspection/list`, {
       headers: {
         'Content-Type': 'application/json',
@@ -216,33 +271,22 @@ const dolode = async () => {
       brandSuggestions: [],
       productSuggestions: [],
       selectedBrand: '',
-      selectedProduct: '',
+      selectedProduct: [],
+      productNameInput: '',
+      brandNameInput: '',
     }));
+    // 검수 합격 리스트
+    const passRes = await axios.get(`${GLOBAL_URL}/api/inspection/pass/grade`);
+    PassGradeList.value = passRes.data;
+    // 검수 불합격 사유 리스트
+    const failRes = await axios.get(`${GLOBAL_URL}/api/inspection/fail/reason`);
+    FailReasonList.value = failRes.data;
   } catch (error) {
     console.error('Error loading inspection list:', error);
   }
 };
 
-watch(
-  () => InspectionList.value,
-  newList => {
-    newList.forEach(list => {
-      if (list.brandKeyword.length > 1) {
-        fetchSuggestions('brand', list);
-      }
-      if (list.productKeyword.length > 1) {
-        fetchSuggestions('product', list);
-      }
-    });
-  },
-  { deep: true },
-);
-
 dolode();
-// 입력값 변경 시 fetchSuggestions 호출
-// watchEffect(() => {
-//   fetchSuggestions, dolode();
-// });
 </script>
 
 <style scoped>
@@ -281,7 +325,8 @@ textarea {
   width: 100%;
 }
 input,
-select {
+select,
+option {
   width: 80%;
 }
 button {
@@ -291,5 +336,9 @@ button {
   width: 100%;
   text-align: center;
   font-size: 1.8rem;
+}
+.InputDisplay {
+  display: flex;
+  align-items: center;
 }
 </style>
