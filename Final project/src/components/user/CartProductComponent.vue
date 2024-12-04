@@ -35,12 +35,11 @@ const cartCheck = ref(props.isChecked)
 
 console.log(cart_size.value)
 
+// 장바구니 check배열 
 onMounted(() => {
   makeCartCheckList()
 })
-watch(
-  () => props.isChecked,
-  newValue => {
+watch(() => props.isChecked, newValue => {
     // props 변화 감지 => makecartCheckList 실행
     cartCheck.value = newValue
     makeCartCheckList()

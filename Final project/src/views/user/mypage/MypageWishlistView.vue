@@ -6,24 +6,30 @@ import { useUserStore } from '@/stores/Login';
 import { computed, ref, watch, watchEffect } from 'vue';
 
 // 로그인 pinia
-const userStore = useUserStore();
-const userLogin = computed(() => userStore.loginCheck);
+// const userStore = useUserStore();
+// const userLogin = computed(() => userStore.loginCheck);
+
 // 장바구니 pinia
 // const cartStore = useCartStore();
 
-const allChecked = ref(false);
-const allCheck = () => {
-  data.value.forEach(product => {
-    product.isChecked = allChecked.value;
-  });
-};
+// 전체석택
+// let allChecked = ref(false);
+// const allCheck =()=>{
+//   console.log(allChecked.value)
+// }
 
 // 찜 목록 정보를 DB에서 가져옴.
 const data = ref([]);
 const LoadingwishList = async () => {
   const wishListData = await wishList();
-  data.value = wishListData;
+
+  data.value = wishListData.map(product => ({
+    ...product,         
+    isChecked: false
+  }));
   console.log(data.value);
+  // data.value = wishListData;
+  // console.log(data.value);
 };
 
 // 화면 랜더링
@@ -32,8 +38,8 @@ watchEffect(() => {
 });
 
 // 찜목록 삭제
-const wishDelete = async productId => {
-  if (product.isChecked == true) {
+const wishDelete = async(productId, check) => {
+  if (check == true) {
     await wishClick(productId);
     console.log('찜목록 삭제');
     await LoadingwishList();
@@ -43,7 +49,7 @@ const wishDelete = async productId => {
 };
 
 // 장바구니 담기
-const addCart = productId => {
+const addCart = (productId) => {
   // cartStore.addItem(props.productInfo); - pinia에 정보를 담아야함. productInfo 뭐가 들어오는지 봐야함.
   if (userLogin.value && isChecked.value == true) {
     const data = {
@@ -56,7 +62,6 @@ const addCart = productId => {
     alert('선택된 제품이 없습니다.');
   }
 };
-
 </script>
 
 <template>
@@ -69,7 +74,7 @@ const addCart = productId => {
 
     <!-- 상품 컴포넌트 -->
     <div class="wish_product" v-for="product in data" :key="product.productId">
-      <input class="pro_check" @change="isCheck" type="checkbox" v-model="product.isChecked" />
+      <input class="pro_check"  type="checkbox" v-model="product.isChecked" />
 
       <div class="product_box">
         <div class="img_box">
@@ -84,9 +89,10 @@ const addCart = productId => {
 
       <div class="btn">
         <div class="cart_btn" @click="addCart(product.productId)">장바구니 담기</div>
-        <div class="delet_btn" @click="wishDelete(product.productId)">삭제</div>
+        <div class="delet_btn" @click="wishDelete(product.productId, product.isChecked)">삭제</div>
       </div>
     </div>
+    
   </div>
 </template>
 

@@ -7,6 +7,7 @@ import axios from 'axios';
 import { useUserStore } from '@/stores/Login';
 import { wishClick } from '@/api/wishApi';
 import { addCartDatabase } from '@/api/cartApi';
+import { useWishStore } from '@/stores/WishStore';
 // import { useQueryClient } from '@tanstack/vue-query';
 // import { getProductData, getReviewData, getReviewImageList, getSlideImages, getstarCounting } from '@/api/productDetail';
 
@@ -68,11 +69,15 @@ const navDetailProduct = () => {
 const redHeart = ref(false);
 const iconClick = ref(false); // 찜하트 css
 
+const wishStore = useWishStore();
+
 const addToWishlist = async () => {
   redHeart.value = !redHeart.value;
   iconClick.value = !iconClick.value; // 찜하트 css
 
-  wishClick(props.productInfo.productId);
+  await wishClick(props.productInfo.productId);
+  // wishStore.makeWishList(props.productInfo.productId);
+    
 };
 </script>
 

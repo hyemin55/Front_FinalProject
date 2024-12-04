@@ -3,20 +3,37 @@ import { GLOBAL_URL } from '@/api/util';
 import axios from 'axios';
 import { ref } from 'vue';
 
+const a = ref({
+  title : {
+
+  },
+  content:{
+    a:"1" ,
+    b:"2",
+    c:"3"
+  }
+})
+
+
+
 // 모달창 닫기(부모로 event 전달)
 const emit = defineEmits();
 const closeModal = () => {
   emit('closeModal');
 };
 
+// 신청 성공페이지
+const complete = ref(true);
+
+// 신청 데이터
 const bankName = ref("");
 const accountNumber = ref("");
 const productName = ref("");
 const categoryName = ref("");
-const productSize = ref(0);
-const expectedSellingPrice = ref(0);
+const productSize = ref();
+const expectedSellingPrice = ref();
 const brandName = ref("");
-const use = ref(false);
+const use = ref();
 const productContent = ref("");
 const uploadedFiles = ref([]);
 
@@ -27,7 +44,6 @@ const handleFileUpload = (event) => {
 
 // 판매신청 보내기
 const sucsess = async()=>{
-
     const pendingSaleCreateReqDto = {
       "seller": "강도현",
       "bankName": bankName.value,
@@ -46,7 +62,7 @@ const sucsess = async()=>{
         })
       ),
     }
-
+    
     const formdata = new FormData();
     formdata.append('pendingSaleCreateReqDto',
       new Blob([JSON.stringify(pendingSaleCreateReqDto)], {type:'application/json'})
@@ -67,7 +83,9 @@ const sucsess = async()=>{
                 Authorization: `Bearer ${sessionStorage.getItem('token')}`,
             }
         })
-        alert('성공!!!')
+        if (res.status === 201) {
+          complete.value = false;
+        }
     }catch(error){
         console.error("판매신청 실패", error)
         alert('실패ㅠㅠ')
@@ -77,7 +95,7 @@ const sucsess = async()=>{
 
 <template>
   <section class="sale_modal">
-    <article class="modal_page">
+    <article class="modal_page" v-if="complete">
       <h2 class="modal_title">판매 등록 신청</h2>
       <div class="line"></div>
       <form @submit.prevent="sucsess">
@@ -129,13 +147,15 @@ const sucsess = async()=>{
         </div>
         
         <div class="form_group">
-          <label label for="name">상품명 <small><span>*</span>필수사항</small></label>
-          <input type="text" id="name" placeholder="상품명을 입력해 주세요." maxlength="20" v-model="productName" required />
+          <label label for="brand">브랜드명 <small><span>*</span>필수사항</small></label>
+          <input type="text" id="brand" placeholder="상품의 브랜드명을 입력해 주세요." maxlength="20" v-model="brandName" required />
         </div>
         <div class="form_group">
-          <label label for="brand">브랜드명 <small><span>*</span>필수사항</small></label>
-          <input type="text" id="brand" placeholder="브랜드명을 입력해 주세요." maxlength="20" v-model="brandName" required />
+          <label label for="name">상품명 <small><span>*</span>필수사항</small></label>
+          <input type="text" id="name" placeholder="상품의 이름을 입력해 주세요." maxlength="20" v-model="productName" required />
         </div>
+
+        <div class="line02"></div>
 
         <div class="form_group">
           <label label for="">제품 사용 유무 <small><span>*</span>필수사항</small></label>
@@ -173,6 +193,14 @@ const sucsess = async()=>{
       <p @click.stop="closeModal" class="close_btn"><i class="fi fi-br-x"></i></p>
     </article>
 
+    <article class="modal_page completePage" v-else="!complete">
+      <span @click.stop="closeModal" class="close_btn"><i class="fi fi-br-x"></i></span>
+      <!-- <img src="@/assets/img/partying-face.gif" alt=""> -->
+      <img src="@/assets/img/smiling-face-hearts.gif" alt="">
+      <h2>판매 신청 접수가 완료되었습니다!</h2>
+      <p>신청현황은 판매내역 조회에서 확인하실 수 있습니다.</p>
+    </article>
+    
     <article @click.stop="closeModal" class="modal_background"></article>
 
   </section>
@@ -361,5 +389,39 @@ input[type='submit']:hover {
   cursor: pointer;
 }
 
-
+/* 신청 성공 페이지 ######################################### */
+.completePage{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.completePage img{
+  margin: 20px 0;
+}
+.completePage h2{
+  font-size: 2.5rem;
+  margin: 15px 0;
+  color: #161616;
+}
+.completePage p{
+  font-size: 1.3rem;
+  color: #333;
+  opacity: 1;
+  animation: textop 5s infinite;
+}
+@keyframes textop{
+  0%{
+    opacity: 1;
+  }
+  20%{
+    opacity: 0;
+  }
+  40%{
+    opacity: 1;
+  }
+  100%{
+    opacity: 1;
+  }
+}
 </style>
