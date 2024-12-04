@@ -64,12 +64,13 @@
         <tbody>
           <tr>
             <td>
-              <select required>
-                <option value="default">{{ list.category }}</option>
+              <p value="">기존값: {{ list.category }}</p>
+              <select required v-model="list.categoryId">
+                <option value="" selected disabled>선택</option>
                 <option value="" disabled>-------</option>
-                <option value="Perfurm">Perfurm</option>
-                <option value="Diffuser">Diffuser</option>
-                <option value="Candle">Candle</option>
+                <option value="1">Perfume</option>
+                <option value="2">Diffuser</option>
+                <option value="3">Candle</option>
               </select>
             </td>
             <!-- 브랜드 검색 -->
@@ -128,8 +129,8 @@
         <thead>
           <tr>
             <th>용량 (ml)</th>
-            <th>사진</th>
-            <th>대표사진</th>
+            <th>판매자 사진</th>
+            <th>상품 검색 대표사진</th>
             <th colspan="2">상세설명</th>
           </tr>
         </thead>
@@ -140,8 +141,25 @@
               <br />
               <input type="number" max="10000" placeholder="용량(ml)" required />
             </td>
-            <td><img src="@/assets/img/빵빵덕세안핑크.png" alt="" style="width: 50px" /></td>
-            <td><img src="@/assets/img/빵빵덕세안.png" alt="" style="width: 50px" /></td>
+            <td>
+              <img
+                :src="`${GLOBAL_URL}/api/file/download/${userSaleImage.name}`"
+                v-for="userSaleImage in list.userSaleResImageList"
+                :key="userSaleImage"
+                alt=""
+                style="width: 50px"
+              />
+            </td>
+            <td v-if="list.selectedProduct.mainImage">
+              <img
+                :src="`${GLOBAL_URL}/api/file/download/${list.selectedProduct.mainImage.filename}`"
+                alt=""
+                style="width: 50px"
+              />
+            </td>
+            <td v-else>
+              <img src="@/assets/img/빵빵덕세안.png" alt="" style="width: 50px" />
+            </td>
             <td colspan="2">{{ list.userContent }}</td>
           </tr>
         </tbody>
@@ -150,25 +168,32 @@
             <th>희망판매가격</th>
             <th>권장판매가격</th>
             <th>검수결과</th>
-            <th v-if="TestResult == 'Y' || TestResult == ''">등급</th>
-            <th v-if="TestResult == 'N'">반려사유</th>
+            <th v-if="list.TestResult == 'Y' || list.TestResult == ''">등급</th>
+            <th v-if="list.TestResult == 'N'">반려사유</th>
             <th>검수결과 참고사항</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>￦ {{ list.expectedSellingPrice.toLocaleString() }}</td>
-            <td><input type="number" min="5000" placeholder="권장판매가격(5,000원 이상)" /></td>
             <td>
-              <select name="TestResults" id="" v-model="TestResult">
+              <input
+                type="number"
+                v-model="list.inspectionSellingPrice"
+                min="5000"
+                placeholder="권장판매가격(5,000원 이상)"
+              />
+            </td>
+            <td>
+              <select name="TestResults" id="" v-model="list.TestResult">
                 <option value="" selected disabled>선택</option>
                 <option value="" disabled>-------</option>
                 <option value="Y">합격</option>
                 <option value="N">불합격</option>
               </select>
             </td>
-            <td v-if="TestResult == 'Y' || TestResult == ''">
-              <select name="Rating" id="" v-model="PassGradeId">
+            <td v-if="list.TestResult == 'Y' || list.TestResult == ''">
+              <select name="Rating" id="" v-model="list.PassGradeId">
                 <option value="" selected disabled>상품 등급 선택</option>
                 <option value="" disabled>-------</option>
                 <option :value="PassGrade.gradeId" v-for="PassGrade in PassGradeList" :key="PassGrade">
@@ -176,8 +201,8 @@
                 </option>
               </select>
             </td>
-            <td v-if="TestResult == 'N'">
-              <select name="NotForSale" id="" v-model="FailReasonId">
+            <td v-if="list.TestResult == 'N'">
+              <select name="NotForSale" id="" v-model="list.FailReasonId">
                 <option value="" selected disabled>판매불가 사유 선택</option>
                 <option value="" disabled>-------</option>
                 <option value="FailReason.rejectionReasonId" v-for="FailReason in FailReasonList" :key="FailReason">
@@ -186,13 +211,19 @@
               </select>
             </td>
             <td>
-              <textarea name="" id="" maxlength="1000" placeholder="기타사항을 입력해주세요(최대 1000자)"></textarea>
+              <textarea
+                name=""
+                v-model="list.Content"
+                id=""
+                maxlength="1000"
+                placeholder="기타사항을 입력해주세요(최대 1000자)"
+              ></textarea>
             </td>
           </tr>
         </tbody>
       </table>
       <div>
-        <button>전송</button>
+        <button @click="Send(list)">전송</button>
       </div>
     </article>
   </section>
@@ -205,25 +236,53 @@ import axios from 'axios';
 import { ref } from 'vue';
 
 const InspectionList = ref([]);
-
-const TestResult = ref('');
-const PassGradeId = ref('');
-const FailReasonId = ref('');
 const PassGradeList = ref([]);
 const FailReasonList = ref([]);
+const categoriesList = ['Perfume', 'Diffuser', 'Candle'];
 
+const Send = list => {
+  if (list.TestResult === 'Y') {
+    const passData = {
+      pendingSaleId: list.saleApplicationId,
+      gradeId: list.PassGradeId,
+      inspectionCategoryReqDto: {
+        categoryId: list.categoryId,
+        categoryName: categoriesList[list.categoryId - 1],
+      },
+      inspectionBrandReqDto: {
+        brandId: list.selectedBrand.split('.')[0],
+        brandName: list.selectedBrand.split('.')[1],
+      },
+      inspectionProductReqDto: {
+        productName: list.selectedProduct.productName,
+        productSize: list.selectedProduct.size,
+        verifiedSellingPrice: list.inspectionSellingPrice,
+        quantity: 0,
+      },
+      inspectionContent: list.Content,
+      inspectionResult: true,
+    };
+    console.log(passData);
+
+    axios.post(`${GLOBAL_URL}/api/inspection/pass`, passData, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+      },
+    });
+  }
+};
 // 브랜드, 상품명 검색 입력 시 호출
 const fetchSuggestions = async (type, list) => {
   // 검색어가 변경될 때만 API를 호출하는 명령어
   // clearTimeout(debounceTimeout);
   if (type === 'brand' && list.brandKeyword.length > 1) {
     // 최소 2자 입력 후 검색
-    console.log(list.brandKeyword);
     try {
+      // 브랜드 검색어 입력 시 서버와 통신
       const brandResponse = await axios.get(`${GLOBAL_URL}/api/inspection/search-brands`, {
         params: { keyword: list.brandKeyword },
       });
-      console.log(brandResponse);
       list.brandSuggestions = brandResponse.data;
       if (list.brandSuggestions.length > 0) {
         list.selectedBrand = `${list.brandSuggestions[0].brandId}.${list.brandSuggestions[0].brandName}`;
@@ -235,10 +294,10 @@ const fetchSuggestions = async (type, list) => {
     }
   } else if (type === 'product' && list.productKeyword.length > 1) {
     try {
+      // 상품명 검색어 입력 시 서버와 통신
       const productResponse = await axios.get(`${GLOBAL_URL}/api/inspection/search-products`, {
         params: { keyword: list.productKeyword },
       });
-      console.log(productResponse);
       list.productSuggestions = productResponse.data;
       if (list.productSuggestions.length > 0) {
         console.log(list.productSuggestions);
@@ -263,7 +322,6 @@ const dolode = async () => {
         Authorization: `Bearer ${sessionStorage.getItem('token')}`,
       },
     });
-    console.log(InspectionListRes);
     InspectionList.value = InspectionListRes.data.map(item => ({
       ...item,
       brandKeyword: '',
@@ -274,13 +332,21 @@ const dolode = async () => {
       selectedProduct: [],
       productNameInput: '',
       brandNameInput: '',
+      categoryId: 0,
+      inspectionSellingPrice: 0,
+      TestResult: '',
+      PassGradeId: 0,
+      FailReasonId: 0,
+      Content: '',
     }));
-    // 검수 합격 리스트
+    // 검수 합격 등급 리스트
     const passRes = await axios.get(`${GLOBAL_URL}/api/inspection/pass/grade`);
     PassGradeList.value = passRes.data;
     // 검수 불합격 사유 리스트
     const failRes = await axios.get(`${GLOBAL_URL}/api/inspection/fail/reason`);
     FailReasonList.value = failRes.data;
+    // userSaleImageList.value = InspectionList.value.userSaleResImageList;
+    console.log(InspectionList.value);
   } catch (error) {
     console.error('Error loading inspection list:', error);
   }
@@ -331,11 +397,12 @@ option {
 }
 button {
   padding: 10px;
-  background-color: orange;
+  background-color: var(--color-main-bloode);
   border-radius: 10px;
   width: 100%;
   text-align: center;
   font-size: 1.8rem;
+  color: white;
 }
 .InputDisplay {
   display: flex;

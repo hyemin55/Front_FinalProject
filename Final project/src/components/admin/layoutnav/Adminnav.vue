@@ -20,7 +20,9 @@
         ><li><img src="@/assets/img/icon/free-icon-font-megaphone-3914404.svg" alt="" />공지사항</li></RouterLink
       >
       <RouterLink to="/mainInspectionList"
-        ><li><img src="@/assets/img/icon/free-icon-font-clipboard-list-7857488.svg" alt="" />판매신청목록</li></RouterLink
+        ><li>
+          <img src="@/assets/img/icon/free-icon-font-clipboard-list-7857488.svg" alt="" />판매신청목록
+        </li></RouterLink
       >
       <RouterLink to="/approvedList"
         ><li><img src="@/assets/img/icon/free-icon-font-clipboard-list-7857488.svg" alt="" />승인목록</li></RouterLink
@@ -37,7 +39,9 @@
   <article id="Adminnav" v-if="role === 'APPRAISER'">
     <ul>
       <RouterLink to="/mainInspectionList"
-        ><li><img src="@/assets/img/icon/free-icon-font-clipboard-list-7857488.svg" alt="" />판매신청목록</li></RouterLink
+        ><li>
+          <img src="@/assets/img/icon/free-icon-font-clipboard-list-7857488.svg" alt="" />판매신청목록
+        </li></RouterLink
       >
       <RouterLink to="/approvedList"
         ><li><img src="@/assets/img/icon/free-icon-font-clipboard-list-7857488.svg" alt="" />승인목록</li></RouterLink
@@ -69,6 +73,7 @@ watch(useStore.role, _new => {
   height: calc(100vh - 70px);
   background-color: var(--color-main-pink);
   font-size: 1.6rem;
+  transition: all 0.3s;
 }
 li {
   width: 100%;
@@ -89,5 +94,21 @@ li:hover img {
 li img {
   width: 10%;
   margin-right: 10px;
+  transition: all 0.3s;
+}
+@media (max-width: 1000px) {
+  #Adminnav {
+    width: 100px;
+    font-size: 1.2rem;
+    transition: all 0.3s;
+  }
+  li {
+    padding-left: 10px;
+  }
+  li img {
+    width: 20%;
+    margin-right: 1px;
+    transition: all 0.3s;
+  }
 }
 </style>
