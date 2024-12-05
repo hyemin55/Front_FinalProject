@@ -14,18 +14,18 @@ export const useWishStore = defineStore('wish', {
 
             if(aready){
                 this.wishList = this.wishList.filter(item => item !== product);
-                localStorage.removeItem('wishList', JSON.stringify(this.wishList))
+                localStorage.setItem('wishList', JSON.stringify(this.wishList))
             }
             else{
                 this.wishList.push(product)
                 localStorage.setItem('wishList', JSON.stringify(this.wishList))
-                console.log('추가추가')
             }
         },
         removeWishList(){
             localStorage.removeItem('wishList');
             this.wishList = [];
         },
+        
     },
     getter:{}
     

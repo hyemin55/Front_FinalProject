@@ -4,10 +4,13 @@ import { useRoute, useRouter } from 'vue-router';
 import { login, loginCheck } from '@/api/KakaoLoginApi';
 import { useUserStore } from '@/stores/Login';
 import LodingView from '@/views/loding/LodingView.vue';
+import { wishList } from '@/api/wishApi';
+import { useWishStore } from '@/stores/WishStore';
 
 const route = useRoute();
 const router = useRouter();
 const useStore = useUserStore();
+const wishStore = useWishStore();
 
 // 받은 인가코드로 토큰받아오기
 watchEffect(async () => {
@@ -20,6 +23,8 @@ watchEffect(async () => {
     res = await loginCheck();
     useStore.login(res.data); //스토어 등록
     console.log(res.data);
+    const wishListData = await wishList(); // 찜하기 통신
+    wishListData.map(item => item.productId).forEach(productId => {wishStore.makeWishList(productId);}); // 찜 스토어 등록
     if (res.status.toString().startsWith('2')) {
       console.log(res.data);
     }

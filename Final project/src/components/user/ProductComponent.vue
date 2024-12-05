@@ -11,14 +11,15 @@ import { useWishStore } from '@/stores/WishStore';
 // import { useQueryClient } from '@tanstack/vue-query';
 // import { getProductData, getReviewData, getReviewImageList, getSlideImages, getstarCounting } from '@/api/productDetail';
 
+
 // 로그인 pinia
 const userStore = useUserStore();
 const userLogin = computed(() => userStore.loginCheck);
 
+
 // 장바구니 추가
 const cartStore = useCartStore();
 const addToCart = () => {
-  alert('장바구니에 담았습니다.');
   console.log('props.productInfo', props.productInfo);
   cartStore.addItem(props.productInfo);
   if (userLogin.value) {
@@ -27,6 +28,7 @@ const addToCart = () => {
       quantity: 1,
     };
     addCartDatabase(data);
+    alert('장바구니에 담았습니다.');
   }
 };
 

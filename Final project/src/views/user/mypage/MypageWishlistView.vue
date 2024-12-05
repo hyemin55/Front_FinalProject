@@ -1,18 +1,21 @@
 <script setup>
+import { addCartDatabase } from '@/api/cartApi';
 import { GLOBAL_URL } from '@/api/util';
 import { wishClick, wishList } from '@/api/wishApi';
 import { useCartStore } from '@/stores/CartStore';
 import { useUserStore } from '@/stores/Login';
+import { useWishStore } from '@/stores/WishStore';
 import { computed, ref, watch, watchEffect } from 'vue';
 
 // 로그인 pinia
-// const userStore = useUserStore();
-// const userLogin = computed(() => userStore.loginCheck);
+const userStore = useUserStore();
+const userLogin = computed(() => userStore.loginCheck);
 
-// 장바구니 pinia
-// const cartStore = useCartStore();
+const wishStore = useWishStore();
+const cartStore = useCartStore();
 
 // 전체석택
+// const allCheckList = ref([]);
 // let allChecked = ref(false);
 // const allCheck =()=>{
 //   console.log(allChecked.value)
@@ -22,14 +25,11 @@ import { computed, ref, watch, watchEffect } from 'vue';
 const data = ref([]);
 const LoadingwishList = async () => {
   const wishListData = await wishList();
-
   data.value = wishListData.map(product => ({
     ...product,         
     isChecked: false
   }));
-  console.log(data.value);
-  // data.value = wishListData;
-  // console.log(data.value);
+  console.log('찜목록 데이터', data.value);
 };
 
 // 화면 랜더링
@@ -42,6 +42,7 @@ const wishDelete = async(productId, check) => {
   if (check == true) {
     await wishClick(productId);
     console.log('찜목록 삭제');
+    wishStore.makeWishList(productId)
     await LoadingwishList();
   } else {
     alert('선택된 제품이 없습니다.');
@@ -49,15 +50,15 @@ const wishDelete = async(productId, check) => {
 };
 
 // 장바구니 담기
-const addCart = (productId) => {
-  // cartStore.addItem(props.productInfo); - pinia에 정보를 담아야함. productInfo 뭐가 들어오는지 봐야함.
-  if (userLogin.value && isChecked.value == true) {
-    const data = {
+const addCart = (productId, check) => {
+  const data = {
       productId: productId,
       quantity: 1,
-    };
-    alert('장바구니에 담았습니다.');
+  };
+  if (userLogin.value && check == true) {
+    // cartStore.addItem(props.productInfo); (pinia데이터 통일)
     addCartDatabase(data);
+    alert('장바구니에 담았습니다.');
   } else {
     alert('선택된 제품이 없습니다.');
   }
@@ -88,7 +89,7 @@ const addCart = (productId) => {
       </div>
 
       <div class="btn">
-        <div class="cart_btn" @click="addCart(product.productId)">장바구니 담기</div>
+        <div class="cart_btn" @click="addCart(product.productId, product.isChecked)">장바구니 담기</div>
         <div class="delet_btn" @click="wishDelete(product.productId, product.isChecked)">삭제</div>
       </div>
     </div>

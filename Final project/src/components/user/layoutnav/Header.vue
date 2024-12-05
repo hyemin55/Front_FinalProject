@@ -4,6 +4,7 @@ import { ref, watchEffect, onMounted, onUpdated, nextTick } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { eventBus } from '@/eventBus';
 import { useCartStore } from '@/stores/CartStore';
+import { useWishStore } from '@/stores/WishStore';
 
 const cartStore = useCartStore();
 const route = useRoute();
@@ -11,6 +12,7 @@ const router = useRouter();
 const HeaderMode = ref(false);
 
 const useStore = useUserStore();
+const wishStore = useWishStore();
 
 const loginCheck = ref(false);
 const token = ref(false);
@@ -25,6 +27,7 @@ const kakaoLogout = async () => {
   // console.log('로그아웃 성공')
   // console.log(token.value)
   // token.value = false
+  wishStore.removeWishList();
   eventBus.emit('logout');
   router.push({ name: 'login2' });
 };
