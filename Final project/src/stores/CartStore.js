@@ -40,7 +40,7 @@ export const useCartStore = defineStore('cart', {
       localStorage.setItem('cartItems', JSON.stringify(this.cartItems));
     },
 
-    // 장바구니 회원정보 불러오기
+    // 회원의 장바구니 정보 불러오기
     updateCart(items) {
       // 장바구니 초기화
       this.cartItems = [];

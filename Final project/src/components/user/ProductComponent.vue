@@ -1,7 +1,7 @@
 <script setup>
 import { GLOBAL_URL } from '@/api/util';
 import { useRouter } from 'vue-router';
-import { computed, ref, watch } from 'vue';
+import { computed, ref, watch, watchEffect } from 'vue';
 import { useCartStore } from '@/stores/CartStore';
 import axios from 'axios';
 import { useUserStore } from '@/stores/Login';
@@ -45,13 +45,13 @@ const props = defineProps({
     required: true,
   },
 });
-
 const productName = ref(props.productInfo.productName || '상품이름');
 const content = ref(props.productInfo.content || '상품설명');
 const price = ref(props.productInfo.price || '가격');
 const size = ref(props.productInfo.size || '사이즈');
 // const review_avr = ref('평점');
 const reviewCount = ref(props.productInfo.reviewCount || '0');
+
 
 // useNavigator
 const router = useRouter();
@@ -65,20 +65,38 @@ const navDetailProduct = () => {
   });
 };
 
-// 찜목록 추가
+// 찜목록 추가 #############################################
 const redHeart = ref(false);
 const iconClick = ref(false); // 찜하트 css
-
 const wishStore = useWishStore();
 
-const addToWishlist = async () => {
-  redHeart.value = !redHeart.value;
-  iconClick.value = !iconClick.value; // 찜하트 css
+watchEffect(()=>{
+  const wishProduct = wishStore.wishList.find(
+    item => item === props.productInfo.productId
+  );
+  console.log(wishProduct)
+  if(wishProduct){
+    redHeart.value = true;
+    iconClick.value = true;
+  }else{
+    redHeart.value = false;
+    iconClick.value = false;
+  }
+})
 
-  await wishClick(props.productInfo.productId);
-  // wishStore.makeWishList(props.productInfo.productId);
-    
+const addToWishlist = async () => {
+  if(userLogin.value){
+    // DB통신(추가,삭제)
+    await wishClick(props.productInfo.productId);
+    // Pinia(추가, 삭제)
+    wishStore.makeWishList(props.productInfo.productId);
+  }else{
+    alert('로그인 후 사용이 가능합니다.')
+    router.push({path: '/login2' });
+  }
 };
+// ##########################################################
+
 </script>
 
 <template>

@@ -7,6 +7,7 @@ import MypageSalseHistoryView from '@/views/user/mypage/MypageSalseHistoryView.v
 import MypageWishlistView from '@/views/user/mypage/MypageWishlistView.vue';
 import MypageReviewView from '@/views/user/mypage/MypageReviewView.vue';
 import MypageCurrentSituationView from '@/views/user/mypage/MypageCurrentSituationView.vue';
+import ModalCommon from '@/components/user/ModalCommon.vue';
 
 const user = useUserStore();
 onMounted(() => {});
@@ -22,6 +23,7 @@ const componentMap = {
   myInformation: MypageInformationView,
 };
 const currentComponent = computed(() => componentMap[selectpage.value]);
+
 </script>
 
 <template>

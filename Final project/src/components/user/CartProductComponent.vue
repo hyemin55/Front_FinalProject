@@ -105,9 +105,7 @@ const downCount = async () => {
     }
   }
 }
-watch(
-  () => props.productInfo.quantity,
-  newValue => {
+watch(() => props.productInfo.quantity, newValue => {
     cart_quantity.value = newValue
   },
 )

@@ -14,8 +14,6 @@ const a = ref({
   }
 })
 
-
-
 // 모달창 닫기(부모로 event 전달)
 const emit = defineEmits();
 const closeModal = () => {
