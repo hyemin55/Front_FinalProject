@@ -50,7 +50,7 @@ const filterInfo = reactive(props.filterInfo);
 }
 .title {
   /* background-color: var(--color-main-pink); */
-  background-color: rgb(227, 227, 255);
+  background-color: rgb(147, 33, 33);
   width: 100%;
   height: 50px;
   display: flex;
@@ -61,7 +61,7 @@ const filterInfo = reactive(props.filterInfo);
   border-bottom: 1px solid #cccccc;
 }
 .title p {
-  color: #111111;
+  color: #eeeeee;
   padding: 15px;
 }
 .title p img{

@@ -272,7 +272,9 @@ const addToWishlist = async () => {
   font-family: "Playfair Display", serif;
   font-size: 1.2rem;
   font-weight: 600;
-  color: rgb(255, 188, 64);
+  color: orange;
+  /* color: rgb(255, 188, 64); */
+  /* color: var(--color-main-bloode); */
 }
 
 </style>

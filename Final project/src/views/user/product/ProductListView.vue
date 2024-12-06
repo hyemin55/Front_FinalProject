@@ -270,10 +270,10 @@ const chageMode = ()=>{
   height: 100%;
   width: 52px;
   cursor: pointer;
-  background-color: rgb(154, 154, 255);
+  background-color: rgb(197, 33, 33);
   border-radius: 1.5rem;
   padding: 4px;
-  box-shadow: inset 1px 1px 5px 2px rgb(80, 80, 184);
+  box-shadow: inset 1px 1px 5px 2px var(--color-main-bloode);
 }
 .filter_ball{
   width: 20px;
