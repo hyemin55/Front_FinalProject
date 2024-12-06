@@ -250,12 +250,11 @@ const categoriesList = ['Perfume', 'Diffuser', 'Candle'];
 const Send = async list => {
   console.log(list.TestResult);
 
+  const InspectionResultId = [list.PassGradeId, list.FailReasonId];
   // 각 항목에 필드 이름과 값을 함께 저장
   const valueError = [
     { field: '검수 결과', value: list.TestResult },
     { field: '판매 신청자', value: list.saleApplicationId },
-    { field: '등급', value: list.PassGradeId },
-    { field: '반려 사유', value: list.FailReasonId },
     { field: '카테고리', value: list.categoryId },
     { field: '카테고리', value: categoriesList[list.categoryId - 1] },
     { field: '브랜드', value: list.selectedBrand.split('.')[0] },
@@ -263,74 +262,76 @@ const Send = async list => {
     { field: '상품명', value: list.selectedProduct.productName },
     { field: '용량', value: list.selectedProduct.size },
     { field: '권장 판매 가격', value: list.inspectionSellingPrice },
+    {
+      field: list.TestResult === 'Y' ? '등급' : '반려사유',
+      value: list.TestResult === 'Y' ? InspectionResultId[0].value : InspectionResultId[1].value,
+    },
   ];
 
   // 배열 순회하며 값 검증
   for (let i = 0; i < valueError.length; i++) {
+    console.log('valueError.values', valueError.values);
     if (valueError[i].value === '' || valueError[i].value === null || valueError[i].value === 0) {
       alert(`"${valueError[i].field}" 값이 입력되지 않았습니다.`);
       return; // 입력 오류 발생 시 함수 종료
+    } else if (list.TestResult === 'Y') {
+      console.log('모든 값이 올바르게 입력되었습니다.');
+      const passData = {
+        pendingSaleId: list.saleApplicationId,
+        gradeId: list.PassGradeId,
+        inspectionCategoryReqDto: {
+          categoryId: list.categoryId,
+          categoryName: categoriesList[list.categoryId - 1],
+        },
+        inspectionBrandReqDto: {
+          brandId: list.selectedBrand.split('.')[0],
+          brandName: list.selectedBrand.split('.')[1],
+        },
+        inspectionProductReqDto: {
+          productName: list.selectedProduct.productName,
+          productSize: list.selectedProduct.size,
+          verifiedSellingPrice: list.inspectionSellingPrice,
+          quantity: 0,
+        },
+        inspectionContent: list.Content,
+        inspectionResult: true,
+      };
+      console.log(passData);
+
+      await axios.post(`${GLOBAL_URL}/api/inspection/pass`, passData, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+      });
+    } else if (list.TestResult === 'N') {
+      const failData = {
+        pendingSaleId: list.saleApplicationId,
+        rejectionReasonId: list.FailReasonId,
+        inspectionCategoryReqDto: {
+          categoryId: list.categoryId,
+          categoryName: categoriesList[list.categoryId - 1],
+        },
+        inspectionBrandReqDto: {
+          brandId: list.selectedBrand.split('.')[0],
+          brandName: list.selectedBrand.split('.')[1],
+        },
+        inspectionProductReqDto: {
+          productName: list.selectedProduct.productName,
+          productSize: list.selectedProduct.size,
+          verifiedSellingPrice: list.inspectionSellingPrice,
+          quantity: 0,
+        },
+        inspectionContent: list.Content,
+        inspectionResult: false,
+      };
+      await axios.post(`${GLOBAL_URL}/api/inspection/reject`, failData, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+      });
     }
-  }
-
-  console.log('모든 값이 올바르게 입력되었습니다.');
-
-  if (list.TestResult === 'Y') {
-    const passData = {
-      pendingSaleId: list.saleApplicationId,
-      gradeId: list.PassGradeId,
-      inspectionCategoryReqDto: {
-        categoryId: list.categoryId,
-        categoryName: categoriesList[list.categoryId - 1],
-      },
-      inspectionBrandReqDto: {
-        brandId: list.selectedBrand.split('.')[0],
-        brandName: list.selectedBrand.split('.')[1],
-      },
-      inspectionProductReqDto: {
-        productName: list.selectedProduct.productName,
-        productSize: list.selectedProduct.size,
-        verifiedSellingPrice: list.inspectionSellingPrice,
-        quantity: 0,
-      },
-      inspectionContent: list.Content,
-      inspectionResult: true,
-    };
-    console.log(passData);
-
-    await axios.post(`${GLOBAL_URL}/api/inspection/pass`, passData, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-      },
-    });
-  } else if (list.TestResult === 'N') {
-    const failData = {
-      pendingSaleId: list.saleApplicationId,
-      rejectionReasonId: list.FailReasonId,
-      inspectionCategoryReqDto: {
-        categoryId: list.categoryId,
-        categoryName: categoriesList[list.categoryId - 1],
-      },
-      inspectionBrandReqDto: {
-        brandId: list.selectedBrand.split('.')[0],
-        brandName: list.selectedBrand.split('.')[1],
-      },
-      inspectionProductReqDto: {
-        productName: list.selectedProduct.productName,
-        productSize: list.selectedProduct.size,
-        verifiedSellingPrice: list.inspectionSellingPrice,
-        quantity: 0,
-      },
-      inspectionContent: list.Content,
-      inspectionResult: false,
-    };
-    await axios.post(`${GLOBAL_URL}/api/inspection/reject`, failData, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-      },
-    });
   }
 };
 // 브랜드, 상품명 검색 입력 시 호출
