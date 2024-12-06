@@ -56,7 +56,8 @@ const addCart = (productId, check) => {
       quantity: 1,
   };
   if (userLogin.value && check == true) {
-    // cartStore.addItem(props.productInfo); (pinia데이터 통일)
+    // (pinia데이터 통일)
+    cartStore.addItem(props.productInfo); 
     addCartDatabase(data);
     alert('장바구니에 담았습니다.');
   } else {

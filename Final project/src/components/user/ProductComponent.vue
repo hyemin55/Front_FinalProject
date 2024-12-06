@@ -104,6 +104,7 @@ const addToWishlist = async () => {
 <template>
   <article class="products">
     <div class="product_img" @click="navDetailProduct">
+      <p v-if="size > 50" class="brandNew">Brand new</p>
       <img :src="`${GLOBAL_URL}/api/file/download/${productInfo.images[0].filename}`" style="height: 90%" />
       <ul @click.stop>
         <li class="cart_push" @click.stop="addToCart">
@@ -138,6 +139,7 @@ const addToWishlist = async () => {
 </template>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 /* 전체설정 */
 .products {
   max-width: 305px;
@@ -258,4 +260,19 @@ const addToWishlist = async () => {
 .size {
   /* font-weight: 400; */
 }
+.brandNew{
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 5px 8px;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: rgb(247, 247, 247);
+  box-shadow: inset -3px -3px 3px #ffffff73, inset 1px 1px 3px rgba(94, 104, 121, .288);
+  font-family: "Playfair Display", serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: rgb(255, 188, 64);
+}
+
 </style>
