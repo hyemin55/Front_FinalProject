@@ -50,11 +50,20 @@ input[type='checkbox'] {
 }
 .MainAdmin {
   height: auto;
-  min-height: calc(100vh - 70px);
-  width: calc(100vw - 200px);
+  min-height: calc(100% - 70px);
+  width: calc(100% - 200px);
   margin: 70px 0 0 200px;
-  padding: 10px 0 0 10px;
-  /* background-color: brown; */
+  padding: 10px 10px 0 10px;
+  background-color: var(--color-main-Lgray);
+  transition: all 0.3s;
+}
+@media (max-width: 1000px) {
+  .MainAdmin {
+    min-height: calc(100% - 70px);
+    width: calc(100% - 100px);
+    margin: 70px 0 0 100px;
+    transition: all 0.3s;
+  }
 }
 /* @media (hover: hover) {
   a:hover {

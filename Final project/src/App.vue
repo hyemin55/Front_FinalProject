@@ -5,7 +5,7 @@ import Footer from '@/components/user/layoutnav/Footer.vue';
 import { onBeforeMount, onBeforeUnmount, onMounted, ref } from 'vue';
 import AdminHeader from '@/components/admin/layoutnav/AdminHeader.vue';
 import { useUserStore } from '@/stores/Login';
-import Adminnav from '@/components/admin/layoutnav/Adminnav.vue';
+import AdminNav from '@/components/admin/layoutnav/AdminNav.vue';
 
 const data = useUserStore();
 // console.log(role.nickName);
@@ -24,10 +24,7 @@ const pageUp = () => {
 const pageDown = () => {
   window.scrollTo({ top: 30000, behavior: 'smooth' });
 };
-onBeforeMount(()=>{
-  // data.loginCheck === 'true'
-  
-})
+
 onMounted(() => {
   window.addEventListener('scroll', scrollHeight);
 });
@@ -37,12 +34,12 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div> 
-    <div v-if="data.nickName === '민이♡'">
+  <div>
+    <div v-if="data.role === 'ADMIN' || data.role === 'APPRAISER'">
       <div>
         <AdminHeader></AdminHeader>
-        <div class="adminLayout">
-          <Adminnav></Adminnav>
+        <div>
+          <AdminNav></AdminNav>
           <RouterView class="MainAdmin" />
         </div>
       </div>
@@ -50,11 +47,11 @@ onBeforeUnmount(() => {
 
     <div v-else>
       <Header></Header>
-      
+
       <div class="min-height">
         <RouterView />
       </div>
-      
+
       <Footer></Footer>
     </div>
 
@@ -68,9 +65,6 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
-.adminLayout {
-  display: flex;
-}
 .min-height {
   min-height: calc(100vh - 320px);
 }

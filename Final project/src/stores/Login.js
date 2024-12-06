@@ -29,6 +29,7 @@ export const useUserStore = defineStore('member', {
         this.profileImage = image1234;
       }
       console.log(sessionStorage.getItem('token'));
+      console.log('Login.js = ', this.role);
       sessionStorage.setItem('nickName', this.nickName);
       sessionStorage.setItem('profileImage', this.profileImage);
     },
@@ -41,6 +42,8 @@ export const useUserStore = defineStore('member', {
       this.email = '';
       this.userId = '';
       this.snsType = '';
+      this.role = '';
+      console.log(this.role);
       sessionStorage.removeItem('token');
       sessionStorage.removeItem('nickName');
       sessionStorage.removeItem('profileImage');

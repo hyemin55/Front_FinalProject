@@ -1,34 +1,30 @@
 <template>
-  <article>
-    <nav id="header">
+  <article id="header">
       <img src="@/assets/img/logo_text_white.png" alt="" />
       <ul class="header_nav">
-        <li><a href="/" target="_blank" rel="noopener noreferrer">사이트로 이동</a></li>
+        <!-- <li><a href="/" target="_blank" rel="noopener noreferrer">사이트로 이동</a></li> -->
+        <li><a href="/" rel="noopener noreferrer">사이트로 이동</a></li>
         <li><img src="@/assets/img/icon/free-icon-font-refresh-3917293.svg" alt="" /></li>
         <li @click="logout">LOGOUT</li>
       </ul>
-    </nav>
   </article>
 </template>
 
 <script setup>
 import { useUserStore } from '@/stores/Login';
-import { onBeforeMount, onMounted, onUpdated } from 'vue';
+import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 const router = useRouter();
 const useStore = useUserStore();
 
 const logout = () => {
   useStore.logout();
+  // eventBus.emit('logout');
   router.push({ name: 'main' });
 };
-// onMounted(() => {
-//   useStore.nickName === '민이♡';
-//   console.log(useStore.nickName);
-// });
 
 onMounted(() => {
-  console.log('AdminHeader', useStore.nickName);
+  console.log('AdminHeader', useStore.role);
 });
 </script>
 
@@ -38,6 +34,7 @@ onMounted(() => {
   align-items: center;
   justify-content: space-between;
   position: fixed;
+  top: 0;
   padding: 1%;
   font-size: 1.7rem;
   width: 100%;
@@ -79,6 +76,7 @@ onMounted(() => {
 .header_nav li:nth-child(3) {
   background-color: var(--color-main-pink);
   border-radius: 10px;
+  cursor: pointer;
 }
 
 @keyframes spin {
