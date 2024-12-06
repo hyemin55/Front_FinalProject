@@ -167,6 +167,7 @@ const requestPay = async () => {
                 buyerAddr: rsp.buyer_addr,
                 buyerPostcode: rsp.buyer_postcode,
                 purchaseProductDtos: cartData.purchaseProductDtos, // 제품IDs와 수량들
+                purchaseId: purchaseId.value,
               };
 
               // 주문 정보 저장
