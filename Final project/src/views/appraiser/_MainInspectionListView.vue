@@ -264,76 +264,79 @@ const Send = async list => {
     { field: '권장 판매 가격', value: list.inspectionSellingPrice },
     {
       field: list.TestResult === 'Y' ? '등급' : '반려사유',
-      value: list.TestResult === 'Y' ? InspectionResultId[0].value : InspectionResultId[1].value,
+      value: list.TestResult === 'Y' ? InspectionResultId[0] : InspectionResultId[1],
     },
   ];
 
   // 배열 순회하며 값 검증
   for (let i = 0; i < valueError.length; i++) {
     console.log('valueError.values', valueError.values);
+
     if (valueError[i].value === '' || valueError[i].value === null || valueError[i].value === 0) {
       alert(`"${valueError[i].field}" 값이 입력되지 않았습니다.`);
       return; // 입력 오류 발생 시 함수 종료
-    } else if (list.TestResult === 'Y') {
-      console.log('모든 값이 올바르게 입력되었습니다.');
-      const passData = {
-        pendingSaleId: list.saleApplicationId,
-        gradeId: list.PassGradeId,
-        inspectionCategoryReqDto: {
-          categoryId: list.categoryId,
-          categoryName: categoriesList[list.categoryId - 1],
-        },
-        inspectionBrandReqDto: {
-          brandId: list.selectedBrand.split('.')[0],
-          brandName: list.selectedBrand.split('.')[1],
-        },
-        inspectionProductReqDto: {
-          productName: list.selectedProduct.productName,
-          productSize: list.selectedProduct.size,
-          verifiedSellingPrice: list.inspectionSellingPrice,
-          quantity: 0,
-        },
-        inspectionContent: list.Content,
-        inspectionResult: true,
-      };
-      console.log(passData);
-
-      await axios.post(`${GLOBAL_URL}/api/inspection/pass`, passData, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-        },
-      });
-    } else if (list.TestResult === 'N') {
-      const failData = {
-        pendingSaleId: list.saleApplicationId,
-        rejectionReasonId: list.FailReasonId,
-        inspectionCategoryReqDto: {
-          categoryId: list.categoryId,
-          categoryName: categoriesList[list.categoryId - 1],
-        },
-        inspectionBrandReqDto: {
-          brandId: list.selectedBrand.split('.')[0],
-          brandName: list.selectedBrand.split('.')[1],
-        },
-        inspectionProductReqDto: {
-          productName: list.selectedProduct.productName,
-          productSize: list.selectedProduct.size,
-          verifiedSellingPrice: list.inspectionSellingPrice,
-          quantity: 0,
-        },
-        inspectionContent: list.Content,
-        inspectionResult: false,
-      };
-      await axios.post(`${GLOBAL_URL}/api/inspection/reject`, failData, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-        },
-      });
     }
   }
+  if (list.TestResult === 'Y') {
+    console.log('모든 값이 올바르게 입력되었습니다.');
+    const passData = {
+      pendingSaleId: list.saleApplicationId,
+      gradeId: list.PassGradeId,
+      inspectionCategoryReqDto: {
+        categoryId: list.categoryId,
+        categoryName: categoriesList[list.categoryId - 1],
+      },
+      inspectionBrandReqDto: {
+        brandId: list.selectedBrand.split('.')[0],
+        brandName: list.selectedBrand.split('.')[1],
+      },
+      inspectionProductReqDto: {
+        productName: list.selectedProduct.productName,
+        productSize: list.selectedProduct.size,
+        verifiedSellingPrice: list.inspectionSellingPrice,
+        quantity: 0,
+      },
+      inspectionContent: list.Content,
+      inspectionResult: true,
+    };
+    console.log(passData);
+
+    await axios.post(`${GLOBAL_URL}/api/inspection/pass`, passData, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+      },
+    });
+  } else if (list.TestResult === 'N') {
+    const failData = {
+      pendingSaleId: list.saleApplicationId,
+      rejectionReasonId: list.FailReasonId,
+      inspectionCategoryReqDto: {
+        categoryId: list.categoryId,
+        categoryName: categoriesList[list.categoryId - 1],
+      },
+      inspectionBrandReqDto: {
+        brandId: list.selectedBrand.split('.')[0],
+        brandName: list.selectedBrand.split('.')[1],
+      },
+      inspectionProductReqDto: {
+        productName: list.selectedProduct.productName,
+        productSize: list.selectedProduct.size,
+        verifiedSellingPrice: list.inspectionSellingPrice,
+        quantity: 0,
+      },
+      inspectionContent: list.Content,
+      inspectionResult: false,
+    };
+    await axios.post(`${GLOBAL_URL}/api/inspection/reject`, failData, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+      },
+    });
+  }
 };
+
 // 브랜드, 상품명 검색 입력 시 호출
 const fetchSuggestions = async (type, list) => {
   if (list.brandKeyword.length < 2) return;
