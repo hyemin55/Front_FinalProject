@@ -59,14 +59,19 @@
                 >
                   {{ brand.brandId }}.{{ brand.brandName }}
                 </option>
-                <option :value="list.brandNameInput">직접입력</option>
+                <option value="brandNameInput">직접입력</option>
               </select>
             </td>
             <td rowspan="2">
               <p>기존값: {{ list.brand }}</p>
               <p class="InputDisplay" v-if="list.selectedBrand != ''">
                 수정값:
-                <input v-if="list.selectedBrand === list.brandNameInput" type="text" placeholder="직접입력" />
+                <input
+                  v-if="list.selectedBrand === 'brandNameInput'"
+                  :value="list.selectedBrand"
+                  type="text"
+                  placeholder="직접입력"
+                />
                 <span v-else>{{ list.selectedBrand }} </span>
               </p>
             </td>
@@ -76,7 +81,7 @@
                 <option :value="product" v-for="(product, index) in list.productSuggestions" :key="index">
                   {{ product.productName }}ㆍ{{ product.size }} ml
                 </option>
-                <option :value="list.productNameInput">직접입력</option>
+                <option value="productNameInput">직접입력</option>
               </select>
             </td>
             <td rowspan="2">
@@ -84,7 +89,12 @@
 
               <p class="InputDisplay" v-if="list.selectedProduct != ''">
                 수정값:
-                <input v-if="list.selectedProduct === list.productNameInput" type="text" placeholder="직접입력" />
+                <input
+                  v-if="list.selectedProduct === 'productNameInput'"
+                  :value="list.selectedProduct"
+                  type="text"
+                  placeholder="직접입력"
+                />
                 <span v-else>{{ list.selectedProduct.productName }}ㆍ{{ list.selectedProduct.size }} ml</span>
               </p>
             </td>
