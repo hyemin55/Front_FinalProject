@@ -149,7 +149,7 @@ watchEffect(() => {
         1,222찜 수
         <span style="color: orange">★ {{ Average(reviewData.data.starAverage) }} ({{ reviewData.data.reviewCount }} reviews)</span>
       </li>
-      <li>{{ formatPrice(productDataOk.price) }}</li>
+      <li>{{ productDataOk.price.toLocalString() }}</li>
     </ul>
 
     <p class="OptionSelect">옵션선택</p>

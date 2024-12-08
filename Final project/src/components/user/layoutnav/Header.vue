@@ -1,6 +1,6 @@
 <script setup>
 import { useUserStore } from '@/stores/Login';
-import { ref, watchEffect, onMounted, onUpdated, nextTick } from 'vue';
+import { ref, watchEffect, onMounted, nextTick } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { eventBus } from '@/eventBus';
 import { useCartStore } from '@/stores/CartStore';
@@ -13,8 +13,8 @@ const HeaderMode = ref(false);
 
 const useStore = useUserStore();
 const wishStore = useWishStore();
+const role = ref('');
 
-const loginCheck = ref(false);
 const token = ref(false);
 watchEffect(() => {
   HeaderMode.value = route.path === '/';
@@ -34,9 +34,11 @@ const kakaoLogout = async () => {
 
 onMounted(() => {
   const savedToken = sessionStorage.getItem('token');
+  
   if (savedToken) {
     token.value = true;
     useStore.loginCheck = true; // 스토어에 로그인 상태 설정
+    role.value = useStore.role;
   } else {
     useStore.loginCheck = false;
   }
@@ -104,10 +106,14 @@ const toggleSearch = () => {
           <li><router-link to="/mypage">마이페이지</router-link></li>
           <li class="noCursor">&nbsp;|&nbsp;</li>
           <li>고객센터</li>
-          <li class="noCursor">&nbsp;|&nbsp;</li>
-          <li><router-link to="/mainInspectionList">검수자</router-link></li>
-          <li class="noCursor">&nbsp;|&nbsp;</li>
-          <li><router-link to="/mainDashboard">관리자</router-link></li>
+          <span v-if="role === 'APPRAISER'">
+            <li class="noCursor">&nbsp;|&nbsp;</li>
+            <li><router-link to="/mainInspectionList">검수자</router-link></li>
+          </span>
+          <span v-if="role === 'ADMIN'">
+            <li class="noCursor">&nbsp;|&nbsp;</li>
+            <li><router-link to="/mainDashboard">관리자</router-link></li>
+          </span>
         </ul>
       </template>
       <template v-else>
