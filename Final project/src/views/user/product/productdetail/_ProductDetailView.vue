@@ -9,7 +9,7 @@ import ProductInfoSection from '@/views/user/product/productdetail/ProductDetail
 const route = useRoute();
 
 const productId = ref(route.params.idx);
-const productSize = ref(route.query.size);
+// const productSize = ref(route.query.size);
 
 const isProductInfoLoaded = ref(false); // 상태 변수
 
@@ -21,7 +21,7 @@ const handleProductInfoLoaded = newStatus => {
 
 watchEffect(() => {
   productId.value = route.params.idx;
-  productSize.value = route.query.size;
+  // productSize.value = route.query.size;
 });
 </script>
 

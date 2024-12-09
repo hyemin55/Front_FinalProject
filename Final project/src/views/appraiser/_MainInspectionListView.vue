@@ -103,8 +103,9 @@
         <thead>
           <tr>
             <th>용량 (ml)</th>
-            <th>판매자 사진</th>
-            <th>상품 검색 대표사진</th>
+            <th>희망판매가격</th>
+            <th>권장판매가격</th>
+
             <th colspan="2">상세설명</th>
           </tr>
         </thead>
@@ -113,34 +114,26 @@
             <td rowspan="2">
               기존값: {{ list.size }} ml
               <br />
-              <input type="number" max="10000" placeholder="용량(ml)" required />
+              <input type="number" step="1" max="10000" placeholder="용량(ml)" required />
             </td>
+            <td>￦ {{ list.expectedSellingPrice.toLocaleString() }}</td>
             <td>
-              <img
-                :src="`${GLOBAL_URL}/api/file/download/${userSaleImage.name}`"
-                v-for="userSaleImage in list.userSaleResImageList"
-                :key="userSaleImage"
-                alt=""
-                style="width: 50px"
+              <input
+                type="number"
+                v-model="list.inspectionSellingPrice"
+                min="5000"
+                step="10"
+                placeholder="권장판매가격(5,000원 이상)"
               />
             </td>
-            <td v-if="list.selectedProduct.mainImage">
-              <img
-                :src="`${GLOBAL_URL}/api/file/download/${list.selectedProduct.mainImage.filename}`"
-                alt=""
-                style="width: 50px"
-              />
-            </td>
-            <td v-else>
-              <img src="@/assets/img/빵빵덕세안.png" alt="" style="width: 50px" />
-            </td>
+
             <td colspan="2">{{ list.userContent }}</td>
           </tr>
         </tbody>
         <thead>
           <tr>
-            <th>희망판매가격</th>
-            <th>권장판매가격</th>
+            <th>판매자 사진</th>
+            <th>상품 검색 대표사진</th>
             <th>검수결과</th>
             <th v-if="list.TestResult == 'Y' || list.TestResult == ''" class="TestResult">
               등급
@@ -191,15 +184,25 @@
         </thead>
         <tbody>
           <tr>
-            <td>￦ {{ list.expectedSellingPrice.toLocaleString() }}</td>
             <td>
-              <input
-                type="number"
-                v-model="list.inspectionSellingPrice"
-                min="5000"
-                step="10"
-                placeholder="권장판매가격(5,000원 이상)"
+              <img
+                :src="`${GLOBAL_URL}/api/file/download/${userSaleImage.name}`"
+                v-for="userSaleImage in list.userSaleResImageList"
+                :key="userSaleImage"
+                alt=""
+                style="width: 50px"
               />
+              <input type="file" id="photo" multiple @change="handleFileUpload" />
+            </td>
+            <td v-if="list.selectedProduct.mainImage">
+              <img
+                :src="`${GLOBAL_URL}/api/file/download/${list.selectedProduct.mainImage.filename}`"
+                alt=""
+                style="width: 50px"
+              />
+            </td>
+            <td v-else>
+              <img src="@/assets/img/빵빵덕세안.png" alt="" style="width: 50px" />
             </td>
             <td>
               <select name="TestResults" id="" v-model="list.TestResult" required>
@@ -243,6 +246,9 @@
         <button @click="Send(list)">전송</button>
       </div>
     </article>
+    <article>
+      <InspectionModalView />
+    </article>
   </section>
 </template>
 
@@ -251,6 +257,7 @@ import { GLOBAL_URL } from '@/api/util';
 import AnnouncementComponent from '@/components/admin/AnnouncementComponent.vue';
 import axios from 'axios';
 import { ref } from 'vue';
+import InspectionModalView from '@/views/appraiser/InspectionModalView.vue';
 
 const InspectionList = ref([]);
 const PassGradeList = ref([]);

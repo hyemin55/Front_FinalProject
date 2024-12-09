@@ -12,7 +12,7 @@ const displayedList = ref([]);
 const chartRef = ref(null); // chart element 참조
 let chartInstance = null;
 const showMore = ref(5);
-const size = ref(route.query.size);
+// const size = ref(route.query.size);
 let sortTotalSaleTradeList = [];
 // 데이터 로드 함수
 const doLode = async () => {
@@ -57,7 +57,11 @@ const generateDateLabels = startDate => {
   //   console.log(item);
   // });
   sortTotalSaleTradeList.forEach(item => {
-    labels.push(new Intl.DateTimeFormat('ko-KR', { month: 'numeric', day: 'numeric' }).format(Date.parse(item.tradeCompletedDate)));
+    labels.push(
+      new Intl.DateTimeFormat('ko-KR', { month: 'numeric', day: 'numeric' }).format(
+        Date.parse(item.tradeCompletedDate),
+      ),
+    );
   });
 
   // while (date <= today) {
@@ -193,8 +197,12 @@ watchEffect(() => {
         <li>{{ list.tradeCompletedDate }}</li>
       </ul>
       <div class="showButtonBox">
-        <button v-if="showMore && totalSalseList.length > showMore" @click="loadMore" class="showButton">체결 내역 더보기 ▽</button>
-        <button v-if="showMore && totalSalseList.length <= showMore" @click="closeList" class="showButton">닫기 △</button>
+        <button v-if="showMore && totalSalseList.length > showMore" @click="loadMore" class="showButton">
+          체결 내역 더보기 ▽
+        </button>
+        <button v-if="showMore && totalSalseList.length <= showMore" @click="closeList" class="showButton">
+          닫기 △
+        </button>
       </div>
     </div>
   </figure>

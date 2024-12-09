@@ -19,7 +19,7 @@ const reviewData = ref(null);
 const productDataOk = ref([]);
 
 const idx = ref(route.params.idx);
-const size = ref(route.query.size);
+// const size = ref(route.query.size);
 
 const cartStore = useCartStore();
 
@@ -30,15 +30,15 @@ const emit = defineEmits();
 // const emit = defineEmits();
 
 // 1. 클릭한 옵션값을 idx에 담아준다.
-const productOptionSelect = item => {
-  // console.log('item', item.productId);
-  // console.log('item', item.size);
-  router.push({
-    name: 'productsdetail',
-    params: { idx: item.productId },
-    query: { size: item.size },
-  });
-};
+// const productOptionSelect = item => {
+//   // console.log('item', item.productId);
+//   // console.log('item', item.size);
+//   router.push({
+//     name: 'productsdetail',
+//     params: { idx: item.productId },
+//     query: { size: item.size },
+//   });
+// };
 
 // 3. 옵션값을 클릭하면 watch에서 추적하는 idx값이 바뀌고 doLoad를 호출한다.
 const doLoad = async () => {
@@ -135,7 +135,7 @@ const Average = data => {
 
 watchEffect(() => {
   idx.value = route.params.idx;
-  size.value = route.query.size;
+  // size.value = route.query.size;
   doLoad();
 });
 </script>
@@ -147,15 +147,24 @@ watchEffect(() => {
       <li>{{ productDataOk.productName }}</li>
       <li v-if="reviewData">
         1,222찜 수
-        <span style="color: orange">★ {{ Average(reviewData.data.starAverage) }} ({{ reviewData.data.reviewCount }} reviews)</span>
+        <span style="color: orange"
+          >★ {{ Average(reviewData.data.starAverage) }} ({{ reviewData.data.reviewCount }} reviews)</span
+        >
       </li>
-      <li>{{ productDataOk.price.toLocalString() }}</li>
+      <li>{{ formatPrice(productDataOk.price) }}</li>
     </ul>
 
-    <p class="OptionSelect">옵션선택</p>
+    <!-- <p class="OptionSelect">옵션선택</p>
     <div id="productOption">
-      <button @click="productOptionSelect(size)" v-for="(size, index) in productData.data" :key="index" :class="{ selectedSize: isselectedSize(size) }">{{ size.size }} ml</button>
-    </div>
+      <button
+        @click="productOptionSelect(size)"
+        v-for="(size, index) in productData.data"
+        :key="index"
+        :class="{ selectedSize: isselectedSize(size) }"
+      >
+        {{ size.size }} ml
+      </button>
+    </div> -->
     <!-- <div>
       <p>제조일자 : 2024-11-01</p>
       <p>유통기한 : 2029-11-01</p>

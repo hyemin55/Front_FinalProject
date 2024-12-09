@@ -68,7 +68,13 @@ onMounted(async () => {
     </div>
 
     <!-- :autoplay="2000" -->
-    <Carousel id="thumbnails" v-bind="thumbnailsConfig" v-model="currentSlide" :pause-autoplay-on-hover="true" :mouse-drag="false">
+    <Carousel
+      id="thumbnails"
+      v-bind="thumbnailsConfig"
+      v-model="currentSlide"
+      :pause-autoplay-on-hover="true"
+      :mouse-drag="false"
+    >
       <Slide v-for="(image, index) in list.images" :key="index">
         <img :src="`${GLOBAL_URL}/api/file/download/${image.filename}`" class="carousel_thumbnail" />
       </Slide>

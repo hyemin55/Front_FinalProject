@@ -13,7 +13,6 @@ const HeaderMode = ref(false);
 
 const useStore = useUserStore();
 const wishStore = useWishStore();
-const role = ref('');
 
 const token = ref(false);
 watchEffect(() => {
@@ -34,11 +33,10 @@ const kakaoLogout = async () => {
 
 onMounted(() => {
   const savedToken = sessionStorage.getItem('token');
-  
+
   if (savedToken) {
     token.value = true;
     useStore.loginCheck = true; // 스토어에 로그인 상태 설정
-    role.value = useStore.role;
   } else {
     useStore.loginCheck = false;
   }
@@ -106,14 +104,10 @@ const toggleSearch = () => {
           <li><router-link to="/mypage">마이페이지</router-link></li>
           <li class="noCursor">&nbsp;|&nbsp;</li>
           <li>고객센터</li>
-          <span v-if="role === 'APPRAISER'">
-            <li class="noCursor">&nbsp;|&nbsp;</li>
-            <li><router-link to="/mainInspectionList">검수자</router-link></li>
-          </span>
-          <span v-if="role === 'ADMIN'">
-            <li class="noCursor">&nbsp;|&nbsp;</li>
-            <li><router-link to="/mainDashboard">관리자</router-link></li>
-          </span>
+          <li class="noCursor">&nbsp;|&nbsp;</li>
+          <li><router-link to="/mainInspectionList">검수자</router-link></li>
+          <li class="noCursor">&nbsp;|&nbsp;</li>
+          <li><router-link to="/mainDashboard">관리자</router-link></li>
         </ul>
       </template>
       <template v-else>
@@ -137,7 +131,15 @@ const toggleSearch = () => {
       </ul>
       <ul class="gnb02">
         <li>
-          <input v-show="isSearchVisible" v-bind:style="searchStyle" type="text" placeholder="검색어를 입력해주세요." class="search-input" v-model="searchQuery" ref="searchInput" />
+          <input
+            v-show="isSearchVisible"
+            v-bind:style="searchStyle"
+            type="text"
+            placeholder="검색어를 입력해주세요."
+            class="search-input"
+            v-model="searchQuery"
+            ref="searchInput"
+          />
           <img @click="toggleSearch" class="icon" src="@/assets/img/icon/free-icon-font-search-3917132.png" alt="" />
         </li>
         <li>
