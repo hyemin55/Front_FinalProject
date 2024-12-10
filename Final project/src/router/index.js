@@ -20,6 +20,7 @@ import MainInspectionListView from '@/views/appraiser/_MainInspectionListView.vu
 import ApprovedListView from '@/views/appraiser/ApprovedListView.vue';
 import PetListView from '@/views/appraiser/PetListView.vue';
 import AnnouncementView from '@/views/admin/AnnouncementView.vue';
+import ProductMasonryView from '@/views/user/product/ProductMasonryView.vue';
 
 // 로그인
 const loginRouters = [
@@ -115,6 +116,11 @@ const userRouters = [
     path: '/search',
     name: 'search',
     component: ProductListView,
+  },
+  {
+    path: '/masonry',
+    name: 'masonry',
+    component: ProductMasonryView,
   },
   // {
   //   path: '/productsdetail/:idx',

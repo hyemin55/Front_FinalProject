@@ -53,16 +53,25 @@ const price = ref(props.productInfo.price || '가격');
 const size = ref(props.productInfo.size || '사이즈');
 // const review_avr = ref('평점');
 const reviewCount = ref(props.productInfo.reviewCount || '0');
+const brand = ref(props.productInfo.brand || 'Santa Maria Novella');
 
 
 // useNavigator
 const router = useRouter();
 const navDetailProduct = () => {
-  console.log('사이즈 값', size.value);
+  // console.log('사이즈 값', size.value);
+  // router.push({
+  //   path: `/productsdetail/${props.productInfo.productId}`,
+  //   query: {
+  //     size: size.value,
+  //   },
+  // });
   router.push({
-    path: `/productsdetail/${props.productInfo.productId}`,
+    path: `/masonry`,
     query: {
-      size: size.value,
+      // 여기서 상품의 하나에 대한 카테고리 아이디를 넘겨준다.
+      title: productName.value,
+      brand: brand.value
     },
   });
 };

@@ -17,7 +17,6 @@ export const wishClick = async (info) => {
   }
 };
 
-
 // 찜목록 DB에서 불러오기
 export const wishList = async () => {
   try {
