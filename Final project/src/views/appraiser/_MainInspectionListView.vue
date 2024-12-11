@@ -112,9 +112,17 @@
         <tbody>
           <tr>
             <td rowspan="2">
-              기존값: {{ list.size }} ml
+              기존용량: {{ list.size }} ml
               <br />
-              <input type="number" step="1" max="10000" placeholder="용량(ml)" required />
+              검수용량:
+              <input
+                type="number"
+                v-model="list.inspectionSize"
+                step="1"
+                :max="list.selectedProduct.size"
+                placeholder="용량(ml)"
+                required
+              />
             </td>
             <td>￦ {{ list.expectedSellingPrice.toLocaleString() }}</td>
             <td>
@@ -132,7 +140,6 @@
         </tbody>
         <thead>
           <tr>
-            <th>판매자 사진</th>
             <th>상품 검색 대표사진</th>
             <th>검수결과</th>
             <th v-if="list.TestResult == 'Y' || list.TestResult == ''" class="TestResult">
@@ -179,21 +186,11 @@
                 </div>
               </span>
             </th>
-            <th>검수결과 참고사항</th>
+            <th colspan="2">검수결과 참고사항</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>
-              <img
-                :src="`${GLOBAL_URL}/api/file/download/${userSaleImage.name}`"
-                v-for="userSaleImage in list.userSaleResImageList"
-                :key="userSaleImage"
-                alt=""
-                style="width: 50px"
-              />
-              <input type="file" id="photo" multiple @change="handleFileUpload" />
-            </td>
             <td v-if="list.selectedProduct.mainImage">
               <img
                 :src="`${GLOBAL_URL}/api/file/download/${list.selectedProduct.mainImage.filename}`"
@@ -202,7 +199,8 @@
               />
             </td>
             <td v-else>
-              <img src="@/assets/img/빵빵덕세안.png" alt="" style="width: 50px" />
+              <img src="@/assets/img/icon/free-icon-font-image-slash-10742150.svg" alt="" style="width: 40px" />
+              <p>이미지가 없습니다.</p>
             </td>
             <td>
               <select name="TestResults" id="" v-model="list.TestResult" required>
@@ -213,24 +211,24 @@
               </select>
             </td>
             <td v-if="list.TestResult == 'Y' || list.TestResult == ''">
-              <select name="PassGradeId" id="" v-model="list.PassGradeId">
+              <select name="PassGradeId" id="" v-model="list.PassGrade">
                 <option value="" selected disabled>상품 등급 선택</option>
                 <option value="" disabled>-------</option>
-                <option :value="PassGrade.gradeId" v-for="PassGrade in PassGradeList" :key="PassGrade">
+                <option :value="PassGrade" v-for="PassGrade in PassGradeList" :key="PassGrade">
                   {{ PassGrade.gradeType }}. {{ PassGrade.gradeDescription }}
                 </option>
               </select>
             </td>
             <td v-if="list.TestResult == 'N'">
-              <select name="NotForSale" id="" v-model="list.FailReasonId">
+              <select name="NotForSale" id="" v-model="list.FailReason">
                 <option value="" selected disabled>판매불가 사유 선택</option>
                 <option value="" disabled>-------</option>
-                <option :value="FailReason.rejectionReasonId" v-for="FailReason in FailReasonList" :key="FailReason">
+                <option :value="FailReason" v-for="FailReason in FailReasonList" :key="FailReason">
                   {{ FailReason.rejectionReasonId }}. {{ FailReason.rejectionReason }}
                 </option>
               </select>
             </td>
-            <td>
+            <td colspan="2">
               <textarea
                 name=""
                 v-model="list.Content"
@@ -241,13 +239,35 @@
             </td>
           </tr>
         </tbody>
+        <tbody>
+          <tr>
+            <th colspan="2">판매자 사진</th>
+            <th colspan="2">검수자 등록 사진</th>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <img
+                :src="`${GLOBAL_URL}/api/file/download/${userSaleImage.name}`"
+                v-for="(userSaleImage, index) in list.userSaleResImageList"
+                :key="index"
+                alt=""
+                style="width: 70px"
+                class="userSaleImage"
+                @click="ImageDelete(userSaleImage, index)"
+              />
+            </td>
+            <td colspan="2">
+              <input type="file" id="photo" multiple @change="handleFileUpload" />
+            </td>
+          </tr>
+        </tbody>
       </table>
       <div>
         <button @click="Send(list)">전송</button>
       </div>
     </article>
     <article>
-      <InspectionModalView />
+      <InspectionModalView v-if="InspectionModal" :Data="DeliveryData" @close="closeModal" />
     </article>
   </section>
 </template>
@@ -263,11 +283,29 @@ const InspectionList = ref([]);
 const PassGradeList = ref([]);
 const FailReasonList = ref([]);
 const categoriesList = ['Perfume', 'Diffuser', 'Candle'];
+const DeliveryData = ref([]);
+const InspectionModal = ref(false);
+// console.log(DeliveryData.value);
 
+const ImageDelete = (img, index) => {
+  console.log('삭제하려는 이미지', index);
+  // InspectionList.value[index].userSaleResImageList(img);
+  console.log(InspectionList.value, '       ', img.name);
+  const res = confirm('[ ' + img.name + ' ]를 삭제하시겠습니까?');
+  if (res) {
+    console.log('삭제되었습니다.');
+  } else {
+    console.log('취소되었습니다.');
+  }
+};
+
+const closeModal = () => {
+  InspectionModal.value = false;
+};
 const Send = async list => {
   console.log(list.TestResult);
 
-  const InspectionResultId = [list.PassGradeId, list.FailReasonId];
+  const InspectionResultId = [list.PassGrade.PassGradeId, list.FailReason.FailReasonId];
   // 각 항목에 필드 이름과 값을 함께 저장
   const valueError = [
     { field: '검수 결과', value: list.TestResult },
@@ -277,7 +315,7 @@ const Send = async list => {
     { field: '브랜드', value: list.selectedBrand.split('.')[0] },
     { field: '브랜드', value: list.selectedBrand.split('.')[1] },
     { field: '상품명', value: list.selectedProduct.productName },
-    { field: '용량', value: list.selectedProduct.size },
+    { field: '용량', value: list.inspectionSize },
     { field: '권장 판매 가격', value: list.inspectionSellingPrice },
     {
       field: list.TestResult === 'Y' ? '등급' : '반려사유',
@@ -294,11 +332,12 @@ const Send = async list => {
       return; // 입력 오류 발생 시 함수 종료
     }
   }
+
   if (list.TestResult === 'Y') {
     console.log('모든 값이 올바르게 입력되었습니다.');
     const passData = {
       pendingSaleId: list.saleApplicationId,
-      gradeId: list.PassGradeId,
+      gradeId: list.PassGrade.PassGradeId,
       inspectionCategoryReqDto: {
         categoryId: list.categoryId,
         categoryName: categoriesList[list.categoryId - 1],
@@ -309,25 +348,21 @@ const Send = async list => {
       },
       inspectionProductReqDto: {
         productName: list.selectedProduct.productName,
-        productSize: list.selectedProduct.size,
+        productSize: list.inspectionSize,
         verifiedSellingPrice: list.inspectionSellingPrice,
         quantity: 0,
       },
       inspectionContent: list.Content,
       inspectionResult: true,
     };
-    console.log(passData);
 
-    await axios.post(`${GLOBAL_URL}/api/inspection/pass`, passData, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-      },
-    });
+    console.log(passData);
+    DeliveryData.value = { DeliveryData: passData, list: list };
+    console.log(DeliveryData.value);
   } else if (list.TestResult === 'N') {
     const failData = {
       pendingSaleId: list.saleApplicationId,
-      rejectionReasonId: list.FailReasonId,
+      rejectionReasonId: list.FailReason.FailReasonId,
       inspectionCategoryReqDto: {
         categoryId: list.categoryId,
         categoryName: categoriesList[list.categoryId - 1],
@@ -338,20 +373,17 @@ const Send = async list => {
       },
       inspectionProductReqDto: {
         productName: list.selectedProduct.productName,
-        productSize: list.selectedProduct.size,
+        productSize: list.inspectionSize,
         verifiedSellingPrice: list.inspectionSellingPrice,
         quantity: 0,
       },
       inspectionContent: list.Content,
       inspectionResult: false,
     };
-    await axios.post(`${GLOBAL_URL}/api/inspection/reject`, failData, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-      },
-    });
+    DeliveryData.value = { DeliveryData: failData, list: list };
   }
+  InspectionModal.value = true;
+  console.log('모달창 나옵니다.');
 };
 
 // 브랜드, 상품명 검색 입력 시 호출
@@ -417,10 +449,11 @@ const dolode = async () => {
       productNameInput: '',
       brandNameInput: '',
       categoryId: 0,
+      inspectionSize: 0,
       inspectionSellingPrice: 5000,
       TestResult: '',
-      PassGradeId: 0,
-      FailReasonId: 0,
+      PassGrade: [],
+      FailReason: [],
       Content: '',
     }));
     // 검수 합격 등급 리스트
@@ -503,6 +536,11 @@ button {
 .icon > img {
   width: 1.4rem;
 }
+.userSaleImage {
+  cursor: pointer;
+  margin: 0 5px;
+}
+
 .TestResultModal {
   width: 250px;
   height: 265px;

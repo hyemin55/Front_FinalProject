@@ -4,7 +4,7 @@ import { GLOBAL_URL } from '@/api/util';
 import { useUserStore } from '@/stores/Login';
 import axios from 'axios';
 import { ref, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 const useStore = useUserStore();
 const props = defineProps({
   // 받아오는props의 정의 방법
@@ -15,6 +15,7 @@ const props = defineProps({
 });
 
 const route = useRoute();
+const router = useRouter();
 const idx = ref(route.params.idx);
 const currentPage = ref(1);
 const totalPages = ref(10);
@@ -29,24 +30,33 @@ const startPage = ref(0);
 const endPage = ref(0);
 const star_list = ['★', '★★', '★★★', '★★★★', '★★★★★'];
 const GoodIcon = ref(true);
-
 // 유저별 리뷰 도움되요 표시
 const dolode = async () => {
+  console.log('currentPage', currentPage.value);
+  GoodIcon.value = [];
+  if (useStore.loginCheck === false) {
+    GoodIcon.value = false;
+    return;
+  }
   const reviewListRes = await axios.get(`${GLOBAL_URL}/detail/favorite/${idx.value}`, {
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${sessionStorage.getItem('token')}`,
     },
+    params: {
+      pageNum: currentPage.value - 1,
+    },
   });
-  console.log(reviewListRes.data);
+  console.log(reviewList.data);
   GoodIcon.value = reviewListRes.data;
 };
 
 // 유저별 도움돼요 클릭 시 서버로 데이터 넘기기
-const GoodIconState = async (reviewId, index) => {
+const GoodIconState = async reviewId => {
   console.log(reviewId);
   if (!useStore.loginCheck) {
     alert('로그인이 필요한 기능입니다.');
+    router.push({ name: 'login2' });
     return;
   }
   const reviewListRes = await axios.get(`${GLOBAL_URL}/detail/favorite/clickFavorite/reviewId?${reviewId}`, {
@@ -108,8 +118,8 @@ const viewCurrentPage = async () => {
     totalPageGroup.value = Math.floor(totalPages.value / 10);
     startPage.value = currentPageGroup.value * 10 + 1;
     endPage.value = Math.min(startPage.value + 9, totalPages.value);
-    // console.log(reviewCount.value);
   }
+  dolode();
 };
 
 // 선택된 페이지번호에 CSS 설정
@@ -149,14 +159,26 @@ watch(
           </p>
         </div>
       </div>
-      <li class="reviewGoodIcon reviewGoodIconTrue" v-if="GoodIcon[index].checked" @click="GoodIconState(list.reviewId, index)">
-        <img src="@/assets/img/icon/free-icon-font-hand-holding-heart-17766584.svg" alt="" />
-        {{ list.favoriteCount }} 도움되요
-      </li>
-      <li class="reviewGoodIcon" v-else @click="GoodIconState(list.reviewId)">
-        <img src="@/assets/img/icon/free-icon-font-hand-holding-heart-17766580.svg" alt="" />
-        {{ list.favoriteCount }} 도움되요
-      </li>
+      <template v-if="useStore.loginCheck">
+        <li
+          class="reviewGoodIcon reviewGoodIconTrue"
+          v-if="GoodIcon[index].checked"
+          @click="GoodIconState(GoodIcon[index].reviewId)"
+        >
+          <img src="@/assets/img/icon/free-icon-font-hand-holding-heart-17766584.svg" alt="" />
+          {{ list.favoriteCount }} 도움되요
+        </li>
+        <li class="reviewGoodIcon" v-else @click="GoodIconState(GoodIcon[index].reviewId)">
+          <img src="@/assets/img/icon/free-icon-font-hand-holding-heart-17766580.svg" alt="" />
+          {{ list.favoriteCount }} 도움되요
+        </li>
+      </template>
+      <template v-else>
+        <li class="reviewGoodIcon" @click="GoodIconState(0)">
+          <img src="@/assets/img/icon/free-icon-font-hand-holding-heart-17766580.svg" alt="" />
+          {{ list.favoriteCount }} 도움되요
+        </li>
+      </template>
     </ul>
 
     <div class="userReviewImgs">
@@ -177,7 +199,13 @@ watch(
 
   <ul id="totalPages">
     <li @click="backPage">이전</li>
-    <li class="totalPages" v-for="pageNum in endPage - startPage + 1" v-bind:key="pageNum" @click="goToPage(startPage + pageNum - 1)" :class="{ active: activePage(pageNum) }">
+    <li
+      class="totalPages"
+      v-for="pageNum in endPage - startPage + 1"
+      v-bind:key="pageNum"
+      @click="goToPage(startPage + pageNum - 1)"
+      :class="{ active: activePage(pageNum) }"
+    >
       {{ startPage + pageNum - 1 }}
       {{ startPage }}
       {{ pageNum }}

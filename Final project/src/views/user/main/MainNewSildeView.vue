@@ -6,7 +6,6 @@ import axios from 'axios';
 import 'vue3-carousel/dist/carousel.css';
 import { GLOBAL_URL } from '@/api/util';
 import router from '@/router';
-import { formatPrice } from '@/FormatPrice';
 
 const slides = ref([]);
 const pageNum = 0;
@@ -48,7 +47,14 @@ const navDetailProduct = (productId, size) => {
 
 <template>
   <div class="wrapper">
-    <Carousel :items-to-show="3.5" :autoplay="2000" :snapAlign="'center'" :wrap-around="true" :pause-autoplay-on-hover="true" :mouseDrag="false">
+    <Carousel
+      :items-to-show="3.5"
+      :autoplay="2000"
+      :snapAlign="'center'"
+      :wrap-around="true"
+      :pause-autoplay-on-hover="true"
+      :mouseDrag="false"
+    >
       <Slide v-for="(slide, index) in slides" :key="index">
         <!-- <div v-for="productDtail in New_list" :key="productDtail.productId"> -->
         <div class="carousel__item" @click="navDetailProduct(slide.productId, slide.size)">

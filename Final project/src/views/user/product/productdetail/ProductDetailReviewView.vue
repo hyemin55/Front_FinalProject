@@ -62,7 +62,6 @@ watchEffect(() => {
   idx.value = route.params.idx;
   starCounting();
 });
-
 </script>
 
 <template>
@@ -100,15 +99,15 @@ watchEffect(() => {
         <p>from {{ reviewCount }} reviews</p>
       </div>
 
-      <ul id="starCounting">
-        <li v-for="(count, index) in starCounts" :key="index">
+      <div id="starCounting">
+        <span v-for="(count, index) in starCounts" :key="index">
           ★ {{ 5 - index }}.0
-          <li class="bar-container">
+          <span class="bar-container">
             <div class="bar" :style="{ width: `${(count / reviewCount) * 100}%` }"></div>
-          </li>
-          <li>{{ count }} reviews</li>
-        </li>
-      </ul>
+          </span>
+          <span>{{ count }} reviews</span>
+        </span>
+      </div>
     </div>
 
     <h1 id="detailReviewTitle">Photo Lists</h1>
@@ -181,7 +180,7 @@ watchEffect(() => {
   line-height: 30px;
   font-size: 1.4rem;
 }
-#starCounting > li {
+#starCounting > span {
   display: flex;
   align-items: center;
   justify-content: space-around;
