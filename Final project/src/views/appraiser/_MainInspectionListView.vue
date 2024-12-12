@@ -119,9 +119,11 @@
                 type="number"
                 v-model="list.inspectionSize"
                 step="1"
+                :min="list.selectedProduct.size / 2"
                 :max="list.selectedProduct.size"
                 placeholder="용량(ml)"
                 required
+                @blur="validatedinspectionSize(list)"
               />
             </td>
             <td>￦ {{ list.expectedSellingPrice.toLocaleString() }}</td>
@@ -301,11 +303,31 @@ const ImageDelete = (img, index) => {
 
 const closeModal = () => {
   InspectionModal.value = false;
+  console.log('InspectionList.value.PassGrade', InspectionList.value);
+  for (let i = 0; InspectionList.value.length > i; i++) {
+    InspectionList.value[i].PassGrade = '';
+    InspectionList.value[i].FailReason = '';
+  }
+  console.log('InspectionList.value.FailReason', InspectionList.value.FailReason);
 };
+const validatedinspectionSize = list => {
+  if (list.inspectionSize > list.selectedProduct.size) {
+    alert('검수 용량이 상품 기준 용량보다 많습니다.' + '\n' + '상품 기준 용량 : ' + list.selectedProduct.size + ' ml');
+    return false;
+  }
+  if (list.inspectionSize <= list.selectedProduct.size / 2) {
+    alert(
+      '검수 용량이 상품 기준 용량의 절반 이하입니다.' + '\n' + '상품 기준 용량 : ' + list.selectedProduct.size + ' ml',
+    );
+    return false;
+  }
+};
+// 검수 전송 버튼 눌렀을 때
 const Send = async list => {
   console.log(list.TestResult);
 
-  const InspectionResultId = [list.PassGrade.PassGradeId, list.FailReason.FailReasonId];
+  console.log('list', list);
+  const InspectionResultId = [list.PassGrade.gradeId, list.FailReason.rejectionReasonId];
   // 각 항목에 필드 이름과 값을 함께 저장
   const valueError = [
     { field: '검수 결과', value: list.TestResult },
@@ -332,12 +354,22 @@ const Send = async list => {
       return; // 입력 오류 발생 시 함수 종료
     }
   }
-
+  const error = validatedinspectionSize(list);
+  if (!error) return;
+  // if (list.inspectionSize > list.selectedProduct.size) {
+  //   alert('검수 용량이 상품 기준 용량보다 많습니다.' + '\n' + '상품 기준 용량 : ' + list.selectedProduct.size + ' ml');
+  //   return;
+  // }
+  // if (list.inspectionSize <= list.selectedProduct.size / 2) {
+  //   alert('검수 용량이 상품 기준 용량의 절반 이하입니다.' + '\n' + '판매 기준 용량 미달로 불합격 사유에 해당합니다.');
+  //   return;
+  // }
   if (list.TestResult === 'Y') {
     console.log('모든 값이 올바르게 입력되었습니다.');
+
     const passData = {
       pendingSaleId: list.saleApplicationId,
-      gradeId: list.PassGrade.PassGradeId,
+      gradeId: list.PassGrade.gradeId,
       inspectionCategoryReqDto: {
         categoryId: list.categoryId,
         categoryName: categoriesList[list.categoryId - 1],
@@ -355,14 +387,13 @@ const Send = async list => {
       inspectionContent: list.Content,
       inspectionResult: true,
     };
-
-    console.log(passData);
+    console.log('gradeId', passData.gradeId);
     DeliveryData.value = { DeliveryData: passData, list: list };
     console.log(DeliveryData.value);
   } else if (list.TestResult === 'N') {
     const failData = {
       pendingSaleId: list.saleApplicationId,
-      rejectionReasonId: list.FailReason.FailReasonId,
+      rejectionReasonId: list.FailReason.rejectionReasonId,
       inspectionCategoryReqDto: {
         categoryId: list.categoryId,
         categoryName: categoriesList[list.categoryId - 1],
@@ -380,6 +411,7 @@ const Send = async list => {
       inspectionContent: list.Content,
       inspectionResult: false,
     };
+    console.log('rejectionReasonId', failData.rejectionReasonId);
     DeliveryData.value = { DeliveryData: failData, list: list };
   }
   InspectionModal.value = true;

@@ -87,53 +87,55 @@ watch(
               <th>단위</th>
             </tr>
           </thead>
-          <tr>
-            <th>No.</th>
-            <td>{{ dataRes.pendingSaleId }}</td>
-            <td>-</td>
-          </tr>
+          <tbody>
+            <tr>
+              <th>No.</th>
+              <td>{{ dataRes.pendingSaleId }}</td>
+              <td>-</td>
+            </tr>
 
-          <tr>
-            <th>카테고리</th>
-            <td>{{ dataRes.inspectionCategoryReqDto.categoryName }}</td>
-            <td>-</td>
-          </tr>
-          <tr>
-            <th>브랜드명</th>
-            <td>{{ dataRes.inspectionBrandReqDto.brandId }}. {{ dataRes.inspectionBrandReqDto.brandName }}</td>
-            <td>-</td>
-          </tr>
-          <tr>
-            <th>상품명</th>
-            <td>{{ dataRes.inspectionProductReqDto.productName }}</td>
-            <td>-</td>
-          </tr>
-          <tr>
-            <th>정량</th>
-            <td>{{ ListRes.selectedProduct.size }}</td>
-            <td>ml</td>
-          </tr>
-          <tr>
-            <th>검수 후 실용량</th>
-            <td>{{ dataRes.inspectionProductReqDto.productSize }}</td>
-            <td>ml</td>
-          </tr>
-          <tr>
-            <th>희망 판매 가격</th>
-            <td>{{ Number(ListRes.expectedSellingPrice).toLocaleString() }}</td>
-            <td>원</td>
-          </tr>
-          <tr>
-            <th>권장 판매 가격</th>
-            <td>{{ Number(dataRes.inspectionProductReqDto.verifiedSellingPrice).toLocaleString() }}</td>
-            <td>원</td>
-          </tr>
-          <tr>
-            <th>검수결과 참고사항</th>
-            <td v-if="dataRes.inspectionContent">{{ dataRes.inspectionContent }}</td>
-            <td v-else>-</td>
-            <td>-</td>
-          </tr>
+            <tr>
+              <th>카테고리</th>
+              <td>{{ dataRes.inspectionCategoryReqDto.categoryName }}</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <th>브랜드명</th>
+              <td>{{ dataRes.inspectionBrandReqDto.brandId }}. {{ dataRes.inspectionBrandReqDto.brandName }}</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <th>상품명</th>
+              <td>{{ dataRes.inspectionProductReqDto.productName }}</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <th>정량</th>
+              <td>{{ ListRes.selectedProduct.size.toLocaleString() }}</td>
+              <td>ml</td>
+            </tr>
+            <tr>
+              <th>검수 후 실용량</th>
+              <td>{{ dataRes.inspectionProductReqDto.productSize.toLocaleString() }}</td>
+              <td>ml</td>
+            </tr>
+            <tr>
+              <th>희망 판매 가격</th>
+              <td>{{ Number(ListRes.expectedSellingPrice).toLocaleString() }}</td>
+              <td>원</td>
+            </tr>
+            <tr>
+              <th>권장 판매 가격</th>
+              <td>{{ Number(dataRes.inspectionProductReqDto.verifiedSellingPrice).toLocaleString() }}</td>
+              <td>원</td>
+            </tr>
+            <tr>
+              <th>검수결과 참고사항</th>
+              <td v-if="dataRes.inspectionContent">{{ dataRes.inspectionContent }}</td>
+              <td v-else>-</td>
+              <td>-</td>
+            </tr>
+          </tbody>
         </table>
       </div>
       <div class="Results_transfer_button">
@@ -202,6 +204,7 @@ watch(
   text-align: center;
 }
 th {
+  background-color: var(--color-main-Lgray);
   width: 30%;
 }
 td {

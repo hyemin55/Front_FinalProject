@@ -39,7 +39,7 @@ const loginRouters = [
 const adminRouters = [
   {
     path: '/',
-    meta: { role: 'admin' }, // 공통 meta
+    meta: { role: 'ADMIN' }, // 공통 meta
     children: [
       {
         path: 'mainDashboard',
@@ -80,11 +80,11 @@ const adminRouters = [
   },
 ];
 
-// 검수자 페이지
+// 검수자 및 관리자 페이지
 const appraiserRouters = [
   {
     path: '/',
-    meta: { role: 'appraiser' },
+    meta: { role: ['APPRAISER', 'ADMIN'] },
     // 공통 meta
     children: [
       {
@@ -184,17 +184,28 @@ routers.beforeEach(async (to, from, next) => {
       res = await loginCheck();
       useStore.login(res.data); //스토어 등록
       const userRole = useStore.role;
-      if ((to.meta.role === 'admin' && userRole !== 'ADMIN') || (to.meta.role === 'appraiser' && useStore.role !== 'APPRAISER')) {
+
+      // if (
+      //   (to.meta.role === 'admin' && userRole !== 'ADMIN') ||
+      //   (to.meta.role === 'appraiser' && userRole !== 'APPRAISER')
+      // ) {
+      //   console.log('index 경로이동실패', useStore.role);
+      //   alert('페이지 권한이 없습니다.');
+      //   return next('/');
+      // } else if (to.meta.role === 'admin' && userRole === 'ADMIN') {
+      //   // alert('관리자 페이지로 이동합니다.');
+      //   return next();
+      // } else if (to.meta.role === 'appraiser' && userRole === 'APPRAISER') {
+      //   // alert('검수자 페이지로 이동합니다.');
+      //   return next();
+      // }
+      const roles = Array.isArray(to.meta.role) ? to.meta.role : [to.meta.role];
+      if (!roles.includes(userRole)) {
         console.log('index 경로이동실패', useStore.role);
         alert('페이지 권한이 없습니다.');
         return next('/');
-      } else if (to.meta.role === 'admin' && userRole === 'ADMIN') {
-        // alert('관리자 페이지로 이동합니다.');
-        return next();
-      } else if (to.meta.role === 'appraiser' && useStore.role === 'APPRAISER') {
-        // alert('검수자 페이지로 이동합니다.');
-        return next();
       }
+      return next(); // 권한이 유효하면 계속 진행
     }
     alert('로그인이 필요한 페이지입니다.');
     return next('/login2');
