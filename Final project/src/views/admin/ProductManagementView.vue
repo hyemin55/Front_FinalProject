@@ -20,7 +20,7 @@
     <article id="Inspection">
       <table>
         <thead>
-          <tr>
+          <tr class="TableHeader">
             <th>No.</th>
             <th colspan="2">상품명</th>
             <th>옵션</th>
@@ -33,7 +33,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
+          <tr class="TableBody">
             <td>1</td>
             <td><img class="productImages" src="@/assets/img/빵빵덕세안.png" alt="" /></td>
             <td>카레토 프린트 캔들</td>
@@ -41,13 +41,168 @@
             <td>134,000</td>
             <td>Candle</td>
             <td>
-              <select name="state" id="">
-                <option value="total">전체</option>
-                <option value="onSale">판매중</option>
-                <option value="soldOut">품절</option>
-                <option value="hiding">숨김</option>
-                <option value="waitingForSale">판매대기</option>
-                <option value="saleCompleted">판매완료</option>
+              <select name="state" id="" v-model="selectState.value">
+                <option :value="list" v-for="(list, index) in stateOption" :key="index">{{ list.name }}</option>
+              </select>
+            </td>
+            <td>2</td>
+            <td>2024-11-19</td>
+            <td>2024-11-20</td>
+          </tr>
+          <tr class="TableBody">
+            <td>1</td>
+            <td><img class="productImages" src="@/assets/img/빵빵덕세안.png" alt="" /></td>
+            <td>카레토 프린트 캔들</td>
+            <td>340 ml</td>
+            <td>134,000</td>
+            <td>Candle</td>
+            <td>
+              <select name="state" id="" v-model="selectState.value">
+                <option :value="list" v-for="(list, index) in stateOption" :key="index">{{ list.name }}</option>
+              </select>
+            </td>
+            <td>2</td>
+            <td>2024-11-19</td>
+            <td>2024-11-20</td>
+          </tr>
+          <tr class="TableBody">
+            <td>1</td>
+            <td><img class="productImages" src="@/assets/img/빵빵덕세안.png" alt="" /></td>
+            <td>카레토 프린트 캔들</td>
+            <td>340 ml</td>
+            <td>134,000</td>
+            <td>Candle</td>
+            <td>
+              <select name="state" id="" v-model="selectState.value">
+                <option :value="list" v-for="(list, index) in stateOption" :key="index">{{ list.name }}</option>
+              </select>
+            </td>
+            <td>2</td>
+            <td>2024-11-19</td>
+            <td>2024-11-20</td>
+          </tr>
+          <tr class="TableBody">
+            <td>1</td>
+            <td><img class="productImages" src="@/assets/img/빵빵덕세안.png" alt="" /></td>
+            <td>카레토 프린트 캔들</td>
+            <td>340 ml</td>
+            <td>134,000</td>
+            <td>Candle</td>
+            <td>
+              <select name="state" id="" v-model="selectState.value">
+                <option :value="list" v-for="(list, index) in stateOption" :key="index">{{ list.name }}</option>
+              </select>
+            </td>
+            <td>2</td>
+            <td>2024-11-19</td>
+            <td>2024-11-20</td>
+          </tr>
+          <tr class="TableBody">
+            <td>1</td>
+            <td><img class="productImages" src="@/assets/img/빵빵덕세안.png" alt="" /></td>
+            <td>카레토 프린트 캔들</td>
+            <td>340 ml</td>
+            <td>134,000</td>
+            <td>Candle</td>
+            <td>
+              <select name="state" id="" v-model="selectState.value">
+                <option :value="list" v-for="(list, index) in stateOption" :key="index">{{ list.name }}</option>
+              </select>
+            </td>
+            <td>2</td>
+            <td>2024-11-19</td>
+            <td>2024-11-20</td>
+          </tr>
+          <tr class="TableBody">
+            <td>1</td>
+            <td><img class="productImages" src="@/assets/img/빵빵덕세안.png" alt="" /></td>
+            <td>카레토 프린트 캔들</td>
+            <td>340 ml</td>
+            <td>134,000</td>
+            <td>Candle</td>
+            <td>
+              <select name="state" id="" v-model="selectState.value">
+                <option :value="list" v-for="(list, index) in stateOption" :key="index">{{ list.name }}</option>
+              </select>
+            </td>
+            <td>2</td>
+            <td>2024-11-19</td>
+            <td>2024-11-20</td>
+          </tr>
+          <tr class="TableBody">
+            <td>1</td>
+            <td><img class="productImages" src="@/assets/img/빵빵덕세안.png" alt="" /></td>
+            <td>카레토 프린트 캔들</td>
+            <td>340 ml</td>
+            <td>134,000</td>
+            <td>Candle</td>
+            <td>
+              <select name="state" id="" v-model="selectState.value">
+                <option :value="list" v-for="(list, index) in stateOption" :key="index">{{ list.name }}</option>
+              </select>
+            </td>
+            <td>2</td>
+            <td>2024-11-19</td>
+            <td>2024-11-20</td>
+          </tr>
+          <tr class="TableBody">
+            <td>1</td>
+            <td><img class="productImages" src="@/assets/img/빵빵덕세안.png" alt="" /></td>
+            <td>카레토 프린트 캔들</td>
+            <td>340 ml</td>
+            <td>134,000</td>
+            <td>Candle</td>
+            <td>
+              <select name="state" id="" v-model="selectState.value">
+                <option :value="list" v-for="(list, index) in stateOption" :key="index">{{ list.name }}</option>
+              </select>
+            </td>
+            <td>2</td>
+            <td>2024-11-19</td>
+            <td>2024-11-20</td>
+          </tr>
+          <tr class="TableBody">
+            <td>1</td>
+            <td><img class="productImages" src="@/assets/img/빵빵덕세안.png" alt="" /></td>
+            <td>카레토 프린트 캔들</td>
+            <td>340 ml</td>
+            <td>134,000</td>
+            <td>Candle</td>
+            <td>
+              <select name="state" id="" v-model="selectState.value">
+                <option :value="list" v-for="(list, index) in stateOption" :key="index">{{ list.name }}</option>
+              </select>
+            </td>
+            <td>2</td>
+            <td>2024-11-19</td>
+            <td>2024-11-20</td>
+          </tr>
+          <tr class="TableBody">
+            <td>1</td>
+            <td><img class="productImages" src="@/assets/img/빵빵덕세안.png" alt="" /></td>
+            <td>카레토 프린트 캔들</td>
+            <td>340 ml</td>
+            <td>134,000</td>
+            <td>Candle</td>
+            <td>
+              <select name="state" id="" v-model="selectState.value">
+                <option :value="list" v-for="(list, index) in stateOption" :key="index">{{ list.name }}</option>
+              </select>
+            </td>
+            <td>2</td>
+            <td>2024-11-19</td>
+            <td>2024-11-20</td>
+          </tr>
+          <tr class="TableBody">
+            <td>1</td>
+            <td><img class="productImages" src="@/assets/img/빵빵덕세안.png" alt="" /></td>
+            <td>카레토 프린트 캔들</td>
+            <td>340 ml</td>
+            <td>134,000</td>
+            <td>Candle</td>
+            <td>
+              <select name="state" id="" v-model="selectState.value">
+                <option :value="list" v-for="(list, index) in stateOption" :key="index">{{ list.name }}</option>
               </select>
             </td>
             <td>2</td>
@@ -62,8 +217,20 @@
 
 <script setup>
 import AnnouncementComponent from '@/components/admin/AnnouncementComponent.vue';
+import { ref } from 'vue';
 
-const dolode = () => {};
+const selectState = ref([]);
+const stateOption = [
+  { name: '판매중', value: 'onSale' },
+  { name: '품절', value: 'soldOut' },
+  { name: '숨김', value: 'hiding' },
+  { name: '판매대기', value: 'waitingForSale' },
+  { name: '판매완료', value: 'saleCompleted' },
+];
+
+const dolode = () => {
+  selectState.value = stateOption[0];
+};
 dolode();
 </script>
 
@@ -73,6 +240,8 @@ dolode();
   width: 100%;
   height: auto;
   border-radius: 15px;
+  padding: 5px;
+  text-align: center;
 }
 input,
 select,
@@ -85,7 +254,6 @@ option {
   justify-content: space-between;
   width: 100%;
   height: 30px;
-  background-color: antiquewhite;
   margin: 20px 0 10px 0;
 }
 #sortBy,
@@ -111,14 +279,28 @@ option {
   height: 20px;
   cursor: pointer;
 }
-.productImages {
-  width: 50px;
-  height: 50px;
+.TableHeader {
 }
-
+.productImages {
+  width: 45px;
+  height: 45px;
+  padding: 2px;
+  border: 0.5px solid var(--color-main-Lgray);
+  border-radius: 5px;
+}
 table {
   width: 100%;
   font-size: 14px;
-  color: #333;
+}
+td {
+  height: 50px;
+  border-bottom: 0.5px solid var(--color-main-gray);
+}
+th {
+  border-bottom: 2px solid var(--color-main-gray);
+  height: 40px;
+}
+.TableBody > td:nth-child(3) {
+  text-align: left;
 }
 </style>
