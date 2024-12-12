@@ -173,7 +173,7 @@ watch(
   height: 800px;
   background-color: rgb(255, 255, 255);
   z-index: 11;
-  border: 1px solid var(--color-main-bloode);
+  border: 10px double forestgreen;
   padding: 5%;
   line-height: 2;
   font-size: 1.6rem;
@@ -214,7 +214,6 @@ table,
 th,
 td {
   border: 1px solid #333;
-  border-collapse: collapse;
 }
 .Results_transfer_button {
   width: 70%;

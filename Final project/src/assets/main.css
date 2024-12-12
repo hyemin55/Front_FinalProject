@@ -40,6 +40,9 @@ button {
   text-decoration: none;
   box-sizing: border-box;
 }
+table {
+  border-collapse: collapse;
+}
 input[type='checkbox'] {
   cursor: pointer;
 }

@@ -102,7 +102,32 @@
         </tbody>
         <thead>
           <tr>
-            <th>용량 (ml)</th>
+            <th class="TestResult">
+              용량 (ml)
+              <span class="icon"
+                ><img src="@/assets/img/icon/free-icon-font-exclamation-3917663.svg" alt="" />
+                <div class="TestResultModal">
+                  <h3>용량 기준</h3>
+                  <body>
+                    판매 기준 용량은 상품 정량의 절반 이상이어야 합니다.
+                    <br />
+                    <br />
+                    <h4>● 합격 기준</h4>
+                    <span>
+                      상품명 (프리지아 오드코롱) :
+                      <br />
+                      검수 용량 (25 ml) > 상품 정량 (50 ml)
+                    </span>
+                    <h4>● 불합격 기준</h4>
+                    <span>
+                      상품명 (프리지아 오드코롱) :
+                      <br />
+                      검수 용량 (24 ml) > 상품 정량 (50 ml)
+                    </span>
+                  </body>
+                </div>
+              </span>
+            </th>
             <th>희망판매가격</th>
             <th>권장판매가격</th>
 
@@ -311,6 +336,7 @@ const closeModal = () => {
   console.log('InspectionList.value.FailReason', InspectionList.value.FailReason);
 };
 const validatedinspectionSize = list => {
+  console.log('여기여기???');
   if (list.inspectionSize > list.selectedProduct.size) {
     alert('검수 용량이 상품 기준 용량보다 많습니다.' + '\n' + '상품 기준 용량 : ' + list.selectedProduct.size + ' ml');
     return false;
@@ -320,6 +346,8 @@ const validatedinspectionSize = list => {
       '검수 용량이 상품 기준 용량의 절반 이하입니다.' + '\n' + '상품 기준 용량 : ' + list.selectedProduct.size + ' ml',
     );
     return false;
+  } else {
+    return true;
   }
 };
 // 검수 전송 버튼 눌렀을 때
@@ -347,7 +375,7 @@ const Send = async list => {
 
   // 배열 순회하며 값 검증
   for (let i = 0; i < valueError.length; i++) {
-    console.log('valueError.values', valueError.values);
+    console.log('valueError.values', valueError[i]);
 
     if (valueError[i].value === '' || valueError[i].value === null || valueError[i].value === 0) {
       alert(`"${valueError[i].field}" 값이 입력되지 않았습니다.`);
@@ -355,6 +383,7 @@ const Send = async list => {
     }
   }
   const error = validatedinspectionSize(list);
+
   if (!error) return;
   // if (list.inspectionSize > list.selectedProduct.size) {
   //   alert('검수 용량이 상품 기준 용량보다 많습니다.' + '\n' + '상품 기준 용량 : ' + list.selectedProduct.size + ' ml');
@@ -515,7 +544,6 @@ dolode();
 }
 table {
   width: 100%;
-  border-collapse: collapse;
   font-size: 14px;
   color: #333;
 }
@@ -547,7 +575,7 @@ option {
 button {
   padding: 10px;
   background-color: var(--color-main-bloode);
-  border-radius: 10px;
+  border-end-end-radius: 7px;
   width: 100%;
   text-align: center;
   font-size: 1.8rem;

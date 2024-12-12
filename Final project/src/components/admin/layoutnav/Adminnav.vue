@@ -1,72 +1,71 @@
 <template>
-  <article id="Adminnav" v-if="role === 'ADMIN'">
+  <article id="AdminNav" v-if="role === 'ADMIN'">
     <ul>
-      <RouterLink to="/mainDashboard"
-        ><li><img src="@/assets/img/icon/free-icon-font-apps-3917482.svg" alt="" />대시보드</li></RouterLink
-      >
-      <RouterLink to="/reviewManagement"
-        ><li><img src="@/assets/img/icon/free-icon-font-clipboard-list-7857488.svg" alt="" />상품관리</li></RouterLink
-      >
-      <RouterLink to="/orderManagement"
-        ><li><img src="@/assets/img/icon/free-icon-font-clipboard-list-7857488.svg" alt="" />주문관리</li></RouterLink
-      >
-      <RouterLink to="/userManagement"
-        ><li><img src="@/assets/img/icon/free-icon-font-user-3917559.svg" alt="" />사용자관리</li></RouterLink
-      >
-      <RouterLink to="/reviewManagement"
-        ><li><img src="@/assets/img/icon/free-icon-font-comment-3916638.svg" alt="" />리뷰관리</li></RouterLink
-      >
-      <RouterLink to="/announcement"
-        ><li><img src="@/assets/img/icon/free-icon-font-megaphone-3914404.svg" alt="" />공지사항</li></RouterLink
-      >
-      <RouterLink to="/mainInspectionList"
-        ><li>
-          <img src="@/assets/img/icon/free-icon-font-clipboard-list-7857488.svg" alt="" />판매신청목록
-        </li></RouterLink
-      >
-      <RouterLink to="/approvedList"
-        ><li><img src="@/assets/img/icon/free-icon-font-clipboard-list-7857488.svg" alt="" />승인목록</li></RouterLink
-      >
-      <RouterLink to="/petList"
-        ><li><img src="@/assets/img/icon/free-icon-font-clipboard-list-7857488.svg" alt="" />반려목록</li></RouterLink
-      >
-      <RouterLink to="/statistics"
-        ><li><img src="@/assets/img/icon/free-icon-font-chart-histogram-5528038.svg" alt="" />통계</li></RouterLink
-      >
+      <Router-link v-for="(item, index) in adminMenu" :key="index" :to="item.route" @click="setActive(index)">
+        <li :class="{ active: activeIndex === index }"><img :src="item.icon" alt="" />{{ item.label }}</li>
+      </Router-link>
     </ul>
   </article>
 
-  <article id="Adminnav" v-if="role === 'APPRAISER'">
+  <article id="AdminNav" v-if="role === 'APPRAISER'">
     <ul>
-      <RouterLink to="/mainInspectionList"
-        ><li>
-          <img src="@/assets/img/icon/free-icon-font-clipboard-list-7857488.svg" alt="" />판매신청목록
-        </li></RouterLink
-      >
-      <RouterLink to="/approvedList"
-        ><li><img src="@/assets/img/icon/free-icon-font-clipboard-list-7857488.svg" alt="" />승인목록</li></RouterLink
-      >
-      <RouterLink to="/petList"
-        ><li><img src="@/assets/img/icon/free-icon-font-clipboard-list-7857488.svg" alt="" />반려목록</li></RouterLink
-      >
+      <RouterLink :to="item.route" v-for="(item, index) in appraiserMenu" :key="index" @click="setActive(index)">
+        <li :class="{ active: activeIndex === index }"><img :src="item.icon" alt="" />{{ item.label }}</li>
+      </RouterLink>
     </ul>
   </article>
 </template>
 
 <script setup>
 import { useUserStore } from '@/stores/Login';
-import { watch } from 'vue';
+import { watch, ref } from 'vue';
 
 const useStore = useUserStore();
 const role = useStore.role;
-console.log(role);
+const activeIndex = ref(null);
+
+// 메뉴 항목 데이터
+const adminMenu = [
+  { route: '/mainDashboard', icon: '@/assets/img/icon/free-icon-font-apps-3917482.svg', label: '대시보드' },
+  {
+    route: '/productManagement',
+    icon: '@/assets/img/icon/free-icon-font-clipboard-list-7857488.svg',
+    label: '상품관리',
+  },
+  { route: '/orderManagement', icon: '@/assets/img/icon/free-icon-font-clipboard-list-7857488.svg', label: '주문관리' },
+  { route: '/userManagement', icon: '@/assets/img/icon/free-icon-font-user-3917559.svg', label: '사용자관리' },
+  { route: '/reviewManagement', icon: '@/assets/img/icon/free-icon-font-comment-3916638.svg', label: '리뷰관리' },
+  { route: '/announcement', icon: '@/assets/img/icon/free-icon-font-megaphone-3914404.svg', label: '공지사항' },
+  {
+    route: '/mainInspectionList',
+    icon: '@/assets/img/icon/free-icon-font-clipboard-list-7857488.svg',
+    label: '판매신청목록',
+  },
+  { route: '/approvedList', icon: '@/assets/img/icon/free-icon-font-clipboard-list-7857488.svg', label: '승인목록' },
+  { route: '/petList', icon: '@/assets/img/icon/free-icon-font-clipboard-list-7857488.svg', label: '반려목록' },
+  { route: '/statistics', icon: '@/assets/img/icon/free-icon-font-chart-histogram-5528038.svg', label: '통계' },
+];
+
+const appraiserMenu = [
+  {
+    route: '/mainInspectionList',
+    icon: '@/assets/img/icon/free-icon-font-clipboard-list-7857488.svg',
+    label: '판매신청목록',
+  },
+  { route: '/approvedList', icon: '@/assets/img/icon/free-icon-font-clipboard-list-7857488.svg', label: '승인목록' },
+  { route: '/petList', icon: '@/assets/img/icon/free-icon-font-clipboard-list-7857488.svg', label: '반려목록' },
+];
+
+const setActive = index => {
+  activeIndex.value = index;
+};
 watch(useStore.role, _new => {
   console.log(_new);
 });
 </script>
 
 <style scoped>
-#Adminnav {
+#AdminNav {
   position: fixed;
   left: 0;
   width: 200px;
@@ -82,13 +81,14 @@ li {
   align-content: center;
   padding-left: 20px;
 }
-li:hover {
+li:hover,
+li:active {
   background-color: var(--color-main-bloode);
   color: white;
   transition: all 0.3s;
 }
-
-li:hover img {
+li:hover img,
+li:active img {
   filter: invert(100%) brightness(200%);
 }
 li img {
