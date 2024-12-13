@@ -27,6 +27,7 @@
             <th>평점</th>
             <th>작성자</th>
             <th>작성일자</th>
+            <th>도움되요</th>
             <th>상태</th>
           </tr>
         </thead>
@@ -41,6 +42,7 @@
             <td>★5</td>
             <td>흰수염</td>
             <td>2024-11-20</td>
+            <td>20</td>
             <td class="stateButtons">
               <button class="stateButton" @click="HideButton">숨기기</button>
               <button class="stateButton" @click="DeleteButton">삭제</button>

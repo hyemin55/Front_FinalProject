@@ -1,23 +1,14 @@
 <script setup>
-import { ref } from 'vue';
-import home_1 from '@/assets/img/빵빵덕복숭아.png';
-import home_2 from '@/assets/img/p_003.png';
-import home_3 from '@/assets/img/빵빵덕세안.png';
-import home_4 from '@/assets/img/빵빵덕토끼.png';
-import home_5 from '@/assets/img/빵빵덕세안.png';
+import { onMounted, ref } from 'vue';
 import Queue from 'queue-fifo';
 import router from '@/router';
+import { getEditorPicks } from '@/api/mainApi';
+import { GLOBAL_URL } from '@/api/util';
 
-const slides = ref([home_1, home_2, home_3, home_4, home_5]);
+const slides = ref([]);
 
 let queue = new Queue();
 let image_list = [];
-// 1. img idx => q
-for (let i = 0; i < slides.value.length; i++) {
-  // console.log('ddd ' + i)
-  queue.enqueue(i);
-  image_list.push(slides.value[i]);
-}
 // 2. 클릭 시 제일 앞으로
 // 클릭 시 index 값을 받아오는 함수
 const handleClick = index => {
@@ -25,11 +16,17 @@ const handleClick = index => {
   console.log('Clicked index:', index);
   // 클릭한 슬라이드의 index에 따른 로직 추가
 
-  console.log('queuepeek', queue.peek());
+  console.log('queuepeek: ', queue.peek());
+  let maxIterations = queue.size();
   if (queue.peek() == index) return;
-  while (queue.peek() != index) {
+  while (queue.peek() != index && maxIterations > 0) {
     queue.enqueue(queue.dequeue());
+    maxIterations--;
     console.log('queue : ' + queue.elements);
+  }
+  if (maxIterations === 0) {
+    console.warn('Infinite loop detected. Exiting...');
+    return; // 무한 루프 방지
   }
   slides.value = [];
   while (!queue.isEmpty()) {
@@ -50,13 +47,30 @@ const handleClick = index => {
 };
 
 // 자세히보기를 클릭했을 때 넘겨줄 idx와 size이다.
-// const navDetailProduct = (productId,size) => {
-//   console.log(productId,size);
-//   router.push({
-//     path: `/productsdetail/${productId}`,
-//     query: { size: size },
-//   });
-// };
+const navDetailProduct = (productId, size) => {
+  console.log(productId);
+  router.push({
+    path: `/productsdetail/${productId}`,
+    query: { size: size },
+  });
+};
+
+// 렌더링 시 한번 실행
+const dolode = async () => {
+  const pickRes = await getEditorPicks();
+  slides.value = pickRes;
+  console.log(slides.value);
+  // 1. img idx => q
+  for (let i = 0; i < slides.value.length; i++) {
+    // console.log('ddd ' + i)
+    queue.enqueue(i);
+    image_list.push(slides.value[i]);
+  }
+};
+
+onMounted(() => {
+  dolode();
+});
 </script>
 
 <template>
@@ -73,16 +87,16 @@ const handleClick = index => {
         otherSlideImg: index >= 3,
       }"
     >
-      <img :src="slide" />
+      <img :src="`${GLOBAL_URL}/api/file/download/${slide.fileName}`" />
       <div class="slides_info">
-        <p>Santa Maria Novella</p>
-        <p>프리지아 오드코롱</p>
-        <p>￦ 100,000</p>
+        <p>{{ slide.brandName }}</p>
+        <p>{{ slide.productName }}</p>
+        <p>￦ {{ slide.price.toLocaleString() }}</p>
       </div>
       <div v-if="index === 0" class="extra_content">
-        <p>프리지아 오드코롱</p>
-        <p>풍부한 꽃향기와 함께 신비로운 느낌의 오 드 퍼퓸. 마시멜로처럼 부드럽고 포근한 느낌을 줍니다.</p>
-        <p>자세히 보러가기 →</p>
+        <p>{{ slide.productName }}ㆍ{{ slide.size }} ml</p>
+        <p>{{ slide.content }}</p>
+        <p @click="navDetailProduct(slide.productId, slide.size)">자세히 보러가기 →</p>
         <!-- <p @click="navDetailProduct(slide)">자세히 보러가기 →</p> -->
       </div>
     </div>
@@ -142,6 +156,8 @@ const handleClick = index => {
   align-items: center;
   justify-content: center;
   color: white;
+  padding: 1%;
+  text-align: center;
   /* text-shadow: 2px 2px 5px #333; */
   line-height: 1.5;
 
@@ -160,10 +176,10 @@ const handleClick = index => {
 .slides_info p:nth-child(2) {
   border-bottom: 1px solid white;
   transition: all 0.3s ease;
+  font-size: 2rem;
 }
 .slides_info p:nth-child(3) {
   line-height: 300%;
-  font-size: 80%;
   transition: all 0.6s ease;
 }
 .Slidebox:hover .slides_info p {
@@ -205,9 +221,26 @@ const handleClick = index => {
   color: var(--color-main-bloode);
 }
 @media (max-width: 630px) {
+  .slides_info {
+    padding: 3%;
+    line-height: 1.3;
+  }
   .extra_content p:nth-child(1),
   .extra_content p:nth-child(2) {
     display: none;
+  }
+  .firstSlideImg {
+    font-size: 1.8rem;
+  }
+  .secondSlideImg,
+  .thirdSlideImg {
+    font-size: 1.2rem;
+  }
+  .slides_info p:nth-child(2) {
+    font-size: 1.4rem;
+  }
+  .Slidebox:hover .slides_info p {
+    transform: translateY(15px);
   }
 }
 </style>

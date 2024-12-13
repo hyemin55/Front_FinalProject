@@ -1,8 +1,14 @@
-<!-- <template>
+<template>
   <article>
     <ul id="totalPages">
       <li @click="backPage">이전</li>
-      <li class="totalPages" v-for="pageNum in endPage - startPage + 1" v-bind:key="pageNum" @click="goToPage(startPage + pageNum - 1)" :class="{ active: activePage(pageNum) }">
+      <li
+        class="totalPages"
+        v-for="pageNum in endPage - startPage + 1"
+        v-bind:key="pageNum"
+        @click="goToPage(startPage + pageNum - 1)"
+        :class="{ active: activePage(pageNum) }"
+      >
         {{ startPage + pageNum - 1 }}
         {{ startPage }}
         {{ pageNum }}
@@ -13,16 +19,25 @@
 </template>
 
 <script setup>
-import { getViewCurrentPage } from '@/api/productDetailApi';
+import { getReviewPageNation } from '@/api/PageNationApi';
 import { useUserStore } from '@/stores/Login';
 import { ref, watch } from 'vue';
 
+const props = defineProps({
+  totalCount: {
+    type: Object,
+    require: true,
+  },
+});
+const emit = defineEmits(['pageNumber']);
+
+const categoryType = ref('');
 const currentPage = ref(1);
 const totalPages = ref(10);
 const currentPageGroup = ref(0);
 let flag = 0;
 const totalPageGroup = ref(0);
-const pageSize = 5;
+const pageSize = ref(5);
 const startPage = ref(0);
 const endPage = ref(0);
 
@@ -66,7 +81,15 @@ const viewCurrentPage = async () => {
     flag = true;
     return;
   } else {
-    reviewList.value = await getViewCurrentPage(idx.value, currentPage.value - 1);
+    switch (categoryType.value) {
+      case 'review':
+        const reviewPageNationRes = await getReviewPageNation(idx.value, currentPage.value - 1);
+
+        break;
+      case 'InspectionList':
+        const InspectionListPageNationRes = await getgetInspectionListPageNation(idx.value, currentPage.value - 1);
+        break;
+    }
     totalPages.value = Math.ceil(reviewCount.value / pageSize);
     totalPageGroup.value = Math.floor(totalPages.value / 10);
     startPage.value = currentPageGroup.value * 10 + 1;
@@ -91,7 +114,7 @@ watch(
     reviewCount.value = newReviewCount;
     viewCurrentPage();
   },
-  dolode(),
+  // dolode(),
 );
 </script>
 
@@ -124,4 +147,4 @@ watch(
   font-weight: 600;
   text-decoration: underline;
 }
-</style> -->
+</style>

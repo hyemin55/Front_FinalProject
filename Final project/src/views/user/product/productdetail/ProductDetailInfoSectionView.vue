@@ -19,7 +19,7 @@ const reviewData = ref(null);
 const productDataOk = ref([]);
 
 const idx = ref(route.params.idx);
-// const size = ref(route.query.size);
+const size = ref(route.query.size);
 
 const cartStore = useCartStore();
 
@@ -47,8 +47,8 @@ const doLoad = async () => {
     productData.value = await getProductData(idx.value);
     reviewData.value = await getReviewData(idx.value);
 
-    // console.log('productData 값 : ', productData.value.data[0].productId);
-    // console.log('reviewData 값 : ', reviewData.value.length);
+    console.log('productData 값 : ', productData.value);
+    console.log('reviewData 값 : ', reviewData.value);
 
     if (productData.value.status === 200 && reviewData.value.status === 200) {
       // console.log('productData.value.status === 200', productData.value);
@@ -135,7 +135,7 @@ const Average = data => {
 
 watchEffect(() => {
   idx.value = route.params.idx;
-  // size.value = route.query.size;
+  size.value = route.query.size;
   doLoad();
 });
 </script>

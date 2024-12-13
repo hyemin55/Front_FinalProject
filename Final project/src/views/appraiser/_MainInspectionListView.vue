@@ -108,7 +108,7 @@
                 ><img src="@/assets/img/icon/free-icon-font-exclamation-3917663.svg" alt="" />
                 <div class="TestResultModal">
                   <h3>용량 기준</h3>
-                  <body>
+                  <div>
                     판매 기준 용량은 상품 정량의 절반 이상이어야 합니다.
                     <br />
                     <br />
@@ -124,7 +124,7 @@
                       <br />
                       검수 용량 (24 ml) > 상품 정량 (50 ml)
                     </span>
-                  </body>
+                  </div>
                 </div>
               </span>
             </th>
@@ -294,6 +294,9 @@
       </div>
     </article>
     <article>
+      <PageNationComponent :pageNationData="pageNationData" @pageNumber="dolode" />
+    </article>
+    <article>
       <InspectionModalView v-if="InspectionModal" :Data="DeliveryData" @close="closeModal" />
     </article>
   </section>
@@ -303,8 +306,9 @@
 import { GLOBAL_URL } from '@/api/util';
 import AnnouncementComponent from '@/components/admin/AnnouncementComponent.vue';
 import axios from 'axios';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import InspectionModalView from '@/views/appraiser/InspectionModalView.vue';
+import PageNationComponent from '@/components/PageNationComponent.vue';
 
 const InspectionList = ref([]);
 const PassGradeList = ref([]);
@@ -312,8 +316,13 @@ const FailReasonList = ref([]);
 const categoriesList = ['Perfume', 'Diffuser', 'Candle'];
 const DeliveryData = ref([]);
 const InspectionModal = ref(false);
+const totalCount = ref(0);
 // console.log(DeliveryData.value);
-
+const pageNationData = {
+  name: 'InspectionList',
+  totalCount: totalCount.value,
+  pageSize: 20,
+};
 const ImageDelete = (img, index) => {
   console.log('삭제하려는 이미지', index);
   // InspectionList.value[index].userSaleResImageList(img);
@@ -524,13 +533,20 @@ const dolode = async () => {
     const failRes = await axios.get(`${GLOBAL_URL}/api/inspection/fail/reason`);
     FailReasonList.value = failRes.data;
     // userSaleImageList.value = InspectionList.value.userSaleResImageList;
-    console.log(InspectionList.value);
+    // console.log(InspectionList.value);
   } catch (error) {
     console.error('Error loading inspection list:', error);
   }
 };
-
-dolode();
+onMounted(async () => {
+  dolode();
+  totalCount.value = await axios.get(`${GLOBAL_URL}/api/inspection/pending-sale/total-count`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+    },
+  });
+});
 </script>
 
 <style scoped>

@@ -74,14 +74,18 @@ onBeforeUnmount(() => {
           />
           <ul class="best_left_text">
             <li class="best_brand_name" v-if="bestListRef.length > 0">{{ bestListRef[currentIdxRef].brandName }}</li>
-            <li class="best_product_name" v-if="bestListRef.length > 0">{{ bestListRef[currentIdxRef].productName }}</li>
+            <li class="best_product_name" v-if="bestListRef.length > 0">
+              {{ bestListRef[currentIdxRef].productName }}
+            </li>
             <li v-else>Loading...</li>
           </ul>
         </div>
       </div>
 
       <div class="best_right_box">
-        <p class="best_right_text">피렌체의 소중한 기억을 간직한, <br />&nbsp;&nbsp;&nbsp;&nbsp; 아름다운 꽃과 식물들의 이야기</p>
+        <p class="best_right_text">
+          피렌체의 소중한 기억을 간직한, <br />&nbsp;&nbsp;&nbsp;&nbsp; 아름다운 꽃과 식물들의 이야기
+        </p>
         <img class="best_promotion_img" src="@/assets/img/best_img.png" alt="" />
       </div>
     </div>

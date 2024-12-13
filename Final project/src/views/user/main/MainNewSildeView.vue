@@ -2,10 +2,10 @@
 <script setup>
 import { Carousel, Slide, Navigation, Icon, Pagination } from 'vue3-carousel';
 import { ref, watchEffect } from 'vue';
-import axios from 'axios';
 import 'vue3-carousel/dist/carousel.css';
 import { GLOBAL_URL } from '@/api/util';
 import router from '@/router';
+import { getNewSildes } from '@/api/mainApi';
 
 const slides = ref([]);
 const pageNum = 0;
@@ -15,17 +15,9 @@ const size = 10;
 
 const getNewList = async () => {
   try {
-    const res = await axios.get(`${GLOBAL_URL}/api/products/new?pageNum=${pageNum}&size=${size}`);
-    // console.log(res)
-    if (res.status == 200) {
-      // New_list.value = res.data
-      // console.log('나와랏', res.data)
-      // for (let i = 0; i < res.data.length; i++) {
-      //   slides.value.push(res.data[i].images[0])
-      // }
-      slides.value = res.data;
-      console.log(slides.value);
-    }
+    const newSildesRes = await getNewSildes();
+    slides.value = newSildesRes;
+    console.log(slides.value);
   } catch (e) {
     console.log('리스트 못 받아오는 오류에요 = ' + e);
   }
@@ -95,7 +87,7 @@ const navDetailProduct = (productId, size) => {
 
 .carousel__item img {
   position: absolute;
-  width: 95%;
+  width: 330px;
   max-height: auto;
   top: 20%;
 }
@@ -131,5 +123,25 @@ const navDetailProduct = (productId, size) => {
   font-size: 2.7rem;
   /* height: 200px; */
   padding: 5px 20px;
+}
+@media (max-width: 630px) {
+  .carousel__item {
+    height: 440px;
+    border-radius: 10px;
+  }
+  .time_check {
+    font-size: 1.6rem;
+    top: 20px;
+  }
+  .carousel__item img {
+    width: 180px;
+  }
+  .item_info p:nth-child(1) {
+    font-size: 1.8rem;
+  }
+  .item_info p {
+    font-size: 2rem;
+    padding: 5px 5px;
+  }
 }
 </style>

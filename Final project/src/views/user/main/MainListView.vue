@@ -16,9 +16,8 @@
 </template>
 
 <script setup>
-import { GLOBAL_URL } from '@/api/util';
+import { getMainList } from '@/api/mainApi';
 import ProductComponent from '@/components/user/ProductComponent.vue';
-import axios from 'axios';
 import { ref, watchEffect } from 'vue';
 
 // main_product_list
@@ -37,11 +36,9 @@ const see_handle = () => {
 
 const getRandomList = async (pageNum, size) => {
   try {
-    const res = await axios.get(`${GLOBAL_URL}/api/products/random?pageNum=${pageNum}&size=${size}`);
-    if (res.status == 200) {
-      random_list.value = res.data; // 전체 제품 리스트
-      displayed_products.value = res.data.slice(0, 4); // 처음 4개 제품 표시
-    }
+    const getMainListRes = await getMainList(pageNum, size);
+    random_list.value = getMainListRes; // 전체 제품 리스트
+    displayed_products.value = getMainListRes.slice(0, 4); // 처음 4개 제품 표시
   } catch (e) {
     console.log(e);
   }
@@ -116,7 +113,7 @@ watchEffect(() => {
 }
 @media (max-width: 630px) {
   .main_product_Com,
-.main_add_product_Com {
+  .main_add_product_Com {
     grid-template-columns: repeat(2, 1fr);
     height: auto;
   }
