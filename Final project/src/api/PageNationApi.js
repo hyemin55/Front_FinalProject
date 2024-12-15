@@ -1,7 +1,7 @@
 import { errorMessages } from 'vue/compiler-sfc';
+import { GLOBAL_URL } from './util';
+import axios from 'axios';
 
-const { default: axios } = require('axios');
-const { GLOBAL_URL } = require('./util');
 
 export const getReviewPageNation = async (idx, currentPage) => {
   try {

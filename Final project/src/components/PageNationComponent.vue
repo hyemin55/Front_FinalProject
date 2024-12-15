@@ -1,6 +1,6 @@
 <template>
   <article>
-    <ul id="totalPages">
+    <ul id="totalPages" v-if="pageNationData.totalCount > 0">
       <li @click="backPage">이전</li>
       <li
         class="totalPages"
@@ -9,8 +9,6 @@
         @click="goToPage(startPage + pageNum - 1)"
         :class="{ active: activePage(pageNum) }"
       >
-        {{ startPage + pageNum - 1 }}
-        {{ startPage }}
         {{ pageNum }}
       </li>
       <li @click="nextPage">다음</li>
@@ -20,24 +18,25 @@
 
 <script setup>
 import { getReviewPageNation } from '@/api/PageNationApi';
-import { useUserStore } from '@/stores/Login';
-import { ref, watch } from 'vue';
+import { ref, watchEffect } from 'vue';
+
 
 const props = defineProps({
-  totalCount: {
+  pageNationData: {
     type: Object,
-    require: true,
+    required: true,
   },
 });
-const emit = defineEmits(['pageNumber']);
 
-const categoryType = ref('');
+const emit = defineEmits(['currentPage']);
+const viewPageName = ref(props.pageNationData.name)
+const pageSize = ref(0)
+const totalCount = ref(0)
 const currentPage = ref(1);
 const totalPages = ref(10);
 const currentPageGroup = ref(0);
 let flag = 0;
 const totalPageGroup = ref(0);
-const pageSize = ref(5);
 const startPage = ref(0);
 const endPage = ref(0);
 
@@ -76,25 +75,18 @@ const goToPage = page => {
 
 // 현재페이지
 const viewCurrentPage = async () => {
+  
   currentPageGroup.value = Math.floor((currentPage.value - 1) / 10);
   if (currentPageGroup.value == currentPage.value - 1 && flag) {
     flag = true;
     return;
   } else {
-    switch (categoryType.value) {
-      case 'review':
-        const reviewPageNationRes = await getReviewPageNation(idx.value, currentPage.value - 1);
-
-        break;
-      case 'InspectionList':
-        const InspectionListPageNationRes = await getgetInspectionListPageNation(idx.value, currentPage.value - 1);
-        break;
-    }
-    totalPages.value = Math.ceil(reviewCount.value / pageSize);
+    totalPages.value = Math.ceil(totalCount.value / pageSize.value);
     totalPageGroup.value = Math.floor(totalPages.value / 10);
     startPage.value = currentPageGroup.value * 10 + 1;
     endPage.value = Math.min(startPage.value + 9, totalPages.value);
-    // console.log(reviewCount.value);
+    // console.log(totalCount);
+    emit('currentPage',currentPage.value-1)
   }
 };
 
@@ -106,16 +98,15 @@ const activePage = pageNum => {
     return currentPage.value - 1 - currentPageGroup.value * 10 === pageNum - 1;
   }
 };
-
-// 주소줄의 idx값이 바뀌면 리뷰리스트와 페이지네이션 변경을 위해 재통신 필요.
-watch(
-  () => props.reviewCount, // source로 배열을 사용하여 다중 변수를 추적
-  newReviewCount => {
-    reviewCount.value = newReviewCount;
-    viewCurrentPage();
-  },
-  // dolode(),
-);
+const dolode = () =>{
+  totalCount.value = props.pageNationData.totalCount
+  pageSize.value = props.pageNationData.pageSize
+  viewCurrentPage()
+}
+watchEffect(()=>{
+  console.log(props.pageNationData)
+  dolode()
+})
 </script>
 
 <style scoped>

@@ -294,7 +294,7 @@
       </div>
     </article>
     <article>
-      <PageNationComponent :pageNationData="pageNationData" @pageNumber="dolode" />
+      <PageNationComponent v-if="totalCount > 0" :pageNationData="pageNationData" @currentPage="pageUpdate" />
     </article>
     <article>
       <InspectionModalView v-if="InspectionModal" :Data="DeliveryData" @close="closeModal" />
@@ -306,7 +306,7 @@
 import { GLOBAL_URL } from '@/api/util';
 import AnnouncementComponent from '@/components/admin/AnnouncementComponent.vue';
 import axios from 'axios';
-import { onMounted, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import InspectionModalView from '@/views/appraiser/InspectionModalView.vue';
 import PageNationComponent from '@/components/PageNationComponent.vue';
 
@@ -317,12 +317,15 @@ const categoriesList = ['Perfume', 'Diffuser', 'Candle'];
 const DeliveryData = ref([]);
 const InspectionModal = ref(false);
 const totalCount = ref(0);
+const pageNumber = ref(0)
+
 // console.log(DeliveryData.value);
-const pageNationData = {
+const pageNationData = reactive({
   name: 'InspectionList',
   totalCount: totalCount.value,
-  pageSize: 20,
-};
+  pageSize: 5,
+});
+
 const ImageDelete = (img, index) => {
   console.log('삭제하려는 이미지', index);
   // InspectionList.value[index].userSaleResImageList(img);
@@ -335,6 +338,13 @@ const ImageDelete = (img, index) => {
   }
 };
 
+// pageNation emit 업데이트 
+const pageUpdate = (pageNum) =>{
+pageNumber.value = pageNum
+dolode()
+}
+
+// InspectionMadal emit 업데이트
 const closeModal = () => {
   InspectionModal.value = false;
   console.log('InspectionList.value.PassGrade', InspectionList.value);
@@ -344,6 +354,7 @@ const closeModal = () => {
   }
   console.log('InspectionList.value.FailReason', InspectionList.value.FailReason);
 };
+
 const validatedinspectionSize = list => {
   console.log('여기여기???');
   if (list.inspectionSize > list.selectedProduct.size) {
@@ -499,6 +510,7 @@ const fetchSuggestions = async (type, list) => {
   }
 };
 
+
 const dolode = async () => {
   try {
     // 판매 신청 리스트
@@ -507,6 +519,9 @@ const dolode = async () => {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${sessionStorage.getItem('token')}`,
       },
+      params:{
+        pageNum: pageNumber.value
+      }
     });
     InspectionList.value = InspectionListRes.data.map(item => ({
       ...item,
@@ -526,26 +541,26 @@ const dolode = async () => {
       FailReason: [],
       Content: '',
     }));
-    // 검수 합격 등급 리스트
-    const passRes = await axios.get(`${GLOBAL_URL}/api/inspection/pass/grade`);
-    PassGradeList.value = passRes.data;
-    // 검수 불합격 사유 리스트
-    const failRes = await axios.get(`${GLOBAL_URL}/api/inspection/fail/reason`);
-    FailReasonList.value = failRes.data;
-    // userSaleImageList.value = InspectionList.value.userSaleResImageList;
-    // console.log(InspectionList.value);
   } catch (error) {
     console.error('Error loading inspection list:', error);
   }
 };
 onMounted(async () => {
   dolode();
-  totalCount.value = await axios.get(`${GLOBAL_URL}/api/inspection/pending-sale/total-count`, {
+  const countRes = await axios.get(`${GLOBAL_URL}/api/inspection/pending-sale/total-count`, {
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${sessionStorage.getItem('token')}`,
     },
   });
+  totalCount.value = countRes.data;
+  pageNationData.totalCount = totalCount.value;
+  // 검수 합격 등급 리스트
+  const passRes = await axios.get(`${GLOBAL_URL}/api/inspection/pass/grade`);
+  PassGradeList.value = passRes.data;
+  // 검수 불합격 사유 리스트
+  const failRes = await axios.get(`${GLOBAL_URL}/api/inspection/fail/reason`);
+  FailReasonList.value = failRes.data;
 });
 </script>
 
