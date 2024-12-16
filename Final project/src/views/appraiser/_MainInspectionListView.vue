@@ -148,7 +148,7 @@
                 :max="list.selectedProduct.size"
                 placeholder="용량(ml)"
                 required
-                @blur="validatedinspectionSize(list)"
+                @blur="validatedInspectionSize(list)"
               />
             </td>
             <td>￦ {{ list.expectedSellingPrice.toLocaleString() }}</td>
@@ -167,7 +167,7 @@
         </tbody>
         <thead>
           <tr>
-            <th>상품 검색 대표사진</th>
+            <th>사용 유무</th>
             <th>검수결과</th>
             <th v-if="list.TestResult == 'Y' || list.TestResult == ''" class="TestResult">
               등급
@@ -218,16 +218,11 @@
         </thead>
         <tbody>
           <tr>
-            <td v-if="list.selectedProduct.mainImage">
-              <img
-                :src="`${GLOBAL_URL}/api/file/download/${list.selectedProduct.mainImage.filename}`"
-                alt=""
-                style="width: 50px"
-              />
-            </td>
-            <td v-else>
-              <img src="@/assets/img/icon/free-icon-font-image-slash-10742150.svg" alt="" style="width: 40px" />
-              <p>이미지가 없습니다.</p>
+            <td>
+              <select name="New" id="">
+                <option value="Y">새상품</option>
+                <option value="N">중고상품</option>
+              </select>
             </td>
             <td>
               <select name="TestResults" id="" v-model="list.TestResult" required>
@@ -268,10 +263,22 @@
         </tbody>
         <tbody>
           <tr>
+            <th>상품 검색 대표사진</th>
             <th colspan="2">판매자 사진</th>
             <th colspan="2">검수자 등록 사진</th>
           </tr>
           <tr>
+            <td v-if="list.selectedProduct.mainImage">
+              <img
+                :src="`${GLOBAL_URL}/api/file/download/${list.selectedProduct.mainImage.filename}`"
+                alt=""
+                style="width: 50px"
+              />
+            </td>
+            <td v-else>
+              <img src="@/assets/img/icon/free-icon-font-image-slash-10742150.svg" alt="" style="width: 40px" />
+              <p>이미지가 없습니다.</p>
+            </td>
             <td colspan="2">
               <img
                 :src="`${GLOBAL_URL}/api/file/download/${userSaleImage.name}`"
@@ -283,9 +290,10 @@
                 @click="ImageDelete(userSaleImage, index)"
               />
             </td>
-            <td colspan="2">
+            <td colspan="1">
               <input type="file" id="photo" multiple @change="handleFileUpload" />
             </td>
+            <!-- <td><img :src="passFileImage" alt="" v-for="(passFileImage, index) in passFiles" :key="index" /></td> -->
           </tr>
         </tbody>
       </table>
@@ -317,8 +325,11 @@ const categoriesList = ['Perfume', 'Diffuser', 'Candle'];
 const DeliveryData = ref([]);
 const InspectionModal = ref(false);
 const totalCount = ref(0);
-const pageNumber = ref(0)
+const pageNumber = ref(0);
+const userFiles = ref([]);
+const passFiles = ref([]);
 
+// Dataform;
 // console.log(DeliveryData.value);
 const pageNationData = reactive({
   name: 'InspectionList',
@@ -326,6 +337,13 @@ const pageNationData = reactive({
   pageSize: 5,
 });
 
+// 검수자 이미지파일 등록`
+const handleFileUpload = event => {
+  passFiles.value = Array.from(event.target.files);
+  console.log('passFiles.value', passFiles.value);
+};
+
+// 판매자 사진 삭제하기
 const ImageDelete = (img, index) => {
   console.log('삭제하려는 이미지', index);
   // InspectionList.value[index].userSaleResImageList(img);
@@ -338,11 +356,11 @@ const ImageDelete = (img, index) => {
   }
 };
 
-// pageNation emit 업데이트 
-const pageUpdate = (pageNum) =>{
-pageNumber.value = pageNum
-dolode()
-}
+// pageNation emit 업데이트
+const pageUpdate = pageNum => {
+  pageNumber.value = pageNum;
+  dolode();
+};
 
 // InspectionMadal emit 업데이트
 const closeModal = () => {
@@ -355,13 +373,12 @@ const closeModal = () => {
   console.log('InspectionList.value.FailReason', InspectionList.value.FailReason);
 };
 
-const validatedinspectionSize = list => {
-  console.log('여기여기???');
+const validatedInspectionSize = list => {
   if (list.inspectionSize > list.selectedProduct.size) {
     alert('검수 용량이 상품 기준 용량보다 많습니다.' + '\n' + '상품 기준 용량 : ' + list.selectedProduct.size + ' ml');
     return false;
   }
-  if (list.inspectionSize <= list.selectedProduct.size / 2) {
+  if (list.inspectionSize < list.selectedProduct.size / 2) {
     alert(
       '검수 용량이 상품 기준 용량의 절반 이하입니다.' + '\n' + '상품 기준 용량 : ' + list.selectedProduct.size + ' ml',
     );
@@ -370,7 +387,8 @@ const validatedinspectionSize = list => {
     return true;
   }
 };
-// 검수 전송 버튼 눌렀을 때
+
+// ======================검수 전송 버튼 눌렀을 때======================
 const Send = async list => {
   console.log(list.TestResult);
 
@@ -402,42 +420,42 @@ const Send = async list => {
       return; // 입력 오류 발생 시 함수 종료
     }
   }
-  const error = validatedinspectionSize(list);
-
+  const error = validatedInspectionSize(list);
   if (!error) return;
-  // if (list.inspectionSize > list.selectedProduct.size) {
-  //   alert('검수 용량이 상품 기준 용량보다 많습니다.' + '\n' + '상품 기준 용량 : ' + list.selectedProduct.size + ' ml');
-  //   return;
-  // }
-  // if (list.inspectionSize <= list.selectedProduct.size / 2) {
-  //   alert('검수 용량이 상품 기준 용량의 절반 이하입니다.' + '\n' + '판매 기준 용량 미달로 불합격 사유에 해당합니다.');
-  //   return;
-  // }
+
   if (list.TestResult === 'Y') {
     console.log('모든 값이 올바르게 입력되었습니다.');
 
     const passData = {
-      pendingSaleId: list.saleApplicationId,
-      gradeId: list.PassGrade.gradeId,
-      inspectionCategoryReqDto: {
-        categoryId: list.categoryId,
-        categoryName: categoriesList[list.categoryId - 1],
+      inspectionPassReqDto: {
+        pendingSaleId: list.saleApplicationId,
+        gradeId: list.PassGrade.gradeId,
+        inspectionCategoryReqDto: {
+          categoryId: list.categoryId,
+          categoryName: categoriesList[list.categoryId - 1],
+        },
+        inspectionBrandReqDto: {
+          brandId: list.selectedBrand.split('.')[0],
+          brandName: list.selectedBrand.split('.')[1],
+        },
+        inspectionProductReqDto: {
+          productName: list.selectedProduct.productName,
+          productSize: list.inspectionSize,
+          verifiedSellingPrice: list.inspectionSellingPrice,
+          quantity: 0,
+        },
+        usedOrNot: '',
+        inspectionContent: list.Content,
+        inspectionResult: true,
       },
-      inspectionBrandReqDto: {
-        brandId: list.selectedBrand.split('.')[0],
-        brandName: list.selectedBrand.split('.')[1],
-      },
-      inspectionProductReqDto: {
-        productName: list.selectedProduct.productName,
-        productSize: list.inspectionSize,
-        verifiedSellingPrice: list.inspectionSellingPrice,
-        quantity: 0,
-      },
-      inspectionContent: list.Content,
-      inspectionResult: true,
+      passImageFiles: passFiles.value.map((file, index) => ({
+        name: file.name,
+        desc: `image-${index + 1}`,
+      })),
     };
     console.log('gradeId', passData.gradeId);
     DeliveryData.value = { DeliveryData: passData, list: list };
+    userFiles.value = list.userSaleResImageList;
     console.log(DeliveryData.value);
   } else if (list.TestResult === 'N') {
     const failData = {
@@ -510,7 +528,6 @@ const fetchSuggestions = async (type, list) => {
   }
 };
 
-
 const dolode = async () => {
   try {
     // 판매 신청 리스트
@@ -519,9 +536,9 @@ const dolode = async () => {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${sessionStorage.getItem('token')}`,
       },
-      params:{
-        pageNum: pageNumber.value
-      }
+      params: {
+        pageNum: pageNumber.value,
+      },
     });
     InspectionList.value = InspectionListRes.data.map(item => ({
       ...item,
@@ -541,6 +558,7 @@ const dolode = async () => {
       FailReason: [],
       Content: '',
     }));
+    console.log('InspectionList.value', InspectionList.value);
   } catch (error) {
     console.error('Error loading inspection list:', error);
   }

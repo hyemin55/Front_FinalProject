@@ -10,8 +10,8 @@ const emit = defineEmits(['close']);
 // const submitModal = () => {
 //   emit('sucess');
 // };
+// 받아오는props의 정의 방법
 const props = defineProps({
-  // 받아오는props의 정의 방법
   Data: {
     type: Object,
     required: true,

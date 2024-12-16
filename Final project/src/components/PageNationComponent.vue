@@ -17,9 +17,7 @@
 </template>
 
 <script setup>
-import { getReviewPageNation } from '@/api/PageNationApi';
 import { ref, watchEffect } from 'vue';
-
 
 const props = defineProps({
   pageNationData: {
@@ -29,9 +27,9 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['currentPage']);
-const viewPageName = ref(props.pageNationData.name)
-const pageSize = ref(0)
-const totalCount = ref(0)
+const viewPageName = ref(props.pageNationData.name);
+const pageSize = ref(0);
+const totalCount = ref(0);
 const currentPage = ref(1);
 const totalPages = ref(10);
 const currentPageGroup = ref(0);
@@ -75,7 +73,6 @@ const goToPage = page => {
 
 // 현재페이지
 const viewCurrentPage = async () => {
-  
   currentPageGroup.value = Math.floor((currentPage.value - 1) / 10);
   if (currentPageGroup.value == currentPage.value - 1 && flag) {
     flag = true;
@@ -86,7 +83,7 @@ const viewCurrentPage = async () => {
     startPage.value = currentPageGroup.value * 10 + 1;
     endPage.value = Math.min(startPage.value + 9, totalPages.value);
     // console.log(totalCount);
-    emit('currentPage',currentPage.value-1)
+    emit('currentPage', currentPage.value - 1);
   }
 };
 
@@ -98,15 +95,15 @@ const activePage = pageNum => {
     return currentPage.value - 1 - currentPageGroup.value * 10 === pageNum - 1;
   }
 };
-const dolode = () =>{
-  totalCount.value = props.pageNationData.totalCount
-  pageSize.value = props.pageNationData.pageSize
-  viewCurrentPage()
-}
-watchEffect(()=>{
-  console.log(props.pageNationData)
-  dolode()
-})
+const dolode = () => {
+  totalCount.value = props.pageNationData.totalCount;
+  pageSize.value = props.pageNationData.pageSize;
+  viewCurrentPage();
+};
+watchEffect(() => {
+  console.log(props.pageNationData);
+  dolode();
+});
 </script>
 
 <style scoped>
