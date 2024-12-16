@@ -25,15 +25,21 @@ const props = defineProps({
     required: false,
   },
 })
-const cart_idx = ref(props.productInfo.productId) // 부모자로 보낼 idx
+// const cart_idx = ref(props.productInfo.productId) // 부모자로 보낼 idx
+// const cart_product_name = ref(props.productInfo.productName)
+// const cart_product_price = ref(props.productInfo.price) // 이것도
+// const cart_quantity = ref(props.productInfo.quantity)
+// // 사이즈 수정 필요
+// const cart_size = ref(props.productInfo.size)
+// const cartCheck = ref(props.isChecked)
+const cart_idx = ref(props.productInfo.usedProductId) // 부모자로 보낼 idx
 const cart_product_name = ref(props.productInfo.productName)
 const cart_product_price = ref(props.productInfo.price) // 이것도
 const cart_quantity = ref(props.productInfo.quantity)
 // 사이즈 수정 필요
-const cart_size = ref(props.productInfo.size)
-const cartCheck = ref(props.isChecked)
-
-console.log(cart_size.value)
+const cart_size = ref(props.productInfo.size);
+const cartCheck = ref(props.isChecked);
+const imgURL = ref(props.productInfo.images);
 
 // 장바구니 check배열 
 onMounted(() => {
@@ -114,7 +120,7 @@ watch(() => props.productInfo.quantity, newValue => {
 const router = useRouter()
 const moveDetail = () => {
   router.push({
-    path: `/productsdetail/${props.productInfo.productId}`,
+    path: `/productsdetail/${props.productInfo.usedProductId}`,
     query: {
       size: cart_size.value,
     },
@@ -138,10 +144,7 @@ const moveDetail = () => {
       <span class="custom-checkmark"></span>
     </label>
     <div class="img">
-      <img
-        :src="`${GLOBAL_URL}/api/file/download/${productInfo.images[0].filename}`"
-        @click="moveDetail"
-      />
+      <img :src="`${GLOBAL_URL}/api/file/download/${imgURL[0].filename}`" @click="moveDetail"/>
     </div>
     <div class="text">
       <div class="text_box">
@@ -149,7 +152,7 @@ const moveDetail = () => {
           상품명 : {{ cart_product_name }}
         </p>
         <p class="contents">옵션 : {{ cart_size }}ml</p>
-        <p class="price">{{ cart_product_price.toLocaleString() }}원</p>
+        <p class="price">{{ cart_product_price }}원</p>
       </div>
       <div class="count">
         <button @click="downCount">-</button>

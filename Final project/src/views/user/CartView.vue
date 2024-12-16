@@ -82,7 +82,6 @@ const cartLogin = async () => {
     cartStore.updateCart(fetchRes.data);
   }
 };
-
 console.log('로그인 완료');
 
 // const payMentStore = usePayMentStore();

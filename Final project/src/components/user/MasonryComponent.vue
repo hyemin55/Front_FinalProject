@@ -1,5 +1,15 @@
 <script setup>
+import { addCartDatabase } from '@/api/cartApi';
+import { GLOBAL_URL } from '@/api/util';
+import { useCartStore } from '@/stores/CartStore';
+import { useUserStore } from '@/stores/Login';
+import { useWishStore } from '@/stores/WishStore';
 import { computed, onMounted, ref, watchEffect } from 'vue';
+import { useRouter } from 'vue-router';
+
+// 로그인 pinia
+const userStore = useUserStore();
+const userLogin = computed(() => userStore.loginCheck);
 
 const props = defineProps({
   productInfo: {
@@ -15,26 +25,85 @@ watchEffect(() => {
   console.log('현재 모드:', props.layoutType ? 'true' : 'false')
 })
 
-const rank = ref(props.productInfo.rank)
-const price = ref(props.productInfo.price)
-const size = ref(props.productInfo.size)
-const sales = ref(props.productInfo.sales)
-const wishCount = ref(props.productInfo.wishCount)
-const viewCount = ref(props.productInfo.viewCount)
-const imgURL = ref(props.productInfo.imgURL)
+const rank = ref(props.productInfo.verifiedSaleGradeType)
+const price = ref(props.productInfo.sellingPrice)
+const size = ref(props.productInfo.productSize)
+const sales = ref(props.productInfo.nickName)
+const imgURL = ref(props.productInfo.userSaleImages)
+// 아직 들어오지 않은 값(찜, 조회수)
+const wishCount = ref(props.productInfo.wishCount || 10)
+const viewCount = ref(props.productInfo.viewCount || 10)
 
+// 10ml당 가격 계산
 const cost = ref('')
 const detailPrice = ()=>{
     cost.value = price.value/(size.value/10);
 }
 onMounted(detailPrice)
 
+
+// 장바구니 추가 ###########################################
+const cartStore = useCartStore();
+const addToCart = () => {
+  console.log('props.productInfo', props.productInfo);
+  cartStore.addItem(props.productInfo);
+  if (userLogin.value) {
+    const data = {
+      productId: props.productInfo.usedProductId,
+      quantity: 1,
+    };
+    addCartDatabase(data);
+    alert('장바구니에 담았습니다.');
+  }
+};
+
+// 찜목록 추가 #############################################
+const redHeart = ref(false);
+const iconClick = ref(false); // 찜하트 css
+const wishStore = useWishStore();
+
+watchEffect(()=>{
+  const wishProduct = wishStore.itemWishList.find(
+    item => item === props.productInfo.usedProductId
+  );
+  console.log(wishProduct)
+  if(wishProduct){
+    redHeart.value = true;
+    iconClick.value = true;
+  }else{
+    redHeart.value = false;
+    iconClick.value = false;
+  }
+})
+
+const addToWishlist = async () => {
+  if(userLogin.value){
+    // DB통신(추가,삭제)
+    // await wishClick(props.productInfo.productId); (새로운 테이블)
+    // Pinia(추가, 삭제)
+    wishStore.itemMakeWishList(props.productInfo.usedProductId);
+  }else{
+    alert('로그인 후 사용이 가능합니다.')
+    router.push({path: '/login2' });
+  }
+};
+
+
+// 디테일페이지 이동
+const router = useRouter();
+const RouteDetailPage = () => {
+  router.push({
+    path: `/productsdetail/${props.productInfo.productId}`,
+    // query: { },
+  })
+}
 </script>
+
 
 <template>
   <article :class="{'imgStyle':props.layoutType, 'listStyle': !props.layoutType}" class="masonry_component_wrapper">
     <div class="masonry_img_box">
-      <img class="back_img" :src="`/src/assets/img/${imgURL}.png`" alt="" />
+      <img @click="RouteDetailPage" class="back_img" :src="`${GLOBAL_URL}/api/file/download/${imgURL[0].filename}`" alt="" />
       <div class="status_ranking">{{ rank }} 등급</div>
       <ul @click.stop>
         <li class="cart_push" @click.stop="addToCart">
@@ -48,7 +117,7 @@ onMounted(detailPrice)
     </div>
     <div class="masonry_text_box">
       <ul>
-        <li>용량 : {{ size }}ml • 가격 : {{ price }}원 <span class="detail_price">(10ml당 {{ cost }}원)</span></li>
+        <li @click="RouteDetailPage">용량 : {{ size }}ml • 가격 : {{ price }}원 <span class="detail_price">(10ml당 {{ cost }}원)</span></li>
         <li>[ {{ sales }} ]</li>
         <li>❤ {{ wishCount }} • 조회수 {{ viewCount }}</li>
       </ul>

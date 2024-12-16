@@ -18,26 +18,20 @@ const userLogin = computed(() => userStore.loginCheck);
 
 
 // 장바구니 추가
-const cartStore = useCartStore();
-const addToCart = () => {
-  console.log('props.productInfo', props.productInfo);
-  cartStore.addItem(props.productInfo);
-  if (userLogin.value) {
-    const data = {
-      productId: props.productInfo.productId,
-      quantity: 1,
-    };
-    addCartDatabase(data);
-    alert('장바구니에 담았습니다.');
-  }
-};
+// const cartStore = useCartStore();
+// const addToCart = () => {
+//   console.log('props.productInfo', props.productInfo);
+//   cartStore.addItem(props.productInfo);
+//   if (userLogin.value) {
+//     const data = {
+//       productId: props.productInfo.productId,
+//       quantity: 1,
+//     };
+//     addCartDatabase(data);
+//     alert('장바구니에 담았습니다.');
+//   }
+// };
 
-// 단위 변경
-// const unit = ref('ml');
-// watch(() => categoryTitle.value, (newTitle) => {
-//   if (newTitle === 'Candle') {unit.value = 'g';}
-//   else {unit.value = 'ml';}
-//   });
 
 // 상품리스트에 출력
 const props = defineProps({
@@ -55,19 +49,11 @@ const size = ref(props.productInfo.size || '사이즈');
 const reviewCount = ref(props.productInfo.reviewCount || '0');
 const brand = ref(props.productInfo.brand || 'Santa Maria Novella');
 
-
 // useNavigator
 const router = useRouter();
 const navDetailProduct = () => {
-  // console.log('사이즈 값', size.value);
-  // router.push({
-  //   path: `/productsdetail/${props.productInfo.productId}`,
-  //   query: {
-  //     size: size.value,
-  //   },
-  // });
   router.push({
-    path: `/masonry`,
+    path: `/masonry/${props.productInfo.productId}`,
     query: {
       // 여기서 상품의 하나에 대한 카테고리 아이디를 넘겨준다.
       title: productName.value,
@@ -116,9 +102,7 @@ const addToWishlist = async () => {
       <p v-if="size > 50" class="brandNew">Brand new</p>
       <img :src="`${GLOBAL_URL}/api/file/download/${productInfo.images[0].filename}`" style="height: 90%" />
       <ul @click.stop>
-        <li class="cart_push" @click.stop="addToCart">
-          <img class="icon" src="@/assets/img/icon/free-icon-font-shopping-cart.svg" alt="" />
-        </li>
+        <!-- <li class="cart_push" @click.stop="addToCart"><img class="icon" src="@/assets/img/icon/free-icon-font-shopping-cart.svg" alt="" /></li> -->
         <li class="wish_push" :class="{ active: redHeart }" @click.stop="addToWishlist">
           <img class="icon" src="@/assets/img/icon/free-icon-font-heart-line.svg" alt="" :style="{ display: iconClick ? 'none' : 'flex' }" />
           <img class="icon" src="@/assets/img/icon/free-icon-font-heart.svg" alt="" :style="{ display: iconClick ? 'flex' : 'none' }" />
@@ -128,12 +112,12 @@ const addToWishlist = async () => {
     <div class="product_text">
       <ul>
         <li @click="navDetailProduct" class="product_title">
-          {{ productName }}ㆍ<span class="size">{{ size }}<span>ml</span></span>
+          {{ productName }}
         </li>
         <li class="product_content">{{ content }}</li>
       </ul>
       <ul>
-        <li class="product_price">￦ {{ price.toLocaleString() }}</li>
+        <li class="product_price">￦ 100 ~ {{ price.toLocaleString() }}</li>
         <li class="product_review">
           <span>
             <img class="star" src="@/assets/img/icon/free-icon-font-star.svg" alt="" />
@@ -199,9 +183,6 @@ const addToWishlist = async () => {
   background-color: var(--color-main-gray);
   /* background-color:#fdf4f1; */
   border: 2px solid rgba(0, 0, 0, 0.05);
-}
-.product_img > ul > li:nth-child(1) {
-  margin-right: -7px;
 }
 
 .wish_push.active {

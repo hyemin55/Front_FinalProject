@@ -5,15 +5,28 @@ import { wishClick, wishList } from '@/api/wishApi';
 import { useCartStore } from '@/stores/CartStore';
 import { useUserStore } from '@/stores/Login';
 import { useWishStore } from '@/stores/WishStore';
-import { computed, ref, watch, watchEffect } from 'vue';
+import { computed, onMounted, ref, watch, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 
-// 로그인 pinia
+// pinia
 const userStore = useUserStore();
 const userLogin = computed(() => userStore.loginCheck);
-
 const wishStore = useWishStore();
 const cartStore = useCartStore();
+
+const clickBtn = ref(true);
+// 모드 변경
+const mode = ref('categoryMode')
+const categoryMode = ()=>{
+  mode.value = 'categoryMode'
+  console.log(mode.value)
+  clickBtn.value = true
+}
+const itemMode = ()=>{
+  mode.value = 'itemMode'
+  console.log(mode.value)
+  clickBtn.value = false
+}
 
 // 전체석택
 let allChecked = ref(false);
@@ -51,18 +64,27 @@ const allCheckDelete = () => {
 // 찜 목록 정보를 DB에서 가져옴.
 const data = ref([]);
 const LoadingwishList = async () => {
-  const wishListData = await wishList();
-  data.value = wishListData.map(product => ({
-    ...product,
-    isChecked: false,
-  }));
-  console.log('찜목록 데이터', data.value);
+  if(mode.value === 'categoryMode'){
+    const wishListData = await wishList();
+    data.value = wishListData.map(product => ({
+      ...product,
+      isChecked: false,
+    }));
+    console.log('찜목록 데이터', data.value);
+  }else if(mode.value === 'itemMode'){
+    alert('아직 통신값 없음')
+    data.value = [];
+  }
 };
 
 // 화면 랜더링
-watchEffect(() => {
+onMounted(()=>{
+  LoadingwishList();
+})
+watch(mode, () => {
   LoadingwishList();
 });
+
 
 // 찜목록 삭제
 const wishDelete = async (productId, check) => {
@@ -76,56 +98,80 @@ const wishDelete = async (productId, check) => {
   }
 };
 
-// 장바구니 담기
+// 장바구니 담기 (수정 필요)
 const addCart = (productId, check) => {
-  const data = {
-    productId: productId,
-    quantity: 1,
-  };
-  const cartData = {
-    productId: productId,
-    brandName : "",
-    content : "",
-    dtype : "",
-    images : [],
-    mainImage : {filename: 'p_011.png', path: 'images/file/\\p_011.png', fileDesc: 'perfume11'},
-    price : 100800,
-    productId : 37,
-    productName : "소바쥬 오 드 뚜왈렛",
-    registerDate : "2024-10-23 06:49:37",
-    reviewCount : 0,
-    size : 30   
-  };
-  if (userLogin.value && check == true) {
-    cartStore.addItem(cartData);
-    addCartDatabase(data);
-    alert('장바구니에 담았습니다.');
-  } else {
-    alert('선택된 제품이 없습니다.');
+  if(mode.value = 'itemMode'){
+    const data = {
+      productId: productId,
+      quantity: 1,
+    };
+    const cartData = {
+      productId: productId,
+      brandName : "",
+      content : "",
+      dtype : "",
+      images : [],
+      mainImage : {filename: 'p_011.png', path: 'images/file/\\p_011.png', fileDesc: 'perfume11'},
+      price : 100800,
+      productId : 37,
+      productName : "소바쥬 오 드 뚜왈렛",
+      registerDate : "2024-10-23 06:49:37",
+      reviewCount : 0,
+      size : 30   
+    };
+    if (userLogin.value && check == true) {
+      cartStore.addItem(cartData);
+      addCartDatabase(data);
+      alert('장바구니에 담았습니다.');
+    } else {
+      alert('선택된 제품이 없습니다.');
+    }
+  }
+  else{
+    console.log('장바구니')
   }
 };
 
 // 상품으로 이동
 const router = useRouter();
-
 const moveDetail = (productId, productSize) => {
-  router.push({
-    path: `/productsdetail/${productId}`,
-    query: {
-      size: productSize,
-    },
-  });
+  if(mode.value === 'categoryMode'){
+    router.push({
+      path: `/masonry/${productId}`,
+    });
+  }
+  else if(mode.value === 'itemMode'){
+    router.push({
+      path: `/productsdetail/${productId}`,
+      query: {
+        size: productSize,
+      },
+    });
+  }
 };
+
+// const mypageOrigin = ref(true);
+// const hahaha = ()=>{
+//   if(data.length <= 0){
+//     mypageOrigin.value = false
+//   }
+// }
+// watchEffect(()=>{
+//   hahaha();
+// })
 </script>
 
 <template>
-  <div>
-    <h1 class="wishlist_title">찜 목록</h1>
+  <div v-if="mypageOrigin">
+    <h1 class="wishlist_title">찜 목록
+      <ul class="wishlist_mode">
+        <li @click="categoryMode" :class="{'click_btn':clickBtn, 'none_click_btn':!clickBtn}">카테고리</li>
+        <li @click="itemMode" :class="{'click_btn':!clickBtn, 'none_click_btn':clickBtn}">상품</li>
+      </ul>
+    </h1>
     <div class="product_select">
       <p>
-        <input id="allcheck" type="checkbox" @change="allCheck" v-model="allChecked" /><label for="allcheck"
-          >전체 선택</label
-        >
+        <input id="allcheck" type="checkbox" @change="allCheck" v-model="allChecked" /><label for="allcheck">전체 선택</label>
       </p>
       <p @click="allCheckDelete">선택 삭제하기</p>
     </div>
@@ -136,11 +182,9 @@ const moveDetail = (productId, productSize) => {
 
       <div class="product_box">
         <div class="img_box">
-          <img
-            @click="moveDetail(product.productId, product.size)"
+          <img @click="moveDetail(product.productId, product.size)"
             :src="`${GLOBAL_URL}/api/file/download/${product.mainImage}`"
-            alt=""
-          />
+            alt=""/>
         </div>
         <ul @click="moveDetail(product.productId, product.size)" class="content_box">
           <li>상품명 : {{ product.productName }}</li>
@@ -150,11 +194,13 @@ const moveDetail = (productId, productSize) => {
       </div>
 
       <div class="btn">
-        <div class="cart_btn" @click="addCart(product.productId, product.isChecked)">장바구니 담기</div>
+        <div class="cart_btn" @click="addCart(product.productId, product.isChecked)"  v-if="mode == 'itemMode'">장바구니 담기</div>
         <div class="delet_btn" @click="wishDelete(product.productId, product.isChecked)">삭제</div>
       </div>
     </div>
   </div>
+
+  <article v-else>d</article>
 </template>
 
 <style scoped>
@@ -165,6 +211,7 @@ const moveDetail = (productId, productSize) => {
   border-bottom: solid 1px #000;
   padding: 20px 0;
   margin-top: 32px;
+  position: relative;
 }
 .product_select {
   width: 100%;
@@ -186,6 +233,37 @@ const moveDetail = (productId, productSize) => {
 }
 .product_select p label {
   cursor: pointer;
+}
+
+.wishlist_mode{
+  position: absolute;
+  right: 0;
+  bottom: 20px;
+  display: flex; 
+  background-color: antiquewhite;
+  border-radius: 1.2rem;
+}
+.wishlist_mode li {
+  cursor: pointer;
+  font-size: 1.8rem;
+  font-weight: 600;
+  padding: 10px 16px;
+}
+.wishlist_mode li:nth-child(1){
+  border-top-left-radius: 1.2rem;
+  border-bottom-left-radius: 1.2rem;
+}
+.wishlist_mode li:nth-child(2){
+  border-top-right-radius: 1.2rem;
+  border-bottom-right-radius: 1.2rem;
+}
+.click_btn{
+  background-color: #000;
+  color: #fff;
+}
+.none_click_btn{
+  background-color: antiquewhite;
+  color: #000;
 }
 
 /* 상품컴포넌트 설정 ############################ */

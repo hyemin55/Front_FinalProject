@@ -1,55 +1,77 @@
 <script setup>
+import { GLOBAL_URL } from '@/api/util';
 import MasonryComponent from '@/components/user/MasonryComponent.vue';
-import { ref } from 'vue';
+import axios from 'axios';
+import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
+const productId = route.params.idx
 const title = route.query.title;
 const brand = route.query.brand;
 // 여기서 상품 카테고리에 id를 받아 통신 -> 통신으로 productData 값을 props로 전달.
 
-const productData = [
-    {
-        id: 1,
-        rank:'A',
-        price: 30000,
-        size: 500,
-        sales: '김선달',
-        wishCount : 52,
-        viewCount: 5120,
-        imgURL:'mosonry_ex01'
-    },
-    {
-      id: 2,
-        rank:'B',
-        price: 30000,
-        size: 400,
-        sales: '김선달',
-        wishCount : 10,
-        viewCount: 520,
-        imgURL:'mosonry_ex02'
-    },
-    {
-      id: 3,
-        rank:'C',
-        price: 30000,
-        size: 200,
-        sales: '김선달',
-        wishCount : 3,
-        viewCount: 210,
-        imgURL:'mosonry_ex03'
-    },
-    {
-      id: 4,
-        rank:'A',
-        price: 30000,
-        size: 500,
-        sales: '김선달',
-        wishCount : 20,
-        viewCount: 3120,
-        imgURL:'mosonry_ex04'
-    }
-]
+const productData = ref([])
+const fetchProductData = async()=>{
+  try{
+    const res = await axios.get(`${GLOBAL_URL}/api/used-product/list/${productId}`, {
+      headers:{
+        'Content-Type': 'application/json'
+      }
+    })
+    console.log(res.data)
+    productData.value = res.data
+  }catch(error){
+    console.error(error)
+  } 
+}
+
+onMounted(()=>{
+  fetchProductData();
+})
+
+// const productData = [
+//     {
+//         id: 1,
+//         rank:'A',
+//         price: 30000,
+//         size: 500,
+//         sales: '김선달',
+//         wishCount : 52,
+//         viewCount: 5120,
+//         imgURL:'mosonry_ex01'
+//     },
+//     {
+//       id: 2,
+//         rank:'B',
+//         price: 30000,
+//         size: 400,
+//         sales: '김선달',
+//         wishCount : 10,
+//         viewCount: 520,
+//         imgURL:'mosonry_ex02'
+//     },
+//     {
+//       id: 3,
+//         rank:'C',
+//         price: 30000,
+//         size: 200,
+//         sales: '김선달',
+//         wishCount : 3,
+//         viewCount: 210,
+//         imgURL:'mosonry_ex03'
+//     },
+//     {
+//       id: 4,
+//         rank:'A',
+//         price: 30000,
+//         size: 500,
+//         sales: '김선달',
+//         wishCount : 20,
+//         viewCount: 3120,
+//         imgURL:'mosonry_ex04'
+//     }
+// ]
 
 let mode = ref(true);
 const changeMode = () => {
@@ -101,7 +123,7 @@ const changeMode = () => {
         </article>
 
         <article class="masonry_layout" :class="{'iconStyle':mode , 'listStyle':!mode}">
-            <MasonryComponent v-for="data in productData" :key="data.id" :productInfo="data" :layoutType="mode"></MasonryComponent>
+            <MasonryComponent v-for="data in productData" :key="data.productId" :productInfo="data" :layoutType="mode"></MasonryComponent>
         </article>
     </section>
 </template>

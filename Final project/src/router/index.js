@@ -118,7 +118,7 @@ const userRouters = [
     component: ProductListView,
   },
   {
-    path: '/masonry',
+    path: '/masonry/:idx',
     name: 'masonry',
     component: ProductMasonryView,
   },

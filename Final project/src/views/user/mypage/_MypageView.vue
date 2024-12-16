@@ -113,6 +113,7 @@ const currentComponent = computed(() => componentMap[selectpage.value]);
   color: var(--color-main-bloode);
   font-family: 'Pretendard-Bold';
 }
+
 #rightGroub {
   /* position: absolute; */
   width: 100%;
