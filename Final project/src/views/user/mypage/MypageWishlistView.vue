@@ -150,19 +150,10 @@ const moveDetail = (productId, productSize) => {
   }
 };
 
-// const mypageOrigin = ref(true);
-// const hahaha = ()=>{
-//   if(data.length <= 0){
-//     mypageOrigin.value = false
-//   }
-// }
-// watchEffect(()=>{
-//   hahaha();
-// })
 </script>
 
 <template>
-  <div v-if="mypageOrigin">
+  <div>
     <h1 class="wishlist_title">찜 목록
       <ul class="wishlist_mode">
         <li @click="categoryMode" :class="{'click_btn':clickBtn, 'none_click_btn':!clickBtn}">카테고리</li>
@@ -199,8 +190,6 @@ const moveDetail = (productId, productSize) => {
       </div>
     </div>
   </div>
-
-  <article v-else>d</article>
 </template>
 
 <style scoped>
