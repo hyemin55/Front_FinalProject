@@ -21,7 +21,7 @@ onMounted(async () => {
 
 const changeIdx = setInterval(() => {
   currentIdxRef.value = (currentIdxRef.value + 1) % 3;
-}, 10000);
+}, 3000);
 
 const nextchangeIdx = () => {
   currentIdxRef.value = (currentIdxRef.value + 1) % 3;
