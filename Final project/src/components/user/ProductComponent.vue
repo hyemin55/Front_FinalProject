@@ -117,7 +117,7 @@ const addToWishlist = async () => {
         <li class="product_content">{{ content }}</li>
       </ul>
       <ul>
-        <li class="product_price">￦ 100 ~ {{ price.toLocaleString() }}</li>
+        <li class="product_price">￦ 190,000 ~ {{ price.toLocaleString() }}</li>
         <li class="product_review">
           <span>
             <img class="star" src="@/assets/img/icon/free-icon-font-star.svg" alt="" />
