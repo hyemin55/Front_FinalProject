@@ -12,12 +12,12 @@ export const useCartStore = defineStore('cart', {
   actions: {
     // 장바구니 담기
     addItem(item) {
-      console.log(item);
-      const Duplicatecheck = this.cartItems.find(cartItem => cartItem.productId === item.productId);
+      console.log('store 들어온값',item);
+      const Duplicatecheck = this.cartItems.find(cartItem => cartItem.usedProductId === item.usedProductId);
       if (Duplicatecheck) {
-        Duplicatecheck.quantity++;
+        alert('이미 장바구니에 있는 상품 입니다.')
       } else {
-        this.cartItems.push({ ...item, quantity: 1, isChecked: true });
+        this.cartItems.push({ ...item, isChecked: true });
       }
       localStorage.setItem('cartItems', JSON.stringify(this.cartItems));
     },
@@ -46,12 +46,11 @@ export const useCartStore = defineStore('cart', {
       this.cartItems = [];
       items.forEach(item => {
         const p = {
-          productId: item.productResDto.productId,
+          usedProductId: item.productResDto.productId,
           productName: item.productResDto.productName,
           images: item.productResDto.images,
-          price: item.productResDto.price,
-          size: item.productResDto.size,
-          quantity: item.quantity || 1, // 기본값 1 설정
+          sellingPrice: item.productResDto.price,
+          productSize: item.productResDto.size,
           isChecked: true, // 기본 체크 여부
         };
         // 생성한 객체를 cartItems에 추가
@@ -59,32 +58,12 @@ export const useCartStore = defineStore('cart', {
       });
       localStorage.setItem('cartItems', JSON.stringify(this.cartItems));
     },
-
-    // 수량변경
-    upQuantity(productId) {
-      console.log(productId);
-      const item = this.cartItems.find(cartItem => cartItem.productId === productId);
-      console.log(item.quantity);
-      if (item) {
-        item.quantity += 1;
-      }
-      localStorage.setItem('cartItems', JSON.stringify(this.cartItems));
-    },
-    downQuantity(productId) {
-      console.log(productId);
-      const item = this.cartItems.find(cartItem => cartItem.productId === productId);
-      console.log(item.quantity);
-      if (item) {
-        item.quantity -= 1;
-      }
-      localStorage.setItem('cartItems', JSON.stringify(this.cartItems));
-    },
   },
 
   getters: {
     // 선택 상품 가격합계
     totalPrice: state => {
-      return state.cartCheckList.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      return state.cartCheckList.reduce((sum, item) => sum + item.price * 1, 0);
     },
   },
 });

@@ -1,18 +1,12 @@
 <script setup>
 import { GLOBAL_URL } from '@/api/util';
+import { useUserStore } from '@/stores/Login';
 import axios from 'axios';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
-const a = ref({
-  title : {
+const userStore = useUserStore();
+const userLogin = computed(() => userStore.loginCheck);
 
-  },
-  content:{
-    a:"1" ,
-    b:"2",
-    c:"3"
-  }
-})
 
 // 모달창 닫기(부모로 event 전달)
 const emit = defineEmits();
@@ -181,10 +175,22 @@ const sucsess = async()=>{
           <label label for="content">상세 설명</label>
           <textarea maxlength="300" rows="10" id="content" placeholder="상품명의 상세한 설명을 입력해 주세요.(자세할수록 판매 등록에 도움이 됩니다.)" v-model="productContent"></textarea>
         </div>
+
+
+
+
+        
         <div class="form_group">
           <label label for="photo">상품 사진 <small><span>*</span>필수사항</small></label>
           <input type="file" id="photo" multiple @change="handleFileUpload"/>
         </div>
+        
+        
+        
+        
+        
+        
+        
         <input type="submit" value="신청하기" />
       </form>
 

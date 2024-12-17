@@ -1,18 +1,39 @@
 <script setup>
+import { GLOBAL_URL } from '@/api/util';
 import HistoryProduct from '@/components/user/HistoryProduct.vue';
 import SaleProductModal from '@/components/user/SaleProductModal.vue';
-import { ref } from 'vue';
+import axios from 'axios';
+import { onMounted, ref } from 'vue';
 
 const saleModal = ref(false)
 const showModal = ()=>{
   saleModal.value = !saleModal.value
 }
-
 const props = ref({
   text01: '판매신청',
   text02: '판매',
   text03: '판매',
 });
+
+const saleList = ref([]);
+const getSaleList = async()=>{
+  try{
+    const res = await axios.get(`${GLOBAL_URL}/myPage/saleList`, {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        'Content-Type':'application/json'
+      }
+    })
+    saleList.value = res.data;
+    console.log(saleList.value);
+  }catch(error){
+    console.error(error)
+  }
+}
+onMounted(()=>{
+  getSaleList();
+})
+
 </script>
 
 <template>

@@ -20,7 +20,7 @@ export const wishClick = async (info) => {
 // 찜목록 DB에서 불러오기
 export const wishList = async () => {
   try {
-    const res = await axios.get(`${GLOBAL_URL}/myPage/wishList`, {
+    const res = await axios.get(`${GLOBAL_URL}/myPage/wishList/category`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${sessionStorage.getItem('token')}`,

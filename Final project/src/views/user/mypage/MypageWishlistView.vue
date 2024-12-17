@@ -134,18 +134,17 @@ const addCart = (productId, check) => {
 
 // 상품으로 이동
 const router = useRouter();
-const moveDetail = (productId, productSize) => {
+const moveDetail = (productId, productName, brand) => {
   if(mode.value === 'categoryMode'){
-    router.push({
-      path: `/masonry/${productId}`,
+    router.push({path: `/masonry/${productId}`,
+      query: {
+        title: productName,
+        brand: brand
+      },
     });
   }
   else if(mode.value === 'itemMode'){
-    router.push({
-      path: `/productsdetail/${productId}`,
-      query: {
-        size: productSize,
-      },
+    router.push({path: `/productsdetail/${productId}`,
     });
   }
 };
@@ -168,25 +167,25 @@ const moveDetail = (productId, productSize) => {
     </div>
 
     <!-- 상품 컴포넌트 -->
-    <div class="wish_product" v-for="product in data" :key="product.productId">
+    <div class="wish_product" v-for="product in data" :key="product.wishListCategoryDto.id">
       <input class="pro_check" type="checkbox" v-model="product.isChecked" />
 
       <div class="product_box">
         <div class="img_box">
-          <img @click="moveDetail(product.productId, product.size)"
-            :src="`${GLOBAL_URL}/api/file/download/${product.mainImage}`"
+          <img @click="moveDetail(product.wishListCategoryDto.id, product.wishListCategoryDto.name, product.brandName)"
+            :src="`${GLOBAL_URL}/api/file/download/${product.wishListCategoryDto.mainImage}`"
             alt=""/>
         </div>
-        <ul @click="moveDetail(product.productId, product.size)" class="content_box">
-          <li>상품명 : {{ product.productName }}</li>
-          <li>가격 : {{ product.productPrice }}</li>
-          <li>옵션 : {{ product.size }}</li>
+        <ul @click="moveDetail(product.wishListCategoryDto.id, product.wishListCategoryDto.name, product.brandName)" class="content_box">
+          <li>{{ product.brandName }}</li>
+          <li>상품명 : {{ product.wishListCategoryDto.name }}</li>
+          <li>재고 : {{ product.productCount }}</li>
         </ul>
       </div>
 
       <div class="btn">
-        <div class="cart_btn" @click="addCart(product.productId, product.isChecked)"  v-if="mode == 'itemMode'">장바구니 담기</div>
-        <div class="delet_btn" @click="wishDelete(product.productId, product.isChecked)">삭제</div>
+        <div class="cart_btn" @click="addCart(product.wishListCategoryDto.id, product.isChecked)"  v-if="mode == 'itemMode'">장바구니 담기</div>
+        <div class="delet_btn" @click="wishDelete(product.wishListCategoryDto.id, product.isChecked)">삭제</div>
       </div>
     </div>
   </div>

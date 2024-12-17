@@ -28,6 +28,11 @@ onMounted(()=>{
   getReview();
 })
 
+
+data.value.star
+
+
+
 // 리뷰 삭제 
 const deleteReview = async(reviewId)=>{
   try{
@@ -53,7 +58,6 @@ const updateReview = async(list, reviewId, content)=>{
     {
       reviewId: reviewId,
       content: content,
-      star: 1
     }
   );
   try{
@@ -79,7 +83,7 @@ const updateReview = async(list, reviewId, content)=>{
     <article class="review_wrapper" v-for="list in data" :key="list.reviewId">
         <div class="review_title">
             <ul>
-                <li class="title_star">★☆☆☆☆ ( {{ list.star }} )</li>
+                <li class="title_star">★ ( {{ list.star }} )</li>
                 <li class="title_product">{{ list.productName }}</li>
                 <li class="title_options">{{ list.size }}ml</li>
             </ul>
@@ -149,7 +153,6 @@ const updateReview = async(list, reviewId, content)=>{
   display: flex;
   width: 100%;
   height: 150px;
-  /* background-color: antiquewhite; */
 }
 .img_box{
   width: 185px;
@@ -166,6 +169,7 @@ const updateReview = async(list, reviewId, content)=>{
 }
 .text_box{
   position: relative;
+  width: calc(100% - 350px);
 }
 .text_content{
   font-size: 1.6rem;
@@ -216,6 +220,7 @@ const updateReview = async(list, reviewId, content)=>{
 /* textarea 설정 */
 textarea {
   width: 100%;
+  height: 80%;
   font-size: 16px;
   line-height: 1.5; 
   border: 2px solid #ccc;

@@ -25,21 +25,14 @@ const props = defineProps({
     required: false,
   },
 })
-// const cart_idx = ref(props.productInfo.productId) // 부모자로 보낼 idx
-// const cart_product_name = ref(props.productInfo.productName)
-// const cart_product_price = ref(props.productInfo.price) // 이것도
-// const cart_quantity = ref(props.productInfo.quantity)
-// // 사이즈 수정 필요
-// const cart_size = ref(props.productInfo.size)
-// const cartCheck = ref(props.isChecked)
+
 const cart_idx = ref(props.productInfo.usedProductId) // 부모자로 보낼 idx
 const cart_product_name = ref(props.productInfo.productName)
-const cart_product_price = ref(props.productInfo.price) // 이것도
-const cart_quantity = ref(props.productInfo.quantity)
-// 사이즈 수정 필요
-const cart_size = ref(props.productInfo.size);
+const cart_product_price = ref(props.productInfo.sellingPrice) // 이것도
+const cart_size = ref(props.productInfo.productSize);
 const cartCheck = ref(props.isChecked);
-const imgURL = ref(props.productInfo.images);
+const imgURL = ref(props.productInfo.userSaleImages);
+
 
 // 장바구니 check배열 
 onMounted(() => {
@@ -55,9 +48,8 @@ const makeCartCheckList = () => {
   // 배열에 추가
   if (cartCheck.value) {
     cartStore.cartCheckList.push({
-      productId: cart_idx.value,
-      price: cart_product_price.value,
-      quantity: cart_quantity,
+      usedProductId: cart_idx.value,
+      sellingPrice: cart_product_price.value,
     })
   }
   // 배열에 삭제
@@ -76,45 +68,6 @@ const handleCheckboxChange = item => {
 watch(cartCheck, newValue => {
   emit('update:isChecked', newValue)
 })
-
-// 수량 변경
-const upCount = async () => {
-  cartStore.upQuantity(cart_idx.value)
-  const data = {
-    productId: cart_idx.value,
-    quantity: 1,
-  }
-  if (userLogin.value) {
-    await axios.post(`${GLOBAL_URL}/cartProduct/increment`, data, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-      },
-    })
-  }
-}
-const downCount = async () => {
-  if (cart_quantity.value > 1) {
-    cartStore.downQuantity(cart_idx.value)
-    const data = {
-      productId: cart_idx.value,
-      quantity: 1,
-      memberId: 1,
-    }
-    if (userLogin.value) {
-      await axios.post(`${GLOBAL_URL}/cartProduct/decrement`, data, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-        },
-      })
-    }
-  }
-}
-watch(() => props.productInfo.quantity, newValue => {
-    cart_quantity.value = newValue
-  },
-)
 
 // 상품으로 이동
 const router = useRouter()
@@ -153,11 +106,6 @@ const moveDetail = () => {
         </p>
         <p class="contents">옵션 : {{ cart_size }}ml</p>
         <p class="price">{{ cart_product_price }}원</p>
-      </div>
-      <div class="count">
-        <button @click="downCount">-</button>
-        <p>수량 : {{ cart_quantity }}</p>
-        <button @click="upCount">+</button>
       </div>
     </div>
   </article>
