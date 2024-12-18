@@ -25,53 +25,10 @@ const fetchProductData = async()=>{
     console.error(error)
   } 
 }
-
 onMounted(()=>{
   fetchProductData();
 })
 
-// const productData = [
-//     {
-//         id: 1,
-//         rank:'A',
-//         price: 30000,
-//         size: 500,
-//         sales: '김선달',
-//         wishCount : 52,
-//         viewCount: 5120,
-//         imgURL:'mosonry_ex01'
-//     },
-//     {
-//       id: 2,
-//         rank:'B',
-//         price: 30000,
-//         size: 400,
-//         sales: '김선달',
-//         wishCount : 10,
-//         viewCount: 520,
-//         imgURL:'mosonry_ex02'
-//     },
-//     {
-//       id: 3,
-//         rank:'C',
-//         price: 30000,
-//         size: 200,
-//         sales: '김선달',
-//         wishCount : 3,
-//         viewCount: 210,
-//         imgURL:'mosonry_ex03'
-//     },
-//     {
-//       id: 4,
-//         rank:'A',
-//         price: 30000,
-//         size: 500,
-//         sales: '김선달',
-//         wishCount : 20,
-//         viewCount: 3120,
-//         imgURL:'mosonry_ex04'
-//     }
-// ]
 
 let mode = ref(true);
 const changeMode = () => {
@@ -123,7 +80,7 @@ const changeMode = () => {
         </article>
 
         <article class="masonry_layout" :class="{'iconStyle':mode , 'listStyle':!mode}">
-            <MasonryComponent v-for="data in productData" :key="data.productId" :productInfo="data" :layoutType="mode"></MasonryComponent>
+            <MasonryComponent v-for="data in productData" :key="data.usedProductId" :productInfo="data" :layoutType="mode"></MasonryComponent>
         </article>
     </section>
 </template>

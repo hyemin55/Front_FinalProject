@@ -15,6 +15,7 @@ const props = ref({
   text03: '판매',
 });
 
+
 const saleList = ref([]);
 const getSaleList = async()=>{
   try{
@@ -25,7 +26,7 @@ const getSaleList = async()=>{
       }
     })
     saleList.value = res.data;
-    console.log(saleList.value);
+    console.log("이거이거", saleList.value);
   }catch(error){
     console.error(error)
   }

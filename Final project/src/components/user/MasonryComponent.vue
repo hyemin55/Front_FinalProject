@@ -1,6 +1,7 @@
 <script setup>
 import { addCartDatabase } from '@/api/cartApi';
 import { GLOBAL_URL } from '@/api/util';
+import { itemWishClick } from '@/api/wishApi';
 import { useCartStore } from '@/stores/CartStore';
 import { useUserStore } from '@/stores/Login';
 import { useWishStore } from '@/stores/WishStore';
@@ -79,7 +80,7 @@ watchEffect(()=>{
 const addToWishlist = async () => {
   if(userLogin.value){
     // DB통신(추가,삭제)
-    // await wishClick(props.productInfo.productId); (새로운 테이블)
+    await itemWishClick(props.productInfo.usedProductId);
     // Pinia(추가, 삭제)
     wishStore.itemMakeWishList(props.productInfo.usedProductId);
   }else{
@@ -87,7 +88,6 @@ const addToWishlist = async () => {
     router.push({path: '/login2' });
   }
 };
-
 
 // 디테일페이지 이동
 const router = useRouter();

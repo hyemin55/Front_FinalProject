@@ -5,7 +5,7 @@ import { computed, onMounted, ref, watch, watchEffect } from 'vue';
 import { useCartStore } from '@/stores/CartStore';
 import axios from 'axios';
 import { useUserStore } from '@/stores/Login';
-import { wishClick } from '@/api/wishApi';
+import { categoryWishClick } from '@/api/wishApi';
 import { addCartDatabase } from '@/api/cartApi';
 import { useWishStore } from '@/stores/WishStore';
 // import { useQueryClient } from '@tanstack/vue-query';
@@ -86,7 +86,7 @@ watchEffect(()=>{
 const addToWishlist = async () => {
   if(userLogin.value){
     // DB통신(추가,삭제)
-    await wishClick(props.productInfo.productId);
+    await categoryWishClick(props.productInfo.productId);
     // Pinia(추가, 삭제)
     wishStore.makeWishList(props.productInfo.productId);
   }else{

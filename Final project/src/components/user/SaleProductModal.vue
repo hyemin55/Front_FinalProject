@@ -29,9 +29,28 @@ const use = ref();
 const productContent = ref("");
 const uploadedFiles = ref([]);
 
+// file 관리
+const imageSrc = ref([]);
+const files = ref([])
+
 const handleFileUpload = (event) => {
-  const files = event.target.files;
-  uploadedFiles.value = Array.from(files);  // 선택한 파일들을 반응형 변수에 저장
+  files.value.push(...event.target.files);
+  uploadedFiles.value = files.value;  
+  // uploadedFiles.value = Array.from(files);
+
+  for (const file of event.target.files) {
+    if (file.type.startsWith("image/")) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        imageSrc.value.push(e.target.result);  // 이미지 파일의 데이터 URL을 imageSrc에 추가
+      };
+      reader.readAsDataURL(file);
+    } else {
+      console.error("이미지 파일만 업로드 가능 합니다.");
+      imageSrc.value = null;  // 이미지가 아니면 null로 설정
+    }
+  }
+
 };
 
 // 판매신청 보내기
@@ -173,24 +192,20 @@ const sucsess = async()=>{
         </div>
         <div class="form_group">
           <label label for="content">상세 설명</label>
-          <textarea maxlength="300" rows="10" id="content" placeholder="상품명의 상세한 설명을 입력해 주세요.(자세할수록 판매 등록에 도움이 됩니다.)" v-model="productContent"></textarea>
+          <textarea maxlength="254" rows="10" id="content" placeholder="상품명의 상세한 설명을 입력해 주세요.(자세할수록 판매 등록에 도움이 됩니다.)" v-model="productContent"></textarea>
         </div>
-
-
-
-
         
         <div class="form_group">
           <label label for="photo">상품 사진 <small><span>*</span>필수사항</small></label>
-          <input type="file" id="photo" multiple @change="handleFileUpload"/>
+          <input  type="file" id="photo" multiple accept="image/*" @change="handleFileUpload"/>
+          
+          <div class="file_img_section">
+            <div class="file_img_box" v-if="imageSrc" v-for="(img, index) in imageSrc" :key="index">
+              <img :src="img" alt="Preview" id="preview"  />
+            </div>
+          </div>
         </div>
-        
-        
-        
-        
-        
-        
-        
+           
         <input type="submit" value="신청하기" />
       </form>
 
@@ -366,6 +381,20 @@ select > option{
   padding: 10px;
   background-color: #f9f9f9;
 }
+.file_img_section{
+  display: flex;
+}
+.file_img_box{
+  width: 150px;
+  height: 200px;
+  overflow: hidden;
+  background-color: aqua;
+}
+.file_img_box > img{
+  object-position: center;
+  object-fit: cover;
+}
+
 
 /* 제출 버튼 ############################################### */
 input[type='submit'] {

@@ -28,6 +28,8 @@ export const useWishStore = defineStore('wish', {
             this.wishList = [];
         },
         
+        
+
         // 상품 찜 목록
         itemMakeWishList(product){
             const aready = this.itemWishList.find(item => item === product);          
@@ -45,6 +47,7 @@ export const useWishStore = defineStore('wish', {
             this.itemWishList = [];
         }
     },
+
     getter:{}
     
 });

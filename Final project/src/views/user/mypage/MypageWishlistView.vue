@@ -1,7 +1,7 @@
 <script setup>
 import { addCartDatabase } from '@/api/cartApi';
 import { GLOBAL_URL } from '@/api/util';
-import { wishClick, wishList } from '@/api/wishApi';
+import { categoryWishClick, categoryWishList, itemWishList } from '@/api/wishApi';
 import { useCartStore } from '@/stores/CartStore';
 import { useUserStore } from '@/stores/Login';
 import { useWishStore } from '@/stores/WishStore';
@@ -61,21 +61,28 @@ const allCheckDelete = () => {
   });
 };
 
+
 // 찜 목록 정보를 DB에서 가져옴.
 const data = ref([]);
 const LoadingwishList = async () => {
   if(mode.value === 'categoryMode'){
-    const wishListData = await wishList();
+    const wishListData = await categoryWishList();
     data.value = wishListData.map(product => ({
       ...product,
       isChecked: false,
     }));
     console.log('찜목록 데이터', data.value);
-  }else if(mode.value === 'itemMode'){
-    alert('아직 통신값 없음')
-    data.value = [];
+  }
+  else if(mode.value === 'itemMode'){
+    const wishListData = await itemWishList();
+    data.value = wishListData.map(product => ({
+      ...product,
+      isChecked: false,
+    }));
+    console.log('찜목록 데이터', data.value);
   }
 };
+
 
 // 화면 랜더링
 onMounted(()=>{
@@ -89,7 +96,7 @@ watch(mode, () => {
 // 찜목록 삭제
 const wishDelete = async (productId, check) => {
   if (check == true) {
-    await wishClick(productId);
+    await categoryWishClick(productId);
     console.log('찜목록 삭제');
     wishStore.makeWishList(productId);
     await LoadingwishList();
@@ -98,39 +105,41 @@ const wishDelete = async (productId, check) => {
   }
 };
 
+
 // 장바구니 담기 (수정 필요)
-const addCart = (productId, check) => {
-  if(mode.value = 'itemMode'){
-    const data = {
-      productId: productId,
-      quantity: 1,
-    };
-    const cartData = {
-      productId: productId,
-      brandName : "",
-      content : "",
-      dtype : "",
-      images : [],
-      mainImage : {filename: 'p_011.png', path: 'images/file/\\p_011.png', fileDesc: 'perfume11'},
-      price : 100800,
-      productId : 37,
-      productName : "소바쥬 오 드 뚜왈렛",
-      registerDate : "2024-10-23 06:49:37",
-      reviewCount : 0,
-      size : 30   
-    };
-    if (userLogin.value && check == true) {
-      cartStore.addItem(cartData);
-      addCartDatabase(data);
-      alert('장바구니에 담았습니다.');
-    } else {
-      alert('선택된 제품이 없습니다.');
-    }
-  }
-  else{
-    console.log('장바구니')
-  }
-};
+// const addCart = (productId, check) => {
+//   if(mode.value = 'itemMode'){
+//     const data = {
+//       productId: productId,
+//       quantity: 1,
+//     };
+//     const cartData = {
+//       productId: productId,
+//       brandName : "",
+//       content : "",
+//       dtype : "",
+//       images : [],
+//       mainImage : {filename: 'p_011.png', path: 'images/file/\\p_011.png', fileDesc: 'perfume11'},
+//       price : 100800,
+//       productId : 37,
+//       productName : "소바쥬 오 드 뚜왈렛",
+//       registerDate : "2024-10-23 06:49:37",
+//       reviewCount : 0,
+//       size : 30   
+//     };
+//     if (userLogin.value && check == true) {
+//       cartStore.addItem(cartData);
+//       addCartDatabase(data);
+//       alert('장바구니에 담았습니다.');
+//     } else {
+//       alert('선택된 제품이 없습니다.');
+//     }
+//   }
+//   else{
+//     console.log('장바구니')
+//   }
+// };
+
 
 // 상품으로 이동
 const router = useRouter();
@@ -145,10 +154,13 @@ const moveDetail = (productId, productName, brand) => {
   }
   else if(mode.value === 'itemMode'){
     router.push({path: `/productsdetail/${productId}`,
+      query: {
+        title: productName,
+        brand: brand
+      },
     });
   }
 };
-
 </script>
 
 <template>
@@ -166,10 +178,10 @@ const moveDetail = (productId, productName, brand) => {
       <p @click="allCheckDelete">선택 삭제하기</p>
     </div>
 
-    <!-- 상품 컴포넌트 -->
-    <div class="wish_product" v-for="product in data" :key="product.wishListCategoryDto.id">
-      <input class="pro_check" type="checkbox" v-model="product.isChecked" />
 
+    <!-- 카테고리 찜 목록 컴포넌트 -->
+    <div v-if="mode === 'categoryMode'" class="wish_product" v-for="product in data" :key="product.wishListCategoryDto.id">
+      <input class="pro_check" type="checkbox" v-model="product.isChecked" />
       <div class="product_box">
         <div class="img_box">
           <img @click="moveDetail(product.wishListCategoryDto.id, product.wishListCategoryDto.name, product.brandName)"
@@ -182,12 +194,35 @@ const moveDetail = (productId, productName, brand) => {
           <li>재고 : {{ product.productCount }}</li>
         </ul>
       </div>
-
       <div class="btn">
-        <div class="cart_btn" @click="addCart(product.wishListCategoryDto.id, product.isChecked)"  v-if="mode == 'itemMode'">장바구니 담기</div>
         <div class="delet_btn" @click="wishDelete(product.wishListCategoryDto.id, product.isChecked)">삭제</div>
       </div>
     </div>
+
+    
+    <!-- 상품 찜 목록 컴포넌트 -->
+    <div v-if="mode === 'itemMode'" class="wish_product" v-for="product in data" :key="product.productId">
+      <input class="pro_check" type="checkbox" v-model="product.isChecked" />
+      <div class="product_box">
+        <div class="img_box">
+          <img @click="moveDetail(product.productId, product.productName, product.brandName)"
+            :src="`${GLOBAL_URL}/api/file/download/${product.userSaleImages[0].filename}`"
+            alt=""/>
+        </div>
+        <ul @click="moveDetail(product.productId, product.productName, product.brandName)" class="content_box">
+          <li>{{ product.brandName }}</li>
+          <li>상품명 : {{ product.productName }}</li>
+          <li>옵션 : {{ product.size }}</li>
+          <li>가격 : {{ product.price }}</li>
+          <li>등급 : {{ product.gradeType }}</li>
+        </ul>
+      </div>
+      <div class="btn">
+        <div class="cart_btn" @click="addCart(product.productId, product.isChecked)">장바구니 담기</div>
+        <div class="delet_btn" @click="wishDelete(product.productId, product.isChecked)">삭제</div>
+      </div>
+    </div>
+
   </div>
 </template>
 
