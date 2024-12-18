@@ -34,22 +34,22 @@
             <th>리뷰수</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody v-for="(memberItem, index) in membersList" :key="index">
           <tr class="TableBody">
             <td>1</td>
             <td><img class="productImages" src="@/assets/img/빵빵덕세안.png" alt="" /></td>
-            <td>김태영</td>
-            <td>010-1234-5678</td>
-            <td>today241212@naver.com</td>
-            <td>관리자</td>
-            <td>2024-06-28</td>
+            <td>{{ memberItem.name }}</td>
+            <td>{{ memberItem.phoneNum }}</td>
+            <td>{{ memberItem.email }}</td>
+            <td>{{ memberItem.role }}</td>
+            <td>{{ memberItem.joinDate }}</td>
             <td>-</td>
             <td>2024-12-10</td>
-            <td>흰수염</td>
+            <td>{{ memberItem.nickName }}</td>
             <td>100</td>
             <td>Y</td>
             <td>0</td>
-            <td>100</td>
+            <td>{{ memberItem.reviewCount }}</td>
           </tr>
         </tbody>
       </table>
@@ -58,10 +58,25 @@
 </template>
 
 <script setup>
+import { GLOBAL_URL } from '@/api/util';
 import AnnouncementComponent from '@/components/admin/AnnouncementComponent.vue';
+import { useUserStore } from '@/stores/Login';
+import axios from 'axios';
 import { ref } from 'vue';
 
-const dolode = () => {};
+const useStore = useUserStore();
+const role = ref(useStore.role);
+const membersList = ref([]);
+const dolode = async () => {
+  const memberDataRes = await axios.get(`${GLOBAL_URL}/admin/member/management${role}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+    },
+  });
+  membersList.value = memberDataRes.data;
+  console.log('membersList.value', membersList.value);
+};
 dolode();
 </script>
 

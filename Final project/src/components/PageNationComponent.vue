@@ -27,7 +27,6 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['currentPage']);
-const viewPageName = ref(props.pageNationData.name);
 const pageSize = ref(0);
 const totalCount = ref(0);
 const currentPage = ref(1);
