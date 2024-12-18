@@ -474,6 +474,11 @@ const send = async item => {
           verifiedSellingPrice: item.inspectionSellingPrice,
           quantity: 0,
         },
+        userSaleReqImageDtos: item.userSaleResImageList,
+        passSaleReqImageDtos: appraiserFiles.value.map((passFile, index) => ({
+          name: passFile.name,
+          desc: `image-${index + 1}`,
+        })),
         inspectionContent: item.Content,
         inspectionResult: false,
       },

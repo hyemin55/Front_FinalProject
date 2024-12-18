@@ -43,12 +43,12 @@
             <td>{{ memberItem.email }}</td>
             <td>{{ memberItem.role }}</td>
             <td>{{ memberItem.joinDate }}</td>
-            <td>-</td>
-            <td>2024-12-10</td>
+            <td>{{ memberItem.withdrawDate }}</td>
+            <td>{{ memberItem.lastLoginDate }}</td>
             <td>{{ memberItem.nickName }}</td>
-            <td>100</td>
-            <td>Y</td>
-            <td>0</td>
+            <td>{{ memberItem.purchaseCount }}</td>
+            <td>{{ memberItem.adReceived }}</td>
+            <td>{{ memberItem.warnCount }}</td>
             <td>{{ memberItem.reviewCount }}</td>
           </tr>
         </tbody>
