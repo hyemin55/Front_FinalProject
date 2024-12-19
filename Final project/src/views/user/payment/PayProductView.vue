@@ -17,7 +17,7 @@ const payProductMoney = ref(props.productInfo.totalPrice || '상품총금액');
 const list = ref()
 watchEffect(async()=>{
     const data = payProductInfo.value.map(item => ({
-        productId: item.productId,
+        usedProductId: item.usedProductId,
         quantity: item.quantity,
     }))
     try{
