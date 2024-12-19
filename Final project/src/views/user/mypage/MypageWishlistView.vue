@@ -1,7 +1,7 @@
 <script setup>
 import { addCartDatabase } from '@/api/cartApi';
 import { GLOBAL_URL } from '@/api/util';
-import { categoryWishClick, categoryWishList, itemWishList } from '@/api/wishApi';
+import { categoryWishClick, categoryWishList, itemWishClick, itemWishList } from '@/api/wishApi';
 import { useCartStore } from '@/stores/CartStore';
 import { useUserStore } from '@/stores/Login';
 import { useWishStore } from '@/stores/WishStore';
@@ -37,8 +37,8 @@ const allCheck = () => {
     data.value.forEach(product => {
       product.isChecked = allChecked.value;
       if (product.isChecked) {
-        allCheckedList.value.push(product.productId);
-        console.log(allCheckedList.value);
+        allCheckedList.value.push(product.wishListCategoryDto.id); // 카테고리 아이디를 삭제배열에 추가
+                        
       }
     });
   } else {
@@ -48,6 +48,8 @@ const allCheck = () => {
     allCheckedList.value = [];
   }
 };
+
+// 찜(선택) 전체삭제
 const allCheckDelete = () => {
   // 추후에 왜 배열로 보내지 않고 값 하나하나 보냈나 의문을 가질 수 있는데,
   // 벡에서 받는 데이터를 배열로 받지 않아서 그냥 풀어서 보낸거다.
@@ -71,7 +73,7 @@ const LoadingwishList = async () => {
       ...product,
       isChecked: false,
     }));
-    console.log('찜목록 데이터', data.value);
+    console.log('카테고리 목록 데이터', data.value);
   }
   else if(mode.value === 'itemMode'){
     const wishListData = await itemWishList();
@@ -79,7 +81,7 @@ const LoadingwishList = async () => {
       ...product,
       isChecked: false,
     }));
-    console.log('찜목록 데이터', data.value);
+    console.log('상품 목록 데이터', data.value);
   }
 };
 
@@ -93,14 +95,22 @@ watch(mode, () => {
 });
 
 
-// 찜목록 삭제
+// 찜상품(개별) 삭제
 const wishDelete = async (productId, check) => {
   if (check == true) {
-    await categoryWishClick(productId);
-    console.log('찜목록 삭제');
-    wishStore.makeWishList(productId);
+    if(mode.value === 'categoryMode'){
+      await categoryWishClick(productId);
+      console.log('찜목록 삭제');
+      wishStore.makeWishList(productId);
+    }
+    else if(mode.value === 'itemMode'){
+      await itemWishClick(productId);
+      console.log('찜목록 삭제');
+      wishStore.itemMakeWishList(productId);
+    }
     await LoadingwishList();
-  } else {
+  }
+  else {
     alert('선택된 제품이 없습니다.');
   }
 };

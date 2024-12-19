@@ -15,21 +15,6 @@ import { useWishStore } from '@/stores/WishStore';
 const userStore = useUserStore();
 const userLogin = computed(() => userStore.loginCheck);
 
-// 장바구니 추가
-// const cartStore = useCartStore();
-// const addToCart = () => {
-//   console.log('props.productInfo', props.productInfo);
-//   cartStore.addItem(props.productInfo);
-//   if (userLogin.value) {
-//     const data = {
-//       productId: props.productInfo.productId,
-//       quantity: 1,
-//     };
-//     addCartDatabase(data);
-//     alert('장바구니에 담았습니다.');
-//   }
-// };
-
 // 상품리스트에 출력
 const props = defineProps({
   // 받아오는props정의
@@ -63,15 +48,15 @@ const navDetailProduct = () => {
   });
 };
 
-// 찜목록 추가 #############################################
-const redHeart = ref(false);
-const iconClick = ref(false); // 찜하트 css
+// 찜목록 추가 ##############################################
+const redHeart = ref(false); // 찜 상태
+const iconClick = ref(false); // 하트 icon css
 const wishStore = useWishStore();
 
 watchEffect(() => {
   const wishProduct = wishStore.wishList.find(item => item === props.productInfo.productId);
   console.log(wishProduct);
-  if (wishProduct) {
+  if (wishProduct) { // store에 id 값이 있다면 값을 true로..
     redHeart.value = true;
     iconClick.value = true;
   } else {
@@ -127,7 +112,7 @@ const addToWishlist = async () => {
         <li class="product_content">{{ content }}</li>
       </ul>
       <ul>
-        <li class="product_price">￦ {{ minPrice.toLocaleString() }} ~ {{ maxPrice.toLocaleString() }}</li>
+        <li class="product_price">{{ maxPrice>0 ? '￦ ' + minPrice.toLocaleString() + ' ~ ' + maxPrice.toLocaleString() : '. . .' }}</li>
         <li class="product_review">
           <span>
             <img class="star" src="@/assets/img/icon/free-icon-font-star.svg" alt="" />

@@ -37,7 +37,7 @@ const changeMode = () => {
 </script>
 
 <template>
-    <section class="masonry_wrapper_section">
+    <section v-if="productData.length>0" class="masonry_wrapper_section">
       <article class="masonry_filter">
           <div class="title">
             <p class="title_brand">{{ brand }}</p>
@@ -82,7 +82,14 @@ const changeMode = () => {
         <article class="masonry_layout" :class="{'iconStyle':mode , 'listStyle':!mode}">
             <MasonryComponent v-for="data in productData" :key="data.usedProductId" :productInfo="data" :layoutType="mode"></MasonryComponent>
         </article>
+     
+
     </section>
+    <section v-else class="tungtung_section">
+      <img src="/src/assets/img/perfum_tung.png" alt="">
+      <h2>판매중인 상품이 없습니다.</h2>
+    </section>
+
 </template>
 
 <style scoped>
@@ -169,5 +176,22 @@ const changeMode = () => {
   grid-template-columns: repeat(3, 1fr)
 }
 /* .listStyle{} */
+
+
+.tungtung_section{
+  width: 100%;
+  height: calc(100vh - 100px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tungtung_section img{
+  width: 220px;
+  height: auto;
+}
+.tungtung_section h2{
+  font-size: 4rem;
+  color: var(--color-text-gray);
+}
 
 </style>

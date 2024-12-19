@@ -57,15 +57,14 @@ const addToCart = () => {
   }
 };
 
+
 // 찜목록 추가 #############################################
 const redHeart = ref(false);
 const iconClick = ref(false); // 찜하트 css
 const wishStore = useWishStore();
 
 watchEffect(()=>{
-  const wishProduct = wishStore.itemWishList.find(
-    item => item === props.productInfo.usedProductId
-  );
+  const wishProduct = wishStore.itemWishList.find(item => item === props.productInfo.usedProductId);
   console.log(wishProduct)
   if(wishProduct){
     redHeart.value = true;
@@ -87,6 +86,7 @@ const addToWishlist = async () => {
     router.push({path: '/login2' });
   }
 };
+// #########################################################
 
 // 디테일페이지 이동
 const router = useRouter();
