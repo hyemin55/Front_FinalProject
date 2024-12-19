@@ -55,7 +55,7 @@ const makeCartCheckList = () => {
   // 배열에 삭제
   else {
     cartStore.cartCheckList = cartStore.cartCheckList.filter(
-      item => item.productId !== cart_idx.value,
+      item => item.usedProductId !== cart_idx.value,
     )
   }
 }
