@@ -9,7 +9,7 @@
         @click="goToPage(startPage + pageNum - 1)"
         :class="{ active: activePage(pageNum) }"
       >
-        {{ pageNum }}
+        {{ pageNum + startPage - 1 }}
       </li>
       <li @click="nextPage">다음</li>
     </ul>
