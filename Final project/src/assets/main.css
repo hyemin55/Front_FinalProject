@@ -52,7 +52,8 @@ input[type='checkbox'] {
   margin: 0 auto;
 }
 .MainAdmin {
-  height: calc(100vh - 70px);
+  height: auto;
+  min-height: calc(100vh - 70px);
   width: calc(100% - 200px);
   margin: 70px 0 0 200px;
   padding: 10px 10px 0 10px;

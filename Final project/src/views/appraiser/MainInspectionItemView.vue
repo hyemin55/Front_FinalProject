@@ -549,7 +549,7 @@ watchEffect(async () => {
 <style scoped>
 table {
   width: 100%;
-  font-size: 14px;
+  font-size: 1.4rem;
   color: #333;
 }
 tr {

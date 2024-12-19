@@ -17,7 +17,7 @@
 import { GLOBAL_URL } from '@/api/util';
 import AnnouncementComponent from '@/components/admin/AnnouncementComponent.vue';
 import axios from 'axios';
-import { onMounted, reactive, ref } from 'vue';
+import { onMounted, reactive, ref, watchEffect } from 'vue';
 import PageNationComponent from '@/components/PageNationComponent.vue';
 import MainInspectionItemView from './MainInspectionItemView.vue';
 
@@ -85,7 +85,7 @@ const dolode = async () => {
     console.error('Error loading inspection list:', error);
   }
 };
-onMounted(() => {
+watchEffect(() => {
   dolode();
 });
 </script>
