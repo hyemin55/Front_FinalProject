@@ -54,7 +54,7 @@ export const useCartStore = defineStore('cart', {
         const p = {
           usedProductId: item.generalUsedProductResDto.usedProductId,
           productName: item.generalUsedProductResDto.productName,
-          images: item.generalUsedProductResDto.images || [],
+          userSaleImages: item.generalUsedProductResDto.userSaleImages || [],
           sellingPrice: item.generalUsedProductResDto.sellingPrice,
           productSize: item.generalUsedProductResDto.size,
           quantity: item.quantity || 1,
