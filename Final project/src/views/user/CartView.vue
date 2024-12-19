@@ -57,6 +57,7 @@ eventBus.on('logout', () => {
   cartStore.logOutRemoveItem();
   sessionStorage.removeItem('isCartFetched');
 });
+
 // 로그인
 const cartLogin = async () => {
   console.log('로그인 체크');
