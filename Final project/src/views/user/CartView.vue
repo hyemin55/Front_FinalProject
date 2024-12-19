@@ -72,17 +72,17 @@ const cartLogin = async () => {
   if (token) {
     console.log('로그인 여부 저장');
     const pushData = cart.value.map(item => ({
-      productId: item.productId,
-      quantity: item.quantity,
+      usedProductId: item.usedProductId,
+      quantity: 1
     }));
     await mergeMemberCart(pushData); // 장바구니 데이터 합치기
     const fetchRes = await fetchMemeberCart();
+    console.log('스토어로 보내는 값', fetchRes.data);
+
     sessionStorage.setItem('isCartFetched', 'true');
-    // 스토어에서 장바구니 업데이트(store 랜더링)
-    cartStore.updateCart(fetchRes.data);
+    cartStore.updateCart(fetchRes.data);  // 스토어에서 장바구니 업데이트(store 랜더링)
   }
 };
-
 console.log('로그인 완료');
 
 // const payMentStore = usePayMentStore();
@@ -92,9 +92,9 @@ const doPayment = () => {
   if (sessionStorage.getItem('token')) {
     if (checkList.value.length > 0) {
       const purchaseProducttDtos = checkList.value.map(item => ({
-        productId: item.productId,
+        usedProductId: item.usedProductId,
         quantity: item.quantity,
-        name: item.productName,
+        productName: item.productName,
       }));
       const data = {
         purchaseProductDtos: purchaseProducttDtos,
@@ -135,7 +135,7 @@ const doPayment = () => {
           <li><button @click="deleteToCart">선택 삭제</button></li>
         </ul>
 
-        <CartProductComponent v-for="item in cartStore.cartItems" :key="item.productId" :productInfo="item" :isChecked="item.isChecked" v-model:isChecked="item.isChecked" />
+        <CartProductComponent v-for="item in cartStore.cartItems" :key="item.usedProductId" :productInfo="item" :isChecked="item.isChecked" v-model:isChecked="item.isChecked" />
       </article>
 
       <article class="cart_total_price">

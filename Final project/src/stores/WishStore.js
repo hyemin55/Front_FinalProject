@@ -3,8 +3,10 @@ import { defineStore } from "pinia";
 export const useWishStore = defineStore('wish', {
     state: ()=>({
         wishList : JSON.parse(localStorage.getItem('wishList')) || [],
+        itemWishList : JSON.parse(localStorage.getItem('itemWishList')) || [],
     }),
     actions:{
+        // 카테고리 찜 목록
         // 찜목록에 추가(기본추가 / 이미있으면 삭제)
         makeWishList(product){
             // 들어오는 id값 하나라 객체가 아니다. 그렇기 때문에 뒤에 .productId가 안들어가되됨
@@ -26,7 +28,26 @@ export const useWishStore = defineStore('wish', {
             this.wishList = [];
         },
         
+        
+
+        // 상품 찜 목록
+        itemMakeWishList(product){
+            const aready = this.itemWishList.find(item => item === product);          
+            if(aready){
+                this.itemWishList = this.itemWishList.filter(item => item !== product);
+                localStorage.setItem('itemWishList', JSON.stringify(this.itemWishList))
+            }
+            else{
+                this.itemWishList.push(product)
+                localStorage.setItem('itemWishList', JSON.stringify(this.itemWishList))
+            }
+        },
+        itemRemoveWishList(){
+            localStorage.removeItem('itemWishList');
+            this.itemWishList = [];
+        }
     },
+
     getter:{}
     
 });

@@ -23,6 +23,12 @@ const componentMap = {
   myInformation: MypageInformationView,
 };
 const currentComponent = computed(() => componentMap[selectpage.value]);
+
+const handleNavClick = (page) => {
+  selectpage.value = page;
+  window.scrollTo({ top: 0 });
+};
+
 </script>
 
 <template>
@@ -33,12 +39,12 @@ const currentComponent = computed(() => componentMap[selectpage.value]);
         <p>{{ user.nickName }}</p>
       </div>
       <ul id="myInfoNavList">
-        <li @click="selectpage = 'myOrderHistory'">주문 내역 조회</li>
-        <li @click="selectpage = 'mySalseHistory'">판매 내역 조회</li>
-        <li @click="selectpage = 'myWishlist'">찜 목록</li>
-        <li @click="selectpage = 'myReview'">내 리뷰 관리</li>
-        <li @click="selectpage = 'myInformation'">회원 정보 관리</li>
-      </ul>
+      <li @click="handleNavClick('myOrderHistory')">주문 내역 조회</li>
+      <li @click="handleNavClick('mySalseHistory')">판매 내역 조회</li>
+      <li @click="handleNavClick('myWishlist')">찜 목록</li>
+      <li @click="handleNavClick('myReview')">내 리뷰 관리</li>
+      <li @click="handleNavClick('myInformation')">회원 정보 관리</li>
+    </ul>
     </article>
 
     <main id="rightGroub">
@@ -112,6 +118,7 @@ const currentComponent = computed(() => componentMap[selectpage.value]);
   color: var(--color-main-bloode);
   font-family: 'Pretendard-Bold';
 }
+
 #rightGroub {
   /* position: absolute; */
   width: 100%;

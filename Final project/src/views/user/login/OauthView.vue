@@ -4,8 +4,8 @@ import { useRoute, useRouter } from 'vue-router';
 import { login, loginCheck } from '@/api/KakaoLoginApi';
 import { useUserStore } from '@/stores/Login';
 import LodingView from '@/views/loding/LodingView.vue';
-import { wishList } from '@/api/wishApi';
 import { useWishStore } from '@/stores/WishStore';
+import { categoryWishList } from '@/api/wishApi';
 
 const route = useRoute();
 const router = useRouter();
@@ -23,8 +23,12 @@ watchEffect(async () => {
     res = await loginCheck();
     useStore.login(res.data); //스토어 등록
     console.log(res.data);
-    const wishListData = await wishList(); // 찜하기 통신
-    wishListData.map(item => item.productId).forEach(productId => {wishStore.makeWishList(productId);}); // 찜 스토어 등록
+    
+    const wishListData = await categoryWishList(); // 찜하기 통신
+    wishListData.map(item => item.wishListCategoryDto.id).forEach(id => {
+      wishStore.makeWishList(id);
+    });
+    
     if (res.status.toString().startsWith('2')) {
       console.log(res.data);
     } else return;

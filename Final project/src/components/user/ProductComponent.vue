@@ -1,11 +1,11 @@
 <script setup>
 import { GLOBAL_URL } from '@/api/util';
 import { useRouter } from 'vue-router';
-import { computed, ref, watch, watchEffect } from 'vue';
+import { computed, onMounted, ref, watch, watchEffect } from 'vue';
 import { useCartStore } from '@/stores/CartStore';
 import axios from 'axios';
 import { useUserStore } from '@/stores/Login';
-import { wishClick } from '@/api/wishApi';
+import { categoryWishClick } from '@/api/wishApi';
 import { addCartDatabase } from '@/api/cartApi';
 import { useWishStore } from '@/stores/WishStore';
 // import { useQueryClient } from '@tanstack/vue-query';
@@ -16,26 +16,19 @@ const userStore = useUserStore();
 const userLogin = computed(() => userStore.loginCheck);
 
 // 장바구니 추가
-const cartStore = useCartStore();
-const addToCart = () => {
-  console.log('props.productInfo', props.productInfo);
-  cartStore.addItem(props.productInfo);
-  if (userLogin.value) {
-    const data = {
-      productId: props.productInfo.productId,
-      quantity: 1,
-    };
-    addCartDatabase(data);
-    alert('장바구니에 담았습니다.');
-  }
-};
-
-// 단위 변경
-// const unit = ref('ml');
-// watch(() => categoryTitle.value, (newTitle) => {
-//   if (newTitle === 'Candle') {unit.value = 'g';}
-//   else {unit.value = 'ml';}
-//   });
+// const cartStore = useCartStore();
+// const addToCart = () => {
+//   console.log('props.productInfo', props.productInfo);
+//   cartStore.addItem(props.productInfo);
+//   if (userLogin.value) {
+//     const data = {
+//       productId: props.productInfo.productId,
+//       quantity: 1,
+//     };
+//     addCartDatabase(data);
+//     alert('장바구니에 담았습니다.');
+//   }
+// };
 
 // 상품리스트에 출력
 const props = defineProps({
@@ -47,20 +40,26 @@ const props = defineProps({
 });
 const productName = ref(props.productInfo.productName || '상품이름');
 const content = ref(props.productInfo.content || '상품설명');
-const price = ref(props.productInfo.price || '가격');
+const minPrice = ref(props.productInfo.minPrice || '0');
+const maxPrice = ref(props.productInfo.maxPrice || '0');
 const size = ref(props.productInfo.size || '사이즈');
 // const review_avr = ref('평점');
 const reviewCount = ref(props.productInfo.reviewCount || '0');
+const brand = ref(props.productInfo.brand || 'Santa Maria Novella');
+
+const gradeTypes = ref(props.productInfo.gradeTypes || '품절');
+const gradeTypesArray = ref(gradeTypes.value.split(',').map(type => type.trim()));
 
 // useNavigator
 const router = useRouter();
 const navDetailProduct = () => {
-  console.log('사이즈 값', size.value);
   router.push({
-    path: `/productsdetail/${props.productInfo.productId}`,
-    // query: {
-    //   size: size.value,
-    // },
+    path: `/masonry/${props.productInfo.productId}`,
+    query: {
+      // 여기서 상품의 하나에 대한 카테고리 아이디를 넘겨준다.
+      title: productName.value,
+      brand: brand.value
+    },
   });
 };
 
@@ -84,7 +83,7 @@ watchEffect(() => {
 const addToWishlist = async () => {
   if (userLogin.value) {
     // DB통신(추가,삭제)
-    await wishClick(props.productInfo.productId);
+    await categoryWishClick(props.productInfo.productId);
     // Pinia(추가, 삭제)
     wishStore.makeWishList(props.productInfo.productId);
   } else {
@@ -98,12 +97,12 @@ const addToWishlist = async () => {
 <template>
   <article class="products">
     <div class="product_img" @click="navDetailProduct">
-      <p v-if="size > 50" class="brandNew">Brand new</p>
+      <div class="rank">
+        <p v-if="gradeTypesArray.length" v-for="rankData in gradeTypesArray" :key="rankData" class="brandNew">{{ rankData }}</p>
+      </div>
       <img :src="`${GLOBAL_URL}/api/file/download/${productInfo.images[0].filename}`" style="height: 90%" />
       <ul @click.stop>
-        <li class="cart_push" @click.stop="addToCart">
-          <img class="icon" src="@/assets/img/icon/free-icon-font-shopping-cart.svg" alt="" />
-        </li>
+        <!-- <li class="cart_push" @click.stop="addToCart"><img class="icon" src="@/assets/img/icon/free-icon-font-shopping-cart.svg" alt="" /></li> -->
         <li class="wish_push" :class="{ active: redHeart }" @click.stop="addToWishlist">
           <img
             class="icon"
@@ -123,12 +122,12 @@ const addToWishlist = async () => {
     <div class="product_text">
       <ul>
         <li @click="navDetailProduct" class="product_title">
-          {{ productName }}ㆍ<span class="size">{{ size }}<span>ml</span></span>
+          {{ productName }}
         </li>
         <li class="product_content">{{ content }}</li>
       </ul>
       <ul>
-        <li class="product_price">￦ {{ price.toLocaleString() }}</li>
+        <li class="product_price">￦ {{ minPrice.toLocaleString() }} ~ {{ maxPrice.toLocaleString() }}</li>
         <li class="product_review">
           <span>
             <img class="star" src="@/assets/img/icon/free-icon-font-star.svg" alt="" />
@@ -194,9 +193,6 @@ const addToWishlist = async () => {
   background-color: var(--color-main-gray);
   /* background-color:#fdf4f1; */
   border: 2px solid rgba(0, 0, 0, 0.05);
-}
-.product_img > ul > li:nth-child(1) {
-  margin-right: -7px;
 }
 
 .wish_push.active {
@@ -264,22 +260,23 @@ const addToWishlist = async () => {
 .size {
   /* font-weight: 400; */
 }
-.brandNew {
+
+.rank{
   position: absolute;
-  top: 8px;
+  top: 10px;
   left: 8px;
-  padding: 5px 8px;
+  display: flex;
+}
+.brandNew{
+  padding: 5px 10.5px;
+  margin-right: 4px;
   border-radius: 0.5rem;
   border: 1px solid rgba(0, 0, 0, 0.1);
   background-color: rgb(247, 247, 247);
-  box-shadow:
-    inset -3px -3px 3px #ffffff73,
-    inset 1px 1px 3px rgba(94, 104, 121, 0.288);
-  font-family: 'Playfair Display', serif;
+  box-shadow: inset -3px -3px 3px #ffffff73, inset 1px 1px 3px rgba(94, 104, 121, .288);
+  /* font-family: "Playfair Display", serif; */
   font-size: 1.2rem;
   font-weight: 600;
   color: orange;
-  /* color: rgb(255, 188, 64); */
-  /* color: var(--color-main-bloode); */
 }
 </style>
