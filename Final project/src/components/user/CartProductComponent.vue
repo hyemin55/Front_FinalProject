@@ -97,7 +97,7 @@ const moveDetail = () => {
       <span class="custom-checkmark"></span>
     </label>
     <div class="img">
-      <img :src="`${GLOBAL_URL}/api/file/download/${imgURL[0].filename}`" @click="moveDetail"/>
+      <!-- <img :src="`${GLOBAL_URL}/api/file/download/${imgURL[0].filename}`" @click="moveDetail"/> -->
     </div>
     <div class="text">
       <div class="text_box">

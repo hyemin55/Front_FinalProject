@@ -46,15 +46,14 @@ onMounted(detailPrice)
 // 장바구니 추가 ###########################################
 const cartStore = useCartStore();
 const addToCart = () => {
-  console.log('props.productInfo', props.productInfo);
+  console.log('장바구니 추가시 들어가는 값', props.productInfo);
   cartStore.addItem(props.productInfo);
   if (userLogin.value) {
     const data = {
-      productId: props.productInfo.usedProductId,
+      usedProductId: props.productInfo.usedProductId,
       quantity: 1,
     };
     addCartDatabase(data);
-    alert('장바구니에 담았습니다.');
   }
 };
 

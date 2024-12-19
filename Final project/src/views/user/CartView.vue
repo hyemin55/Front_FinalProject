@@ -72,10 +72,13 @@ const cartLogin = async () => {
   if (token) {
     console.log('로그인 여부 저장');
     const pushData = cart.value.map(item => ({
-      productId: item.productId,
+      usedProductId: item.usedProductId,
+      quantity: 1
     }));
     await mergeMemberCart(pushData); // 장바구니 데이터 합치기
     const fetchRes = await fetchMemeberCart();
+    console.log('스토어로 보내는 값', fetchRes.data);
+
     sessionStorage.setItem('isCartFetched', 'true');
     cartStore.updateCart(fetchRes.data);  // 스토어에서 장바구니 업데이트(store 랜더링)
   }
@@ -89,9 +92,9 @@ const doPayment = () => {
   if (sessionStorage.getItem('token')) {
     if (checkList.value.length > 0) {
       const purchaseProducttDtos = checkList.value.map(item => ({
-        productId: item.productId,
+        usedProductId: item.usedProductId,
         quantity: item.quantity,
-        name: item.productName,
+        productName: item.productName,
       }));
       const data = {
         purchaseProductDtos: purchaseProducttDtos,

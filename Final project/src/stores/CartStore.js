@@ -17,15 +17,18 @@ export const useCartStore = defineStore('cart', {
       if (Duplicatecheck) {
         alert('이미 장바구니에 있는 상품 입니다.')
       } else {
-        this.cartItems.push({ ...item, isChecked: true });
+        this.cartItems.push({ ...item, quantity: 1 ,isChecked: true });
+        alert('장바구니에 담았습니다.');
       }
       localStorage.setItem('cartItems', JSON.stringify(this.cartItems));
     },
+
     // 장바구니 삭제(체크가 된것만 삭제하는 로직)
     removeItem() {
       this.cartItems = this.cartItems.filter(item => !item.isChecked);
       localStorage.setItem('cartItems', JSON.stringify(this.cartItems));
     },
+    
     // 장바구니에 들어있는것 전체삭제
     logOutRemoveItem() {
       localStorage.removeItem('cartItems');
@@ -45,12 +48,16 @@ export const useCartStore = defineStore('cart', {
       // 장바구니 초기화
       this.cartItems = [];
       items.forEach(item => {
+        const generalDto = item.generalUsedProductResDto;
+        if (!generalDto) return; // 데이터가 없으면 건너뜀
+
         const p = {
-          usedProductId: item.productResDto.productId,
-          productName: item.productResDto.productName,
-          images: item.productResDto.images,
-          sellingPrice: item.productResDto.price,
-          productSize: item.productResDto.size,
+          usedProductId: item.generalUsedProductResDto.usedProductId,
+          productName: item.generalUsedProductResDto.productName,
+          images: item.generalUsedProductResDto.images || [],
+          sellingPrice: item.generalUsedProductResDto.sellingPrice,
+          productSize: item.generalUsedProductResDto.size,
+          quantity: item.quantity || 1,
           isChecked: true, // 기본 체크 여부
         };
         // 생성한 객체를 cartItems에 추가
@@ -63,7 +70,7 @@ export const useCartStore = defineStore('cart', {
   getters: {
     // 선택 상품 가격합계
     totalPrice: state => {
-      return state.cartCheckList.reduce((sum, item) => sum + item.price * 1, 0);
+      return state.cartCheckList.reduce((sum, item) => sum + item.sellingPrice * 1, 0);
     },
   },
 });
