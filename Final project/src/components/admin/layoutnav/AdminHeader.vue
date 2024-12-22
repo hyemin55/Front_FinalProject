@@ -24,7 +24,7 @@ const logout = () => {
 };
 
 onMounted(() => {
-  console.log('AdminHeader', useStore.role);
+  // console.log('AdminHeader', useStore.role);
 });
 </script>
 

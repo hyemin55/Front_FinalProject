@@ -550,37 +550,44 @@ watchEffect(async () => {
 table {
   width: 100%;
   font-size: 1.4rem;
-  color: #333;
+  text-align: center;
 }
-tr {
+th, td {
+  width: 15%;
+  padding: 10px;
 }
 th {
-  width: 15%;
   border-bottom: 0.5px solid #333;
-  padding: 10px;
   background-color: var(--color-main-gray);
   border-start-start-radius: 10px;
   border-start-end-radius: 10px;
-}
-td {
-  width: 15%;
-  text-align: center;
-  padding: 10px;
 }
 textarea {
   resize: none;
   height: auto;
   width: 100%;
+  border: 0.5px solid var(--color-text-gray);
 }
 input,
 select,
 option {
-  width: 80%;
+  width: 70%;
+  border-radius: 5px;
+  border: 0.5px solid var(--color-text-gray);
+}
+input:focus ,
+select:focus ,
+option:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--color-main-bloode);
+  background-color: var(--color-main-pink);
 }
 button {
   padding: 10px;
   background-color: var(--color-main-bloode);
-  border-end-end-radius: 7px;
+  border-end-end-radius: 9px;
+  border-end-start-radius: 9px;
   width: 100%;
   text-align: center;
   font-size: 1.8rem;
@@ -617,7 +624,7 @@ button:hover {
   cursor: pointer;
   margin: 0 5px;
   width: 100px;
-  border: 1px solid #ccc;
+  border: 0.5px solid #ccc;
   border-radius: 8px;
 }
 .fileUpload {
@@ -629,7 +636,7 @@ button:hover {
 }
 .previewUrls {
   max-width: 100px;
-  border: 1px solid #ccc;
+  border: 0.5px solid #ccc;
   border-radius: 8px;
   padding: 1%;
 }

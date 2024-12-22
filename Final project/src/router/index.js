@@ -19,8 +19,8 @@ import { loginCheck } from '@/api/KakaoLoginApi';
 import MainInspectionListView from '@/views/appraiser/_MainInspectionListView.vue';
 import ApprovedListView from '@/views/appraiser/ApprovedListView.vue';
 import PetListView from '@/views/appraiser/PetListView.vue';
-import AnnouncementView from '@/views/admin/AnnouncementView.vue';
 import ProductMasonryView from '@/views/user/product/ProductMasonryView.vue';
+import AnnouncementView from '@/views/admin/AnnouncementVIew.vue';
 
 // 로그인
 const loginRouters = [

@@ -158,6 +158,7 @@ const dolode = async () => {
     totalCount.value = memberDataRes.data.memberCount;
   }
   console.log(totalCount.value);
+  console.log(membersList.value);
   pageNation();
 };
 

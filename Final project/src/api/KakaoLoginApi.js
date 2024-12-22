@@ -8,7 +8,6 @@ export const login = async code => {
       sessionStorage.setItem('token', res.data);
       console.log('token', res.data);
     }
-    console.log(res.data);
     return res;
   } catch (err) {
     console.log(err);
