@@ -73,4 +73,5 @@ export const useCartStore = defineStore('cart', {
       return state.cartCheckList.reduce((sum, item) => sum + item.sellingPrice * 1, 0);
     },
   },
+  
 });

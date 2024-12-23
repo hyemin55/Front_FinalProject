@@ -50,7 +50,10 @@ const handleFileUpload = (event) => {
       imageSrc.value = null;  // 이미지가 아니면 null로 설정
     }
   }
-
+};
+const imgDelete = (index) => {
+  files.value = files.value.filter((_, i) => i !== index);
+  imageSrc.value = imageSrc.value.filter((_, i) => i !== index);
 };
 
 // 판매신청 보내기
@@ -197,11 +200,12 @@ const sucsess = async()=>{
         
         <div class="form_group">
           <label label for="photo">상품 사진 <small><span>*</span>필수사항</small></label>
-          <input  type="file" id="photo" multiple accept="image/*" @change="handleFileUpload"/>
+          <input  type="file" id="photo" multiple accept="image/*" @change="handleFileUpload" required/>
           
           <div class="file_img_section">
             <div class="file_img_box" v-if="imageSrc" v-for="(img, index) in imageSrc" :key="index">
               <img :src="img" alt="Preview" id="preview"  />
+              <div @click="imgDelete(index)" class="img_close">⨉</div>
             </div>
           </div>
         </div>
@@ -379,22 +383,44 @@ select > option{
 /* 파일 입력 필드 스타일 #################################### */
 .form_group input[type='file'] {
   padding: 10px;
+  margin-bottom: 20px;
   background-color: #f9f9f9;
 }
 .file_img_section{
-  display: flex;
+  width: 100%;
+  /* background-color: #333; */
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
 }
 .file_img_box{
-  width: 150px;
-  height: 200px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
-  background-color: aqua;
+  border: 1.2px solid #bebebe;
+  border-radius: 1.2rem;
+  background-color: #f9f9f9;  
 }
 .file_img_box > img{
-  object-position: center;
-  object-fit: cover;
+  width: 100%;
 }
+.img_close{
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  cursor: pointer;
+  background-color: red;
+  border-radius: 100%;
+  width: 17px;
+  height: 17px;
+  font-weight: 800;
 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 /* 제출 버튼 ############################################### */
 input[type='submit'] {

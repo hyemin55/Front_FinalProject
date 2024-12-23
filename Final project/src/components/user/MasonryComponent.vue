@@ -38,7 +38,7 @@ const viewCount = ref(props.productInfo.viewCount || 10)
 // 10ml당 가격 계산
 const cost = ref('')
 const detailPrice = ()=>{
-    cost.value = price.value/(size.value/10);
+    cost.value = Math.floor(price.value/(size.value/10));
 }
 onMounted(detailPrice)
 
