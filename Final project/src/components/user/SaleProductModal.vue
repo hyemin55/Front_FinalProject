@@ -187,7 +187,7 @@ const sucsess = async()=>{
 
         <div class="form_group">
           <label label for="size">용량 <small><span>*</span>필수사항</small></label>
-          <input type="number" id="size" placeholder="상품의 용량을 입력해 주세요. (ml)" min="50" max="99999" step="1" maxlength="11" v-model="productSize" required />
+          <input type="number" id="size" placeholder="상품의 용량을 입력해 주세요. (ml)" min="10" max="99999" step="1" maxlength="11" v-model="productSize" required />
         </div>
         <div class="form_group">
           <label label for="price">희망 판매가격 <small><span>*</span>필수사항</small></label>

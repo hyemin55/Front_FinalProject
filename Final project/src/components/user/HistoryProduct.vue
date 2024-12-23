@@ -3,7 +3,7 @@ import { ref } from 'vue';
 
 // 주문, 판매 텍스트 변경
 const props = defineProps({
-  propstext: {
+  saledata: {
     type: Object,
     required: false,
   },
@@ -12,10 +12,6 @@ const props = defineProps({
     required: true,
   }
 });
-const text01 = ref(props.propstext.text01)
-const text02 = ref(props.propstext.text02)
-// text03은 추후에 진행상태를 기입
-const text03 = ref(props.propstext.text03)
 
 const confirmed= ()=>{
   console.log('구매확정 함수')
@@ -28,28 +24,28 @@ const goreview= ()=>{
 </script>
 
 <template>
-  <article class="history_box" v-if="props.propstext">
+  <article class="history_box" v-if="props.saledata">
 
     <div class="top_box">
       <div>
         <p class="history_date">
-          <span>{{ text01 }}날짜</span> 2024년 10월 12일
+          <span>{{  props.saledata.text01 }}날짜</span> 2024년 10월 12일
         </p>
-        <p class="history_number">{{ text02 }}번호 123123132231321</p>
+        <p class="history_number">{{  props.saledata.text02 }}번호 123123132231321</p>
       </div>
-      <p class="detail_more" v-if="props.showBtn">{{ text02 }}상세 ></p>
+      <p class="detail_more" v-if="props.showBtn">{{  props.saledata.text02 }}상세 ></p>
     </div>
 
     <div class="bottom_box">
-      <p class="complete_date">{{ text03 }}완료 2024년 10월 13일</p>
+      <p class="complete_date">{{  props.saledata.text03 }}완료 2024년 10월 13일</p>
 
       <div class="history_product">
         <div class="history_product_img">
           <img src="@/assets/img/d003.png" alt="" />
         </div>
         <ul class="history_product_text">
-          <li>상품명 : </li>
-          <li>가격 : </li>
+          <li>상품명 :</li>
+          <li>가격 :  {{ props.saledata.userPrice }}</li>
           <li>수량 : </li>
         </ul>
 

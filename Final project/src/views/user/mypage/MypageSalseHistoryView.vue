@@ -15,7 +15,6 @@ const props = ref({
   text03: '판매',
 });
 
-
 const saleList = ref([]);
 const getSaleList = async()=>{
   try{
@@ -25,7 +24,14 @@ const getSaleList = async()=>{
         'Content-Type':'application/json'
       }
     })
-    saleList.value = res.data;
+    // saleList.value = res.data;
+    saleList.value = res.data.map(product => ({
+      ...product,
+      text01: '판매신청',
+      text02: '판매',
+      text03: '판매',
+    }));
+
     console.log("이거이거", saleList.value);
   }catch(error){
     console.error(error)
@@ -45,7 +51,7 @@ onMounted(()=>{
       <img src="@/assets/img/wing_money.gif" alt="" />
     </h2>
   </div>
-  <HistoryProduct :propstext="props" :showBtn="false"></HistoryProduct>
+  <HistoryProduct v-for="saledata in saleList" :key="saledata.pendingSaleId" :saledata="saledata" :showBtn="false"></HistoryProduct>
 
   <SaleProductModal v-if="saleModal" @closeModal="showModal"/>
 </template>
