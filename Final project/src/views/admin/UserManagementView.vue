@@ -176,6 +176,11 @@ option {
   border: none;
   background-color: unset;
 }
+input:focus,
+select:focus,
+option:focus {
+  outline: none;
+}
 #sortByAndSearch {
   display: flex;
   justify-content: space-between;

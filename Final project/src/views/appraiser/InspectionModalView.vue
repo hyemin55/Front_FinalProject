@@ -30,6 +30,20 @@ const TestResult = computed(() => {
   const testResult = serverItemReqBySeller?.TestResult;
   return testResult === 'Y' ? '합격' : '불합격';
 });
+// const appraiserFiles = ref([]);
+// const previewUrls = ref([]);
+// const imageLode = () => {
+//   appraiserFiles.value = Array.from(appraiserCustomData.userImageFiles); // 선택된 파일 목록
+
+//   if (appraiserFiles.value.length > 0) {
+//     for (const file of appraiserFiles.value) {
+//       if (file.type.startsWith('image/')) {
+//         // 이미지 파일인 경우 URL 생성
+//         previewUrls.value.push(URL.createObjectURL(file));
+//       }
+//     }
+//   }
+// };
 
 const send = async () => {
   try {
@@ -179,6 +193,25 @@ watch(
               <td v-else>-</td>
               <td>-</td>
             </tr>
+            <tr>
+              <th>등록하려는 사진</th>
+              <td colspan="2">
+                <p class="filenames" v-for="(image, index) in appraiserCustomData.userImageFiles" :key="index">
+                  {{ index + 1 }}. {{ image.name }}
+                </p>
+                <p class="filenames" v-for="(imageName, index) in appraiserCustomData.passImageFiles" :key="index">
+                  {{ index + appraiserCustomData.userImageFiles.length + 1 }}. {{ imageName.name }}
+                </p>
+                <!-- <img class="userSaleImage" :src="`${GLOBAL_URL}/api/file/download/${image.name}`" alt="" /> -->
+                <!-- <img
+                  class="userSaleImage"
+                  v-for="(image, index) in appraiserCustomData.passImageFiles"
+                  :key="index"
+                  :src="`${image}`"
+                  alt=""
+                /> -->
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -222,6 +255,7 @@ watch(
   line-height: 2;
   font-size: 1.6rem;
   /* overflow-y: scroll; */
+  /* scroll-behavior: smooth; */
 }
 /* 모달배경 설정 */
 .modal_background {
@@ -246,6 +280,7 @@ watch(
   width: 500px;
   margin: 3% 0;
   text-align: center;
+  overflow-y: scroll;
 }
 th {
   background-color: var(--color-main-Lgray);
@@ -277,5 +312,9 @@ td {
   color: white;
   border: 2px solid var(--color-main-bloode);
   background-color: orange;
+}
+.filenames {
+  text-align: left;
+  padding: 0 2%;
 }
 </style>

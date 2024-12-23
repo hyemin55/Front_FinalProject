@@ -32,9 +32,9 @@
           <select required v-model="item.categoryId">
             <option value="" selected disabled>선택</option>
             <option value="-" disabled>-------</option>
-            <option value="1">Perfume</option>
-            <option value="2">Diffuser</option>
-            <option value="3">Candle</option>
+            <option value="0">Perfume</option>
+            <option value="1">Diffuser</option>
+            <option value="2">Candle</option>
           </select>
         </td>
         <!-- 브랜드 검색 -->
@@ -309,7 +309,7 @@
 import { GLOBAL_URL } from '@/api/util';
 import AnnouncementComponent from '@/components/admin/AnnouncementComponent.vue';
 import axios from 'axios';
-import { onMounted, reactive, ref, watch, watchEffect } from 'vue';
+import { ref, watchEffect } from 'vue';
 import InspectionModalView from '@/views/appraiser/InspectionModalView.vue';
 
 const props = defineProps({
@@ -356,12 +356,8 @@ const selectImages = (img, index) => {
 // InspectionMadal emit 업데이트
 const closeModal = () => {
   InspectionModal.value = false;
-  // console.log('InspectionList.value.PassGrade', InspectionList.value);
-  // for (let i = 0; InspectionList.value.length > i; i++) {
-  //   InspectionList.value[i].PassGrade = '';
-  //   InspectionList.value[i].FailReason = '';
-  // }
-  // console.log('InspectionList.value.FailReason', InspectionList.value.FailReason);
+  item.value.PassGrade = '';
+  item.value.FailReason = '';
 };
 
 const validatedInspectionSize = item => {
@@ -389,8 +385,8 @@ const send = async item => {
   const valueError = [
     { field: '검수 결과', value: item.TestResult },
     { field: '판매 신청자', value: item.saleApplicationId },
-    { field: '카테고리', value: item.categoryId },
-    { field: '카테고리', value: categoriesList[item.categoryId - 1] },
+    { field: '카테고리1', value: item.categoryId + 1 },
+    { field: '카테고리2', value: categoriesList[item.categoryId] },
     { field: '브랜드', value: item.selectedBrand.split('.')[0] },
     { field: '브랜드', value: item.selectedBrand.split('.')[1] },
     { field: '상품명', value: item.selectedProduct.productName },
@@ -425,7 +421,7 @@ const send = async item => {
         gradeId: item.PassGrade.gradeId,
         inspectionCategoryReqDto: {
           categoryId: item.categoryId,
-          categoryName: categoriesList[item.categoryId - 1],
+          categoryName: categoriesList[item.categoryId],
         },
         inspectionBrandReqDto: {
           brandId: item.selectedBrand.split('.')[0],
@@ -462,7 +458,7 @@ const send = async item => {
         rejectionReasonId: item.FailReason.rejectionReasonId,
         inspectionCategoryReqDto: {
           categoryId: item.categoryId,
-          categoryName: categoriesList[item.categoryId - 1],
+          categoryName: categoriesList[item.categoryId],
         },
         inspectionBrandReqDto: {
           brandId: item.selectedBrand.split('.')[0],
@@ -489,6 +485,7 @@ const send = async item => {
     DeliveryData.value = { DeliveryData: failData, item: item };
   }
   InspectionModal.value = true;
+  console.log(DeliveryData.value);
   console.log('모달창 나옵니다.');
 };
 
@@ -538,6 +535,7 @@ const fetchSuggestions = async (type, item) => {
 };
 
 watchEffect(async () => {
+  // 검수 합격 등급 리스트
   const passRes = await axios.get(`${GLOBAL_URL}/api/inspection/pass/grade`);
   PassGradeList.value = passRes.data;
   // 검수 불합격 사유 리스트
@@ -552,7 +550,8 @@ table {
   font-size: 1.4rem;
   text-align: center;
 }
-th, td {
+th,
+td {
   width: 15%;
   padding: 10px;
 }
@@ -575,8 +574,8 @@ option {
   border-radius: 5px;
   border: 0.5px solid var(--color-text-gray);
 }
-input:focus ,
-select:focus ,
+input:focus,
+select:focus,
 option:focus,
 textarea:focus {
   outline: none;
@@ -611,7 +610,9 @@ button:hover {
 .icon > img {
   width: 1.4rem;
 }
-.mainImage {
+.mainImage,
+.userSaleImage,
+.previewUrls {
   width: 100px;
 }
 .userSaleResImageList {
@@ -623,7 +624,6 @@ button:hover {
 .userSaleImage {
   cursor: pointer;
   margin: 0 5px;
-  width: 100px;
   border: 0.5px solid #ccc;
   border-radius: 8px;
 }
@@ -635,7 +635,6 @@ button:hover {
   border-radius: 5px;
 }
 .previewUrls {
-  max-width: 100px;
   border: 0.5px solid #ccc;
   border-radius: 8px;
   padding: 1%;
@@ -647,7 +646,7 @@ button:hover {
   text-align: left;
   line-height: 1.5;
   font-family: 'Pretendard-Light';
-  background-color: var(--color-main-Lgray);
+  background-color: var(--color-main-pink);
   position: absolute;
   top: -285px;
   left: -118px;

@@ -46,7 +46,7 @@
             <td>{{ item.favoriteCount }}</td>
             <td class="stateButtons">
               <button class="stateButton" @click="HideButton">숨기기</button>
-              <button class="stateButton" @click="DeleteButton">삭제</button>
+              <button class="stateButton" @click="DeleteButton(item)">삭제</button>
             </td>
           </tr>
         </tbody>
@@ -80,6 +80,14 @@ const pageNation = () => {
   };
 };
 
+const DeleteButton = item => {
+  console.log(item);
+  const result = confirm('정말 리뷰를 삭제하시겠습니까?');
+  if (result) {
+    console.log('삭제하겠습니다.');
+  }
+  // 서버에 삭제할 데이터 넘겨주기
+};
 const pageUpdate = pageNum => {
   pageNumber.value = pageNum;
   // dolode()
@@ -127,6 +135,11 @@ option {
   border: none;
   background-color: unset;
 }
+input:focus,
+select:focus,
+option:focus {
+  outline: none;
+}
 #sortByAndSearch {
   display: flex;
   justify-content: space-between;
@@ -172,10 +185,12 @@ table {
 }
 td {
   height: 50px;
+  padding: 2px;
   border-bottom: 0.5px solid var(--color-main-gray);
 }
 th {
   border-bottom: 2px solid var(--color-main-gray);
+  padding: 2px;
   height: 40px;
 }
 .TableBody > td:nth-child(6) {
