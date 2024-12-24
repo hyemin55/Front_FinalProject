@@ -30,7 +30,7 @@ export const mergeMemberCart = async pushData => {
 };
 
 // DB 장바구니에 데이터 추가(장바구니 담기)
-export const addCartDatabase=(data)=>{
+export const addCartDatabase = data => {
   try {
     const res = axios.post(`${GLOBAL_URL}/cart/add`, data, {
       headers: {
@@ -41,5 +41,4 @@ export const addCartDatabase=(data)=>{
   } catch (e) {
     console.log(e);
   }
-}
-
+};

@@ -1,3 +1,5 @@
+import { addCartDatabase } from '@/api/cartApi';
+import { loginCheck } from '@/api/KakaoLoginApi';
 import { GLOBAL_URL } from '@/api/util';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
@@ -21,6 +23,13 @@ export const useCartStore = defineStore('cart', {
         alert('장바구니에 담았습니다.');
       }
       localStorage.setItem('cartItems', JSON.stringify(this.cartItems));
+      if (loginCheck) {
+        const data = {
+          usedProductId: item.usedProductId,
+          quantity: 1,
+        };
+        addCartDatabase(data);
+      }
     },
 
     // 장바구니 삭제(체크가 된것만 삭제하는 로직)

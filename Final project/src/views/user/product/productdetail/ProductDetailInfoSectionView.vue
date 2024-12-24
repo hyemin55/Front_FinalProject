@@ -50,7 +50,7 @@ const doLoad = async () => {
     productData.value = productDataRes.detailProductInfoDto;
     productImages.value = productDataRes.productImage;
     reviewData.value = reviewDataRes;
-    console.log('productData 값 : ', productData.value);
+    console.log('productData 값 : ', productDataRes);
     console.log('productImages 값 : ', productImages.value);
     console.log('reviewData 값 : ', reviewData.value);
   } catch (err) {
@@ -64,39 +64,20 @@ const BuyNow = () => {};
 // 장바구니 추가
 const addToCart = async () => {
   const data = {
+    brandName: productData.value.brandName,
+    nickName: sessionStorage.getItem('nickName'),
     productId: Number(idx.value),
     productName: productData.value.productName,
-    price: productData.value.price,
-    brandName: productData.value.brandName,
-    size: productData.value.size,
-    images: [productData.value.mainImage],
-    mainImage: productData.value.mainImage,
+    productSize: productData.value.productSize,
+    sellingPrice: productData.value.price,
+    usedOrNot: false,
+    usedProductId: productData.value.usedProductId,
+    userSaleImages: [productData.value.mainImage],
+    verifiedSaleGradeType: productData.value.gradeType,
     quantity: 1,
   };
-
   cartStore.addItem(data);
-  alert('장바구니에 담았습니다.');
-
-  if (userLogin.value) {
-    try {
-      const res = axios.post(`${GLOBAL_URL}/cart/add`, data, {
-        headers: {
-          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-        },
-      });
-      console.log(res);
-      const pushData = cart.value.map(item => ({
-        productId: item.productId,
-        quantity: item.quantity,
-      }));
-      await mergeMemberCart(pushData);
-      const fetchRes = await fetchMemeberCart();
-      // 스토어에서 장바구니 업데이트(store 랜더링)
-      cartStore.updateCart(fetchRes.data);
-    } catch (e) {
-      console.log(e);
-    }
-  }
+  // alert('장바구니에 담았습니다.');
 };
 
 // 찜 클릭 이벤트
@@ -132,7 +113,7 @@ watchEffect(() => {
         >
       </li>
       <li>{{ formatPrice(productData.verifiedSellingPrice) }}</li>
-      <li>용량 : {{ productData.size }} ml</li>
+      <li>기준용량 : {{ productData.size }} ml / 판매용량 : {{ productData.productSize }} ml</li>
     </ul>
 
     <!-- <div>
