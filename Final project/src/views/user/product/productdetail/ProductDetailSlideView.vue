@@ -58,7 +58,7 @@ onMounted(async () => {
   <article id="productSlide">
     <div class="iconPosition">
       <Carousel id="gallery" v-bind="galleryConfig" v-model="currentSlide" :autoplay="3000">
-        <Slide v-for="(image, index) in list.images" :key="index">
+        <Slide v-for="(image, index) in list" :key="index">
           <img :src="`${GLOBAL_URL}/api/file/download/${image.filename}`" alt="" class="carousel_image" />
         </Slide>
       </Carousel>
@@ -75,7 +75,7 @@ onMounted(async () => {
       :pause-autoplay-on-hover="true"
       :mouse-drag="false"
     >
-      <Slide v-for="(image, index) in list.images" :key="index">
+      <Slide v-for="(image, index) in list" :key="index">
         <img :src="`${GLOBAL_URL}/api/file/download/${image.filename}`" class="carousel_thumbnail" />
       </Slide>
 

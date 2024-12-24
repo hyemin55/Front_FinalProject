@@ -157,7 +157,7 @@ watch(
               <td>{{ appraiserCustomData.inspectionPassReqDto.inspectionProductReqDto.productName }}</td>
               <td>-</td>
             </tr>
-            <tr>
+            <tr v-if="serverItemReqBySeller.selectedProduct.size">
               <th>정량</th>
               <td>{{ serverItemReqBySeller.selectedProduct.size.toLocaleString() }}</td>
               <td>ml</td>
@@ -195,14 +195,19 @@ watch(
             </tr>
             <tr>
               <th>등록하려는 사진</th>
-              <td colspan="2">
+              <td colspan="2" class="fileImagesBox">
                 <p class="filenames" v-for="(image, index) in appraiserCustomData.userImageFiles" :key="index">
-                  {{ index + 1 }}. {{ image.name }}
+                  {{ index + 1 }}.
+                  <img
+                    style="width: 100px"
+                    class="userSaleImage"
+                    :src="`${GLOBAL_URL}/api/file/download/${image.name}`"
+                    alt=""
+                  />
                 </p>
-                <p class="filenames" v-for="(imageName, index) in appraiserCustomData.passImageFiles" :key="index">
+                <!-- <p class="filenames" v-for="(imageName, index) in appraiserCustomData.passImageFiles" :key="index">
                   {{ index + appraiserCustomData.userImageFiles.length + 1 }}. {{ imageName.name }}
-                </p>
-                <!-- <img class="userSaleImage" :src="`${GLOBAL_URL}/api/file/download/${image.name}`" alt="" /> -->
+                </p> -->
                 <!-- <img
                   class="userSaleImage"
                   v-for="(image, index) in appraiserCustomData.passImageFiles"
@@ -316,5 +321,28 @@ td {
 .filenames {
   text-align: left;
   padding: 0 2%;
+}
+.fileImagesBox {
+  overflow-y: scroll;
+  border: none;
+  height: 120px;
+  width: 127.5%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  padding: 1%;
+}
+
+/* 스크롤바 전체 영역 */
+.fileImagesBox::-webkit-scrollbar {
+  width: 5px; /* 가로 스크롤일 경우 height */
+}
+/* 스크롤바 트랙 (배경) */
+.fileImagesBox::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+/* 스크롤바 핸들 (움직이는 부분) */
+.fileImagesBox::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
 }
 </style>

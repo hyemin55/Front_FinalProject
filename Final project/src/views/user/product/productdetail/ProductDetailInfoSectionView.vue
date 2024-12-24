@@ -16,10 +16,8 @@ const router = useRouter();
 
 const productData = ref([]);
 const reviewData = ref(null);
-const productDataOk = ref([]);
-
+const productImages = ref([]);
 const idx = ref(route.params.idx);
-const size = ref(route.query.size);
 
 const cartStore = useCartStore();
 
@@ -44,49 +42,35 @@ const emit = defineEmits();
 const doLoad = async () => {
   // console.log(`doLoad = ${idx.value}`);
   try {
-    productData.value = await getProductData(idx.value);
-    reviewData.value = await getReviewData(idx.value);
+    const productDataRes = await getProductData(idx.value);
+    const reviewDataRes = await getReviewData(idx.value);
 
+    // console.log('productDataRes 값 : ', productDataRes);
+    // console.log('reviewDataRes 값 : ', reviewDataRes);
+    productData.value = productDataRes.detailProductInfoDto;
+    productImages.value = productDataRes.productImage;
+    reviewData.value = reviewDataRes;
     console.log('productData 값 : ', productData.value);
+    console.log('productImages 값 : ', productImages.value);
     console.log('reviewData 값 : ', reviewData.value);
-
-    if (productData.value.status === 200 && reviewData.value.status === 200) {
-      // console.log('productData.value.status === 200', productData.value);
-      for (let i = 0; i < productData.value.data.length; i++) {
-        // console.log('조건에 맞는 아이는? ', productData.value.data[i].size);
-        if (productData.value.data[i].productId == idx.value && productData.value.data[i].size == size.value) {
-          productDataOk.value = productData.value.data[i];
-          // console.log('데이터내용들', productDataOk.value);
-        }
-      }
-      // console.log('reviewData.value', reviewData.value);
-
-      // const newStatus = true;
-      // emit('onProductInfoLoaded', newStatus);
-    } else if (productData.value.status == 500) {
-      console.log(productData.value.status);
-      router.push({ name: 'main' });
-    } else {
-      console.log('실패1');
-    }
   } catch (err) {
     console.log('실패2' + err);
   }
 };
 const BuyNow = () => {};
 
-// console.log(productDataOk);
+// console.log(productData);
 
 // 장바구니 추가
 const addToCart = async () => {
   const data = {
     productId: Number(idx.value),
-    productName: productDataOk.value.productName,
-    price: productDataOk.value.price,
-    brandName: productDataOk.value.brandName,
-    size: productDataOk.value.size,
-    images: [productDataOk.value.mainImage],
-    mainImage: productDataOk.value.mainImage,
+    productName: productData.value.productName,
+    price: productData.value.price,
+    brandName: productData.value.brandName,
+    size: productData.value.size,
+    images: [productData.value.mainImage],
+    mainImage: productData.value.mainImage,
     quantity: 1,
   };
 
@@ -122,9 +106,6 @@ const addToWishlist = () => {
   if (redHeart.value == true) alert('༼ つ ◕_◕ ༽つ 찜~');
 };
 
-const isselectedSize = size => {
-  return route.query.size === size.size.toString() && route.params.idx === size.productId.toString();
-};
 // 리뷰별점평균을 소수점 1자리만 남긴다.
 const Average = data => {
   data = data * 10;
@@ -135,7 +116,6 @@ const Average = data => {
 
 watchEffect(() => {
   idx.value = route.params.idx;
-  size.value = route.query.size;
   doLoad();
 });
 </script>
@@ -143,28 +123,18 @@ watchEffect(() => {
 <template>
   <article id="productInfoSection">
     <ul id="productInfo">
-      <li>{{ productDataOk.brandName }}</li>
-      <li>{{ productDataOk.productName }}</li>
+      <li>{{ productData.brandName }}</li>
+      <li>{{ productData.productName }}</li>
       <li v-if="reviewData">
         1,222찜 수
         <span style="color: orange"
-          >★ {{ Average(reviewData.data.starAverage) }} ({{ reviewData.data.reviewCount }} reviews)</span
+          >★ {{ Average(reviewData.starAverage) }} ({{ reviewData.reviewCount }} reviews)</span
         >
       </li>
-      <li>{{ formatPrice(productDataOk.price) }}</li>
+      <li>{{ formatPrice(productData.verifiedSellingPrice) }}</li>
+      <li>용량 : {{ productData.size }} ml</li>
     </ul>
 
-    <!-- <p class="OptionSelect">옵션선택</p>
-    <div id="productOption">
-      <button
-        @click="productOptionSelect(size)"
-        v-for="(size, index) in productData.data"
-        :key="index"
-        :class="{ selectedSize: isselectedSize(size) }"
-      >
-        {{ size.size }} ml
-      </button>
-    </div> -->
     <!-- <div>
       <p>제조일자 : 2024-11-01</p>
       <p>유통기한 : 2029-11-01</p>
@@ -208,7 +178,8 @@ watchEffect(() => {
   font-size: 1.4rem;
   margin-top: 20px;
 }
-#productInfo li:nth-child(4) {
+#productInfo li:nth-child(4),
+#productInfo li:nth-child(5) {
   font-size: 2rem;
   margin-top: 20px;
 }

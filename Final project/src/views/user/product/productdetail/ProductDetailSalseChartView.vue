@@ -30,6 +30,7 @@ const doLode = async () => {
       // JSON.stringify로 문자열로 바꾼뒤 다시 JSON.parse로 객채를 만들어 sortTotalSaleTradeList가 다른곳을 바라보게 만든다.
       sortTotalSaleTradeList = JSON.parse(JSON.stringify(totalSalseList.value));
       sortTotalSaleTradeList.reverse();
+      console.log(displayedList.value);
 
       initializeChart();
     }
@@ -58,9 +59,7 @@ const generateDateLabels = startDate => {
   // });
   sortTotalSaleTradeList.forEach(item => {
     labels.push(
-      new Intl.DateTimeFormat('ko-KR', { month: 'numeric', day: 'numeric' }).format(
-        Date.parse(item.tradeCompletedDate),
-      ),
+      new Intl.DateTimeFormat('ko-KR', { month: 'numeric', day: 'numeric' }).format(Date.parse(item.createdDate)),
     );
   });
 
@@ -80,7 +79,10 @@ const initializeChart = async () => {
   }
   // 데이터가 존재할 때만 차트를 생성
   if (totalSalseList.value.length > 0) {
-    const firstTradeDate = totalSalseList.value[totalSalseList.value.length - 1].tradeCompletedDate;
+    const firstTradeDate = totalSalseList.value[totalSalseList.value.length - 1].createdDate;
+
+    console.log(totalSalseList.value[totalSalseList.value.length - 1].createdDate);
+    console.log(firstTradeDate);
     const maxPrice = Math.ceil(Math.max(...totalSalseList.value.map(item => item.tradePrice)) * 1.1); // 최대 가격의 110%
 
     // console.log(totalSalseList.value);
@@ -192,9 +194,9 @@ watchEffect(() => {
         <li>거래날짜</li>
       </ul>
       <ul class="TransactionHistoryContent" v-for="(list, index) in displayedList" :key="index">
-        <li>{{ list.size }} ml</li>
+        <li>{{ list.tradeSize }} ml</li>
         <li>￦ {{ list.tradePrice.toLocaleString() }}</li>
-        <li>{{ list.tradeCompletedDate }}</li>
+        <li>{{ list.createdDate }}</li>
       </ul>
       <div class="showButtonBox">
         <button v-if="showMore && totalSalseList.length > showMore" @click="loadMore" class="showButton">
