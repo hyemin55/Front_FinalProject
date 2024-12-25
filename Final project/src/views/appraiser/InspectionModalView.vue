@@ -23,8 +23,10 @@ const props = defineProps({
 const appraiserCustomData = props.Data?.DeliveryData || {};
 // 서버에서 받은 아이템
 const serverItemReqBySeller = props.Data?.item || {};
+const appraiserPreviewUrls = props.Data?.appraiserPreviewUrls || {};
 console.log(appraiserCustomData);
 console.log(serverItemReqBySeller);
+console.log(appraiserPreviewUrls);
 
 const TestResult = computed(() => {
   const testResult = serverItemReqBySeller?.TestResult;
@@ -199,11 +201,16 @@ watch(
                 <p class="filenames" v-for="(image, index) in appraiserCustomData.userImageFiles" :key="index">
                   {{ index + 1 }}.
                   <img
-                    style="width: 100px"
+                    
                     class="userSaleImage"
                     :src="`${GLOBAL_URL}/api/file/download/${image.name}`"
                     alt=""
                   />
+                </p>
+                <p class="filenames" v-for="(image, index) in appraiserPreviewUrls" :key="index">
+                  {{ appraiserCustomData.userImageFiles.length + index + 1 }}.
+                  <img
+                  class="userSaleImage" :src="image" alt="" />
                 </p>
                 <!-- <p class="filenames" v-for="(imageName, index) in appraiserCustomData.passImageFiles" :key="index">
                   {{ index + appraiserCustomData.userImageFiles.length + 1 }}. {{ imageName.name }}
@@ -299,6 +306,38 @@ th,
 td {
   border: 1px solid #333;
 }
+.filenames {
+  text-align: left;
+  padding: 0 2%;
+}
+.fileImagesBox {
+  overflow-y: scroll;
+  border: none;
+  height: 130px;
+  width: 127.5%;
+  display: grid;
+  align-items: end;
+  grid-template-columns: repeat(2, 1fr);
+  padding: 1%;
+}
+
+/* 스크롤바 전체 영역 */
+.fileImagesBox::-webkit-scrollbar {
+  width: 5px; /* 가로 스크롤일 경우 height */
+}
+/* 스크롤바 트랙 (배경) */
+.fileImagesBox::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+/* 스크롤바 핸들 (움직이는 부분) */
+.fileImagesBox::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+.userSaleImage{
+  width: 100px;
+  padding: 1%;
+}
 .Results_transfer_button {
   width: 70%;
   text-align: center;
@@ -317,32 +356,5 @@ td {
   color: white;
   border: 2px solid var(--color-main-bloode);
   background-color: orange;
-}
-.filenames {
-  text-align: left;
-  padding: 0 2%;
-}
-.fileImagesBox {
-  overflow-y: scroll;
-  border: none;
-  height: 120px;
-  width: 127.5%;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  padding: 1%;
-}
-
-/* 스크롤바 전체 영역 */
-.fileImagesBox::-webkit-scrollbar {
-  width: 5px; /* 가로 스크롤일 경우 height */
-}
-/* 스크롤바 트랙 (배경) */
-.fileImagesBox::-webkit-scrollbar-track {
-  background: #f0f0f0;
-}
-/* 스크롤바 핸들 (움직이는 부분) */
-.fileImagesBox::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 5px;
 }
 </style>

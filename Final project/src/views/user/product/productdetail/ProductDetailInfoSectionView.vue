@@ -7,13 +7,14 @@ import { getProductData, getReviewData } from '@/api/productDetailApi';
 import ProductDetailSalseChartViewVue from '@/views/user/product/productdetail/ProductDetailSalseChartView.vue';
 import { useCartStore } from '@/stores/CartStore';
 import { useUserStore } from '@/stores/Login';
-
+import SaleProductModal from '@/components/user/SaleProductModal.vue';
 import axios from 'axios';
 import { GLOBAL_URL } from '@/api/util';
 import { fetchMemeberCart, mergeMemberCart } from '@/api/cartApi';
+
 const route = useRoute();
 const router = useRouter();
-
+const Modal = ref(false)
 const productData = ref([]);
 const reviewData = ref(null);
 const productImages = ref([]);
@@ -58,6 +59,20 @@ const doLoad = async () => {
   }
 };
 const BuyNow = () => {};
+
+// 바로 판매하기 클릭 시 모달 창 열림
+const SellNowOpenModal = () =>{
+  console.log('이제 팔아야징')
+  if(userStore.loginCheck){
+  Modal.value = true}
+  else{
+    alert('로그인이 필요합니다.')
+    router.push({name:'login2'})
+  }
+}
+const closeModal = () =>{
+  Modal.value = false
+}
 
 // console.log(productData);
 
@@ -122,7 +137,7 @@ watchEffect(() => {
     </div> -->
 
     <div class="addButtonGroub">
-      <button class="addToCart Sell​​Now">바로 판매하기</button>
+      <button class="addToCart Sell​​Now" @click="SellNowOpenModal">바로 판매하기</button>
       <button class="addToCart BuyNow" @click="BuyNow">바로 구매하기</button>
       <!-- <button class="addToCart" @click="addToCart"> -->
       <button class="icon_box" @click="addToCart">
@@ -134,6 +149,9 @@ watchEffect(() => {
     </div>
 
     <ProductDetailSalseChartViewVue />
+  </article>
+  <article>
+    <SaleProductModal v-if="Modal" @closeModal="closeModal"  />
   </article>
 </template>
 

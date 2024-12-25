@@ -277,13 +277,15 @@
         <td colspan="2" rowspan="2">
           <div class="userSaleResImageList" v-for="(userSaleImage, index) in item.userSaleResImageList" :key="index">
             <div>
-              <input :id="`${item.saleApplicationId}img-${index}`" type="checkbox" style="height: 2rem" />
+              <input
+                :id="`${item.saleApplicationId}img-${index}`"
+                type="checkbox"
+                style="height: 2rem"
+                @click="selectImages(userSaleImage, index)"
+                v-model="item.userSaleResImageList[index].used"
+              />
               <label :for="`${item.saleApplicationId}img-${index}`"
-                ><img
-                  :src="`${GLOBAL_URL}/api/file/download/${userSaleImage.name}`"
-                  alt=""
-                  class="userSaleImage"
-                  @click="selectImages(userSaleImage, index)"
+                ><img :src="`${GLOBAL_URL}/api/file/download/${userSaleImage.name}`" alt="" class="userSaleImage"
               /></label>
             </div>
           </div>
@@ -327,6 +329,7 @@ const DeliveryData = ref([]);
 const InspectionModal = ref(false);
 const appraiserFiles = ref([]);
 const previewUrls = ref([]);
+const userImageFiles = ref([]);
 
 // 검수자 이미지파일 등록`
 const handleFileUpload = event => {
@@ -348,7 +351,7 @@ const handleFileUpload = event => {
 const selectImages = (img, index) => {
   //isUsed : true = 사용하는 사진 , false =  사용하지 않는 사진
   img.used = !img.used;
-  console.log('삭제하려는 이미지 번호', index, '삭제하려는 이미지 내용', img);
+  console.log('선택한 이미지 번호', index, '선택한 이미지 내용', img);
 };
 
 // pageNation emit 업데이트
@@ -358,6 +361,13 @@ const closeModal = () => {
   InspectionModal.value = false;
   item.value.PassGrade = '';
   item.value.FailReason = '';
+  userImageFiles.value = [];
+  // for (let i = 0; item.value.userSaleResImageList.length > i; i++) {
+  //   item.value.userSaleResImageList[i].used = false;
+  // }
+  item.value.userSaleResImageList.forEach(image => {
+    image.used = false;
+  });
 };
 
 const validatedInspectionSize = item => {
@@ -380,6 +390,13 @@ const send = async item => {
   console.log('item', item);
   console.log('item.userSaleResImageList', item.userSaleResImageList);
   const InspectionResultId = [item.PassGrade.gradeId, item.FailReason.rejectionReasonId];
+
+  for (let i = 0; item.userSaleResImageList.length > i; i++) {
+    if (item.userSaleResImageList[i].used && item.userSaleResImageList[i] !== userImageFiles.value) {
+      userImageFiles.value.push(item.userSaleResImageList[i]);
+    }
+  }
+  console.log(userImageFiles.value);
 
   // 각 항목에 필드 이름과 값을 함께 저장
   const valueError = [
@@ -433,7 +450,7 @@ const send = async item => {
           verifiedSellingPrice: item.inspectionSellingPrice,
           quantity: 0,
         },
-        userSaleReqImageDtos: item.userSaleResImageList,
+        userSaleReqImageDtos: userImageFiles.value,
         passSaleReqImageDtos: appraiserFiles.value.map((passFile, index) => ({
           name: passFile.name,
           desc: `image-${index + 1}`,
@@ -444,12 +461,13 @@ const send = async item => {
         inspectionResult: true,
       },
       passImageFiles: appraiserFiles.value,
-      userImageFiles: item.userSaleResImageList,
+      userImageFiles: userImageFiles.value,
     };
 
     DeliveryData.value = {
       DeliveryData: passData,
       item: item,
+      appraiserPreviewUrls: previewUrls.value,
     };
   } else if (item.TestResult === 'N') {
     const failData = {
@@ -470,7 +488,7 @@ const send = async item => {
           verifiedSellingPrice: item.inspectionSellingPrice,
           quantity: 0,
         },
-        userSaleReqImageDtos: item.userSaleResImageList,
+        userSaleReqImageDtos: userImageFiles.value,
         passSaleReqImageDtos: appraiserFiles.value.map((passFile, index) => ({
           name: passFile.name,
           desc: `image-${index + 1}`,
@@ -479,10 +497,10 @@ const send = async item => {
         inspectionResult: false,
       },
       passImageFiles: appraiserFiles.value,
-      userImageFiles: item.userSaleResImageList,
+      userImageFiles: userImageFiles.value,
     };
     console.log('rejectionReasonId', failData.rejectionReasonId);
-    DeliveryData.value = { DeliveryData: failData, item: item };
+    DeliveryData.value = { DeliveryData: failData, item: item, appraiserPreviewUrls: previewUrls.value };
   }
   InspectionModal.value = true;
   console.log(DeliveryData.value);

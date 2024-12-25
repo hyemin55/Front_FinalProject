@@ -30,7 +30,6 @@ const navDetailProduct = (productId, size) => {
   console.log(productId);
   router.push({
     path: `/productsdetail/${productId}`,
-    query: { size: size },
   });
 };
 

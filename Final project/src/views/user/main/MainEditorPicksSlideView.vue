@@ -51,7 +51,6 @@ const navDetailProduct = (productId, size) => {
   console.log(productId);
   router.push({
     path: `/productsdetail/${productId}`,
-    query: { size: size },
   });
 };
 
@@ -116,7 +115,6 @@ onMounted(() => {
 }
 .Slidebox {
   position: relative;
-  cursor: pointer;
   object-fit: cover;
   background-color: var(--color-main-Lgray);
   transition:
@@ -202,6 +200,7 @@ onMounted(() => {
   width: 116%;
   top: 0;
   right: 0;
+  cursor: default;
   transform: translateX(105%);
   /* font-family: 'Pretendard-Thin'; */
 }
@@ -216,6 +215,7 @@ onMounted(() => {
   font-size: 1.8rem;
 }
 .extra_content p:nth-child(3) {
+  cursor: pointer;
   font-size: 1.6rem;
   font-family: 'Pretendard-SemiBold';
   color: var(--color-main-bloode);

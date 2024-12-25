@@ -10,8 +10,24 @@
             <th>No.</th>
             <th>판매 신청자</th>
             <th>판매신청날짜</th>
-            <th>배송현황</th>
             <th>배송도착일</th>
+     
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+        <thead>
+          <tr>
+            <th>카테고리</th>
+            <th>브랜드</th>
+            <th>상품명</th>
+            <th>용량</th>
           </tr>
         </thead>
         <tbody>
@@ -23,23 +39,9 @@
         </tbody>
         <thead>
           <tr>
-            <th></th>
-            <th></th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-        </tbody>
-        <thead>
-          <tr>
-            <th></th>
-            <th></th>
-            <th></th>
+            <th>희망판매가격</th>
+            <th>권장판매가격</th>
+            <th colspan="2">상세설명</th>
           </tr>
         </thead>
 
@@ -52,9 +54,24 @@
         </tbody>
         <thead>
           <tr>
-            <th></th>
-            <th></th>
-            <th></th>
+            <th>사용 유무</th>
+            <th>판매불가 사유</th>
+            <th colspan="2">검수결과 참고사항</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+        <thead>
+          <tr>
+            <th>대표사진</th>
+            <th colspan="2">등록사진</th>
+            <th>판매현황</th>
           </tr>
         </thead>
 
