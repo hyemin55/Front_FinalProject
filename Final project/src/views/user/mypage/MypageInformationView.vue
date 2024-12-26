@@ -1,9 +1,6 @@
 <script setup>
 import { ref } from 'vue';
 
-const save = ()=>{
-  console.log("작성저장")
-}
 const profileImage = sessionStorage.getItem('profileImage')
 const inputFile = ref();
 const change_profile_image = ()=>{
@@ -11,6 +8,15 @@ const change_profile_image = ()=>{
 }
 const imageUpload = ()=>{
   console.log('사진업로드')
+}
+
+// mode 변경
+const mode = ref('read');
+const update = ()=>{
+  mode.value = 'update'
+}
+const save = ()=>{
+  mode.value = 'read'
 }
 
 </script>
@@ -50,7 +56,8 @@ const imageUpload = ()=>{
           </div>
           <div class="form-group">
             <label for="email">이메일</label>
-            <input type="email" id="email" value="abcdefhijk@naver.com" readonly/>
+            <span v-if="mode === 'read'">"abcdefhijk@naver.com"</span>
+            <input v-else type="email" id="email" value="abcdefhijk@naver.com" readonly/>
             <!-- <small class="email_small">카카오 계정입니다.</small> -->
           </div>
           <div class="form-group">
@@ -58,7 +65,8 @@ const imageUpload = ()=>{
             <input type="text" id="gender" value="여" readonly/>
           </div>
 
-          <button @click.prevent="save" type="submit" class="info_save_btn">저정하기</button>
+          <button v-if="mode === 'read'" @click.prevent="update" type="submit" class="info_save_btn">수정하기</button>
+          <button v-else @click.prevent="save" type="submit" class="info_save_btn">저정하기</button>
         </form>
 
         <p class="secession">
@@ -146,7 +154,8 @@ label {
 }
 input[type="text"],
 input[type="tel"],
-input[type="email"] {
+input[type="email"],
+span {
   width: 100%;
   min-width: 300px;
   font-size: 14px;
@@ -163,6 +172,10 @@ input[type="email"]:focus {
   position: absolute;
   font-size: 12px;
   color: #666;
+}
+span{
+  display: flex;
+  align-items: center;
 }
 
 /* save 버튼설정 */

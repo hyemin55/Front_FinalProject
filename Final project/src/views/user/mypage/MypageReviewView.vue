@@ -18,6 +18,7 @@ const getReview = async()=>{
     data.value = res.data.map(product => ({
       ...product,
       updateMode: true,
+      starIcons: getStarIcon(product.star)
     }));
     console.log(data.value)
   }catch(error){
@@ -29,7 +30,22 @@ onMounted(()=>{
 })
 
 
-data.value.star
+const getStarIcon = (star)=>{
+  switch(star){
+    case 5:
+      return '★★★★★';
+    case 4:
+      return '★★★★☆';
+    case 3:
+      return '★★★☆☆';
+    case 2:
+      return '★★☆☆☆';
+    case 1:
+      return '★☆☆☆☆';
+    default:
+      return '☆☆☆☆☆';
+  }
+}
 
 
 
@@ -83,7 +99,7 @@ const updateReview = async(list, reviewId, content)=>{
     <article class="review_wrapper" v-for="list in data" :key="list.reviewId">
         <div class="review_title">
             <ul>
-                <li class="title_star">★ ( {{ list.star }} )</li>
+                <li class="title_star">{{ list.starIcons }} ( {{ list.star }} )</li>
                 <li class="title_product">{{ list.productName }}</li>
                 <li class="title_options">{{ list.size }}ml</li>
             </ul>

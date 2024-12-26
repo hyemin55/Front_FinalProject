@@ -1,17 +1,32 @@
 <script setup>
+import { GLOBAL_URL } from '@/api/util';
 import HistoryProduct from '@/components/user/HistoryProduct.vue';
-import { ref } from 'vue';
+import axios from 'axios';
+import { onMounted, ref } from 'vue';
 
-const props = ref({
-  text01: '주문',
-  text02: '주문',
-  text03: '배송',
-});
+const orderList = ref([]);
+const getOrderList = async()=>{
+  try{
+    const res = await axios.get(`${GLOBAL_URL}/myPage/orderList`, {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        'Content-Type':'application/json'
+      }
+    })
+    orderList.value = res.data;
+    console.log("오더리스트", orderList.value);
+  }catch(error){
+    console.error(error)
+  }
+}
+onMounted(()=>{
+  getOrderList();
+})
 </script>
 
 <template>
   <h1 class="orderHistory_title">전체 주문 내역</h1>
-  <HistoryProduct :propstext="props" :showBtn="true"></HistoryProduct>
+  <HistoryProduct :orderList="orderList" :type="'order'" :showBtn="true"></HistoryProduct>
 </template>
 
 <style scoped>

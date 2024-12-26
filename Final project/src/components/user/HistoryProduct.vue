@@ -1,52 +1,93 @@
 <script setup>
-import { ref } from 'vue';
+import { GLOBAL_URL } from '@/api/util';
+import dayjs from 'dayjs';
+import { computed, ref } from 'vue';
 
 // 주문, 판매 텍스트 변경
 const props = defineProps({
-  saledata: {
+  saleList: {
     type: Object,
     required: false,
   },
+  orderList: {
+    type: Object,
+    required: false,
+  },
+  // showBtn->true가 주문내역이다.
   showBtn:{
     type: Boolean,
     required: true,
-  }
+  },
+  type:{
+    type: String,
+    required: true,
+  },
 });
 
-const confirmed= ()=>{
-  console.log('구매확정 함수')
-}
-const goreview= ()=>{
-  console.log('리뷰작성 함수')
-}
-
+// 데이터 매핑
+const mappedData = computed(() => {
+  if (props.type === 'sale') {
+    return props.saleList.map(item => ({
+      text01: '판매신청',
+      text02: '판매',
+      id: item.pendingSaleId,
+      startDate: dayjs(item.saleDate || Date.now()).format('YYYY년 MM월 DD일 / HH:mm'),
+      name: item.productName || 'name N/A',
+      category: item.userCategory || 'category N/A',
+      brand: item.userBrand || 'brand N/A',
+      price: item.userPrice || 'price N/A',
+      quantity: item.quantity || 1,
+      image : item.userImages[0].filename,
+      status: item.saleStatus || '준비중',
+    }));
+  } 
+  else if (props.type === 'order') {
+    return props.orderList.map(item => ({
+      text01: '주문',
+      text02: '주문',
+      id: item.orderId,
+      startDate: dayjs(item.orderDate || Date.now()).format('YYYY년 MM월 DD일 / HH:mm'),
+      name: item.orderDetailResDtoList[0].productName || 'name N/A',
+      category: item.userCategory || 'category N/A',
+      brand: item.userBrand || 'brand N/A',
+      price: item.orderDetailResDtoList[0].price || 'price N/A',
+      quantity: item.orderDetailResDtoList[0].quantity || 1,
+    
+      status: item.purchaseStatus || '준비중',
+    }));
+  }
+});
+const confirmed= ()=>{console.log('구매확정 함수')}
+const goreview= ()=>{console.log('리뷰작성 함수')}
 
 </script>
 
-<template>
-  <article class="history_box" v-if="props.saledata">
 
+<template>
+  <article class="history_box" v-for="(data, index) in mappedData" :key="index">
     <div class="top_box">
       <div>
         <p class="history_date">
-          <span>{{  props.saledata.text01 }}날짜</span> 2024년 10월 12일
+          <span>{{  data.text01 }}날짜</span> {{ data.startDate }}
         </p>
-        <p class="history_number">{{  props.saledata.text02 }}번호 123123132231321</p>
+        <p class="history_number">{{  data.text02 }}번호 {{ data.id }}</p>
       </div>
-      <p class="detail_more" v-if="props.showBtn">{{  props.saledata.text02 }}상세 ></p>
+      <p class="detail_more" v-if="props.showBtn">{{  data.text02 }}상세 ></p>
     </div>
 
     <div class="bottom_box">
-      <p class="complete_date">{{  props.saledata.text03 }}완료 2024년 10월 13일</p>
+      <p class="complete_date">진행상태 : {{  data.status }}</p>
 
       <div class="history_product">
         <div class="history_product_img">
-          <img src="@/assets/img/d003.png" alt="" />
+          <img :src="`${GLOBAL_URL}/api/file/download/${data.image}`" alt="" />
         </div>
         <ul class="history_product_text">
-          <li>상품명 :</li>
-          <li>가격 :  {{ props.saledata.userPrice }}</li>
-          <li>수량 : </li>
+          <li>카테고리 : {{ data.category }}</li>
+          <li>브랜드 : {{ data.brand }}</li>
+          <li>상품명 : {{ data.name }}</li>
+          <li>가격 : {{ data.price.toLocaleString() }}원</li>
+          <li>수량 : {{ data.quantity }}</li>
         </ul>
 
         <div class="history_product_btn" v-if="props.showBtn">
@@ -158,6 +199,7 @@ const goreview= ()=>{
   border-radius: 0.7rem;
   margin: 5px 0;
   font-size: 1.3rem;
+  background-color: #fff;
 }
 .history_product_btn button:hover{
   background-color: black;
