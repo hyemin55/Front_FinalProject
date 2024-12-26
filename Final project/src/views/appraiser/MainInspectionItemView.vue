@@ -15,7 +15,7 @@
         <td>{{ item.seller }}</td>
         <td>{{ item.saleApplicationDate }}</td>
         <td>{{ item.shipStatus }}</td>
-        <td>{{ item.shippedDate }}</td>
+        <td>{{ dateTimeFormat(item.shippedDate) }}</td>
       </tr>
     </tbody>
     <thead>
@@ -27,8 +27,9 @@
     </thead>
     <tbody>
       <tr>
-        <td>
+        <td class="category">
           <p value="">기존값: {{ item.category }}</p>
+          수정값:
           <select required v-model="item.categoryId">
             <option value="" selected disabled>선택</option>
             <option value="-" disabled>-------</option>
@@ -57,9 +58,9 @@
             <option value="brandNameInput">직접입력</option>
           </select>
         </td>
-        <td rowspan="2">
+        <td rowspan="2" class="InputDisplay">
           <p>기존값: {{ item.brand }}</p>
-          <p class="InputDisplay" v-if="item.selectedBrand != ''">
+          <p v-if="item.selectedBrand != ''">
             수정값:
             <input
               v-if="item.selectedBrand === 'brandNameInput'"
@@ -79,10 +80,10 @@
             <option value="productNameInput">직접입력</option>
           </select>
         </td>
-        <td rowspan="2">
+        <td rowspan="2" class="InputDisplay">
           <p>기존값: {{ item.productName }}ㆍ{{ item.size }} ml</p>
 
-          <p class="InputDisplay" v-if="item.selectedProduct != ''">
+          <p v-if="item.selectedProduct != ''">
             수정값:
             <input
               v-if="item.selectedProduct === 'productNameInput'"
@@ -131,7 +132,7 @@
     </thead>
     <tbody>
       <tr>
-        <td rowspan="2">
+        <td rowspan="2" class="productSize">
           기존용량: {{ item.size }} ml
           <br />
           검수용량:
@@ -313,6 +314,7 @@ import AnnouncementComponent from '@/components/admin/AnnouncementComponent.vue'
 import axios from 'axios';
 import { ref, watchEffect } from 'vue';
 import InspectionModalView from '@/views/appraiser/InspectionModalView.vue';
+import { dateTimeFormat } from '@/FormatData';
 
 const props = defineProps({
   item: {
@@ -613,9 +615,10 @@ button {
 button:hover {
   background-color: orange;
 }
-.InputDisplay {
-  display: flex;
-  align-items: center;
+.InputDisplay,
+.category,
+.productSize {
+  text-align: left;
 }
 .icon {
   position: relative;
@@ -647,7 +650,7 @@ button:hover {
 }
 .fileUpload {
   width: 100%;
-  padding: 2%;
+  padding: 1%;
   margin-bottom: 10px;
   border: 0.5px solid var(--color-text-gray);
   border-radius: 5px;

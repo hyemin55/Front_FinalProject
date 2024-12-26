@@ -3,7 +3,7 @@
     <article>
       <AnnouncementComponent />
     </article>
-    <article id="Inspection">
+    <article id="Inspection" v-for="(item, index) in rejectionList" :key="index">
       <table>
         <thead>
           <tr>
@@ -11,15 +11,14 @@
             <th>판매 신청자</th>
             <th>판매신청날짜</th>
             <th>배송도착일</th>
-     
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>{{ item.verifiedSaleId }}</td>
+            <td>{{ item.seller }}</td>
+            <td>{{ dateTimeFormat(item.registerDate) }}</td>
+            <td>도착일 하는즁</td>
           </tr>
         </tbody>
         <thead>
@@ -27,29 +26,31 @@
             <th>카테고리</th>
             <th>브랜드</th>
             <th>상품명</th>
-            <th>용량</th>
+            <th>용량 (ml)</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>{{ item.verifiedCategory }}</td>
+            <td>{{ item.verifiedBrand }}</td>
+            <td>{{ item.productName }}</td>
+            <td>{{ item.verifiedSize.toLocaleString() }} ml</td>
           </tr>
         </tbody>
         <thead>
           <tr>
             <th>희망판매가격</th>
             <th>권장판매가격</th>
-            <th colspan="2">상세설명</th>
+            <th colspan="2">판매자 상세설명</th>
           </tr>
         </thead>
 
         <tbody>
           <tr>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>{{ item.userPrice.toLocaleString() }} 원</td>
+            <td>{{ item.verifiedPrice.toLocaleString() }} 원</td>
+            <td colspan="2" v-if="item.productDescription === ''">-</td>
+            <td colspan="2" v-else>{{ item.productDescription }}</td>
           </tr>
         </tbody>
         <thead>
@@ -62,9 +63,10 @@
 
         <tbody>
           <tr>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>{{ item.verifiedUsedOrNot ? '중고상품' : '새상품' }}</td>
+            <td>{{ item.rejectionReason }}</td>
+            <td colspan="2" v-if="item.inspectionDescription === ''">-</td>
+            <td colspan="2" v-else>{{ item.inspectionDescription }}</td>
           </tr>
         </tbody>
         <thead>
@@ -77,20 +79,77 @@
 
         <tbody>
           <tr>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td><img :src="`${GLOBAL_URL}/api/file/download/${item.representativeImage}`" alt="" /></td>
+            <td colspan="2">
+              <img
+                v-for="(userImage, index) in item.userImages"
+                :key="index"
+                :src="`${GLOBAL_URL}/api/file/download/${userImage.filename}`"
+                alt=""
+              />
+              <img
+                v-for="(verifiedImage, index) in item.verifiedImages"
+                :key="index"
+                :src="`${GLOBAL_URL}/api/file/download/${verifiedImage.filename}`"
+                alt=""
+              />
+            </td>
+            <td>{{ statusMap[item.inspectionStatus] }}</td>
           </tr>
         </tbody>
       </table>
+    </article>
+    <article class="PageNation">
+      <PageNationComponent :pageNationData="pageNationData" @currentPage="pageUpdate" />
     </article>
   </section>
 </template>
 
 <script setup>
+import { getRejectionList } from '@/api/InspectionListApi';
+import { GLOBAL_URL } from '@/api/util';
 import AnnouncementComponent from '@/components/admin/AnnouncementComponent.vue';
-</script>
+import PageNationComponent from '@/components/PageNationComponent.vue';
+import { dateTimeFormat } from '@/FormatData';
+import { ref, watchEffect } from 'vue';
 
+const rejectionList = ref();
+const pageNationData = ref('');
+const pageNumber = ref(0);
+const totalCount = ref(5);
+const pageSize = ref(5);
+
+const pageUpdate = pageNum => {
+  pageNumber.value = pageNum;
+};
+
+const pageNation = () => {
+  pageNationData.value = {
+    totalCount: totalCount.value,
+    pageSize: pageSize.value,
+  };
+};
+
+const statusMap = {
+  WAITING: '판매대기',
+  INSPECTING: '검수 중',
+  ACCEPTED: '검수통과',
+  REJECTED: '검수반려',
+  SELLING: '판매 중',
+  SOLD: '판매완료',
+};
+
+const dolode = async () => {
+  const rejectionListRes = await getRejectionList();
+  rejectionList.value = rejectionListRes;
+  console.log('rejectionList', rejectionList.value);
+  pageNation();
+};
+
+watchEffect(() => {
+  dolode();
+});
+</script>
 <style scoped>
 #Inspection {
   background-color: white;
@@ -118,25 +177,12 @@ th {
 td {
   width: 15%;
   text-align: center;
-  padding: 10px;
+  padding: 20px 10px;
 }
-textarea {
-  resize: none;
-  height: auto;
-  width: 100%;
+img {
+  width: 100px;
 }
-input,
-select,
-option {
-  width: 80%;
-}
-button {
-  padding: 10px;
-  background-color: var(--color-main-bloode);
-  border-end-end-radius: 7px;
-  width: 100%;
-  text-align: center;
-  font-size: 1.8rem;
-  color: white;
+.PageNation {
+  padding-bottom: 30px;
 }
 </style>

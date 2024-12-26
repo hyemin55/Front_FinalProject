@@ -83,7 +83,7 @@ const addToWishlist = async () => {
 const router = useRouter();
 const RouteDetailPage = () => {
   router.push({
-    path: `/productsdetail/${props.productInfo.productId}`,
+    path: `/productsdetail/${props.productInfo.usedProductId}`,
     // query: { },
   });
 };

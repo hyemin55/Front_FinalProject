@@ -12,8 +12,21 @@
         <option value="starAsc">별점 낮은순</option>
       </select>
       <div id="search">
-        <input type="search" id="productSearch" placeholder="상품명 검색" />
-        <img class="searchIcon" src="@/assets/img/icon/free-icon-font-search-3917132.png" alt="productSearch" />
+        <input
+          type="search"
+          id="productSearch"
+          placeholder="상품명 검색"
+          v-model="searchKeyword"
+          @keydown.enter="reviewSearchKeyword"
+        />
+        <labe>
+          <img
+            class="searchIcon"
+            @click="reviewSearchKeyword"
+            src="@/assets/img/icon/free-icon-font-search-3917132.png"
+            alt="productSearch"
+          />
+        </labe>
       </div>
     </article>
     <article id="Inspection">
@@ -35,7 +48,7 @@
         <tbody>
           <tr class="TableBody" v-for="(item, index) in reviewList" :key="index">
             <td>{{ item.reviewId }}</td>
-            <td><img class="productImages" src="@/assets/img/빵빵덕세안.png" alt="" /></td>
+            <td><img class="productImages" :src="`${GLOBAL_URL}/api/file/download/${item.reviewImage}`" alt="" /></td>
             <td>{{ item.productName }}</td>
             <td>{{ item.productSize }} ml</td>
             <td>{{ item.categoryName }}</td>
@@ -68,16 +81,23 @@ import { ref, watchEffect } from 'vue';
 const reviewList = ref([]);
 const reviewSortBy = ref('');
 const totalCount = ref(0);
+const pageSize = ref(20);
 const reviewDataRes = ref([]);
 const pageNumber = ref(0);
 const pageNationData = ref('');
-const pageSize = ref(20);
+const searchKeyword = ref('');
 
 const pageNation = () => {
   pageNationData.value = {
     totalCount: totalCount.value,
     pageSize: pageSize.value,
   };
+};
+
+const reviewSearchKeyword = async () => {
+  console.log(searchKeyword.value);
+  pageNumber.value = 0;
+  dolode('search');
 };
 
 const DeleteButton = item => {
@@ -90,29 +110,46 @@ const DeleteButton = item => {
 };
 const pageUpdate = pageNum => {
   pageNumber.value = pageNum;
-  // dolode()
 };
 
-const dolode = async () => {
-  if (reviewSortBy.value === '') {
-    reviewDataRes.value = await axios.get(`${GLOBAL_URL}/admin/review/management`, {
-      params: {
-        pageNum: pageNumber.value,
-        size: pageSize.value,
-      },
-    });
+const dolode = async search => {
+  if (search === 'search' || searchKeyword.value.length > 1) {
+    if (searchKeyword.value.length > 1) {
+      console.log('실행되나?');
+      const searchKeywordRes = await axios.get(`${GLOBAL_URL}/admin/review/management/search`, {
+        params: {
+          searchKeyword: searchKeyword.value,
+          pageNum: pageNumber.value,
+        },
+      });
+      console.log(searchKeywordRes);
+      reviewList.value = searchKeywordRes.data.reviewManageDtos.content;
+      totalCount.value = searchKeywordRes.data.reviewCount;
+      console.log(totalCount.value);
+      pageNation();
+    }
   } else {
-    reviewDataRes.value = await axios.get(`${GLOBAL_URL}/admin/review/management`, {
-      params: {
-        sort: reviewSortBy.value,
-        pageNum: pageNumber.value,
-        size: pageSize.value,
-      },
-    });
+    if (reviewSortBy.value === '') {
+      reviewDataRes.value = await axios.get(`${GLOBAL_URL}/admin/review/management`, {
+        params: {
+          pageNum: pageNumber.value,
+          size: pageSize.value,
+        },
+      });
+    } else {
+      reviewDataRes.value = await axios.get(`${GLOBAL_URL}/admin/review/management`, {
+        params: {
+          sort: reviewSortBy.value,
+          pageNum: pageNumber.value,
+          size: pageSize.value,
+        },
+      });
+    }
+    reviewList.value = reviewDataRes.value.data.reviewManageDtos.content;
+    totalCount.value = reviewDataRes.value.data.reviewCount;
+    pageNation();
+    console.log(reviewList.value);
   }
-  reviewList.value = reviewDataRes.value.data.reviewManageDtos.content;
-  totalCount.value = reviewDataRes.value.data.reviewCount;
-  pageNation();
 };
 
 watchEffect(() => {

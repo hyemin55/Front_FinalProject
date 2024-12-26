@@ -16,7 +16,7 @@
       </select>
     </article>
     <article id="Inspection" v-for="(item, index) in InspectionList" :key="index">
-      <MainInspectionItemView :item="item" />
+      <MainInspectionItemView :item="item" @dataUpdate="dataUpdate" />
     </article>
     <article>
       <PageNationComponent v-if="totalCount > 0" :pageNationData="pageNationData" @currentPage="pageUpdate" />

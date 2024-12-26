@@ -1,13 +1,14 @@
 <script setup>
 import { GLOBAL_URL } from '@/api/util';
-import axios, { HttpStatusCode } from 'axios';
+import axios from 'axios';
 import { ref, watchEffect, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
 import Chart from 'chart.js/auto';
+import { dateTimeFormat } from '@/FormatData';
 
 const route = useRoute();
 const idx = ref(0);
-const totalSalseList = ref([]);
+const totalSalesList = ref([]);
 const displayedList = ref([]);
 const chartRef = ref(null); // chart element 참조
 let chartInstance = null;
@@ -19,16 +20,16 @@ const doLode = async () => {
   try {
     const response = await axios.get(`${GLOBAL_URL}/detail/chart/${idx.value}`);
     console.log(response);
-    totalSalseList.value = response.data;
-    console.log(totalSalseList.value);
+    totalSalesList.value = response.data;
+    console.log(totalSalesList.value);
     // console.log(response.data[0].tradeCompletedDate);
-    if (totalSalseList.value.length > 0) {
-      displayedList.value = totalSalseList.value.slice(0, showMore.value);
+    if (totalSalesList.value.length > 0) {
+      displayedList.value = totalSalesList.value.slice(0, showMore.value);
 
       // Call by Reference vs call by value
-      //  sortTotalSaleTradeList.reverse();를 하면 totalSalseList과 같은 곳을 바라보기때문에
+      //  sortTotalSaleTradeList.reverse();를 하면 totalSalesList과 같은 곳을 바라보기때문에
       // JSON.stringify로 문자열로 바꾼뒤 다시 JSON.parse로 객채를 만들어 sortTotalSaleTradeList가 다른곳을 바라보게 만든다.
-      sortTotalSaleTradeList = JSON.parse(JSON.stringify(totalSalseList.value));
+      sortTotalSaleTradeList = JSON.parse(JSON.stringify(totalSalesList.value));
       sortTotalSaleTradeList.reverse();
       console.log(displayedList.value);
 
@@ -37,7 +38,7 @@ const doLode = async () => {
   } catch (error) {
     if (error.status === 404) {
       console.warn('No transaction history found.');
-      return (totalSalseList.value.length = 0);
+      return (totalSalesList.value.length = 0);
     } else {
       console.error('오류가 발생했습니다:', error);
     }
@@ -50,23 +51,12 @@ const generateDateLabels = startDate => {
   let date = new Date(startDate);
   const today = new Date();
 
-  // totalSalseList.value.forEach(item => {
-  //   sortTotalSaleTradeList.push(item.tradeCompletedDate);
-  // });
-  // sortTotalSaleTradeList.sort();
-  // sortTotalSaleTradeList.forEach(item => {
-  //   console.log(item);
-  // });
   sortTotalSaleTradeList.forEach(item => {
     labels.push(
       new Intl.DateTimeFormat('ko-KR', { month: 'numeric', day: 'numeric' }).format(Date.parse(item.createdDate)),
     );
   });
 
-  // while (date <= today) {
-  //   labels.push(new Intl.DateTimeFormat('ko-KR', { month: 'numeric', day: 'numeric' }).format(totalSalseList.value.tradeCompletedDate));
-  //   date.setDate(date.getDate() + 30);
-  // }
   return labels;
 };
 
@@ -78,16 +68,16 @@ const initializeChart = async () => {
     chartInstance.destroy();
   }
   // 데이터가 존재할 때만 차트를 생성
-  if (totalSalseList.value.length > 0) {
-    const firstTradeDate = totalSalseList.value[totalSalseList.value.length - 1].createdDate;
+  if (totalSalesList.value.length > 0) {
+    const firstTradeDate = totalSalesList.value[totalSalesList.value.length - 1].createdDate;
 
-    console.log(totalSalseList.value[totalSalseList.value.length - 1].createdDate);
+    console.log(totalSalesList.value[totalSalesList.value.length - 1].createdDate);
     console.log(firstTradeDate);
-    const maxPrice = Math.ceil(Math.max(...totalSalseList.value.map(item => item.tradePrice)) * 1.1); // 최대 가격의 110%
+    const maxPrice = Math.ceil(Math.max(...totalSalesList.value.map(item => item.tradePrice)) * 1.1); // 최대 가격의 110%
 
-    // console.log(totalSalseList.value);
+    // console.log(totalSalesList.value);
     // console.log(
-    //   'totalSalseList',
+    //   'totalSalesList',
     //   sortTotalSaleTradeList.map(item => item.tradePrice),
     // );
     chartInstance = new Chart(chartRef.value, {
@@ -96,7 +86,7 @@ const initializeChart = async () => {
         labels: generateDateLabels(firstTradeDate), // X축 라벨
         datasets: [
           {
-            label: 'Sales Figures',
+            label: 'Sales Price',
             data: sortTotalSaleTradeList.map(item => item.tradePrice),
             borderColor: 'orange',
             backgroundColor: 'orange',
@@ -151,15 +141,15 @@ const initializeChart = async () => {
 };
 
 const loadMore = () => {
-  console.log(totalSalseList.value.length);
-  if (totalSalseList.value.length > showMore.value) {
+  console.log(totalSalesList.value.length);
+  if (totalSalesList.value.length > showMore.value) {
     showMore.value += 5;
-    displayedList.value = totalSalseList.value.slice(0, showMore.value);
+    displayedList.value = totalSalesList.value.slice(0, showMore.value);
   }
 };
 const closeList = () => {
   showMore.value = 5;
-  displayedList.value = totalSalseList.value.slice(0, showMore.value);
+  displayedList.value = totalSalesList.value.slice(0, showMore.value);
 };
 // onMounted(() => {
 //   doLode();
@@ -172,7 +162,7 @@ watchEffect(() => {
 </script>
 
 <template>
-  <figure id="salseChart" v-if="totalSalseList.length > 0">
+  <figure id="salseChart" v-if="totalSalesList.length > 0">
     <h1>시세</h1>
     <div class="chartCycle">
       <p>1개월</p>
@@ -196,13 +186,13 @@ watchEffect(() => {
       <ul class="TransactionHistoryContent" v-for="(list, index) in displayedList" :key="index">
         <li>{{ list.tradeSize }} ml</li>
         <li>￦ {{ list.tradePrice.toLocaleString() }}</li>
-        <li>{{ list.createdDate }}</li>
+        <li>{{ dateTimeFormat(list.createdDate) }}</li>
       </ul>
       <div class="showButtonBox">
-        <button v-if="showMore && totalSalseList.length > showMore" @click="loadMore" class="showButton">
+        <button v-if="showMore && totalSalesList.length > showMore" @click="loadMore" class="showButton">
           체결 내역 더보기 ▽
         </button>
-        <button v-if="showMore && totalSalseList.length <= showMore" @click="closeList" class="showButton">
+        <button v-if="showMore && totalSalesList.length <= showMore" @click="closeList" class="showButton">
           닫기 △
         </button>
       </div>

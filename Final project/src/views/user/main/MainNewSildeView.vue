@@ -26,10 +26,10 @@ const getNewList = async () => {
 watchEffect(() => {
   getNewList();
 });
-const navDetailProduct = (productId, size) => {
-  console.log(productId);
+const navDetailProduct = usedProductId => {
+  console.log(usedProductId);
   router.push({
-    path: `/productsdetail/${productId}`,
+    path: `/productsdetail/${usedProductId}`,
   });
 };
 
@@ -48,13 +48,15 @@ const navDetailProduct = (productId, size) => {
     >
       <Slide v-for="(slide, index) in slides" :key="index">
         <!-- <div v-for="productDtail in New_list" :key="productDtail.productId"> -->
-        <div class="carousel__item" @click="navDetailProduct(slide.productId, slide.size)">
+        <div class="carousel__item" @click="navDetailProduct(slide.usedProductId)">
           <p class="time_check">{{ slide.registerDate }} 등록상품</p>
-          <img class="slideImg" :src="`${GLOBAL_URL}/api/file/download/${slide.images[0].filename}`" />
+          <p class="gradeType">{{ slide.gradeType }}등급</p>
+          <img class="slideImg" :src="`${GLOBAL_URL}/api/file/download/${slide.mainImage}`" />
           <div class="item_info">
             <p>{{ slide.brandName }}</p>
-            <p>{{ slide.productName }}</p>
+            <p>이름{{ slide.productName }}ㆍ{{ slide.size }} ml</p>
             <p>￦ {{ slide.price.toLocaleString() }}</p>
+            <p></p>
           </div>
         </div>
         <!-- </div> -->
@@ -105,6 +107,20 @@ const navDetailProduct = (productId, size) => {
   position: absolute;
   top: 30px;
 }
+.gradeType {
+  position: absolute;
+  top: 70px;
+  font-size: 2rem;
+  color: orange;
+  padding: 5px 8px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  background-color: rgb(247, 247, 247);
+  box-shadow:
+    inset -3px -3px 3px #ffffff73,
+    inset 1px 1px 3px rgba(94, 104, 121, 0.288);
+}
+
 .item_info {
   position: absolute;
   display: flex;
@@ -117,6 +133,9 @@ const navDetailProduct = (productId, size) => {
 .item_info p:nth-child(1) {
   font-size: 2rem;
   color: var(--color-main-bloode);
+}
+.item_info p:nth-child(2) {
+  font-size: 2.3rem;
 }
 .item_info p {
   font-size: 2.7rem;

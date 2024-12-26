@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { formatPrice } from '@/FormatPrice';
+import { formatPrice } from '@/FormatData';
 import _ProductDetailView from '@/views/user/product/productdetail/_ProductDetailView.vue';
 import { getProductData, getReviewData } from '@/api/productDetailApi';
 import ProductDetailSalseChartViewVue from '@/views/user/product/productdetail/ProductDetailSalseChartView.vue';
@@ -14,7 +14,7 @@ import { fetchMemeberCart, mergeMemberCart } from '@/api/cartApi';
 
 const route = useRoute();
 const router = useRouter();
-const Modal = ref(false)
+const Modal = ref(false);
 const productData = ref([]);
 const reviewData = ref(null);
 const productImages = ref([]);
@@ -27,17 +27,6 @@ const userStore = useUserStore();
 const userLogin = computed(() => userStore.loginCheck);
 const emit = defineEmits();
 // const emit = defineEmits();
-
-// 1. 클릭한 옵션값을 idx에 담아준다.
-// const productOptionSelect = item => {
-//   // console.log('item', item.productId);
-//   // console.log('item', item.size);
-//   router.push({
-//     name: 'productsdetail',
-//     params: { idx: item.productId },
-//     query: { size: item.size },
-//   });
-// };
 
 // 3. 옵션값을 클릭하면 watch에서 추적하는 idx값이 바뀌고 doLoad를 호출한다.
 const doLoad = async () => {
@@ -58,21 +47,20 @@ const doLoad = async () => {
     console.log('실패2' + err);
   }
 };
-const BuyNow = () => {};
 
 // 바로 판매하기 클릭 시 모달 창 열림
-const SellNowOpenModal = () =>{
-  console.log('이제 팔아야징')
-  if(userStore.loginCheck){
-  Modal.value = true}
-  else{
-    alert('로그인이 필요합니다.')
-    router.push({name:'login2'})
+const SellNowOpenModal = () => {
+  console.log('이제 팔아야징');
+  if (userStore.loginCheck) {
+    Modal.value = true;
+  } else {
+    alert('로그인이 필요합니다.');
+    router.push({ name: 'login2' });
   }
-}
-const closeModal = () =>{
-  Modal.value = false
-}
+};
+const closeModal = () => {
+  Modal.value = false;
+};
 
 // console.log(productData);
 
@@ -81,13 +69,13 @@ const addToCart = async () => {
   const data = {
     brandName: productData.value.brandName,
     nickName: sessionStorage.getItem('nickName'),
-    productId: Number(idx.value),
+    productId: productData.value.productId,
     productName: productData.value.productName,
     productSize: productData.value.productSize,
-    sellingPrice: productData.value.price,
+    sellingPrice: productData.value.verifiedSellingPrice,
     usedOrNot: false,
-    usedProductId: productData.value.usedProductId,
-    userSaleImages: [productData.value.mainImage],
+    usedProductId: Number(idx.value),
+    userSaleImages: productImages.value,
     verifiedSaleGradeType: productData.value.gradeType,
     quantity: 1,
   };
@@ -108,6 +96,31 @@ const Average = data => {
   data = Math.round(data);
   data = data / 10;
   return data;
+};
+
+// 바로 결제하기
+const doPayment = () => {
+  if (sessionStorage.getItem('token')) {
+    const purchaseProductDto = {
+      usedProductId: productData.value.usedProductId,
+      quantity: 1,
+      productName: productData.value.productName,
+    };
+    console.log(purchaseProductDto);
+    const data = {
+      purchaseProductDtos: purchaseProductDto,
+      totalPrice: productData.verifiedSellingPrice,
+    };
+    // payMentStore.payProductScan(data)
+
+    router.push({
+      path: '/payment',
+      query: { item: encodeURIComponent(JSON.stringify(data)) },
+    });
+  } else {
+    alert('로그인 후 이용 가능합니다.');
+    router.push({ path: '/login2' });
+  }
 };
 
 watchEffect(() => {
@@ -138,7 +151,7 @@ watchEffect(() => {
 
     <div class="addButtonGroub">
       <button class="addToCart Sell​​Now" @click="SellNowOpenModal">바로 판매하기</button>
-      <button class="addToCart BuyNow" @click="BuyNow">바로 구매하기</button>
+      <button class="addToCart BuyNow" @click="doPayment">바로 구매하기</button>
       <!-- <button class="addToCart" @click="addToCart"> -->
       <button class="icon_box" @click="addToCart">
         <img class="icon" src="@/assets/img/icon/free-icon-font-shopping-cart.svg" alt="" />
@@ -151,7 +164,7 @@ watchEffect(() => {
     <ProductDetailSalseChartViewVue />
   </article>
   <article>
-    <SaleProductModal v-if="Modal" @closeModal="closeModal"  />
+    <SaleProductModal v-if="Modal" @closeModal="closeModal" />
   </article>
 </template>
 

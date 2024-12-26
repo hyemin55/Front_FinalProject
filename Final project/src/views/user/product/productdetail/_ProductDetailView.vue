@@ -21,7 +21,6 @@ const handleProductInfoLoaded = newStatus => {
 
 watchEffect(() => {
   productId.value = route.params.idx;
-  // productSize.value = route.query.size;
 });
 </script>
 

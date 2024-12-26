@@ -54,7 +54,7 @@
             <td>{{ memberItem.phoneNum }}</td>
             <td>{{ memberItem.email }}</td>
             <td>
-              <select name="sortBy" id="sortBy" v-model="memberItem.role" @change="roleChange(memberItem)">
+              <select name="sortBy" id="sortByColor" v-model="memberItem.role" @change="roleChange(memberItem)">
                 <option value="USER">USER</option>
                 <option value="APPRAISER">APPRAISER</option>
                 <option value="ADMIN">ADMIN</option>
@@ -64,7 +64,7 @@
               </select>
             </td>
             <td>{{ memberItem.joinDate }}</td>
-            <td>{{ memberItem.withdrawDate }}</td>
+            <td>{{ memberItem.withdrawDate === null ? '-' : memberItem.withdrawDate }}</td>
             <td>{{ memberItem.lastLoginDate }}</td>
             <td>{{ memberItem.nickName }}</td>
             <td>{{ memberItem.purchaseCount }}</td>
@@ -194,15 +194,21 @@ option:focus {
   width: 40%;
   gap: 1%;
 }
+
 #sortBy,
-#search {
+#search,
+#sortByColor {
   background-color: white;
   border-radius: 10px;
   padding: 0 10px 0 5px;
   align-items: center;
 }
-#sortBy {
+#sortBy,
+#sortByColor {
   width: 150px;
+}
+#sortByColor {
+  background-color: var(--color-main-pink);
 }
 #search {
   width: 70%;

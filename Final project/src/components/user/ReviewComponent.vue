@@ -6,6 +6,7 @@ import {
   getViewCurrentPage,
 } from '@/api/productDetailApi';
 import { GLOBAL_URL } from '@/api/util';
+import { dateTimeFormat } from '@/FormatData';
 import { useUserStore } from '@/stores/Login';
 import axios from 'axios';
 import { ref, watch } from 'vue';
@@ -109,6 +110,7 @@ const viewCurrentPage = async () => {
     totalPageGroup.value = Math.floor(totalPages.value / 10);
     startPage.value = currentPageGroup.value * 10 + 1;
     endPage.value = Math.min(startPage.value + 9, totalPages.value);
+    console.log(reviewList.value);
   }
   dolode();
 };
@@ -177,7 +179,7 @@ watch(
     </div>
     <p class="userReviewText">{{ list.content }}</p>
     <p class="userReviewTime">
-      {{ list.reviewCreationDate }}
+      {{ dateTimeFormat(list.reviewCreationDate) }}
     </p>
   </div>
 
