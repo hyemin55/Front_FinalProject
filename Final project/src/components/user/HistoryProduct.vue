@@ -1,66 +1,154 @@
 <script setup>
-import { ref } from 'vue';
+import { GLOBAL_URL } from '@/api/util';
+import axios from 'axios';
+import dayjs from 'dayjs';
+import { computed, ref } from 'vue';
+import SaleRegistrationModal from './SaleRegistrationModal.vue';
+
 
 // 주문, 판매 텍스트 변경
 const props = defineProps({
-  propstext: {
+  saleList: {
     type: Object,
     required: false,
   },
+  orderList: {
+    type: Object,
+    required: false,
+  },
+  // showBtn->true가 주문내역이다.
   showBtn:{
     type: Boolean,
     required: true,
+  },
+  type:{
+    type: String,
+    required: true,
+  },
+});
+
+const emit = defineEmits(['UpdateRendering', 'DeleteRendering']);
+const rendering = ()=>{
+  emit('UpdateRendering');
+}
+
+// 데이터 매핑
+const mappedData = computed(() => {
+  if (props.type === 'sale') {
+    return props.saleList.map(item => ({
+      text01: '판매신청',
+      text02: '판매',
+      id: item.pendingSaleId,
+      startDate: dayjs(item.saleDate || Date.now()).format('YYYY년 MM월 DD일 / HH:mm'),
+      name: item.productName || 'name N/A',
+      category: item.userCategory || 'category N/A',
+      brand: item.userBrand || 'brand N/A',
+      price: item.userPrice || 'price N/A',
+      grade: item.gradeType || '감정중',
+      size: item.userSize || 'size N/A',
+      image : item.userImages[0].filename,
+      status: item.saleStatus || '준비중',
+    }));
+  } 
+  else if (props.type === 'order') {
+    return props.orderList.map(item => ({
+      text01: '주문',
+      text02: '주문',
+      id: item.orderId,
+      startDate: dayjs(item.orderDate || Date.now()).format('YYYY년 MM월 DD일 / HH:mm'),
+      name: item.orderDetailResDtoList[0].productName || 'name N/A',
+      category: item.userCategory || 'category N/A',
+      brand: item.userBrand || 'brand N/A',
+      price: item.orderDetailResDtoList[0].price || 'price N/A',
+      quantity: item.orderDetailResDtoList[0].quantity || 1,
+      size: item.userSize || 'size N/A',
+      // image : ,
+      status: item.purchaseStatus || '준비중',
+    }));
   }
 });
-const text01 = ref(props.propstext.text01)
-const text02 = ref(props.propstext.text02)
-// text03은 추후에 진행상태를 기입
-const text03 = ref(props.propstext.text03)
+const confirmed= ()=>{console.log('구매확정 함수')}
+const goreview= ()=>{console.log('리뷰작성 함수')} 
 
-const confirmed= ()=>{
-  console.log('구매확정 함수')
+// 판매 반려
+const saleReject = async(pendingSaleId)=>{
+  try{
+    const res = await axios.post(`${GLOBAL_URL}/myPage/verified-sale/reject`, pendingSaleId ,{
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+      },
+    })
+    emit('DeleteRendering');
+    alert('상품 등록이 취소되었습니다.')
+  }
+  catch(error){
+    console.error(error)
+  }
 }
-const goreview= ()=>{
-  console.log('리뷰작성 함수')
+
+// 신청 결과 popup창 
+const saleModal = ref(false)
+const modalData = ref(null)
+
+const showModal = (data)=>{
+  const status = data.status;
+  if(status == 'ACCEPTED'){
+    saleModal.value = true
+    modalData.value = data
+  }else{
+    alert('신청 진행중인 항목입니다.')
+  }
 }
-
-
+// 신청 결과 popup창 닫기
+const closeModal = ()=>{
+  saleModal.value = false
+}
 </script>
 
 <template>
-  <article class="history_box" v-if="props.propstext">
-
+  <article class="history_box" v-for="(data, index) in mappedData" :key="index">
     <div class="top_box">
       <div>
         <p class="history_date">
-          <span>{{ text01 }}날짜</span> 2024년 10월 12일
+          <span>{{  data.text01 }}날짜</span> {{ data.startDate }}
         </p>
-        <p class="history_number">{{ text02 }}번호 123123132231321</p>
+        <p class="history_number">{{  data.text02 }}번호 {{ data.id }}</p>
       </div>
-      <p class="detail_more" v-if="props.showBtn">{{ text02 }}상세 ></p>
+      <p class="detail_more" v-if="props.showBtn">{{  data.text02 }}상세 ></p>
     </div>
 
     <div class="bottom_box">
-      <p class="complete_date">{{ text03 }}완료 2024년 10월 13일</p>
+      <p class="complete_date">진행상태 : <span class="status_text"> {{ data.status }}</span></p>
 
       <div class="history_product">
         <div class="history_product_img">
-          <img src="@/assets/img/d003.png" alt="" />
+          <img :src="`${GLOBAL_URL}/api/file/download/${data.image}`" alt="" />
         </div>
         <ul class="history_product_text">
-          <li>상품명 : </li>
-          <li>가격 : </li>
-          <li>수량 : </li>
+          <li>카테고리 : {{ data.category }}</li>
+          <li>브랜드 : {{ data.brand }}</li>
+          <li>상품명 : {{ data.name }}</li>
+          <li>용량 : {{ data.size }} ml</li>
+          <li v-if="!props.showBtn">등급 : {{ data.grade }}</li>
+          <li v-if="props.showBtn">수량 : {{ data.quantity }}</li>
+          <li>가격 : {{ data.price.toLocaleString() }}원</li>
         </ul>
 
         <div class="history_product_btn" v-if="props.showBtn">
-          <button @click="confirmed">구매확정</button>
-          <button @click="goreview">구매후기 작성</button>
+          <button @click="confirmed()">구매확정</button>
+          <button @click="goreview()">구매후기 작성</button>
         </div>
+        <div class="history_product_btn" v-else>
+          <button v-if="data.status === 'ACCEPTED' || data.status === 'WAITING'" @click="showModal(data)">판매신청 결과 확인</button>
+          <button @click="saleReject(data.id)">판매등록 취소</button>
+        </div>
+
       </div>
     </div>
-
   </article>
+  
+  <SaleRegistrationModal v-if="saleModal" :data="modalData" @closeModal="closeModal()" @Rendering="rendering"></SaleRegistrationModal>
 </template>
 
 <style scoped>
@@ -68,7 +156,6 @@ const goreview= ()=>{
 .history_box {
   border-bottom: 4px solid var(--color-main-gray);
 }
-
 /* 윗 박스 */
 .top_box {
   height: 70px;
@@ -129,6 +216,7 @@ const goreview= ()=>{
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 .history_product_img img{
   height: 80%;
@@ -136,6 +224,7 @@ const goreview= ()=>{
   background-color: var(--color-main-Lgray);
   border-radius: 1.5rem;
 }
+
 /* product 텍스트 설정 */
 .history_product_text li{
   font-size: 1.7rem;
@@ -162,9 +251,17 @@ const goreview= ()=>{
   border-radius: 0.7rem;
   margin: 5px 0;
   font-size: 1.3rem;
+  background-color: #fff;
 }
 .history_product_btn button:hover{
   background-color: black;
   color: #fff;
+}
+
+.status_text{
+  color: var(--color-main-bloode);
+  font-weight: 600;
+  margin-left: 8px;
+  font-size: 1.9rem;
 }
 </style>

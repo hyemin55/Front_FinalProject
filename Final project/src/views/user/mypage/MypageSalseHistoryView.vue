@@ -9,12 +9,6 @@ const saleModal = ref(false)
 const showModal = ()=>{
   saleModal.value = !saleModal.value
 }
-const props = ref({
-  text01: '판매신청',
-  text02: '판매',
-  text03: '판매',
-});
-
 
 const saleList = ref([]);
 const getSaleList = async()=>{
@@ -26,7 +20,7 @@ const getSaleList = async()=>{
       }
     })
     saleList.value = res.data;
-    console.log("이거이거", saleList.value);
+    console.log("세일리스트", saleList.value);
   }catch(error){
     console.error(error)
   }
@@ -35,23 +29,28 @@ onMounted(()=>{
   getSaleList();
 })
 
+const Rendering = ()=>{
+  getSaleList();
+}
+
 </script>
 
 <template>
-  <div class="dfd">
+  <div class="salesWrapper">
     <h1 class="orderHistory_title">전체 판매 내역</h1>
     <h2 @click="showModal" class="salesApplication">
       판매 신청하기
       <img src="@/assets/img/wing_money.gif" alt="" />
     </h2>
   </div>
-  <HistoryProduct :propstext="props" :showBtn="false"></HistoryProduct>
+
+  <HistoryProduct :saleList="saleList" :type="'sale'" :showBtn="false" @UpdateRendering="Rendering" @DeleteRendering="Rendering"></HistoryProduct>
 
   <SaleProductModal v-if="saleModal" @closeModal="showModal"/>
 </template>
 
 <style scoped>
-.dfd {
+.salesWrapper {
   display: flex;
   justify-content: space-between;
   align-items: center;
