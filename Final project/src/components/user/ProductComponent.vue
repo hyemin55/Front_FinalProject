@@ -43,7 +43,7 @@ const navDetailProduct = () => {
     query: {
       // 여기서 상품의 하나에 대한 카테고리 아이디를 넘겨준다.
       title: productName.value,
-      brand: brand.value
+      brand: brand.value,
     },
   });
 };
@@ -56,7 +56,8 @@ const wishStore = useWishStore();
 watchEffect(() => {
   const wishProduct = wishStore.wishList.find(item => item === props.productInfo.productId);
   console.log(wishProduct);
-  if (wishProduct) { // store에 id 값이 있다면 값을 true로..
+  if (wishProduct) {
+    // store에 id 값이 있다면 값을 true로..
     redHeart.value = true;
     iconClick.value = true;
   } else {
@@ -83,7 +84,9 @@ const addToWishlist = async () => {
   <article class="products">
     <div class="product_img" @click="navDetailProduct">
       <div class="rank">
-        <p v-if="gradeTypesArray.length" v-for="rankData in gradeTypesArray" :key="rankData" class="brandNew">{{ rankData }}</p>
+        <p v-if="gradeTypesArray.length" v-for="rankData in gradeTypesArray" :key="rankData" class="brandNew">
+          {{ rankData }}
+        </p>
       </div>
       <img :src="`${GLOBAL_URL}/api/file/download/${productInfo.images[0].filename}`" style="height: 90%" />
       <ul @click.stop>
@@ -112,7 +115,9 @@ const addToWishlist = async () => {
         <li class="product_content">{{ content }}</li>
       </ul>
       <ul>
-        <li class="product_price">{{ maxPrice>0 ? '￦ ' + minPrice.toLocaleString() + ' ~ ' + maxPrice.toLocaleString() : '. . .' }}</li>
+        <li class="product_price">
+          {{ maxPrice > 0 ? '￦ ' + minPrice.toLocaleString() + ' ~ ' + maxPrice.toLocaleString() : '. . .' }}
+        </li>
         <li class="product_review">
           <span>
             <img class="star" src="@/assets/img/icon/free-icon-font-star.svg" alt="" />
@@ -246,19 +251,21 @@ const addToWishlist = async () => {
   /* font-weight: 400; */
 }
 
-.rank{
+.rank {
   position: absolute;
   top: 10px;
   left: 8px;
   display: flex;
 }
-.brandNew{
+.brandNew {
   padding: 5px 10.5px;
   margin-right: 4px;
   border-radius: 0.5rem;
   border: 1px solid rgba(0, 0, 0, 0.1);
   background-color: rgb(247, 247, 247);
-  box-shadow: inset -3px -3px 3px #ffffff73, inset 1px 1px 3px rgba(94, 104, 121, .288);
+  box-shadow:
+    inset -3px -3px 3px #ffffff73,
+    inset 1px 1px 3px rgba(94, 104, 121, 0.288);
   /* font-family: "Playfair Display", serif; */
   font-size: 1.2rem;
   font-weight: 600;

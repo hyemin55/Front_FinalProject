@@ -4,11 +4,12 @@
       <AnnouncementComponent />
     </article>
     <article id="sortByAndSearch">
-      <select name="sortBy" id="sortBy">
-        <option value="total">전체</option>
+      <select name="sortBy" id="sortBy" v-model="reviewSortBy">
+        <option value="">전체</option>
         <option value="category">카테고리</option>
-        <option value="product">상품명</option>
-        <option value="rating">평점</option>
+        <option value="productName">상품명</option>
+        <option value="starDesc">별점 높은순</option>
+        <option value="starAsc">별점 낮은순</option>
       </select>
       <div id="search">
         <input type="search" id="productSearch" placeholder="상품명 검색" />
@@ -32,34 +33,91 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="TableBody">
-            <td>1</td>
+          <tr class="TableBody" v-for="(item, index) in reviewList" :key="index">
+            <td>{{ item.reviewId }}</td>
             <td><img class="productImages" src="@/assets/img/빵빵덕세안.png" alt="" /></td>
-            <td>카레토 프린트 캔들</td>
-            <td>340 ml</td>
-            <td>Candle</td>
-            <td>너무 좋아요. 향에 취하네요 ໒꒰ྀི◜ ཅ ◝ ꒱ྀི১◞♡</td>
-            <td>★5</td>
-            <td>흰수염</td>
-            <td>2024-11-20</td>
-            <td>20</td>
+            <td>{{ item.productName }}</td>
+            <td>{{ item.productSize }} ml</td>
+            <td>{{ item.categoryName }}</td>
+            <td>{{ item.content }}</td>
+            <td>★ {{ item.star }}</td>
+            <td>{{ item.nickName }}</td>
+            <td>{{ item.reviewCreationDate }}</td>
+            <td>{{ item.favoriteCount }}</td>
             <td class="stateButtons">
               <button class="stateButton" @click="HideButton">숨기기</button>
-              <button class="stateButton" @click="DeleteButton">삭제</button>
+              <button class="stateButton" @click="DeleteButton(item)">삭제</button>
             </td>
           </tr>
         </tbody>
       </table>
+      <article>
+        <PageNationComponent :pageNationData="pageNationData" @currentPage="pageUpdate" />
+      </article>
     </article>
   </section>
 </template>
 
 <script setup>
+import { GLOBAL_URL } from '@/api/util';
 import AnnouncementComponent from '@/components/admin/AnnouncementComponent.vue';
-import { ref } from 'vue';
+import PageNationComponent from '@/components/PageNationComponent.vue';
+import axios from 'axios';
+import { ref, watchEffect } from 'vue';
 
-const dolode = () => {};
-dolode();
+const reviewList = ref([]);
+const reviewSortBy = ref('');
+const totalCount = ref(0);
+const reviewDataRes = ref([]);
+const pageNumber = ref(0);
+const pageNationData = ref('');
+const pageSize = ref(20);
+
+const pageNation = () => {
+  pageNationData.value = {
+    totalCount: totalCount.value,
+    pageSize: pageSize.value,
+  };
+};
+
+const DeleteButton = item => {
+  console.log(item);
+  const result = confirm('정말 리뷰를 삭제하시겠습니까?');
+  if (result) {
+    console.log('삭제하겠습니다.');
+  }
+  // 서버에 삭제할 데이터 넘겨주기
+};
+const pageUpdate = pageNum => {
+  pageNumber.value = pageNum;
+  // dolode()
+};
+
+const dolode = async () => {
+  if (reviewSortBy.value === '') {
+    reviewDataRes.value = await axios.get(`${GLOBAL_URL}/admin/review/management`, {
+      params: {
+        pageNum: pageNumber.value,
+        size: pageSize.value,
+      },
+    });
+  } else {
+    reviewDataRes.value = await axios.get(`${GLOBAL_URL}/admin/review/management`, {
+      params: {
+        sort: reviewSortBy.value,
+        pageNum: pageNumber.value,
+        size: pageSize.value,
+      },
+    });
+  }
+  reviewList.value = reviewDataRes.value.data.reviewManageDtos.content;
+  totalCount.value = reviewDataRes.value.data.reviewCount;
+  pageNation();
+};
+
+watchEffect(() => {
+  dolode();
+});
 </script>
 
 <style scoped>
@@ -68,7 +126,7 @@ dolode();
   width: 100%;
   height: auto;
   border-radius: 15px;
-  padding: 5px;
+  padding: 5px 0 20px 0;
   text-align: center;
 }
 input,
@@ -76,6 +134,11 @@ select,
 option {
   border: none;
   background-color: unset;
+}
+input:focus,
+select:focus,
+option:focus {
+  outline: none;
 }
 #sortByAndSearch {
   display: flex;
@@ -118,17 +181,19 @@ option {
 }
 table {
   width: 100%;
-  font-size: 14px;
+  font-size: 1.4rem;
 }
 td {
   height: 50px;
+  padding: 2px;
   border-bottom: 0.5px solid var(--color-main-gray);
 }
 th {
   border-bottom: 2px solid var(--color-main-gray);
+  padding: 2px;
   height: 40px;
 }
-.TableBody > td:nth-child(3) {
+.TableBody > td:nth-child(6) {
   text-align: left;
 }
 .stateButtons {

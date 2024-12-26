@@ -12,7 +12,13 @@
       </select>
       <div id="saveAndSearch">
         <div id="search">
-          <input type="search" id="productSearch" placeholder="상품명 검색" />
+          <input
+            type="search"
+            @input="fetchSuggestions()"
+            v-model="emailSearchKeyword"
+            id="productSearch"
+            placeholder="이메일주소 검색"
+          />
           <img class="searchIcon" src="@/assets/img/icon/free-icon-font-search-3917132.png" alt="productSearch" />
         </div>
         <div class="save" @click="memberRoleSave">저장</div>
@@ -68,10 +74,10 @@
           </tr>
         </tbody>
       </table>
+      <article>
+        <PageNationComponent v-if="totalCount > 0" :pageNationData="pageNationData" @currentPage="pageUpdate" />
+      </article>
     </article>
-    <!-- <article>
-      <PageNationComponent />
-    </article> -->
   </section>
 </template>
 
@@ -83,9 +89,30 @@ import axios from 'axios';
 import { ref, watchEffect } from 'vue';
 
 const sortByRole = ref('');
-const pageNum = ref(0);
+const pageNumber = ref(0);
+const totalCount = ref(0);
+const pageSize = ref(20);
 const membersList = ref([]);
 const memberRoleUpdate = ref([]);
+const pageNationData = ref('');
+const emailSearchKeyword = ref('');
+
+const pageNation = () => {
+  pageNationData.value = {
+    totalCount: totalCount.value,
+    pageSize: pageSize.value,
+  };
+};
+
+// 상품명 검색 시 호출
+const fetchSuggestions = () => {
+  console.log(emailSearchKeyword.value);
+};
+
+// 페이지 선택 시 데이터 업데이트
+const pageUpdate = pageNum => {
+  pageNumber.value = pageNum;
+};
 
 // 권한 변경 후 서버에 데이터 전송
 const memberRoleSave = async () => {
@@ -115,19 +142,24 @@ const dolode = async () => {
   if (sortByRole.value === '') {
     const memberDataRes = await axios.get(`${GLOBAL_URL}/admin/member/management`, {
       params: {
-        pageNum: pageNum.value,
+        pageNum: pageNumber.value,
       },
     });
-    membersList.value = memberDataRes.data;
+    membersList.value = memberDataRes.data.memberManageDtos;
+    totalCount.value = memberDataRes.data.memberCount;
   } else {
     const memberDataRes = await axios.get(`${GLOBAL_URL}/admin/member/management`, {
       params: {
         role: sortByRole.value,
-        pageNum: pageNum.value,
+        pageNum: pageNumber.value,
       },
     });
-    membersList.value = memberDataRes.data;
+    membersList.value = memberDataRes.data.memberManageDtos;
+    totalCount.value = memberDataRes.data.memberCount;
   }
+  console.log(totalCount.value);
+  console.log(membersList.value);
+  pageNation();
 };
 
 // 권한별 보기 방식
@@ -138,19 +170,16 @@ watchEffect(() => {
 </script>
 
 <style scoped>
-#Inspection {
-  background-color: white;
-  width: 100%;
-  height: auto;
-  border-radius: 15px;
-  padding: 5px;
-  text-align: center;
-}
 input,
 select,
 option {
   border: none;
   background-color: unset;
+}
+input:focus,
+select:focus,
+option:focus {
+  outline: none;
 }
 #sortByAndSearch {
   display: flex;
@@ -175,7 +204,6 @@ option {
 #sortBy {
   width: 150px;
 }
-
 #search {
   width: 70%;
   display: flex;
@@ -188,7 +216,7 @@ option {
   width: 20%;
   text-align: center;
   align-content: center;
-  font-size: 2rem;
+  font-size: 1.8rem;
   color: white;
   border-radius: 10px;
   background-color: var(--color-main-bloode);
@@ -198,6 +226,14 @@ option {
   width: 20px;
   height: 20px;
   cursor: pointer;
+}
+#Inspection {
+  background-color: white;
+  width: 100%;
+  height: auto;
+  border-radius: 15px;
+  padding: 5px;
+  text-align: center;
 }
 .TableHeader {
 }
@@ -210,10 +246,11 @@ option {
 }
 table {
   width: 100%;
-  font-size: 14px;
+  font-size: 1.4rem;
 }
 td {
   height: 50px;
+  font-size: 1.3rem;
   border-bottom: 0.5px solid var(--color-main-gray);
 }
 th {

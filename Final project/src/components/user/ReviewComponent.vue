@@ -1,5 +1,10 @@
 <script setup>
-import { getViewCurrentPage } from '@/api/productDetailApi';
+import {
+  getReviewImageList,
+  getReviewList,
+  getReviewListGoodIconState,
+  getViewCurrentPage,
+} from '@/api/productDetailApi';
 import { GLOBAL_URL } from '@/api/util';
 import { useUserStore } from '@/stores/Login';
 import axios from 'axios';
@@ -38,17 +43,9 @@ const dolode = async () => {
     GoodIcon.value = false;
     return;
   }
-  const reviewListRes = await axios.get(`${GLOBAL_URL}/detail/favorite/${idx.value}`, {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-    },
-    params: {
-      pageNum: currentPage.value - 1,
-    },
-  });
-  console.log(reviewList.data);
+  const reviewListRes = await getReviewList(idx.value, currentPage.value - 1);
   GoodIcon.value = reviewListRes.data;
+  console.log(GoodIcon.value);
 };
 
 // 유저별 도움돼요 클릭 시 서버로 데이터 넘기기
@@ -59,13 +56,7 @@ const GoodIconState = async reviewId => {
     router.push({ name: 'login2' });
     return;
   }
-  const reviewListRes = await axios.get(`${GLOBAL_URL}/detail/favorite/clickFavorite/reviewId?${reviewId}`, {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-    },
-    params: { reviewId: reviewId },
-  });
+  const reviewListRes = await getReviewListGoodIconState(reviewId);
   console.log(reviewListRes.data.checked);
   console.log(reviewList.value);
   console.log(GoodIcon.value.checked);
@@ -159,10 +150,10 @@ watch(
           </p>
         </div>
       </div>
-      <template v-if="useStore.loginCheck">
+      <template v-if="useStore.loginCheck && GoodIcon">
         <li
           class="reviewGoodIcon reviewGoodIconTrue"
-          v-if="GoodIcon[index].checked"
+          v-if="GoodIcon[index]?.checked"
           @click="GoodIconState(GoodIcon[index].reviewId)"
         >
           <img src="@/assets/img/icon/free-icon-font-hand-holding-heart-17766584.svg" alt="" />
@@ -207,8 +198,6 @@ watch(
       :class="{ active: activePage(pageNum) }"
     >
       {{ startPage + pageNum - 1 }}
-      {{ startPage }}
-      {{ pageNum }}
     </li>
     <li @click="nextPage">다음</li>
   </ul>

@@ -94,9 +94,10 @@ const doPayment = () => {
     if (checkList.value.length > 0) {
       const purchaseProducttDtos = checkList.value.map(item => ({
         usedProductId: item.usedProductId,
-        quantity: item.quantity,
+        quantity: 1,
         productName: item.productName,
       }));
+      console.log(purchaseProducttDtos)
       const data = {
         purchaseProductDtos: purchaseProducttDtos,
         totalPrice: total_amount.value,

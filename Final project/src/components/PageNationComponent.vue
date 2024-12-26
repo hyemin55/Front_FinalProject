@@ -1,3 +1,13 @@
+<!--
+props = 부모 컴포넌트에서 pageNationData에 아래의 데이터 내용을 넣고 props로 보내준다.
+  pageNationData.value = {
+    totalCount: totalCount.value,
+    pageSize: pageSize.value,
+  };
+
+emit = 아래의 이름으로 부모컴포넌트에서 emit을 받아주고 페이지번호를 수정해 서버와 재통신한다.
+  'currentPage'
+ -->
 <template>
   <article>
     <ul id="totalPages" v-if="pageNationData.totalCount > 0">
@@ -9,7 +19,7 @@
         @click="goToPage(startPage + pageNum - 1)"
         :class="{ active: activePage(pageNum) }"
       >
-        {{ pageNum }}
+        {{ pageNum + startPage - 1 }}
       </li>
       <li @click="nextPage">다음</li>
     </ul>
@@ -71,7 +81,7 @@ const goToPage = page => {
 };
 
 // 현재페이지
-const viewCurrentPage = async () => {
+const viewCurrentPage = () => {
   currentPageGroup.value = Math.floor((currentPage.value - 1) / 10);
   if (currentPageGroup.value == currentPage.value - 1 && flag) {
     flag = true;

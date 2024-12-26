@@ -12,12 +12,12 @@ export const useCartStore = defineStore('cart', {
   actions: {
     // 장바구니 담기
     addItem(item) {
-      console.log('store 들어온값',item);
+      console.log('store 들어온값', item);
       const Duplicatecheck = this.cartItems.find(cartItem => cartItem.usedProductId === item.usedProductId);
       if (Duplicatecheck) {
-        alert('이미 장바구니에 있는 상품 입니다.')
+        alert('이미 장바구니에 있는 상품 입니다.');
       } else {
-        this.cartItems.push({ ...item, quantity: 1 ,isChecked: true });
+        this.cartItems.push({ ...item, quantity: 1, isChecked: true });
         alert('장바구니에 담았습니다.');
       }
       localStorage.setItem('cartItems', JSON.stringify(this.cartItems));
@@ -28,7 +28,7 @@ export const useCartStore = defineStore('cart', {
       this.cartItems = this.cartItems.filter(item => !item.isChecked);
       localStorage.setItem('cartItems', JSON.stringify(this.cartItems));
     },
-    
+
     // 장바구니에 들어있는것 전체삭제
     logOutRemoveItem() {
       localStorage.removeItem('cartItems');

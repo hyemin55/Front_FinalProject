@@ -22,7 +22,7 @@ watchEffect(async () => {
     if (!res.status.toString().startsWith('2')) return;
     res = await loginCheck();
     useStore.login(res.data); //스토어 등록
-    console.log(res.data);
+    // console.log(res.data);
     
     const wishListData = await categoryWishList(); // 로그인시 찜하기 정보 가져오기
     wishListData.map(item => item.wishListCategoryDto.id).forEach(id => { // id만 추출해서
@@ -30,7 +30,7 @@ watchEffect(async () => {
     });
     
     if (res.status.toString().startsWith('2')) {
-      console.log(res.data);
+      // console.log(res.data);
     } else return;
 
     // if사용해 role 권한이 admin이면 관리자페이지로 푸시
