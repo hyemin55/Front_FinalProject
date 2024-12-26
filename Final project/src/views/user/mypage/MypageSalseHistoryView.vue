@@ -28,6 +28,11 @@ const getSaleList = async()=>{
 onMounted(()=>{
   getSaleList();
 })
+
+const Rendering = ()=>{
+  getSaleList();
+}
+
 </script>
 
 <template>
@@ -39,7 +44,7 @@ onMounted(()=>{
     </h2>
   </div>
 
-  <HistoryProduct :saleList="saleList" :type="'sale'" :showBtn="false"></HistoryProduct>
+  <HistoryProduct :saleList="saleList" :type="'sale'" :showBtn="false" @UpdateRendering="Rendering" @DeleteRendering="Rendering"></HistoryProduct>
 
   <SaleProductModal v-if="saleModal" @closeModal="showModal"/>
 </template>

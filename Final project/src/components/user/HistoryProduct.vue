@@ -1,7 +1,10 @@
 <script setup>
 import { GLOBAL_URL } from '@/api/util';
+import axios from 'axios';
 import dayjs from 'dayjs';
 import { computed, ref } from 'vue';
+import SaleRegistrationModal from './SaleRegistrationModal.vue';
+
 
 // 주문, 판매 텍스트 변경
 const props = defineProps({
@@ -24,6 +27,11 @@ const props = defineProps({
   },
 });
 
+const emit = defineEmits(['UpdateRendering', 'DeleteRendering']);
+const rendering = ()=>{
+  emit('UpdateRendering');
+}
+
 // 데이터 매핑
 const mappedData = computed(() => {
   if (props.type === 'sale') {
@@ -36,7 +44,8 @@ const mappedData = computed(() => {
       category: item.userCategory || 'category N/A',
       brand: item.userBrand || 'brand N/A',
       price: item.userPrice || 'price N/A',
-      quantity: item.quantity || 1,
+      grade: item.gradeType || '감정중',
+      size: item.userSize || 'size N/A',
       image : item.userImages[0].filename,
       status: item.saleStatus || '준비중',
     }));
@@ -52,16 +61,50 @@ const mappedData = computed(() => {
       brand: item.userBrand || 'brand N/A',
       price: item.orderDetailResDtoList[0].price || 'price N/A',
       quantity: item.orderDetailResDtoList[0].quantity || 1,
-    
+      size: item.userSize || 'size N/A',
+      // image : ,
       status: item.purchaseStatus || '준비중',
     }));
   }
 });
 const confirmed= ()=>{console.log('구매확정 함수')}
-const goreview= ()=>{console.log('리뷰작성 함수')}
+const goreview= ()=>{console.log('리뷰작성 함수')} 
 
+// 판매 반려
+const saleReject = async(pendingSaleId)=>{
+  try{
+    const res = await axios.post(`${GLOBAL_URL}/myPage/verified-sale/reject`, pendingSaleId ,{
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+      },
+    })
+    emit('DeleteRendering');
+    alert('상품 등록이 취소되었습니다.')
+  }
+  catch(error){
+    console.error(error)
+  }
+}
+
+// 신청 결과 popup창 
+const saleModal = ref(false)
+const modalData = ref(null)
+
+const showModal = (data)=>{
+  const status = data.status;
+  if(status == 'ACCEPTED'){
+    saleModal.value = true
+    modalData.value = data
+  }else{
+    alert('신청 진행중인 항목입니다.')
+  }
+}
+// 신청 결과 popup창 닫기
+const closeModal = ()=>{
+  saleModal.value = false
+}
 </script>
-
 
 <template>
   <article class="history_box" v-for="(data, index) in mappedData" :key="index">
@@ -76,7 +119,7 @@ const goreview= ()=>{console.log('리뷰작성 함수')}
     </div>
 
     <div class="bottom_box">
-      <p class="complete_date">진행상태 : {{  data.status }}</p>
+      <p class="complete_date">진행상태 : <span class="status_text"> {{ data.status }}</span></p>
 
       <div class="history_product">
         <div class="history_product_img">
@@ -86,18 +129,26 @@ const goreview= ()=>{console.log('리뷰작성 함수')}
           <li>카테고리 : {{ data.category }}</li>
           <li>브랜드 : {{ data.brand }}</li>
           <li>상품명 : {{ data.name }}</li>
+          <li>용량 : {{ data.size }} ml</li>
+          <li v-if="!props.showBtn">등급 : {{ data.grade }}</li>
+          <li v-if="props.showBtn">수량 : {{ data.quantity }}</li>
           <li>가격 : {{ data.price.toLocaleString() }}원</li>
-          <li>수량 : {{ data.quantity }}</li>
         </ul>
 
         <div class="history_product_btn" v-if="props.showBtn">
-          <button @click="confirmed">구매확정</button>
-          <button @click="goreview">구매후기 작성</button>
+          <button @click="confirmed()">구매확정</button>
+          <button @click="goreview()">구매후기 작성</button>
         </div>
+        <div class="history_product_btn" v-else>
+          <button v-if="data.status === 'ACCEPTED' || data.status === 'WAITING'" @click="showModal(data)">판매신청 결과 확인</button>
+          <button @click="saleReject(data.id)">판매등록 취소</button>
+        </div>
+
       </div>
     </div>
-
   </article>
+  
+  <SaleRegistrationModal v-if="saleModal" :data="modalData" @closeModal="closeModal()" @Rendering="rendering"></SaleRegistrationModal>
 </template>
 
 <style scoped>
@@ -105,7 +156,6 @@ const goreview= ()=>{console.log('리뷰작성 함수')}
 .history_box {
   border-bottom: 4px solid var(--color-main-gray);
 }
-
 /* 윗 박스 */
 .top_box {
   height: 70px;
@@ -166,6 +216,7 @@ const goreview= ()=>{console.log('리뷰작성 함수')}
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 .history_product_img img{
   height: 80%;
@@ -173,6 +224,7 @@ const goreview= ()=>{console.log('리뷰작성 함수')}
   background-color: var(--color-main-Lgray);
   border-radius: 1.5rem;
 }
+
 /* product 텍스트 설정 */
 .history_product_text li{
   font-size: 1.7rem;
@@ -204,5 +256,12 @@ const goreview= ()=>{console.log('리뷰작성 함수')}
 .history_product_btn button:hover{
   background-color: black;
   color: #fff;
+}
+
+.status_text{
+  color: var(--color-main-bloode);
+  font-weight: 600;
+  margin-left: 8px;
+  font-size: 1.9rem;
 }
 </style>
