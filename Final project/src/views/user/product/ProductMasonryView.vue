@@ -1,8 +1,9 @@
 <script setup>
 import { GLOBAL_URL } from '@/api/util';
 import MasonryComponent from '@/components/user/MasonryComponent.vue';
+import { useInfiniteQuery } from '@tanstack/vue-query';
 import axios from 'axios';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watchEffect } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
@@ -12,6 +13,7 @@ const brand = route.query.brand;
 // 여기서 상품 카테고리에 id를 받아 통신 -> 통신으로 productData 값을 props로 전달.
 
 const productData = ref([])
+
 const fetchProductData = async()=>{
   try{
     const res = await axios.get(`${GLOBAL_URL}/api/used-product/list/${productId}`, {
@@ -29,11 +31,58 @@ onMounted(()=>{
   fetchProductData();
 })
 
-
 let mode = ref(true);
 const changeMode = () => {
   mode.value = !mode.value
 }
+
+
+// // 무한 스크롤
+// const loadingUi = ref(null); // 로딩 UI지정
+// // 무한 스크롤 데이터 패칭 함수
+// const fetchItemData = async ({ pageParam = 0 }) => {
+//   const res = await axios.get(`${GLOBAL_URL}/api/used-product/list/${productId}?pageNum=${pageParam}`, {
+//       headers:{
+//         'Content-Type': 'application/json'
+//       }
+//   })
+//   const data = res.data;
+//   return { data, nextPage: data.length > 0 ? pageParam + 1 : undefined };
+// };
+// // useInfiniteQuery로 무한 스크롤 쿼리 설정
+// const {
+//   data: list,
+//   fetchNextPage, // (호출시)자동으로 페이지를 증가시킨다. (이 부분 증가시 getNextPageParam 자동으로 작동)
+//   hasNextPage, // 다음페이지가 있는지 확인하는 변수
+//   isFetchingNextPage, // 로딩중인지 확인한는 변수
+// } = useInfiniteQuery(['itemData', productId], fetchItemData, {
+//   getNextPageParam: lastPage => lastPage.nextPage,
+//   refetchOnWindowFocus: false,
+//   cacheTime: 1000 * 60 * 10, // 데이터 캐싱 시간 설정
+// });
+// watchEffect(() => {
+//   if (list.value && list.value.pages && list.value.pages.length > 0) {
+//     totalDataLength.value = list.value.pages.reduce((total, page) => total + page.data.length, 0);
+//   }
+// });
+// // IntersectionObserver로 ui가 뷰포트에 걸리시 페이지 증가
+// watchEffect(() => {
+//   const observer = new IntersectionObserver(entries => {
+//     const firstEntry = entries[0];
+//     if (firstEntry.isIntersecting && hasNextPage.value && !isFetchingNextPage.value) {
+//       fetchNextPage();
+//     }
+//   });
+//   if (loadingUi.value) {
+//     observer.observe(loadingUi.value);
+//   }
+//   return () => {
+//     if (loadingUi.value) {
+//       observer.unobserve(loadingUi.value);
+//     }
+//   };
+// });
+
 </script>
 
 <template>
@@ -82,9 +131,13 @@ const changeMode = () => {
         <article class="masonry_layout" :class="{'iconStyle':mode , 'listStyle':!mode}">
             <MasonryComponent v-for="data in productData" :key="data.usedProductId" :productInfo="data" :layoutType="mode"></MasonryComponent>
         </article>
-     
 
+
+        <h1 class="loadingUi" ref="loadingUi" v-if="hasNextPage">
+          <img src="/src/assets/img/icon/loading.gif" alt="" />
+        </h1>
     </section>
+
     <section v-else class="tungtung_section">
       <img src="/src/assets/img/perfum_tung.png" alt="">
       <h2>판매중인 상품이 없습니다.</h2>
@@ -194,4 +247,15 @@ const changeMode = () => {
   color: var(--color-text-gray);
 }
 
+/* 로딩 UI설정 */
+.loadingUi {
+  width: 100%;
+  height: 65px;
+  text-align: center;
+  margin-top: 50px;
+}
+.loadingUi img {
+  height: 100%;
+  width: auto;
+}
 </style>

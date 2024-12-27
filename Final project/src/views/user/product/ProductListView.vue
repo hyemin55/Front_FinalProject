@@ -59,36 +59,26 @@ watchEffect(() => {
   };
 });
 
-// 정렬 함수들
-// const latestDate = () => {sortedList.value = [...list.value].sort((a, b) => new Date(a.registerDate) - new Date(b.registerDate))}
-// const oldeDate = () => {sortedList.value = [...list.value].sort((a, b) => new Date(b.registerDate) - new Date(a.registerDate))}
-// const highPrice = () => {sortedList.value = [...list.value].sort((a, b) => b.price - a.price)}
-// const lowPrice = () => {sortedList.value = [...list.value].sort((a, b) => a.price - b.price)}
-
 // 정렬 기준을 바꿀 때 호출되는 함수
 const sortList = (order, index) => {
   hiddenItem.value = index;
   switch (order) {
     case 'latestDate':
       sortTitle.value = '최신순';
-      // latestDate()
       break;
     case 'oldeDate':
       sortTitle.value = '오래된 순';
-      // oldeDate()
       break;
     case 'highPrice':
       sortTitle.value = '높은 가격순';
-      // highPrice()
       break;
     case 'lowPrice':
       sortTitle.value = '낮은 가격순';
-      // lowPrice()
       break;
     case 'basic':
     default:
       sortTitle.value = '추천순 ⇅';
-  } // sortedList.value = [...list.value]  // 기본적으로 원래 순서로 돌아감
+  }
 };
 
 const filterData = [
@@ -127,7 +117,6 @@ const chageMode = ()=>{
   filterLayout.value = !filterMode.value;
   ball.value = !ball.value;
 }
-
 </script>
 
 <template>

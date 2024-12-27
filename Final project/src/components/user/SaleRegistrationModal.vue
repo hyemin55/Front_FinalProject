@@ -62,11 +62,11 @@ const saleApprove = async(pendingSaleId) => {
         <article class="modal_page">
 
             <div class="modal_title">
-                <h1>상품 판매 등록 확인</h1>
+                <h1>- 상품 판매 등록 확인 -</h1>
                 <ul>
-                    <li>판매자 : 강도현</li>
-                    <li>은행 : 하나은행</li>
-                    <li>계좌번호 : 123123-123123-123123</li>
+                    <li><span style="color: green;">✔</span> 판매자 계좌 확인</li>
+                    <li>예금주 : 강도현</li>
+                    <li>은행 : 하나은행 | 계좌번호 : 123123-123123-123123</li>
                 </ul>
             </div>
 
@@ -74,7 +74,7 @@ const saleApprove = async(pendingSaleId) => {
               <thead>
                 <tr>
                   <th></th>
-                  <th>검수 전<br><span class="medium_text">(신청시 기입 사항)</span></th>
+                  <th>검수 전<br><span class="medium_text">(신청시 기입 내용)</span></th>
                   <th>검수 후<br><span class="medium_text">(판매시 등록 내용)</span></th>
                 </tr>
               </thead>
@@ -106,13 +106,13 @@ const saleApprove = async(pendingSaleId) => {
                   <td>₩50,000</td>
                   <td><span class="arrow-icon"><i class="fi fi-ss-left"></i>
                     </span><input v-model="salesPrice" type="number" min="0" placeholder="원하시는 판매가격을 입력해주세요."><br>
-                    <span class="small_text">평균 시세가 : ₩ {{ props.data.price.toLocaleString() }}</span>
+                    <span class="small_text averPrice">평균 시세가 : ₩ {{ props.data.price.toLocaleString() }}</span>
                   </td>
                 </tr>
                 <tr>
                   <td>용량</td>
                   <td>50ml</td>
-                  <td><span class="arrow-icon"><i class="fi fi-ss-left"></i></span>{{ props.data.size }}ml</td>
+                  <td><span class="arrow-icon"><i class="fi fi-ss-left"></i></span>{{ props.data.size }} ml</td>
                 </tr>
                 <tr>
                   <td>등급<br><span class="small_text">(사용유무)</span></td>
@@ -154,7 +154,7 @@ thead th {
   border: 1px solid #ddd;
 }
 tbody td {
-  /* padding: 20px; */
+  padding: 10px 0;
   border: 1px solid #ddd; 
   text-align: center; 
   vertical-align: middle;
@@ -166,7 +166,7 @@ tbody td img{
 }
 tbody tr td:nth-child(1) {
   background-color: #f4f4f4; 
-  padding: 20px 0px;
+  padding: 20px 5px;
 }
 .arrow-icon {
   position: absolute; 
@@ -185,22 +185,28 @@ tbody tr td:nth-child(1) {
 .small_text{
     font-size: 1.2rem;
 }
-
+.averPrice{
+  color: var(--color-main-bloode);
+}
 
 tbody tr:hover td:nth-child(1){
     background-color: rgb(173, 173, 173);
 }
 tbody tr:hover td {
     background-color: #d6d6d6;
+    font-weight: 600;
 }
 tbody tr:hover .arrow-icon{
-    animation: ani1 1s infinite;
+    animation: ani1 2s infinite;
 }
 @keyframes ani1{
-    to{
-        transform: translateX(20px) rotate(180deg);
+    0%{
+        transform: translateX(0) rotate(180deg);
     }
-    from{
+    50%{
+        transform: translateX(10px) rotate(180deg);
+    }
+    100%{
         transform: translateX(0) rotate(180deg);
     }
 }
@@ -221,6 +227,7 @@ tbody tr:hover .arrow-icon{
   position: relative;
   width: 1000px;
   height: 800px;
+  padding: 30px;
   background-color: rgb(255, 255, 255);
   z-index: 11;
   border: 5px solid var(--color-main-bloode);
@@ -243,18 +250,26 @@ tbody tr:hover .arrow-icon{
 }
 .modal_title h1{
     text-align: center;
-    font-size: 2rem;
+    font-size: 2.5rem;
     padding: 20px;
+    margin-top: 20px;
+    /* margin: 20px 0; */
 }
 .modal_title ul{
-    background-color: #f0f0f0;
-    padding: 10px 40px;
-    margin-bottom: 10px;
-    font-size: 1.2rem;
+    /* background-color: #f0f0f0; */
+    border-bottom: 1px solid #c0c0c0;
+    padding: 10px 20px;
+    margin-bottom: 24px;
+    font-size: 1.5rem;
 }
 .modal_title ul li{
     margin: 7px 0;
 } 
+.modal_title ul li:nth-child(1){
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
 /* 모달 번튼 설정 ################################################ */
 .modal_btn{
     text-align: center;
@@ -262,13 +277,13 @@ tbody tr:hover .arrow-icon{
     width: 100%;
 }
 .modal_btn button{
-    padding: 20px;
+    padding: 15px;
     background-color: #a5a5a5;
     margin: 20px 10px;
     border-radius: 1.2rem;
 }
 .modal_btn button:hover{
-    background-color: #333;
+    background-color: var(--color-main-bloode);
     color: #e9e9e9;
 }
 .agreement{
@@ -282,5 +297,11 @@ tbody tr:hover .arrow-icon{
 }
 .agreement label{
     margin-left: 5px;
+    cursor: pointer;
+}
+input[type="number"]{
+  padding: 2px;
+  width: 60%;
+  text-align: center;
 }
 </style>

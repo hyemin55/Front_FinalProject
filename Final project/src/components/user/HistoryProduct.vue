@@ -126,13 +126,13 @@ const closeModal = ()=>{
           <img :src="`${GLOBAL_URL}/api/file/download/${data.image}`" alt="" />
         </div>
         <ul class="history_product_text">
-          <li>카테고리 : {{ data.category }}</li>
-          <li>브랜드 : {{ data.brand }}</li>
-          <li>상품명 : {{ data.name }}</li>
-          <li>용량 : {{ data.size }} ml</li>
-          <li v-if="!props.showBtn">등급 : {{ data.grade }}</li>
-          <li v-if="props.showBtn">수량 : {{ data.quantity }}</li>
-          <li>가격 : {{ data.price.toLocaleString() }}원</li>
+          <li><span>카테고리 :</span> {{ data.category }}</li>
+          <li><span>브랜드 :</span> {{ data.brand }}</li>
+          <li><span>상품명 :</span> {{ data.name }}</li>        
+          <li><span>용량 :</span> {{ data.size }} ml</li>
+          <li v-if="!props.showBtn"><span>등급 :</span> {{ data.grade }}</li>
+          <li v-if="props.showBtn"><span>수량 :</span> {{ data.quantity }}</li>
+          <li><span>가격 :</span> {{ data.price.toLocaleString() }}원</li>
         </ul>
 
         <div class="history_product_btn" v-if="props.showBtn">
@@ -190,7 +190,7 @@ const closeModal = ()=>{
 /* 아래 박스 */
 .bottom_box {
   width: 100%;
-  height: 230px;
+  height: 250px;
 }
 .complete_date {
   height: 50px;
@@ -202,7 +202,7 @@ const closeModal = ()=>{
   padding-left: 12px;
 }
 .history_product {
-  height: 180px;
+  height: 200px;
   width: 100%;
   display: flex;
   align-items: center;
@@ -227,9 +227,15 @@ const closeModal = ()=>{
 
 /* product 텍스트 설정 */
 .history_product_text li{
-  font-size: 1.7rem;
+  font-size: 1.5rem;
   margin: 7px 0px 7px 10px;
+  
 }
+.history_product_text li span{
+  display: inline-block;
+  width: 70px;
+}
+
 /* product 버튼 설정(v-if:구매) */
 .history_product_btn{
   position: absolute;
