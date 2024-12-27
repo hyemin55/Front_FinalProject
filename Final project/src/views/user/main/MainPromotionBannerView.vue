@@ -5,20 +5,20 @@ import Aos from 'aos';
 import 'aos/dist/aos.css';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
-const Modal = ref(false)
-const userStore = useUserStore()
-const router = useRouter()
-const OpenModal = () =>{
-  if(userStore.loginCheck){
-  Modal.value = true}
-  else{
-    alert('로그인이 필요합니다.')
-    router.push({name:'login2'})
+const Modal = ref(false);
+const userStore = useUserStore();
+const router = useRouter();
+const OpenModal = () => {
+  if (userStore.loginCheck) {
+    Modal.value = true;
+  } else {
+    alert('로그인이 필요합니다.');
+    router.push({ name: 'login2' });
   }
-}
-const closeModal = () =>{
-  Modal.value = false
-}
+};
+const closeModal = () => {
+  Modal.value = false;
+};
 
 onMounted(() => {
   Aos.init({
@@ -38,9 +38,13 @@ onMounted(() => {
         <span data-aos="fade-left">새 이야기의 향기를 품어보세요</span>
       </p>
       <!-- to 나중에 판매페이지로 바꿔야함 -->
-      <div class="promotion_banner_link"
-      @click="OpenModal" 
-      data-aos="fade-right" data-aos-offset="50" data-aos-delay="600">
+      <div
+        class="promotion_banner_link"
+        @click="OpenModal"
+        data-aos="fade-right"
+        data-aos-offset="50"
+        data-aos-delay="600"
+      >
         바로 판매하기 →
       </div>
     </div>
@@ -85,7 +89,7 @@ onMounted(() => {
 }
 .promotion_banner_link {
   position: absolute;
-  right: 0;
+  right: 2%;
   top: 50%;
   line-height: 0px;
   /* margin-top: -27px; */
@@ -98,8 +102,18 @@ onMounted(() => {
   transition: all 0.1s ease;
 }
 .promotion_banner_link:hover {
-font-size: 4rem;
+  animation: ani 2s infinite;
 }
+@keyframes ani {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(20%);
+    color: orangered;
+  }
+}
+
 @media (max-width: 630px) {
   .promotion_banner_text {
     display: none;

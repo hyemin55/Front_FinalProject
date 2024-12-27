@@ -2,7 +2,7 @@
 import { RouterView, useRoute } from 'vue-router';
 import Header from '@/components/user/layoutnav/Header.vue';
 import Footer from '@/components/user/layoutnav/Footer.vue';
-import { onBeforeMount, onBeforeUnmount, onMounted, ref } from 'vue';
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 import AdminHeader from '@/components/admin/layoutnav/AdminHeader.vue';
 import { useUserStore } from '@/stores/Login';
 import AdminNav from '@/components/admin/layoutnav/AdminNav.vue';
@@ -24,7 +24,10 @@ const pageUp = () => {
 const pageDown = () => {
   window.scrollTo({ top: 30000, behavior: 'smooth' });
 };
-
+const MouseHovered = boolean => {
+  console.log('boolean', boolean);
+  isScrolled = boolean;
+};
 onMounted(() => {
   window.addEventListener('scroll', scrollHeight);
 });
@@ -40,7 +43,7 @@ onBeforeUnmount(() => {
         <AdminHeader></AdminHeader>
         <div>
           <AdminNav></AdminNav>
-          <RouterView class="MainAdmin" />
+          <RouterView class="MainAdmin" :class="{ expanded: isHovered }" @MouseHovered="MouseHovered()" />
         </div>
       </div>
     </div>

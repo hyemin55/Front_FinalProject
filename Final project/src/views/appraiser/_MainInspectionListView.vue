@@ -51,6 +51,10 @@ const pageUpdate = pageNum => {
   InspectionList.value = [];
 };
 
+const dataUpdate = () => {
+  dolode();
+};
+
 const dolode = async () => {
   const countRes = await axios.get(`${GLOBAL_URL}/api/inspection/pending-sale/total-count`, {
     headers: {

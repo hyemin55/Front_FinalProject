@@ -6,7 +6,7 @@ import { computed, ref, watch } from 'vue';
 // 모달창 완료버튼(부모로 event 전달)
 // 부모자에서 @sucess 이벤트를 발생시킴
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'success']);
 // const submitModal = () => {
 //   emit('sucess');
 // };
@@ -83,6 +83,7 @@ const send = async () => {
       });
       console.log(res.data);
       alert('합격 전송되었습니다.');
+      emit('close', 'success');
     }
     if (!appraiserCustomData.inspectionPassReqDto.inspectionResult) {
       await axios.post(`${GLOBAL_URL}/api/inspection/reject`, formdata, {
@@ -92,9 +93,9 @@ const send = async () => {
         },
       });
       alert('불합격 전송되었습니다.');
+      emit('close');
     }
     // 부모 컴포넌트에 모달 닫기 이벤트 전달
-    emit('close');
   } catch (error) {
     console.error('전송 중 오류가 발생했습니다:', error.response?.data || error.message);
     alert('전송 실패. 다시 시도해주세요.');
@@ -200,17 +201,11 @@ watch(
               <td colspan="2" class="fileImagesBox">
                 <p class="filenames" v-for="(image, index) in appraiserCustomData.userImageFiles" :key="index">
                   {{ index + 1 }}.
-                  <img
-                    
-                    class="userSaleImage"
-                    :src="`${GLOBAL_URL}/api/file/download/${image.name}`"
-                    alt=""
-                  />
+                  <img class="userSaleImage" :src="`${GLOBAL_URL}/api/file/download/${image.name}`" alt="" />
                 </p>
                 <p class="filenames" v-for="(image, index) in appraiserPreviewUrls" :key="index">
                   {{ appraiserCustomData.userImageFiles.length + index + 1 }}.
-                  <img
-                  class="userSaleImage" :src="image" alt="" />
+                  <img class="userSaleImage" :src="image" alt="" />
                 </p>
                 <!-- <p class="filenames" v-for="(imageName, index) in appraiserCustomData.passImageFiles" :key="index">
                   {{ index + appraiserCustomData.userImageFiles.length + 1 }}. {{ imageName.name }}
@@ -334,7 +329,7 @@ td {
   background: #888;
   border-radius: 5px;
 }
-.userSaleImage{
+.userSaleImage {
   width: 100px;
   padding: 1%;
 }

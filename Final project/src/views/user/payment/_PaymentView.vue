@@ -229,6 +229,7 @@ const connectSSE = () => {
 };
 const payroute = useRoute();
 const payData = JSON.parse(decodeURIComponent(payroute.query.item));
+console.log(decodeURIComponent(payroute.query.item));
 </script>
 
 <template>

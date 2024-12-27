@@ -41,7 +41,7 @@
             <td>134,000</td>
             <td>Candle</td>
             <td>
-              <select name="state" id="" v-model="selectState.value">
+              <select name="state" id="" v-model="selectState.value" class="selectState">
                 <option :value="list" v-for="(list, index) in stateOption" :key="index">{{ list.name }}</option>
               </select>
             </td>
@@ -307,5 +307,10 @@ th {
 }
 .TableBody > td:nth-child(3) {
   text-align: left;
+}
+.selectState {
+  background-color: var(--color-main-pink);
+  border-radius: 10px;
+  padding: 5px;
 }
 </style>

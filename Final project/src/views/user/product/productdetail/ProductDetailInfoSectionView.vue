@@ -25,7 +25,6 @@ const cartStore = useCartStore();
 // 로그인 pinia
 const userStore = useUserStore();
 const userLogin = computed(() => userStore.loginCheck);
-const emit = defineEmits();
 // const emit = defineEmits();
 
 // 3. 옵션값을 클릭하면 watch에서 추적하는 idx값이 바뀌고 doLoad를 호출한다.
@@ -101,16 +100,19 @@ const Average = data => {
 // 바로 결제하기
 const doPayment = () => {
   if (sessionStorage.getItem('token')) {
-    const purchaseProductDto = {
-      usedProductId: productData.value.usedProductId,
-      quantity: 1,
-      productName: productData.value.productName,
-    };
-    console.log(purchaseProductDto);
+    const purchaseProductDto = [
+      {
+        usedProductId: productData.value.usedProductId,
+        quantity: 1,
+        productName: productData.value.productName,
+      },
+    ];
+    console.log('purchaseProductDto', purchaseProductDto);
     const data = {
       purchaseProductDtos: purchaseProductDto,
-      totalPrice: productData.verifiedSellingPrice,
+      totalPrice: productData.value.verifiedSellingPrice,
     };
+    console.log('data', data);
     // payMentStore.payProductScan(data)
 
     router.push({
@@ -133,7 +135,7 @@ watchEffect(() => {
   <article id="productInfoSection">
     <ul id="productInfo">
       <li>{{ productData.brandName }}</li>
-      <li>{{ productData.productName }}</li>
+      <li>{{ productData.productName }}ㆍ{{ productData.size }} ml</li>
       <li v-if="reviewData">
         1,222찜 수
         <span style="color: orange"
@@ -141,7 +143,7 @@ watchEffect(() => {
         >
       </li>
       <li>{{ formatPrice(productData.verifiedSellingPrice) }}</li>
-      <li>기준용량 : {{ productData.size }} ml / 판매용량 : {{ productData.productSize }} ml</li>
+      <li>판매용량 : {{ productData.productSize }} ml</li>
     </ul>
 
     <!-- <div>
@@ -152,7 +154,6 @@ watchEffect(() => {
     <div class="addButtonGroub">
       <button class="addToCart Sell​​Now" @click="SellNowOpenModal">바로 판매하기</button>
       <button class="addToCart BuyNow" @click="doPayment">바로 구매하기</button>
-      <!-- <button class="addToCart" @click="addToCart"> -->
       <button class="icon_box" @click="addToCart">
         <img class="icon" src="@/assets/img/icon/free-icon-font-shopping-cart.svg" alt="" />
       </button>

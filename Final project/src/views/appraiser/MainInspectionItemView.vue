@@ -332,6 +332,7 @@ const InspectionModal = ref(false);
 const appraiserFiles = ref([]);
 const previewUrls = ref([]);
 const userImageFiles = ref([]);
+const emit = defineEmits(['dataUpdate']);
 
 // 검수자 이미지파일 등록`
 const handleFileUpload = event => {
@@ -359,7 +360,7 @@ const selectImages = (img, index) => {
 // pageNation emit 업데이트
 
 // InspectionMadal emit 업데이트
-const closeModal = () => {
+const closeModal = value => {
   InspectionModal.value = false;
   item.value.PassGrade = '';
   item.value.FailReason = '';
@@ -370,6 +371,10 @@ const closeModal = () => {
   item.value.userSaleResImageList.forEach(image => {
     image.used = false;
   });
+  console.log('value', value);
+  if (value === 'success') {
+    emit('dataUpdate');
+  }
 };
 
 const validatedInspectionSize = item => {
