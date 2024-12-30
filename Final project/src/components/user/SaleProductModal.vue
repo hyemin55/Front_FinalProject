@@ -11,8 +11,10 @@ const closeModal = () => {
   emit('closeModal');
 };
 
+
 // 신청 성공페이지
 const complete = ref(true);
+
 
 // 신청 데이터
 const bankName = ref("");

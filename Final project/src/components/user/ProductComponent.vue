@@ -40,7 +40,7 @@ const size = ref(props.productInfo.size || '사이즈');
 const reviewCount = ref(props.productInfo.reviewCount || '0');
 const brand = ref(props.productInfo.brandName || 'Santa Maria Novella');
 
-const gradeTypes = ref(props.productInfo.gradeTypes || '품절');
+const gradeTypes = ref(props.productInfo.gradeTypes || 'Sold out');
 const gradeTypesArray = ref(gradeTypes.value.split(',').map(type => type.trim()));
 
 // useNavigator
