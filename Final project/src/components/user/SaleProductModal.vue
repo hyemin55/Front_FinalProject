@@ -1,12 +1,9 @@
 <script setup>
 import { GLOBAL_URL } from '@/api/util';
-import { useUserStore } from '@/stores/Login';
 import axios from 'axios';
 import { computed, ref } from 'vue';
 
-const userStore = useUserStore();
-const userLogin = computed(() => userStore.loginCheck);
-
+const nickName = sessionStorage.getItem('nickName')
 
 // 모달창 닫기(부모로 event 전달)
 const emit = defineEmits();
@@ -59,7 +56,7 @@ const imgDelete = (index) => {
 // 판매신청 보내기
 const sucsess = async()=>{
     const pendingSaleCreateReqDto = {
-      "seller": "강도현",
+      "seller": nickName,
       "bankName": bankName.value,
       "accountNumber": accountNumber.value,
       "productName": productName.value,
@@ -105,6 +102,7 @@ const sucsess = async()=>{
         alert('실패ㅠㅠ')
     }
 }
+
 </script>
 
 <template>
@@ -115,7 +113,7 @@ const sucsess = async()=>{
       <form @submit.prevent="sucsess">
         <div class="form_group">
           <label label for="user">판매 신청자 확인</label>
-          <input type="text" id="user" value="강도현" required readonly />
+          <input type="text" id="user" :value="nickName" required readonly />
         </div>
         <div class="form_group">
           <label label for="account">계좌번호 입력 <small><span>*</span>필수사항</small></label>
