@@ -201,19 +201,16 @@ const requestPay = async () => {
 };
 // 알림 이벤트 소스 (항시 대기중)
 const connectSSE = () => {
-  const sse = new EventSource(`${GLOBAL_URL}/api/notification/payment/completed/subscriber`, {
-    headers: {
-      'Content-Type': 'text/event-stream',
-      Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-    },
-  });
+  const token = sessionStorage.getItem('token');
+  const sse = new EventSource(`${GLOBAL_URL}/api/notification/payment/completed/subscriber?token=${token}`);
+
   console.log('start sse');
   console.log(sse);
 
   sse.addEventListener('paymentCompletedEvent', async event => {
     console.log('SSE event received:', event.data);
     const data = await JSON.parse(event.data);
-    purchaseStatus.value = event.data.status;
+    purchaseStatus.value = data.status;
     console.log('Message:', data.message);
     console.log('Order ID:', data.orderId);
     console.log('Total Amount:', data.totalAmount);

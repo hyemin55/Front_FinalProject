@@ -15,7 +15,7 @@ onMounted(async () => {
   bestListRef.value = await getBestProducts();
   console.log(bestListRef.value);
   bestListRef.value.forEach(best_product => {
-    bestListImagesRef.value.push(best_product.mainImage.filename);
+    bestListImagesRef.value.push(best_product.mainImage);
   });
 });
 
