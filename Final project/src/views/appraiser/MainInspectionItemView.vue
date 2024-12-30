@@ -453,6 +453,7 @@ const send = async item => {
         },
         inspectionProductReqDto: {
           productName: item.selectedProduct.productName,
+          productId: item.selectedProduct.productId,
           productSize: item.inspectionSize,
           verifiedSellingPrice: item.inspectionSellingPrice,
           quantity: 0,
@@ -478,7 +479,7 @@ const send = async item => {
     };
   } else if (item.TestResult === 'N') {
     const failData = {
-      inspectionPassReqDto: {
+      inspectionRejectReqDto: {
         pendingSaleId: item.saleApplicationId,
         rejectionReasonId: item.FailReason.rejectionReasonId,
         inspectionCategoryReqDto: {
@@ -491,22 +492,23 @@ const send = async item => {
         },
         inspectionProductReqDto: {
           productName: item.selectedProduct.productName,
+          productId: item.selectedProduct.productId,
           productSize: item.inspectionSize,
           verifiedSellingPrice: item.inspectionSellingPrice,
           quantity: 0,
         },
         userSaleReqImageDtos: userImageFiles.value,
-        passSaleReqImageDtos: appraiserFiles.value.map((passFile, index) => ({
+        failSaleReqImageDtos: appraiserFiles.value.map((passFile, index) => ({
           name: passFile.name,
           desc: `image-${index + 1}`,
         })),
         inspectionContent: item.Content,
         inspectionResult: false,
       },
-      passImageFiles: appraiserFiles.value,
+      failImageFiles: appraiserFiles.value,
       userImageFiles: userImageFiles.value,
     };
-    console.log('rejectionReasonId', failData.rejectionReasonId);
+    console.log('failData', failData);
     DeliveryData.value = { DeliveryData: failData, item: item, appraiserPreviewUrls: previewUrls.value };
   }
   InspectionModal.value = true;

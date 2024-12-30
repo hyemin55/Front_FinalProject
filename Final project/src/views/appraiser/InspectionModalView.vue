@@ -21,10 +21,12 @@ const props = defineProps({
 
 // 사용자가 수정한 아이템
 const appraiserCustomData = props.Data?.DeliveryData || {};
+const appraiserCustomDataView = appraiserCustomData.inspectionPassReqDto
+  ? appraiserCustomData.inspectionPassReqDto
+  : appraiserCustomData.inspectionRejectReqDto;
 // 서버에서 받은 아이템
 const serverItemReqBySeller = props.Data?.item || {};
 const appraiserPreviewUrls = props.Data?.appraiserPreviewUrls || {};
-console.log(appraiserCustomData);
 console.log(serverItemReqBySeller);
 console.log(appraiserPreviewUrls);
 
@@ -50,18 +52,15 @@ const TestResult = computed(() => {
 const send = async () => {
   try {
     const formdata = new FormData();
-    console.log('inspectionPassReqDto:', appraiserCustomData.inspectionPassReqDto);
-    console.log('userImageFiles:', appraiserCustomData.userImageFiles);
-    console.log('passImageFiles:', appraiserCustomData.appraiserFiles);
-    if (appraiserCustomData.inspectionPassReqDto.inspectionResult) {
+
+    appraiserCustomData.userImageFiles.forEach(image => {
+      formdata.append('userImageFiles', image);
+    });
+    if (appraiserCustomData.inspectionPassReqDto) {
       formdata.append(
         'inspectionPassReqDto',
         new Blob([JSON.stringify(appraiserCustomData.inspectionPassReqDto)], { type: 'application/json' }),
       );
-      appraiserCustomData.userImageFiles.forEach(image => {
-        formdata.append('userImageFiles', image);
-      });
-
       if (appraiserCustomData.passImageFiles.length > 0) {
         appraiserCustomData.passImageFiles.forEach(image => {
           formdata.append('passImageFiles', image);
@@ -69,11 +68,9 @@ const send = async () => {
       } else {
         formdata.append('passImageFiles', new Blob([], { type: 'application/octet-stream' }));
       }
-      console.log('formdata 출력 시작');
       for (let [key, value] of formdata.entries()) {
         console.log(key, value);
       }
-      console.log('formdata 출력 끝');
 
       const res = await axios.post(`${GLOBAL_URL}/api/inspection/pass`, formdata, {
         headers: {
@@ -85,7 +82,22 @@ const send = async () => {
       alert('합격 전송되었습니다.');
       emit('close', 'success');
     }
-    if (!appraiserCustomData.inspectionPassReqDto.inspectionResult) {
+    if (appraiserCustomData.inspectionRejectReqDto) {
+      formdata.append(
+        'inspectionRejectReqDto',
+        new Blob([JSON.stringify(appraiserCustomData.inspectionRejectReqDto)], { type: 'application/json' }),
+      );
+
+      if (appraiserCustomData.failImageFiles.length > 0) {
+        appraiserCustomData.failImageFiles.forEach(image => {
+          formdata.append('failImageFiles', image);
+        });
+      } else {
+        formdata.append('failImageFiles', new Blob([], { type: 'application/octet-stream' }));
+      }
+      for (let [key, value] of formdata.entries()) {
+        console.log(key, value);
+      }
       await axios.post(`${GLOBAL_URL}/api/inspection/reject`, formdata, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -138,26 +150,26 @@ watch(
           <tbody>
             <tr>
               <th>No.</th>
-              <td>{{ appraiserCustomData.inspectionPassReqDto.pendingSaleId }}</td>
+              <td>{{ appraiserCustomDataView.pendingSaleId }}</td>
               <td>-</td>
             </tr>
 
             <tr>
               <th>카테고리</th>
-              <td>{{ appraiserCustomData.inspectionPassReqDto.inspectionCategoryReqDto.categoryName }}</td>
+              <td>{{ appraiserCustomDataView.inspectionCategoryReqDto.categoryName }}</td>
               <td>-</td>
             </tr>
             <tr>
               <th>브랜드명</th>
               <td>
-                {{ appraiserCustomData.inspectionPassReqDto.inspectionBrandReqDto.brandId }}.
-                {{ appraiserCustomData.inspectionPassReqDto.inspectionBrandReqDto.brandName }}
+                {{ appraiserCustomDataView.inspectionBrandReqDto.brandId }}.
+                {{ appraiserCustomDataView.inspectionBrandReqDto.brandName }}
               </td>
               <td>-</td>
             </tr>
             <tr>
               <th>상품명</th>
-              <td>{{ appraiserCustomData.inspectionPassReqDto.inspectionProductReqDto.productName }}</td>
+              <td>{{ appraiserCustomDataView.inspectionProductReqDto.productName }}</td>
               <td>-</td>
             </tr>
             <tr v-if="serverItemReqBySeller.selectedProduct.size">
@@ -168,7 +180,7 @@ watch(
             <tr>
               <th>검수 후 실용량</th>
               <td>
-                {{ appraiserCustomData.inspectionPassReqDto.inspectionProductReqDto.productSize.toLocaleString() }}
+                {{ appraiserCustomDataView.inspectionProductReqDto.productSize.toLocaleString() }}
               </td>
               <td>ml</td>
             </tr>
@@ -180,18 +192,14 @@ watch(
             <tr>
               <th>권장 판매 가격</th>
               <td>
-                {{
-                  Number(
-                    appraiserCustomData.inspectionPassReqDto.inspectionProductReqDto.verifiedSellingPrice,
-                  ).toLocaleString()
-                }}
+                {{ Number(appraiserCustomDataView.inspectionProductReqDto.verifiedSellingPrice).toLocaleString() }}
               </td>
               <td>원</td>
             </tr>
             <tr>
               <th>검수결과 참고사항</th>
-              <td v-if="appraiserCustomData.inspectionPassReqDto.inspectionContent">
-                {{ appraiserCustomData.inspectionPassReqDto.inspectionContent }}
+              <td v-if="appraiserCustomDataView.inspectionContent">
+                {{ appraiserCustomDataView.inspectionContent }}
               </td>
               <td v-else>-</td>
               <td>-</td>

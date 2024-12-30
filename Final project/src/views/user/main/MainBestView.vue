@@ -29,8 +29,8 @@ const nextchangeIdx = () => {
 const prevchangeIdx = () => {
   currentIdxRef.value = (currentIdxRef.value - 1 + 3) % 3;
 };
-const navDetailProduct = (productId, size) => {
-  console.log(productId, size);
+const navDetailProduct = productId => {
+  console.log(productId);
   router.push({
     path: `/productsdetail/${productId}`,
   });
@@ -67,12 +67,14 @@ onBeforeUnmount(() => {
         <div class="best_product">
           <img
             class="best_product_img"
-            @click="navDetailProduct(bestListRef[currentIdxRef].productId, bestListRef[currentIdxRef].size)"
+            @click="navDetailProduct(bestListRef[currentIdxRef].productId)"
             :src="`${GLOBAL_URL}/api/file/download/${bestListImagesRef[currentIdxRef]}`"
             alt=""
           />
           <ul class="best_left_text">
-            <li class="best_brand_name" v-if="bestListRef.length > 0">{{ bestListRef[currentIdxRef].brandName }}</li>
+            <li class="best_brand_name" v-if="bestListRef.length > 0">
+              {{ bestListRef[currentIdxRef].brandName }}
+            </li>
             <li class="best_product_name" v-if="bestListRef.length > 0">
               {{ bestListRef[currentIdxRef].productName }}
             </li>

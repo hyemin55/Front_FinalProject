@@ -110,7 +110,7 @@ import { getAcceptedList } from '@/api/InspectionListApi';
 import { GLOBAL_URL } from '@/api/util';
 import AnnouncementComponent from '@/components/admin/AnnouncementComponent.vue';
 import PageNationComponent from '@/components/PageNationComponent.vue';
-import { dateFormat, dateTimeFormat } from '@/FormatData';
+import { dateTimeFormat } from '@/FormatData';
 import { ref, watchEffect } from 'vue';
 
 const acceptedList = ref([]);
@@ -126,7 +126,7 @@ const pageUpdate = pageNum => {
 
 const pageNation = () => {
   pageNationData.value = {
-    totalCount: totalCount.value,
+    totalCount: totalCount.value || 'totalCount없음',
     pageSize: pageSize.value,
   };
 };
