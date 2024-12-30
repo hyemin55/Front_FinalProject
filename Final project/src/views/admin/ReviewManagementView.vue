@@ -55,7 +55,7 @@
             <td>{{ item.content }}</td>
             <td>★ {{ item.star }}</td>
             <td>{{ item.nickName }}</td>
-            <td>{{ item.reviewCreationDate }}</td>
+            <td>{{ dateTimeFormat(item.reviewCreationDate) }}</td>
             <td>{{ item.favoriteCount }}</td>
             <td class="stateButtons">
               <button class="stateButton" @click="HideButton">숨기기</button>
@@ -72,9 +72,16 @@
 </template>
 
 <script setup>
+import {
+  deleteReviewManagement,
+  sortByReviewData,
+  notSortByReviewData,
+  getSearchKeyword,
+} from '@/api/AdministratorModeApi';
 import { GLOBAL_URL } from '@/api/util';
 import AnnouncementComponent from '@/components/admin/AnnouncementComponent.vue';
 import PageNationComponent from '@/components/PageNationComponent.vue';
+import { dateTimeFormat } from '@/FormatData';
 import axios from 'axios';
 import { ref, watchEffect } from 'vue';
 
@@ -100,13 +107,15 @@ const reviewSearchKeyword = async () => {
   dolode('search');
 };
 
-const DeleteButton = item => {
+// 서버에 삭제할 데이터 넘겨주기
+const DeleteButton = async item => {
   console.log(item);
   const result = confirm('정말 리뷰를 삭제하시겠습니까?');
   if (result) {
     console.log('삭제하겠습니다.');
+    await deleteReviewManagement(item.reviewId);
+    console.log('삭제되었습니다.');
   }
-  // 서버에 삭제할 데이터 넘겨주기
 };
 const pageUpdate = pageNum => {
   pageNumber.value = pageNum;
@@ -116,12 +125,7 @@ const dolode = async search => {
   if (search === 'search' || searchKeyword.value.length > 1) {
     if (searchKeyword.value.length > 1) {
       console.log('실행되나?');
-      const searchKeywordRes = await axios.get(`${GLOBAL_URL}/admin/review/management/search`, {
-        params: {
-          searchKeyword: searchKeyword.value,
-          pageNum: pageNumber.value,
-        },
-      });
+      const searchKeywordRes = await getSearchKeyword(searchKeyword.value, pageNumber.value);
       console.log(searchKeywordRes);
       reviewList.value = searchKeywordRes.data.reviewManageDtos.content;
       totalCount.value = searchKeywordRes.data?.reviewCount;
@@ -130,20 +134,9 @@ const dolode = async search => {
     }
   } else {
     if (reviewSortBy.value === '') {
-      reviewDataRes.value = await axios.get(`${GLOBAL_URL}/admin/review/management`, {
-        params: {
-          pageNum: pageNumber.value,
-          size: pageSize.value,
-        },
-      });
+      reviewDataRes.value = await notSortByReviewData(pageNumber.value, pageSize.value);
     } else {
-      reviewDataRes.value = await axios.get(`${GLOBAL_URL}/admin/review/management`, {
-        params: {
-          sort: reviewSortBy.value,
-          pageNum: pageNumber.value,
-          size: pageSize.value,
-        },
-      });
+      reviewDataRes.value = await sortByReviewData(reviewSortBy.value, pageNumber.value, pageSize.value);
     }
     reviewList.value = reviewDataRes.value.data.reviewManageDtos.content;
     totalCount.value = reviewDataRes.value.data.reviewCount;
@@ -222,7 +215,7 @@ table {
 }
 td {
   height: 50px;
-  padding: 2px;
+  padding: 2px 3px;
   border-bottom: 0.5px solid var(--color-main-gray);
 }
 th {

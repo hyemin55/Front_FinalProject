@@ -11,10 +11,6 @@
         <option value="DeliveryCompleted">배송완료</option>
         <option value="PurchaseConfirmation">구매확정</option>
         <option value="CancelPurchase">구매취소</option>
-        <option value="WaitingForPurchaseReturn">구매반품대기</option>
-        <option value="PurchaseReturnCompleted">구매반품완료</option>
-        <option value="WaitingForSalesReturn">판매반품대기</option>
-        <option value="SalesReturnCompleted">판매반품완료</option>
       </select>
       <div id="search">
         <input type="search" id="productSearch" placeholder="상품명 검색" />

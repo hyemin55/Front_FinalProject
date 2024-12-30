@@ -20,11 +20,12 @@
         <MainInspectionItemView :item="item" @dataUpdate="dataUpdate" />
       </article>
     </template>
-    <template v-else
-      ><article id="notList">
-        <img src="@/assets/img/icon/free-animated-icon-note-6172546.gif" alt="" />판매 신청 목록이 없습니다.
-      </article></template
-    >
+    <template v-else>
+      <article id="notList">
+        <img src="@/assets/img/icon/free-animated-icon-note-6172546.gif" alt="" />
+        <p>판매 신청 목록이 없습니다.</p>
+      </article>
+    </template>
     <article>
       <PageNationComponent v-if="totalCount > 0" :pageNationData="pageNationData" @currentPage="pageUpdate" />
     </article>
@@ -63,27 +64,13 @@ const dataUpdate = () => {
 };
 
 const dolode = async () => {
-  const countRes = await axios.get(`${GLOBAL_URL}/api/inspection/pending-sale/total-count`, {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-    },
-  });
-  totalCount.value = countRes.data;
+  const inspectionListCountRes = await getInspectionListCount();
+  totalCount.value = inspectionListCountRes.data;
   pageNationData.totalCount = totalCount.value;
 
   try {
     // 판매 신청 리스트
-    const InspectionListRes = await axios.get(`${GLOBAL_URL}/api/inspection/list`, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-      },
-      params: {
-        pageNum: pageNumber.value,
-        size: pageSize.value,
-      },
-    });
+    const InspectionListRes = await getInspectionList(pageNumber.value, pageSize.value);
 
     InspectionList.value = InspectionListRes.data.map(item => ({
       ...item,
@@ -131,7 +118,8 @@ watchEffect(() => {
   border-radius: 15px;
   height: auto;
   text-align: center;
-  padding: 5%;
+  padding: 10% 5%;
+  align-content: center;
 }
 #notList > img {
   width: 40%;
@@ -139,6 +127,10 @@ watchEffect(() => {
   height: auto;
   filter: opacity(0.7);
   align-content: center;
+}
+#notList > p {
+  font-size: 2rem;
+  color: var(--color-text-gray);
 }
 input,
 select,

@@ -63,9 +63,9 @@
                 }}
               </select>
             </td>
-            <td>{{ memberItem.joinDate }}</td>
-            <td>{{ memberItem.withdrawDate === null ? '-' : memberItem.withdrawDate }}</td>
-            <td>{{ memberItem.lastLoginDate }}</td>
+            <td>{{ dateTimeFormat(memberItem.joinDate) }}</td>
+            <td>{{ memberItem.withdrawDate === null ? '-' : dateTimeFormat(memberItem.withdrawDate) }}</td>
+            <td>{{ dateTimeFormat(memberItem.lastLoginDate) }}</td>
             <td>{{ memberItem.nickName }}</td>
             <td>{{ memberItem.purchaseCount }}</td>
             <td>{{ memberItem.adReceived }}</td>
@@ -82,10 +82,10 @@
 </template>
 
 <script setup>
-import { GLOBAL_URL } from '@/api/util';
+import { getNotSortByRoleMemberData, getSortByRoleMemberData, postRoleChange } from '@/api/AdministratorModeApi';
 import AnnouncementComponent from '@/components/admin/AnnouncementComponent.vue';
 import PageNationComponent from '@/components/PageNationComponent.vue';
-import axios from 'axios';
+import { dateTimeFormat } from '@/FormatData';
 import { ref, watchEffect } from 'vue';
 
 const sortByRole = ref('');
@@ -124,9 +124,9 @@ const memberRoleSave = async () => {
   try {
     for (let i = 0; memberRoleUpdate.value.length > i; i++) {
       const { memberId, role } = memberRoleUpdate.value[i];
-      await axios.post(`${GLOBAL_URL}/admin/member/management/roleChange`, { memberId, role });
+      await postRoleChange(memberId, role);
+      alert('저장되었습니다.');
     }
-    alert('저장되었습니다.');
   } catch (error) {
     console.error('권한 변경 전송 에러:', error.response?.data || error.message);
   }
@@ -140,20 +140,11 @@ const roleChange = item => {
 // 첫 화면
 const dolode = async () => {
   if (sortByRole.value === '') {
-    const memberDataRes = await axios.get(`${GLOBAL_URL}/admin/member/management`, {
-      params: {
-        pageNum: pageNumber.value,
-      },
-    });
+    const memberDataRes = await getNotSortByRoleMemberData(pageNumber.value);
     membersList.value = memberDataRes.data.memberManageDtos;
     totalCount.value = memberDataRes.data.memberCount;
   } else {
-    const memberDataRes = await axios.get(`${GLOBAL_URL}/admin/member/management`, {
-      params: {
-        role: sortByRole.value,
-        pageNum: pageNumber.value,
-      },
-    });
+    const memberDataRes = await getSortByRoleMemberData(sortByRole.value, pageNumber.value);
     membersList.value = memberDataRes.data.memberManageDtos;
     totalCount.value = memberDataRes.data.memberCount;
   }
@@ -258,6 +249,7 @@ table {
 td {
   height: 50px;
   font-size: 1.3rem;
+  padding: 2px 3px;
   border-bottom: 0.5px solid var(--color-main-gray);
 }
 th {

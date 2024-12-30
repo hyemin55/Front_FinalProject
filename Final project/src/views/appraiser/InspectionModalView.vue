@@ -1,6 +1,6 @@
 <script setup>
+import { postPassFormdata, postRejectFormdata } from '@/api/InspectionListApi';
 import { GLOBAL_URL } from '@/api/util';
-import axios from 'axios';
 import { computed, ref, watch } from 'vue';
 
 // 모달창 완료버튼(부모로 event 전달)
@@ -72,13 +72,8 @@ const send = async () => {
         console.log(key, value);
       }
 
-      const res = await axios.post(`${GLOBAL_URL}/api/inspection/pass`, formdata, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-        },
-      });
-      console.log(res.data);
+      const passRes = await postPassFormdata(formdata);
+      console.log(passRes.data);
       alert('합격 전송되었습니다.');
       emit('close', 'success');
     }
@@ -98,12 +93,8 @@ const send = async () => {
       for (let [key, value] of formdata.entries()) {
         console.log(key, value);
       }
-      await axios.post(`${GLOBAL_URL}/api/inspection/reject`, formdata, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-        },
-      });
+      const rejectRes = await postRejectFormdata(formdata);
+      console.log(rejectRes.data);
       alert('불합격 전송되었습니다.');
       emit('close');
     }

@@ -315,6 +315,7 @@ import axios from 'axios';
 import { ref, watchEffect } from 'vue';
 import InspectionModalView from '@/views/appraiser/InspectionModalView.vue';
 import { dateTimeFormat } from '@/FormatData';
+import { getBrandResponse, getFailReason, getPassGrade, getProductResponse } from '@/api/InspectionListApi';
 
 const props = defineProps({
   item: {
@@ -526,10 +527,8 @@ const fetchSuggestions = async (type, item) => {
     // 최소 2자 입력 후 검색
     try {
       // 브랜드 검색어 입력 시 서버와 통신
-      const brandResponse = await axios.get(`${GLOBAL_URL}/api/inspection/search-brands`, {
-        params: { keyword: item.brandKeyword },
-      });
-      item.brandSuggestions = brandResponse.data;
+      const brandResponseRes = await getBrandResponse(item.brandKeyword);
+      item.brandSuggestions = brandResponseRes.data;
       if (item.brandSuggestions.length > 0) {
         item.selectedBrand = `${item.brandSuggestions[0].brandId}.${item.brandSuggestions[0].brandName}`;
       } else {
@@ -543,10 +542,8 @@ const fetchSuggestions = async (type, item) => {
   if (Number(item.selectedBrand.split('.')[0]) != 0 || Number(item.selectedBrand.split('.')[0]) != null) {
     try {
       // 상품명 검색어 입력 시 서버와 통신
-      const productResponse = await axios.get(`${GLOBAL_URL}/api/inspection/search-products`, {
-        params: { brandId: Number(item.selectedBrand.split('.')[0]) },
-      });
-      item.productSuggestions = productResponse.data;
+      const productResponseRes = await getProductResponse(Number(item.selectedBrand.split('.')[0]));
+      item.productSuggestions = productResponseRes.data;
       if (item.productSuggestions.length > 0) {
         console.log(item.productSuggestions);
         item.selectedProduct = item.productSuggestions[0];
@@ -563,10 +560,10 @@ const fetchSuggestions = async (type, item) => {
 
 watchEffect(async () => {
   // 검수 합격 등급 리스트
-  const passRes = await axios.get(`${GLOBAL_URL}/api/inspection/pass/grade`);
+  const passRes = await getPassGrade();
   PassGradeList.value = passRes.data;
   // 검수 불합격 사유 리스트
-  const failRes = await axios.get(`${GLOBAL_URL}/api/inspection/fail/reason`);
+  const failRes = await getFailReason();
   FailReasonList.value = failRes.data;
 });
 </script>
