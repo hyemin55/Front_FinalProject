@@ -1,6 +1,6 @@
 <script setup>
 import { GLOBAL_URL } from '@/api/util';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { computed, onMounted, ref, watch, watchEffect } from 'vue';
 import { useCartStore } from '@/stores/CartStore';
 import axios from 'axios';
@@ -14,6 +14,13 @@ import { useWishStore } from '@/stores/WishStore';
 // 로그인 pinia
 const userStore = useUserStore();
 const userLogin = computed(() => userStore.loginCheck);
+
+
+// 단위 변경
+const route = useRoute();
+const unit = ref(route.params.idx == 1 ? "g" : "ml");
+
+
 
 // 상품리스트에 출력
 const props = defineProps({
@@ -111,7 +118,7 @@ const addToWishlist = async () => {
     <div class="product_text">
       <ul>
         <li @click="navDetailProduct" class="product_title">
-          {{ productName }}
+          {{ productName }} • {{ size }}{{ unit }}
         </li>
         <li class="product_content">{{ content }}</li>
       </ul>
