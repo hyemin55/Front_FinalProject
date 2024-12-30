@@ -81,33 +81,78 @@ const sortList = (order, index) => {
   }
 };
 
-const filterData = [
-  {
-    id: 1,
-    title: '상품',
-    content: ['새상품 보기', '중고상품 보기'],
-  },
-  {
-    id: 2,
-    title: '브랜드',
-    content: ['Ferrari', 'Chanel', 'Versace', 'Jomalone', 'Cocodor', 'Diptyque', 'Santa Maria Novella', 'Tom Ford', 'Comme Des Garcons Parfum', 'Dior'],
-  },
-  {
-    id: 3,
-    title: '성별',
-    content: ['남성용', '여성용'],
-  },
-  {
-    id: 4,
-    title: '용량',
-    content: ['100ml 이상', '100ml ~ 50ml', '50ml 이하'],
-  },
-  {
-    id: 5,
-    title: '지속시간',
-    content: ['파르푕', '오드파르푕', '오드뜨왈렛', '오드코롱'],
-  },
-];
+const filterData = ref([]);
+const setFilter = ()=>{
+  filterData.value = [];
+  if(categoryId.value === "3"){
+    filterData.value = [{
+      id: 1,
+      title: '브랜드',
+      content: ['Ferrari', 'Chanel', 'Versace', 'Jomalone', 'Cocodor', 'Diptyque', 'Santa Maria Novella', 'Tom Ford', 'Comme Des Garcons Parfum', 'Dior'],
+    },
+    {
+      id: 2,
+      title: '성별',
+      content: ['남성용', '여성용'],
+    },
+    {
+      id: 3,
+      title: '용량',
+      content: ['100ml 이상', '100ml ~ 50ml', '50ml 이하'],
+    },
+    {
+      id: 4,
+      title: '지속시간',
+      content: ['파르푕', '오드파르푕', '오드뜨왈렛', '오드코롱'],
+    }]
+  }
+  else if(categoryId.value === "2"){
+    filterData.value = [{
+      id: 5,
+      title: '브랜드',
+      content: ['Jomalone', 'Diptyque', 'Annunziata'],
+    },
+    {
+      id: 6,
+      title: '용도',
+      content: ['실내용 ', '차량용', '휴대용', '욕실용'],
+    },
+    {
+      id: 7,
+      title: '용량',
+      content: ['100ml 이상', '100ml ~ 50ml', '50ml 이하'],
+    }]
+  }
+  else if(categoryId.value === "1"){
+    filterData.value = [{
+      id: 8,
+      title: '브랜드',
+      content: ['Yankee Candle', 'Dolce & Gabbana',],
+    },
+    {
+      id: 9,
+      title: '성별',
+      content: ['남성용', '여성용'],
+    },
+    {
+      id: 10,
+      title: '용량',
+      content: ['100g 이상', '100g ~ 50g', '50g 이하'],
+    }]
+  }
+}
+  
+onMounted(()=>{
+  setFilter();
+})
+watch(categoryId, (newValue, oldValue) =>{
+  console.log("categoryId 값이 변경되었습니다:", newValue);
+  // filterMode.value = false
+  // filterLayout.value = true
+  // ball.value = false;
+  setFilter();
+})
+
 
 const ball = ref(false)
 const filterLayout = ref(true) //상품 레이아웃 변경

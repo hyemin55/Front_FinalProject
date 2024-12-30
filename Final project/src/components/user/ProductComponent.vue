@@ -23,6 +23,7 @@ const props = defineProps({
     required: true,
   },
 });
+// console.log("들어오는값 ", props.productInfo);
 const productName = ref(props.productInfo.productName || '상품이름');
 const content = ref(props.productInfo.content || '상품설명');
 const minPrice = ref(props.productInfo.minPrice || '0');
@@ -30,7 +31,7 @@ const maxPrice = ref(props.productInfo.maxPrice || '0');
 const size = ref(props.productInfo.size || '사이즈');
 // const review_avr = ref('평점');
 const reviewCount = ref(props.productInfo.reviewCount || '0');
-const brand = ref(props.productInfo.brand || 'Santa Maria Novella');
+const brand = ref(props.productInfo.brandName || 'Santa Maria Novella');
 
 const gradeTypes = ref(props.productInfo.gradeTypes || '품절');
 const gradeTypesArray = ref(gradeTypes.value.split(',').map(type => type.trim()));
