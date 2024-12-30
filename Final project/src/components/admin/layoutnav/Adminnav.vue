@@ -1,9 +1,9 @@
 <template>
-  <article id="AdminNav" v-if="role === 'ADMIN'">
+  <article id="AdminNav" v-if="role === 'ADMIN'" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
     <ul>
       <Router-link v-for="(item, index) in adminMenu" :key="item.route" :to="item.route">
         <li class="NavMenu" :class="{ active: activeIndex === index }" @click="setActive(index)">
-          <img :src="item.icon" alt="" />{{ item.label }}
+          <img :src="item.icon" alt="" /><span class="NavMenuText">{{ item.label }}</span>
         </li>
       </Router-link>
     </ul>
@@ -13,7 +13,7 @@
     <ul>
       <RouterLink :to="item.route" v-for="(item, index) in appraiserMenu" :key="item.route">
         <li class="NavMenu" :class="{ active: activeIndex === index }" @click="setActive(index)">
-          <img :src="item.icon" alt="" />{{ item.label }}
+          <img :src="item.icon" alt="" /><span class="NavMenuText">{{ item.label }}</span>
         </li>
       </RouterLink>
     </ul>
@@ -23,11 +23,26 @@
 <script setup>
 import { useUserStore } from '@/stores/Login';
 import { watch, ref } from 'vue';
+import { useRoute } from 'vue-router';
 
 const useStore = useUserStore();
+const route = useRoute();
 const role = useStore.role;
-const activeIndex = ref(null);
+const activeIndex = ref(0);
+const emit = defineEmits();
 
+const isHovered = ref(false);
+const handleMouseEnter = () => {
+  isHovered.value = true;
+  emit('MouseHovered', isHovered.value);
+  console.log('넘겻니?');
+};
+const handleMouseLeave = () => {
+  isHovered.value = false;
+  emit('MouseHovered', isHovered.value);
+  console.log('마우스 떠났다');
+  // console.log(isHovered.value);
+};
 // 메뉴 항목 데이터
 const adminMenu = [
   {
@@ -109,16 +124,6 @@ watch(useStore.role, _new => {
 </script>
 
 <style scoped>
-#AdminNav {
-  position: fixed;
-  left: 0;
-  width: 200px;
-  height: calc(100vh - 70px);
-  background-color: var(--color-main-pink);
-  font-size: 1.6rem;
-  transition: all 0.3s;
-}
-.NavMenu:hover,
 .NavMenu {
   width: 100%;
   height: 50px;
@@ -137,24 +142,36 @@ watch(useStore.role, _new => {
   filter: invert(100%) brightness(200%);
 }
 .NavMenu img {
-  width: 10%;
+  width: 20px;
   margin-right: 10px;
   transition: all 0.3s;
 }
+.NavMenuText {
+  transition: all 0.3s ease;
+}
+
 @media (max-width: 1000px) {
-  #AdminNav {
-    width: 100px;
-    font-size: 1.2rem;
-    transition: all 0.3s;
-  }
-  .NavMenu,
-  .NavMenu:hover {
+  .NavMenu {
     padding-left: 10px;
+    display: flex;
+    align-items: center;
   }
   .NavMenu img {
-    width: 20%;
+    width: 20px;
     margin-right: 1px;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
+  }
+  .NavMenuText {
+    display: none;
+    font-size: 0rem;
+    width: 80px;
+    transition: all 0.3s ease;
+  }
+
+  #AdminNav:hover .NavMenuText {
+    display: block;
+    font-size: 1.2rem;
+    width: 80px;
   }
 }
 </style>

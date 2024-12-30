@@ -15,9 +15,16 @@
         <option value="20">20개씩 보기</option>
       </select>
     </article>
-    <article id="Inspection" v-for="(item, index) in InspectionList" :key="index">
-      <MainInspectionItemView :item="item" @dataUpdate="dataUpdate" />
-    </article>
+    <template v-if="InspectionList.length > 0">
+      <article id="Inspection" v-for="(item, index) in InspectionList" :key="index">
+        <MainInspectionItemView :item="item" @dataUpdate="dataUpdate" />
+      </article>
+    </template>
+    <template v-else
+      ><article id="notList">
+        <img src="@/assets/img/icon/free-animated-icon-note-6172546.gif" alt="" />판매 신청 목록이 없습니다.
+      </article></template
+    >
     <article>
       <PageNationComponent v-if="totalCount > 0" :pageNationData="pageNationData" @currentPage="pageUpdate" />
     </article>
@@ -49,6 +56,10 @@ const pageNationData = reactive({
 const pageUpdate = pageNum => {
   pageNumber.value = pageNum;
   InspectionList.value = [];
+};
+
+const dataUpdate = () => {
+  dolode();
 };
 
 const dolode = async () => {
@@ -113,6 +124,21 @@ watchEffect(() => {
   border-radius: 15px;
   border: 5px solid var(--color-main-bloode);
   margin-bottom: 15px;
+}
+#notList {
+  background-color: white;
+  width: 100%;
+  border-radius: 15px;
+  height: auto;
+  text-align: center;
+  padding: 5%;
+}
+#notList > img {
+  width: 40%;
+  border-radius: 15px;
+  height: auto;
+  filter: opacity(0.7);
+  align-content: center;
 }
 input,
 select,

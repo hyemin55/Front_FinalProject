@@ -332,6 +332,7 @@ const InspectionModal = ref(false);
 const appraiserFiles = ref([]);
 const previewUrls = ref([]);
 const userImageFiles = ref([]);
+const emit = defineEmits(['dataUpdate']);
 
 // 검수자 이미지파일 등록`
 const handleFileUpload = event => {
@@ -359,7 +360,7 @@ const selectImages = (img, index) => {
 // pageNation emit 업데이트
 
 // InspectionMadal emit 업데이트
-const closeModal = () => {
+const closeModal = value => {
   InspectionModal.value = false;
   item.value.PassGrade = '';
   item.value.FailReason = '';
@@ -370,6 +371,10 @@ const closeModal = () => {
   item.value.userSaleResImageList.forEach(image => {
     image.used = false;
   });
+  console.log('value', value);
+  if (value === 'success') {
+    emit('dataUpdate');
+  }
 };
 
 const validatedInspectionSize = item => {
@@ -448,6 +453,7 @@ const send = async item => {
         },
         inspectionProductReqDto: {
           productName: item.selectedProduct.productName,
+          productId: item.selectedProduct.productId,
           productSize: item.inspectionSize,
           verifiedSellingPrice: item.inspectionSellingPrice,
           quantity: 0,
@@ -473,7 +479,7 @@ const send = async item => {
     };
   } else if (item.TestResult === 'N') {
     const failData = {
-      inspectionPassReqDto: {
+      inspectionRejectReqDto: {
         pendingSaleId: item.saleApplicationId,
         rejectionReasonId: item.FailReason.rejectionReasonId,
         inspectionCategoryReqDto: {
@@ -486,22 +492,23 @@ const send = async item => {
         },
         inspectionProductReqDto: {
           productName: item.selectedProduct.productName,
+          productId: item.selectedProduct.productId,
           productSize: item.inspectionSize,
           verifiedSellingPrice: item.inspectionSellingPrice,
           quantity: 0,
         },
         userSaleReqImageDtos: userImageFiles.value,
-        passSaleReqImageDtos: appraiserFiles.value.map((passFile, index) => ({
+        failSaleReqImageDtos: appraiserFiles.value.map((passFile, index) => ({
           name: passFile.name,
           desc: `image-${index + 1}`,
         })),
         inspectionContent: item.Content,
         inspectionResult: false,
       },
-      passImageFiles: appraiserFiles.value,
+      failImageFiles: appraiserFiles.value,
       userImageFiles: userImageFiles.value,
     };
-    console.log('rejectionReasonId', failData.rejectionReasonId);
+    console.log('failData', failData);
     DeliveryData.value = { DeliveryData: failData, item: item, appraiserPreviewUrls: previewUrls.value };
   }
   InspectionModal.value = true;

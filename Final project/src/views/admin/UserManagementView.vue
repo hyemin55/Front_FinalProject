@@ -209,6 +209,7 @@ option:focus {
 }
 #sortByColor {
   background-color: var(--color-main-pink);
+  padding: 5px;
 }
 #search {
   width: 70%;

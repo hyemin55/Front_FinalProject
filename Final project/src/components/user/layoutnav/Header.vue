@@ -5,6 +5,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { eventBus } from '@/eventBus';
 import { useCartStore } from '@/stores/CartStore';
 import { useWishStore } from '@/stores/WishStore';
+import { loginCheck } from '@/api/KakaoLoginApi';
 
 const cartStore = useCartStore();
 const route = useRoute();
@@ -13,7 +14,7 @@ const HeaderMode = ref(false);
 
 const useStore = useUserStore();
 const wishStore = useWishStore();
-
+const role = ref('');
 const token = ref(false);
 watchEffect(() => {
   HeaderMode.value = route.path === '/';
@@ -33,7 +34,6 @@ const kakaoLogout = async () => {
 
 onMounted(() => {
   const savedToken = sessionStorage.getItem('token');
-
   if (savedToken) {
     token.value = true;
     useStore.loginCheck = true; // 스토어에 로그인 상태 설정
@@ -66,6 +66,9 @@ onMounted(() => {
   } else {
     HeaderMode.value = false;
   }
+  // if (sessionStorage.getItem('token')) {
+  //   const res = loginCheck();
+  // }
 });
 
 const isSearchVisible = ref(false); // 검색창의 표시 여부
@@ -104,10 +107,10 @@ const toggleSearch = () => {
           <li><router-link to="/mypage">마이페이지</router-link></li>
           <li class="noCursor">&nbsp;|&nbsp;</li>
           <li>고객센터</li>
-          <li class="noCursor">&nbsp;|&nbsp;</li>
-          <li><router-link to="/mainInspectionList">검수자</router-link></li>
-          <li class="noCursor">&nbsp;|&nbsp;</li>
-          <li><router-link to="/mainDashboard">관리자</router-link></li>
+          <li class="noCursor" v-if="role === 'APPRAISER'">&nbsp;|&nbsp;</li>
+          <li v-if="role === 'APPRAISER'"><router-link to="/mainInspectionList">검수자</router-link></li>
+          <li class="noCursor" v-if="role === 'ADMIN'">&nbsp;|&nbsp;</li>
+          <li v-if="role === 'ADMIN'"><router-link to="/mainDashboard">관리자</router-link></li>
         </ul>
       </template>
       <template v-else>

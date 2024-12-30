@@ -124,7 +124,7 @@ const dolode = async search => {
       });
       console.log(searchKeywordRes);
       reviewList.value = searchKeywordRes.data.reviewManageDtos.content;
-      totalCount.value = searchKeywordRes.data.reviewCount;
+      totalCount.value = searchKeywordRes.data?.reviewCount;
       console.log(totalCount.value);
       pageNation();
     }
