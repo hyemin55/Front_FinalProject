@@ -1,38 +1,55 @@
 <script setup>
 import { GLOBAL_URL } from '@/api/util';
+import PageNationComponent from '@/components/PageNationComponent.vue';
 import HistoryProduct from '@/components/user/HistoryProduct.vue';
 import SaleProductModal from '@/components/user/SaleProductModal.vue';
 import axios from 'axios';
 import { onMounted, ref } from 'vue';
 
-const saleModal = ref(false)
-const showModal = ()=>{
-  saleModal.value = !saleModal.value
-}
+const saleModal = ref(false);
+const showModal = () => {
+  saleModal.value = !saleModal.value;
+};
 
 const saleList = ref([]);
-const getSaleList = async()=>{
-  try{
+const getSaleList = async () => {
+  try {
     const res = await axios.get(`${GLOBAL_URL}/myPage/saleList`, {
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-        'Content-Type':'application/json'
-      }
-    })
+        'Content-Type': 'application/json',
+      },
+    });
     saleList.value = res.data;
-    console.log("세일리스트", saleList.value);
-  }catch(error){
-    console.error(error)
+    console.log('세일리스트', saleList.value);
+  } catch (error) {
+    console.error(error);
   }
-}
-onMounted(()=>{
+};
+onMounted(() => {
   getSaleList();
-})
+  pageNation();
+});
 
-const Rendering = ()=>{
+const Rendering = () => {
   getSaleList();
-}
+};
 
+// 페이지네이션
+const totalCount = ref(50);
+const pageSize = ref(5);
+const pageNumber = ref(0);
+const pageNationData = ref('');
+
+const pageUpdate = pageNum => {
+  pageNumber.value = pageNum;
+};
+const pageNation = () => {
+  pageNationData.value = {
+    totalCount: totalCount.value,
+    pageSize: pageSize.value,
+  };
+};
 </script>
 
 <template>
@@ -44,9 +61,18 @@ const Rendering = ()=>{
     </h2>
   </div>
 
-  <HistoryProduct :saleList="saleList" :type="'sale'" :showBtn="false" @UpdateRendering="Rendering" @DeleteRendering="Rendering"></HistoryProduct>
+  <HistoryProduct
+    :saleList="saleList"
+    :type="'sale'"
+    :showBtn="false"
+    @UpdateRendering="Rendering"
+    @DeleteRendering="Rendering"
+  ></HistoryProduct>
 
-  <SaleProductModal v-if="saleModal" @closeModal="showModal"/>
+  <SaleProductModal v-if="saleModal" @closeModal="showModal" />
+  <article>
+    <PageNationComponent :pageNationData="pageNationData" @currentPage="pageUpdate" />
+  </article>
 </template>
 
 <style scoped>
