@@ -37,6 +37,8 @@ onMounted(() => {
   if (savedToken) {
     token.value = true;
     useStore.loginCheck = true; // 스토어에 로그인 상태 설정
+    role.value = useStore.role;
+    console.log(useStore.role);
   } else {
     useStore.loginCheck = false;
   }
