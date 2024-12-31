@@ -51,6 +51,11 @@ const adminMenu = [
     label: '대시보드',
   },
   {
+    route: '/categoryManagement',
+    icon: new URL('@/assets/img/icon/free-icon-font-clipboard-list-7857488.svg', import.meta.url).href,
+    label: '카테고리관리',
+  },
+  {
     route: '/productManagement',
     icon: new URL('@/assets/img/icon/free-icon-font-clipboard-list-7857488.svg', import.meta.url).href,
     label: '상품관리',

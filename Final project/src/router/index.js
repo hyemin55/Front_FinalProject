@@ -21,6 +21,7 @@ import ApprovedListView from '@/views/appraiser/ApprovedListView.vue';
 import PetListView from '@/views/appraiser/PetListView.vue';
 import ProductMasonryView from '@/views/user/product/ProductMasonryView.vue';
 import AnnouncementView from '@/views/admin/AnnouncementVIew.vue';
+import CategoryManagementView from '@/views/admin/CategoryManagementView.vue';
 
 // 로그인
 const loginRouters = [
@@ -61,6 +62,11 @@ const adminRouters = [
         path: 'productManagement',
         name: 'productManagement',
         component: ProductManagementView,
+      },
+      {
+        path: 'categoryManagement',
+        name: 'categoryManagement',
+        component: CategoryManagementView,
       },
       {
         path: 'reviewManagement',

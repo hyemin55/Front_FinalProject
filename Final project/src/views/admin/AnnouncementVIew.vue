@@ -31,7 +31,7 @@
               {{ item.header }}
             </td>
             <td>{{ item.creationDate }}</td>
-            <td>{{ item.views }}</td>
+            <td>{{ item.views.toLocaleString() }}</td>
           </tr>
           <tr v-if="viewContents[index]" class="contents" :class="{ contentactive: viewContents[index] }">
             <td colspan="4">{{ item.content }}</td>
@@ -40,7 +40,11 @@
       </table>
     </article>
     <article>
-      <AnnouncementWritingModalComponent v-if="writingModal" :announcementDataCount="announcementDataCount" @closeModal="closeModal"/>
+      <AnnouncementWritingModalComponent
+        v-if="writingModal"
+        :announcementDataCount="announcementDataCount"
+        @closeModal="closeModal"
+      />
     </article>
   </section>
 </template>
@@ -52,10 +56,11 @@ import { ref } from 'vue';
 const announcementData = ref([]);
 const viewContents = ref([false]);
 const writingModal = ref(false);
-const announcementDataCount = ref(announcementData.value.length)
-const toggleContent = (item,index) => {
-  if(!viewContents.value[index])
- { item.views++}
+const announcementDataCount = ref(announcementData.value.length);
+const toggleContent = (item, index) => {
+  if (!viewContents.value[index]) {
+    item.views++;
+  }
   viewContents.value[index] = true;
   for (let i = 0; i < announcementData.value.length; i++) {
     if (i !== index) {
@@ -66,17 +71,17 @@ const toggleContent = (item,index) => {
 };
 
 const openWritingModal = () => {
-  console.log(announcementData.value.length)
+  console.log(announcementData.value.length);
   announcementDataCount.value = announcementData.value.length;
   writingModal.value = true;
 };
 
-const closeModal = (addAnnouncement) =>{
-  console.log('announcementData',announcementData.value)
-  console.log('addAnnouncement',addAnnouncement)
+const closeModal = addAnnouncement => {
+  console.log('announcementData', announcementData.value);
+  console.log('addAnnouncement', addAnnouncement);
   announcementData.value.push(addAnnouncement);
   writingModal.value = false;
-}
+};
 
 announcementData.value = [
   {
@@ -258,7 +263,7 @@ td {
 }
 .Titleactive {
   /* border-top: 2px solid var(--color-text-gray); */
-  border-top: 2px solid orange ;
+  border-top: 2px solid orange;
   background-color: var(--color-main-pink);
 }
 .contentactive {

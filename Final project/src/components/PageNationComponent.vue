@@ -106,12 +106,13 @@ const activePage = pageNum => {
 };
 const dolode = () => {
   totalCount.value = props.pageNationData.totalCount;
+  console.log('totalCount', totalCount.value);
   pageSize.value = props.pageNationData.pageSize;
   viewCurrentPage();
 };
 watchEffect(() => {
-  console.log(props.pageNationData);
   dolode();
+  console.log(props.pageNationData);
 });
 </script>
 
@@ -122,7 +123,7 @@ watchEffect(() => {
   align-items: center;
   justify-content: center;
   width: 100%;
-  margin-top: 30px;
+  padding: 20px;
   /* background-color: rgb(161, 160, 158); */
   font-size: 1.3rem;
   /* gap: 1%; */

@@ -6,11 +6,11 @@
     <article id="sortByAndSearch">
       <select name="sortBy" id="sortBy">
         <option value="total">전체</option>
-        <option value="onSale">판매중</option>
+        <!-- <option value="onSale">판매중</option>
         <option value="soldOut">품절</option>
         <option value="hiding">숨김</option>
         <option value="waitingForSale">판매대기</option>
-        <option value="saleCompleted">판매완료</option>
+        <option value="saleCompleted">판매완료</option> -->
       </select>
       <div id="search">
         <input type="search" id="productSearch" placeholder="상품명 검색" />
@@ -23,53 +23,45 @@
           <tr class="TableHeader">
             <th>No.</th>
             <th>카테고리</th>
-            <th>브랜드</th>
+            <th>브랜드명</th>
             <th colspan="2">상품명</th>
             <th>옵션</th>
-            <th>판매가</th>
-            <th>상태</th>
-            <th>재고</th>
-            <th>등록일</th>
-            <th>수정일</th>
+            <th>재고수량</th>
           </tr>
         </thead>
         <tbody>
-          <tr class="TableBody" v-for="(item, index) in productList" :key="index">
-            <td>{{ item.usedProductId }}</td>
-            <td>{{ item.category }}</td>
-            <!-- <td>{{ item.brandName }}</td> -->
+          <tr class="TableBody" v-for="(item, index) in categoryList" :key="index">
+            <td>{{ index + 1 }}</td>
+            <td>{{ category[item.dtype] }}</td>
+            <td>{{ item.brandName }}</td>
             <td><img class="productImages" :src="`${GLOBAL_URL}/api/file/download/${item.filename}`" alt="" /></td>
-            <td class="productName">{{ item.productName }}</td>
-            <td>{{ item.productSize }} ml</td>
-            <td>{{ item.productPrice.toLocaleString() }} 원</td>
-            <td>
-              <select name="state" id="" v-model="selectState.value" class="selectState">
-                <option :value="list" v-for="(list, index) in stateOption" :key="index">{{ list.name }}</option>
-              </select>
-            </td>
-            <td>1</td>
-            <td>{{ dateTimeFormat(item.createdDate) }}</td>
-            <td v-if="item.modifiedDate">{{ dateTimeFormat(item.modifiedDate) }}</td>
-            <td v-else>-</td>
+            <td class="productName">{{ item.productId }}. {{ item.productName }}</td>
+            <td>{{ item.size.toLocaleString() }} ml</td>
+            <td>{{ item.usedProductCount.toLocaleString() }}</td>
           </tr>
         </tbody>
       </table>
     </article>
-    <article>
+    <article class="PageNation">
       <PageNationComponent :pageNationData="pageNationData" @currentPage="updatePage" />
     </article>
   </section>
 </template>
 
 <script setup>
-import { getProductManagementList } from '@/api/AdministratorModeApi';
+import { getCategoryManagementList } from '@/api/AdministratorModeApi';
+import { GLOBAL_URL } from '@/api/util';
 import AnnouncementComponent from '@/components/admin/AnnouncementComponent.vue';
 import PageNationComponent from '@/components/PageNationComponent.vue';
-import { GLOBAL_URL } from '@/api/util';
 import { ref, watchEffect } from 'vue';
-import { dateTimeFormat } from '@/FormatData';
 
-const productList = ref([]);
+const category = {
+  P: 'Perfume',
+  C: 'Candle',
+  D: 'Diffuser',
+};
+
+const categoryList = ref([]);
 const totalCount = ref(0);
 const size = ref(20);
 const currentPage = ref(0);
@@ -89,18 +81,18 @@ const updatePage = selectPage => {
 
 const dolode = async () => {
   selectState.value = stateOption[0];
-  const productManagementListRes = await getProductManagementList();
-  productList.value = productManagementListRes.productManageDtos.content;
-  totalCount.value = productManagementListRes.productCount;
-  console.log('productList', totalCount.value, productList.value);
+  const CategoryManagementListRes = await getCategoryManagementList(currentPage.value, size.value);
+  categoryList.value = CategoryManagementListRes.categoryManageDtoPage;
+  totalCount.value = CategoryManagementListRes.count;
+  console.log('categoryList', totalCount.value, categoryList.value);
 
   pageNationData.value = {
     totalCount: totalCount.value,
     pageSize: size.value,
   };
 };
-
 watchEffect(() => {
+  currentPage.value;
   dolode();
 });
 </script>
@@ -176,7 +168,7 @@ th {
   border-bottom: 2px solid var(--color-main-gray);
   height: 40px;
 }
-.TableBody > td:nth-child(3) {
+.TableBody > td:nth-child(4) {
   text-align: left;
 }
 .selectState {
@@ -186,5 +178,7 @@ th {
 }
 .productName {
   text-align: left;
+}
+.PageNation {
 }
 </style>

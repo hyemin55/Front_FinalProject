@@ -3,103 +3,111 @@
     <article>
       <AnnouncementComponent />
     </article>
-    <article id="Inspection" v-for="(item, index) in rejectionList" :key="index">
-      <table>
-        <thead>
-          <tr>
-            <th>No.</th>
-            <th>판매 신청자</th>
-            <th>판매신청날짜</th>
-            <th>배송도착일</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{{ item.verifiedSaleId }}</td>
-            <td>{{ item.seller }}</td>
-            <td>{{ dateTimeFormat(item.registerDate) }}</td>
-            <td>도착일 하는즁</td>
-          </tr>
-        </tbody>
-        <thead>
-          <tr>
-            <th>카테고리</th>
-            <th>브랜드</th>
-            <th>상품명</th>
-            <th>용량 (ml)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{{ item.verifiedCategory }}</td>
-            <td>{{ item.verifiedBrand }}</td>
-            <td>{{ item.productName }}</td>
-            <td>{{ item.verifiedSize.toLocaleString() }} ml</td>
-          </tr>
-        </tbody>
-        <thead>
-          <tr>
-            <th>희망판매가격</th>
-            <th>권장판매가격</th>
-            <th colspan="2">판매자 상세설명</th>
-          </tr>
-        </thead>
+    <template v-if="rejectionList.length === 0">
+      <article id="notList">
+        <img src="@/assets/img/icon/free-animated-icon-note-6172546.gif" alt="" />
+        <p>판매 신청 목록이 없습니다.</p>
+      </article>
+    </template>
+    <template v-else>
+      <article id="Inspection" v-for="(item, index) in rejectionList" :key="index">
+        <table>
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>판매 신청자</th>
+              <th>판매신청날짜</th>
+              <th>배송도착일</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ item.pendingSaleId }}</td>
+              <td>{{ item.seller }}</td>
+              <td>{{ dateTimeFormat(item.createdDate) }}</td>
+              <td>{{ dateTimeFormat(item.shippedDate) }}</td>
+            </tr>
+          </tbody>
+          <thead>
+            <tr>
+              <th>카테고리</th>
+              <th>브랜드</th>
+              <th>상품명</th>
+              <th>용량 (ml)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ item.verifiedCategory }}</td>
+              <td>{{ item.verifiedBrand }}</td>
+              <td>{{ item.productName }}</td>
+              <td>{{ item.verifiedSize.toLocaleString() }} ml</td>
+            </tr>
+          </tbody>
+          <thead>
+            <tr>
+              <th>희망판매가격</th>
+              <th>권장판매가격</th>
+              <th colspan="2">판매자 상세설명</th>
+            </tr>
+          </thead>
 
-        <tbody>
-          <tr>
-            <td>{{ item.userPrice.toLocaleString() }} 원</td>
-            <td>{{ item.verifiedPrice.toLocaleString() }} 원</td>
-            <td colspan="2" v-if="item.productDescription === ''">-</td>
-            <td colspan="2" v-else>{{ item.productDescription }}</td>
-          </tr>
-        </tbody>
-        <thead>
-          <tr>
-            <th>사용 유무</th>
-            <th>판매불가 사유</th>
-            <th colspan="2">검수결과 참고사항</th>
-          </tr>
-        </thead>
+          <tbody>
+            <tr>
+              <td>{{ item.userPrice.toLocaleString() }} 원</td>
+              <td>{{ item.verifiedPrice.toLocaleString() }} 원</td>
+              <td colspan="2" v-if="item.productDescription === ''">-</td>
+              <td colspan="2" v-else>{{ item.productDescription }}</td>
+            </tr>
+          </tbody>
+          <thead>
+            <tr>
+              <th>사용 유무</th>
+              <th>판매불가 사유</th>
+              <th colspan="2">검수결과 참고사항</th>
+            </tr>
+          </thead>
 
-        <tbody>
-          <tr>
-            <td>{{ item.verifiedUsedOrNot ? '중고상품' : '새상품' }}</td>
-            <td>{{ item.rejectionReason }}</td>
-            <td colspan="2" v-if="item.inspectionDescription === ''">-</td>
-            <td colspan="2" v-else>{{ item.inspectionDescription }}</td>
-          </tr>
-        </tbody>
-        <thead>
-          <tr>
-            <th>대표사진</th>
-            <th colspan="2">등록사진</th>
-            <th>판매현황</th>
-          </tr>
-        </thead>
+          <tbody>
+            <tr>
+              <td>{{ item.verifiedUsedOrNot ? '중고상품' : '새상품' }}</td>
+              <td>{{ item.rejectionReason }}</td>
+              <td colspan="2" v-if="item.inspectionDescription === ''">-</td>
+              <td colspan="2" v-else>{{ item.inspectionDescription }}</td>
+            </tr>
+          </tbody>
+          <thead>
+            <tr>
+              <th>대표사진</th>
+              <th colspan="2">등록사진</th>
+              <th>판매현황</th>
+            </tr>
+          </thead>
 
-        <tbody>
-          <tr>
-            <td><img :src="`${GLOBAL_URL}/api/file/download/${item.representativeImage}`" alt="" /></td>
-            <td colspan="2">
-              <img
-                v-for="(userImage, index) in item.userImages"
-                :key="index"
-                :src="`${GLOBAL_URL}/api/file/download/${userImage.filename}`"
-                alt=""
-              />
-              <img
-                v-for="(verifiedImage, index) in item.verifiedImages"
-                :key="index"
-                :src="`${GLOBAL_URL}/api/file/download/${verifiedImage.filename}`"
-                alt=""
-              />
-            </td>
-            <td>{{ statusMap[item.inspectionStatus] }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </article>
-    <article class="PageNation">
+          <tbody>
+            <tr>
+              <td><img :src="`${GLOBAL_URL}/api/file/download/${item.representativeImage}`" alt="" /></td>
+              <td colspan="2">
+                <img
+                  v-for="(userImage, index) in item.userImages"
+                  :key="index"
+                  :src="`${GLOBAL_URL}/api/file/download/${userImage.filename}`"
+                  alt=""
+                />
+                <img
+                  v-for="(verifiedImage, index) in item.verifiedImages"
+                  :key="index"
+                  :src="`${GLOBAL_URL}/api/file/download/${verifiedImage.filename}`"
+                  alt=""
+                />
+              </td>
+              <td>{{ statusMap[item.inspectionStatus] }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </article>
+    </template>
+    <article class="PageNation" v-if="rejectionList.length > 0">
       <PageNationComponent :pageNationData="pageNationData" @currentPage="pageUpdate" />
     </article>
   </section>
@@ -158,6 +166,27 @@ watchEffect(() => {
   margin: 30px 0;
   border-radius: 15px;
   border: 5px solid var(--color-main-bloode);
+}
+#notList {
+  background-color: white;
+  width: 100%;
+  border-radius: 15px;
+  height: auto;
+  text-align: center;
+  padding: 10% 5%;
+  align-content: center;
+  margin-top: 30px;
+}
+#notList > img {
+  width: 40%;
+  border-radius: 15px;
+  height: auto;
+  filter: opacity(0.7);
+  align-content: center;
+}
+#notList > p {
+  font-size: 2rem;
+  color: var(--color-text-gray);
 }
 table {
   width: 100%;
