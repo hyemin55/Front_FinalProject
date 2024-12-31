@@ -6,8 +6,8 @@ import router from '@/router';
 
 const bestListRef = ref([]);
 const bestListImagesRef = ref([]);
-const bestCartegoryRef = ref(['Perfume', 'Diffuser', 'Candle']);
-const bestCartegoryColorRef = ref(['112, 56, 129, 0.5', '30, 145, 153, 0.5', '0, 96, 16, 0.5']);
+const bestCategoryRef = ref(['Perfume', 'Diffuser', 'Candle']);
+const bestCategoryColorRef = ref(['112, 56, 129, 0.5', '30, 145, 153, 0.5', '0, 96, 16, 0.5']);
 const currentIdxRef = ref(0);
 let intervalId = null;
 
@@ -23,10 +23,10 @@ const changeIdx = setInterval(() => {
   currentIdxRef.value = (currentIdxRef.value + 1) % 3;
 }, 3000);
 
-const nextchangeIdx = () => {
+const nextChangeIdx = () => {
   currentIdxRef.value = (currentIdxRef.value + 1) % 3;
 };
-const prevchangeIdx = () => {
+const prevChangeIdx = () => {
   currentIdxRef.value = (currentIdxRef.value - 1 + 3) % 3;
 };
 const navDetailProduct = productId => {
@@ -53,13 +53,13 @@ onBeforeUnmount(() => {
 
     <div id="best_position">
       <div class="best_left_box">
-        <div class="best_product_banner" :style="`background-color: rgba(${bestCartegoryColorRef[currentIdxRef]})`">
-          <p class="best_product_category">{{ bestCartegoryRef[currentIdxRef] }}</p>
+        <div class="best_product_banner" :style="`background-color: rgba(${bestCategoryColorRef[currentIdxRef]})`">
+          <p class="best_product_category">{{ bestCategoryRef[currentIdxRef] }}</p>
           <div class="best_product_page">
             <div class="page_btn">
-              <button @click="prevchangeIdx">&lt;</button>
+              <button @click="prevChangeIdx">&lt;</button>
               {{ currentIdxRef + 1 }} / {{ bestListRef.length }}
-              <button @click="nextchangeIdx">&gt;</button>
+              <button @click="nextChangeIdx">&gt;</button>
             </div>
           </div>
         </div>
@@ -73,10 +73,10 @@ onBeforeUnmount(() => {
           />
           <ul class="best_left_text">
             <li class="best_brand_name" v-if="bestListRef.length > 0">
-              {{ bestListRef[currentIdxRef].brandName }}
+              {{ bestListRef[currentIdxRef]?.brandName }}
             </li>
             <li class="best_product_name" v-if="bestListRef.length > 0">
-              {{ bestListRef[currentIdxRef].productName }}
+              {{ bestListRef[currentIdxRef]?.productName }}
             </li>
             <li v-else>Loading...</li>
           </ul>

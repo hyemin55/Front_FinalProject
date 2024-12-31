@@ -23,12 +23,15 @@ watchEffect(async () => {
     res = await loginCheck();
     useStore.login(res.data); //스토어 등록
     // console.log(res.data);
-    
+
     const wishListData = await categoryWishList(); // 로그인시 찜하기 정보 가져오기
-    wishListData.map(item => item.wishListCategoryDto.id).forEach(id => { // id만 추출해서
-      wishStore.makeWishList(id); // 찜 상품의 id를, store에 저장
-    });
-    
+    wishListData
+      .map(item => item.wishListCategoryDto.id)
+      .forEach(id => {
+        // id만 추출해서
+        wishStore.makeWishList(id); // 찜 상품의 id를, store에 저장
+      });
+
     if (res.status.toString().startsWith('2')) {
       // console.log(res.data);
     } else return;

@@ -110,7 +110,7 @@ onMounted(() => {
   width: 150%;
   height: auto;
   margin-top: 60px;
-  gap: 1.5%; /* 슬라이드 간격 */
+  gap: 3%; /* 슬라이드 간격 */
   /* background-color: rgb(121, 121, 121); */
 }
 .Slidebox {
@@ -158,7 +158,6 @@ onMounted(() => {
   text-align: center;
   /* text-shadow: 2px 2px 5px #333; */
   line-height: 1.5;
-
   transition: all 0.3s ease;
   visibility: hidden;
   opacity: 0;
@@ -204,6 +203,7 @@ onMounted(() => {
   transform: translateX(105%);
   /* font-family: 'Pretendard-Thin'; */
 }
+
 .extra_content p:nth-child(1) {
   font-size: 1.8rem;
   font-family: 'Pretendard-Bold';
