@@ -6,7 +6,7 @@ import router from '@/router';
 
 const bestListRef = ref([]);
 const bestListImagesRef = ref([]);
-const bestCategoryRef = ref(['Perfume', 'Diffuser', 'Candle']);
+const bestCategoryRef = {P:'Perfume', D:'Diffuser', C:'Candle'};
 const bestCategoryColorRef = ref(['112, 56, 129, 0.5', '30, 145, 153, 0.5', '0, 96, 16, 0.5']);
 const currentIdxRef = ref(0);
 let intervalId = null;
@@ -32,7 +32,7 @@ const prevChangeIdx = () => {
 const navDetailProduct = productId => {
   console.log(productId);
   router.push({
-    path: `/productsdetail/${productId}`,
+    path: `/masonry/${productId}`,
   });
 };
 
@@ -49,12 +49,11 @@ onBeforeUnmount(() => {
 
 <template>
   <article id="main_best">
-    <h1>BEST</h1>
-
+    <h1>RESELL BEST</h1>
     <div id="best_position">
       <div class="best_left_box">
         <div class="best_product_banner" :style="`background-color: rgba(${bestCategoryColorRef[currentIdxRef]})`">
-          <p class="best_product_category">{{ bestCategoryRef[currentIdxRef] }}</p>
+          <p class="best_product_category">{{ bestCategoryRef[bestListRef[currentIdxRef]?.dtype] }}</p>
           <div class="best_product_page">
             <div class="page_btn">
               <button @click="prevChangeIdx">&lt;</button>
@@ -99,13 +98,12 @@ onBeforeUnmount(() => {
   /* background-color: blanchedalmond; */
   height: 760px;
   margin: 0 auto;
+  text-align: center;
   width: var(--main-max-width);
 }
 #main_best > h1 {
   font-size: 4rem;
   font-family: var(--font-JacquesFrancois);
-  display: flex;
-  justify-content: center;
   padding: 55px 0;
 }
 #best_position {

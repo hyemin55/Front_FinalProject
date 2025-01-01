@@ -1,16 +1,16 @@
 <template>
-  <article id="main_product_list" :class="{ expanded: product_see_more }">
+  <article id="main_product_list" :class="{ expanded: userStore.isExpended }">
     <div>
       <div class="main_product_Com">
         <ProductComponent v-for="product in random_list.slice(0, 4)" :key="product.productId" :productInfo="product" />
       </div>
-      <div class="main_add_product_Com" v-if="product_see_more">
+      <div class="main_add_product_Com" v-if="userStore.isExpended">
         <ProductComponent v-for="product in random_list.slice(4, 8)" :key="product.productId" :productInfo="product" />
       </div>
     </div>
     <div class="main_product_list_btn_box">
-      <button class="main_product_list_btn" @click="see_handle" v-show="!product_see_more">더보기 ▽</button>
-      <button class="main_product_list_btn" @click="see_handle" v-show="product_see_more">닫기 △</button>
+      <button class="main_product_list_btn" @click="see_handle" v-show="!userStore.isExpended">더보기 ▽</button>
+      <button class="main_product_list_btn" @click="see_handle" v-show="userStore.isExpended">닫기 △</button>
     </div>
   </article>
 </template>
@@ -18,34 +18,33 @@
 <script setup>
 import { getMainList } from '@/api/mainApi';
 import ProductComponent from '@/components/user/ProductComponent.vue';
+import { userMainStore } from '@/stores/UserMainStore';
 import { ref, watchEffect } from 'vue';
 
 // main_product_list
 const product_see_more = ref(false);
 const random_list = ref([]);
-const displayed_products = ref([]); // 현재 표시할 제품 리스트
+const userStore = userMainStore();
 
 const see_handle = () => {
-  product_see_more.value = !product_see_more.value;
-
-  if (product_see_more.value) {
-    // "더보기"를 클릭하면 나머지 4개를 보여줍니다
-    // displayed_products.value = res.data.slice(4, 8);
-  }
+  // product_see_more.value = !product_see_more.value;
+  userStore.toggleExpend()
 };
 
 const getRandomList = async (pageNum, size) => {
   try {
     const getMainListRes = await getMainList(pageNum, size);
-    random_list.value = getMainListRes; // 전체 제품 리스트
-    displayed_products.value = getMainListRes.slice(0, 4); // 처음 4개 제품 표시
+
+    random_list.value = getMainListRes;   // 전체 제품 리스트
   } catch (e) {
     console.log(e);
   }
 };
 
 watchEffect(() => {
-  getRandomList(0, 8);
+
+    getRandomList(0, 8);
+
 });
 </script>
 

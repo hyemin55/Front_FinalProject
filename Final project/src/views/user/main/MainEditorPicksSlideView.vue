@@ -50,7 +50,7 @@ const handleClick = index => {
 const navDetailProduct = (productId, size) => {
   console.log(productId);
   router.push({
-    path: `/productsdetail/${productId}`,
+    path: `/masonry/${productId}`,
   });
 };
 
@@ -219,6 +219,11 @@ onMounted(() => {
   font-size: 1.6rem;
   font-family: 'Pretendard-SemiBold';
   color: var(--color-main-bloode);
+}
+
+.firstSlideImg:hover .extra_content p {
+  text-shadow: 2px 2px 1px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease-in-out;
 }
 @media (max-width: 630px) {
   .slides_info {
