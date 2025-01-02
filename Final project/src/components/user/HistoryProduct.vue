@@ -47,6 +47,15 @@ const mappedData = computed(() => {
       size: item.userSize || 'size N/A',
       image: item.userImages[0].filename,
       status: item.saleStatus || '준비중',
+
+      verifiedImages:
+        item.verifiedImages != null && item.verifiedImages.length > 0
+          ? item.verifiedImages[0].filename
+          : '준비중',
+      verifiedPrice: item.verifiedPrice,
+      verifiedSaleId: item.verifiedSaleId,
+      verifiedSize: item.verifiedSize,
+      verifiedUsedOrNot: item.verifiedUsedOrNot,
     }));
   } else if (props.type === 'order') {
     return props.orderList.map(item => ({
@@ -59,7 +68,7 @@ const mappedData = computed(() => {
       brand: item.brandName || 'brand N/A',
       price: item.expectedSellingPrice || 'price N/A',
       size: item.productSize || 'size N/A',
-      image : item.filename,
+      image: item.filename,
       status: item.purchaseStatus || '준비중',
     }));
   }

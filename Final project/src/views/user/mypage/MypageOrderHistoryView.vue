@@ -1,6 +1,7 @@
 <script setup>
 import { GLOBAL_URL } from '@/api/util';
 import HistoryProduct from '@/components/user/HistoryProduct.vue';
+import MypageEmptyComponent from '@/components/user/MypageEmptyComponent.vue';
 import axios from 'axios';
 import { onMounted, ref } from 'vue';
 
@@ -26,7 +27,13 @@ onMounted(()=>{
 
 <template>
   <h1 class="orderHistory_title">전체 주문 내역</h1>
-  <HistoryProduct :orderList="orderList" :type="'order'" :showBtn="true"></HistoryProduct>
+
+  <article v-if="orderList.length > 0">
+    <HistoryProduct :orderList="orderList" :type="'order'" :showBtn="true"></HistoryProduct>
+  </article>
+  <article v-else>
+    <MypageEmptyComponent></MypageEmptyComponent>
+  </article>
 </template>
 
 <style scoped>
