@@ -11,7 +11,7 @@
     </template>
     <template v-else>
       <article id="Inspection" v-for="(item, index) in rejectionList" :key="index">
-      <h1>검수상품 : {{ index+1 }}</h1>
+
         <table>
           <thead>
             <tr>
@@ -192,10 +192,7 @@ watchEffect(() => {
   border: 3px solid #8f9d8d;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
 }
-#Inspection>h1 {
-  font-size: 2rem;
-  padding-bottom: 5px;
-}
+
 table {
   width: 100%;
   font-size: 14px;

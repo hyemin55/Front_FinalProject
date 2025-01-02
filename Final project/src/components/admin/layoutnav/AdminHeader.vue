@@ -2,8 +2,7 @@
   <article id="header">
     <img src="@/assets/img/logo_text_white.png" alt="" />
     <ul class="header_nav">
-      <!-- <li><a href="/" target="_blank" rel="noopener noreferrer">사이트로 이동</a></li> -->
-      <li @click="moveMain" style="color: white; cursor: pointer">사이트로이동</li>
+      <li><router-link to="/">사이트로이동</router-link></li>
       <li>
         <img src="@/assets/img/icon/free-icon-font-refresh-3917293.svg" alt="" />
       </li>
@@ -14,7 +13,7 @@
 
 <script setup>
 import { useUserStore } from '@/stores/Login';
-import { onMounted } from 'vue';
+import { watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -22,17 +21,10 @@ const useStore = useUserStore();
 
 const logout = () => {
   useStore.logout();
-  // eventBus.emit('logout');
   router.push({ name: 'main' });
 };
 
-const moveMain = () => {
-  useStore.moveMain();
-  router.push({ name: 'main' });
-};
-
-onMounted(() => {
-  // console.log('AdminHeader', useStore.role);
+watchEffect(() => {
 });
 </script>
 

@@ -17,6 +17,7 @@
     </article>
     <template v-if="InspectionList.length > 0">
       <article id="Inspection" v-for="(item, index) in InspectionList" :key="index">
+        <h1>검수상품 : {{ index+1 }}</h1>
         <MainInspectionItemView :item="item" @dataUpdate="dataUpdate" />
       </article>
     </template>
@@ -113,6 +114,10 @@ watchEffect(() => {
   border-radius: 15px;
   border: 3px solid #8f9d8d;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
+#Inspection>h1 {
+  font-size: 2rem;
+  padding-bottom: 5px;
 }
 #notList {
   background-color: white;

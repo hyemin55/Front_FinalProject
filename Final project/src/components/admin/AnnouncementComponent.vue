@@ -16,6 +16,7 @@
   width: 100%;
   height: auto;
   padding: 10px;
+  margin-top: 10px;
   border-radius: 10px;
   font-size: 1.5rem;
   text-overflow: ellipsis;

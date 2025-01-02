@@ -77,10 +77,14 @@ const openWritingModal = () => {
 };
 
 const closeModal = addAnnouncement => {
-  console.log('announcementData', announcementData.value);
-  console.log('addAnnouncement', addAnnouncement);
-  announcementData.value.push(addAnnouncement);
-  writingModal.value = false;
+  if (addAnnouncement === false) {
+    writingModal.value = false;
+  } else {
+    console.log('announcementData', announcementData.value);
+    console.log('addAnnouncement', addAnnouncement);
+    announcementData.value.push(addAnnouncement);
+    writingModal.value = false;
+  }
 };
 
 announcementData.value = [
@@ -250,7 +254,7 @@ td {
   width: 15%;
 }
 .tableBody:hover {
-  background-color: var(--color-main-pink);
+  background-color: #e9f2f6;
 }
 .Title,
 .contents {
@@ -262,13 +266,11 @@ td {
   background-color: white;
 }
 .Titleactive {
-  /* border-top: 2px solid var(--color-text-gray); */
-  border-top: 2px solid orange;
-  background-color: var(--color-main-pink);
+  border-top: 2px solid #507383;
+  background-color: #e9f2f6;
 }
 .contentactive {
-  /* border-bottom: 2px solid var(--color-text-gray); */
-  border-bottom: 2px solid orange;
-  background-color: var(--color-main-pink);
+  border-bottom: 2px solid #507383;
+  background-color: #e9f2f6;
 }
 </style>

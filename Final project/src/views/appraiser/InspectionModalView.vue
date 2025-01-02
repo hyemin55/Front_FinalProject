@@ -256,7 +256,7 @@ watch(
   height: 800px;
   background-color: rgb(255, 255, 255);
   z-index: 11;
-  border: 10px double forestgreen;
+  border: 10px double #8f9d8d;
   padding: 5%;
   line-height: 2;
   font-size: 1.6rem;
@@ -344,11 +344,11 @@ td {
   text-align: center;
   border-radius: 10px;
   margin: 0 8%;
-  border: 2px solid var(--color-main-bloode);
+  border: 2px solid #8f9d8d;
 }
 .Results_transfer_button > button:hover {
   color: white;
-  border: 2px solid var(--color-main-bloode);
-  background-color: orange;
+  border: 2px solid #e9f2f6;
+  background-color: #627c85;
 }
 </style>

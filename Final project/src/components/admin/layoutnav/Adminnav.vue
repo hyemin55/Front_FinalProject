@@ -131,6 +131,8 @@ const setActive = index => {
   height: 50px;
   cursor: pointer;
   align-content: center;
+  display: flex;
+  align-items: center;
   padding-left: 20px;
 }
 .NavMenu:hover,
@@ -138,37 +140,28 @@ const setActive = index => {
   /* background-color: var(--color-main-bloode); */
   background-color: #627c85;
   color: white;
-  transition: all 0.3s;
+  transition: all 0.3s ease;
+}
+.NavMenu img {
+  width: 20px;
+  margin-right: 10px;
 }
 .NavMenu:hover img,
 .NavMenu.active img {
   filter: invert(100%) brightness(200%);
 }
-.NavMenu img {
-  width: 20px;
-  margin-right: 10px;
-  transition: all 0.3s;
-}
-.NavMenuText {
-  transition: all 0.3s ease;
-}
 
 @media (max-width: 1000px) {
   .NavMenu {
     padding-left: 10px;
-    display: flex;
-    align-items: center;
   }
   .NavMenu img {
-    width: 20px;
     margin-right: 1px;
-    transition: all 0.3s ease;
   }
   .NavMenuText {
     display: none;
     font-size: 0rem;
     width: 80px;
-    transition: all 0.3s ease;
   }
 
   #AdminNav:hover .NavMenuText {
