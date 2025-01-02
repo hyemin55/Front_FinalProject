@@ -13,7 +13,7 @@ const getOrderList = async()=>{
         'Content-Type':'application/json'
       }
     })
-    orderList.value = res.data;
+    orderList.value = res.data.content;
     console.log("오더리스트", orderList.value);
   }catch(error){
     console.error(error)

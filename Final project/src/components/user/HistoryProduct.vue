@@ -52,15 +52,14 @@ const mappedData = computed(() => {
     return props.orderList.map(item => ({
       text01: '주문',
       text02: '주문',
-      id: item.orderId,
-      startDate: dayjs(item.orderDate || Date.now()).format('YYYY년 MM월 DD일 / HH:mm'),
-      name: item.orderDetailResDtoList[0].productName || 'name N/A',
-      category: item.userCategory || 'category N/A',
-      brand: item.userBrand || 'brand N/A',
-      price: item.orderDetailResDtoList[0].price || 'price N/A',
-      quantity: item.orderDetailResDtoList[0].quantity || 1,
-      size: item.userSize || 'size N/A',
-      // image : ,
+      id: item.purchaseProductId,
+      startDate: dayjs(item.purchaseCreationDate || Date.now()).format('YYYY년 MM월 DD일 / HH:mm'),
+      name: item.productName || 'name N/A',
+      category: item.categoryName || 'category N/A',
+      brand: item.brandName || 'brand N/A',
+      price: item.expectedSellingPrice || 'price N/A',
+      size: item.productSize || 'size N/A',
+      image : item.filename,
       status: item.purchaseStatus || '준비중',
     }));
   }
@@ -134,7 +133,6 @@ const closeModal = () => {
           <li><span>상품명 :</span> {{ data.name }}</li>
           <li><span>용량 :</span> {{ data.size }} ml</li>
           <li v-if="!props.showBtn"><span>등급 :</span> {{ data.grade }}</li>
-          <li v-if="props.showBtn"><span>수량 :</span> {{ data.quantity }}</li>
           <li><span>가격 :</span> {{ data.price.toLocaleString() }}원</li>
         </ul>
 

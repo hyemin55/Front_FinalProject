@@ -90,6 +90,14 @@ const toggleSearch = () => {
     }
   });
 };
+
+// 검색어 입력
+const handleClick = ()=>{
+  console.log('검색')
+  // router.push()  
+  
+}
+
 </script>
 
 <template>
@@ -144,6 +152,8 @@ const toggleSearch = () => {
             class="search-input"
             v-model="searchQuery"
             ref="searchInput"
+            required
+            @keydown.enter="handleClick" 
           />
           <img @click="toggleSearch" class="icon" src="@/assets/img/icon/free-icon-font-search-3917132.png" alt="" />
         </li>
