@@ -1,14 +1,16 @@
 <template>
   <section id="main_wrapper">
-
     <article id="main_video">
       <!-- <video autoplay muted loop src="@/assets/img/main.mp4"></video> -->
       <article id="IntroductionModal">
         <div>
           이건 모달창
           <div>
-            <input type="checkbox" id=""></input>
-            <label for="">3일간 보지 않기</label>
+            <div>
+              <input type="checkbox" name="OneDayCloseModal" id="OneDayCloseModal" />
+              <label for="OneDayCloseModal">오늘 하루 보지 않기</label>
+              <button>닫기×</button>
+            </div>
           </div>
         </div>
       </article>
@@ -32,7 +34,6 @@ import MainNewView from '@/views/user/main/MainNewView.vue';
 
 // const MainEditorView = defineAsyncComponent(() => import('./MainEditorView.vue'));
 // const MainNewView = defineAsyncComponent(() => import('./MainNewView.vue'));
-
 </script>
 
 <style scoped>
@@ -51,10 +52,10 @@ import MainNewView from '@/views/user/main/MainNewView.vue';
   object-fit: cover;
   border: 1px solid white;
 }
-#IntroductionModal{
+#IntroductionModal {
   background-color: bisque;
   position: absolute;
-  top:130px;
+  top: 130px;
   left: 20%;
 }
 </style>
