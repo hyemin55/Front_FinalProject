@@ -116,6 +116,7 @@ watchEffect(() => {
 });
 </script>
 
+
 <style scoped>
 #totalPages {
   position: relative;

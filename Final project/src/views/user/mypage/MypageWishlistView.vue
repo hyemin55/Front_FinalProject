@@ -235,6 +235,7 @@ const moveDetail = (productId, productName, brand) => {
         </div>
       </div>
     </article>
+    
     <article v-else>
       <MypageEmptyComponent></MypageEmptyComponent>
     </article>

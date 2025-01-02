@@ -2,6 +2,7 @@
 import { GLOBAL_URL } from '@/api/util';
 import PageNationComponent from '@/components/PageNationComponent.vue';
 import HistoryProduct from '@/components/user/HistoryProduct.vue';
+import MypageEmptyComponent from '@/components/user/MypageEmptyComponent.vue';
 import SaleProductModal from '@/components/user/SaleProductModal.vue';
 import axios from 'axios';
 import { onMounted, ref } from 'vue';
@@ -61,19 +62,23 @@ const pageNation = () => {
     </h2>
   </div>
 
-  <HistoryProduct
-    :saleList="saleList"
-    :type="'sale'"
-    :showBtn="false"
-    @UpdateRendering="Rendering"
-    @DeleteRendering="Rendering"
-  ></HistoryProduct>
+  <article v-if="saleList.length > 0"> 
+    <HistoryProduct
+      :saleList="saleList"
+      :type="'sale'"
+      :showBtn="false"
+      @UpdateRendering="Rendering"
+      @DeleteRendering="Rendering"
+    ></HistoryProduct>
+    <PageNationComponent :pageNationData="pageNationData" @currentPage="pageUpdate" />
+  </article>
+  <article v-else>
+    <MypageEmptyComponent></MypageEmptyComponent>
+  </article>
+
 
   <SaleProductModal v-if="saleModal" @closeModal="showModal" />
   
-  <article>
-    <PageNationComponent :pageNationData="pageNationData" @currentPage="pageUpdate" />
-  </article>
 </template>
 
 <style scoped>
