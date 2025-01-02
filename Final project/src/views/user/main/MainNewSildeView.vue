@@ -89,7 +89,10 @@ const navDetailProduct = usedProductId => {
 .carousel__item img {
   position: absolute;
   width: 330px;
-  max-height: auto;
+  height: 330px;
+  object-fit: cover;
+  border-radius: 10px;
+  background-color: white;
   top: 20%;
 }
 

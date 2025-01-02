@@ -37,15 +37,18 @@
           <tr class="TableBody" v-for="(item, index) in productList" :key="index">
             <td>{{ item.usedProductId }}</td>
             <td>{{ item.category }}</td>
-            <!-- <td>{{ item.brandName }}</td> -->
+            <td>{{ item.brandName }}</td>
             <td><img class="productImages" :src="`${GLOBAL_URL}/api/file/download/${item.filename}`" alt="" /></td>
             <td class="productName">{{ item.productName }}</td>
             <td>{{ item.productSize }} ml</td>
             <td>{{ item.productPrice.toLocaleString() }} 원</td>
             <td>
-              <select name="state" id="" v-model="selectState.value" class="selectState">
-                <option :value="list" v-for="(list, index) in stateOption" :key="index">{{ list.name }}</option>
-              </select>
+              {{ stateOption[stateOptionNumber(item.status)].name }}
+              <!-- <select name="state" id="" v-model="selectState[item.status]" class="selectState">
+                <option :value="list[index]?.name" v-for="(list, index) in stateOption" :key="index">
+                  {{ list.name }}
+                </option>
+              </select> -->
             </td>
             <td>1</td>
             <td>{{ dateTimeFormat(item.createdDate) }}</td>
@@ -76,12 +79,25 @@ const currentPage = ref(0);
 const selectState = ref([]);
 const pageNationData = ref();
 const stateOption = [
-  { name: '판매중', value: 'onSale' },
-  { name: '품절', value: 'soldOut' },
+  { name: '판매중', value: 'SELLING' },
+  { name: '품절', value: 'SOLD' },
   { name: '숨김', value: 'hiding' },
-  { name: '판매대기', value: 'waitingForSale' },
+  { name: '판매대기', value: 'WAITING' },
   { name: '판매완료', value: 'saleCompleted' },
 ];
+
+// item의 상태값에따라 동적키 매칭하여 이름 할당
+const stateOptionNumber = value => {
+  for (let i = 0; stateOption.length > i; i++) {
+    if (stateOption[i].value === value) {
+      console.log(i);
+      return i;
+    }
+    else{
+      console.log('매칭되는 상태값이 없습니다.')
+    }
+  }
+};
 
 const updatePage = selectPage => {
   currentPage.value = selectPage;
@@ -175,9 +191,6 @@ td {
 th {
   border-bottom: 2px solid var(--color-main-gray);
   height: 40px;
-}
-.TableBody > td:nth-child(3) {
-  text-align: left;
 }
 .selectState {
   background-color: var(--color-main-pink);

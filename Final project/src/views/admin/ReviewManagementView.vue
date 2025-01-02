@@ -58,7 +58,7 @@
             <td>{{ dateTimeFormat(item.reviewCreationDate) }}</td>
             <td>{{ item.favoriteCount }}</td>
             <td class="stateButtons">
-              <button class="stateButton" @click="HideButton">숨기기</button>
+              <!-- <button class="stateButton" @click="HideButton">숨기기</button> -->
               <button class="stateButton" @click="DeleteButton(item)">삭제</button>
             </td>
           </tr>
@@ -112,9 +112,9 @@ const DeleteButton = async item => {
   console.log(item);
   const result = confirm('정말 리뷰를 삭제하시겠습니까?');
   if (result) {
-    console.log('삭제하겠습니다.');
+    console.log('리뷰 삭제합니다.');
     await deleteReviewManagement(item.reviewId);
-    console.log('삭제되었습니다.');
+    console.log('리뷰 삭제되었습니다.');
   }
 };
 const pageUpdate = pageNum => {

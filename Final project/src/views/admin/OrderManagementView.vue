@@ -44,11 +44,10 @@
             <td>134,000</td>
             <td>Candle</td>
             <td>
-              <select name="state" id="" v-model="selectState.value" class="selectState">
-                <option :value="list" v-for="(list, index) in stateOption" :key="index">
-                  {{ list.name }}
-                </option>
-              </select>
+              구매확정
+              <!-- <select name="state" id="" v-model="selectState.value">
+                <option :value="list" v-for="(list, index) in stateOption" :key="index">{{ list.name }}</option>
+              </select> -->
             </td>
             <td>1</td>
             <td>2024-11-19</td>
@@ -122,9 +121,10 @@
             <td>134,000</td>
             <td>Candle</td>
             <td>
-              <select name="state" id="" v-model="selectState.value">
+              구매확정
+              <!-- <select name="state" id="" v-model="selectState.value">
                 <option :value="list" v-for="(list, index) in stateOption" :key="index">{{ list.name }}</option>
-              </select>
+              </select> -->
             </td>
             <td>1</td>
             <td>2024-11-19</td>

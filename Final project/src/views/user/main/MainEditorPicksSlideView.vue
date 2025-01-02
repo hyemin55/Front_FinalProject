@@ -50,7 +50,7 @@ const handleClick = index => {
 const navDetailProduct = (productId, size) => {
   console.log(productId);
   router.push({
-    path: `/productsdetail/${productId}`,
+    path: `/masonry/${productId}`,
   });
 };
 
@@ -110,7 +110,7 @@ onMounted(() => {
   width: 150%;
   height: auto;
   margin-top: 60px;
-  gap: 1.5%; /* 슬라이드 간격 */
+  gap: 3%; /* 슬라이드 간격 */
   /* background-color: rgb(121, 121, 121); */
 }
 .Slidebox {
@@ -158,7 +158,6 @@ onMounted(() => {
   text-align: center;
   /* text-shadow: 2px 2px 5px #333; */
   line-height: 1.5;
-
   transition: all 0.3s ease;
   visibility: hidden;
   opacity: 0;
@@ -204,6 +203,7 @@ onMounted(() => {
   transform: translateX(105%);
   /* font-family: 'Pretendard-Thin'; */
 }
+
 .extra_content p:nth-child(1) {
   font-size: 1.8rem;
   font-family: 'Pretendard-Bold';
@@ -219,6 +219,11 @@ onMounted(() => {
   font-size: 1.6rem;
   font-family: 'Pretendard-SemiBold';
   color: var(--color-main-bloode);
+}
+
+.firstSlideImg:hover .extra_content p {
+  text-shadow: 2px 2px 1px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease-in-out;
 }
 @media (max-width: 630px) {
   .slides_info {

@@ -2,6 +2,18 @@
   <section id="main_wrapper">
     <article id="main_video">
       <!-- <video autoplay muted loop src="@/assets/img/main.mp4"></video> -->
+      <article id="IntroductionModal">
+        <div>
+          이건 모달창
+          <div>
+            <div>
+              <input type="checkbox" name="OneDayCloseModal" id="OneDayCloseModal" />
+              <label for="OneDayCloseModal">오늘 하루 보지 않기</label>
+              <button>닫기×</button>
+            </div>
+          </div>
+        </div>
+      </article>
     </article>
 
     <MainBestView />
@@ -22,30 +34,6 @@ import MainNewView from '@/views/user/main/MainNewView.vue';
 
 // const MainEditorView = defineAsyncComponent(() => import('./MainEditorView.vue'));
 // const MainNewView = defineAsyncComponent(() => import('./MainNewView.vue'));
-
-// main_editor_list
-// const editor_images = [
-//   { src: require('../img/p_003.png') },
-//   { src: require('../img/editor_front_img.png') },
-//   { src: require('../img/editor_front_img.png') },
-//   { src: require('../img/editor_front_img.png') },
-//   { src: require('../img/editor_front_img.png') },
-// ]
-// const currentMainIndex = ref(0)
-// const isAnimating = ref(false)
-
-// const handleImageClick = index => {
-//   if (index === currentMainIndex.value) {
-//     return
-//   } else {
-//     isAnimating.value = true
-
-//     setTimeout = () => {
-//       currentMainIndex.value = index
-//       isAnimating.value = false
-//     }
-//   }
-// }
 </script>
 
 <style scoped>
@@ -63,5 +51,11 @@ import MainNewView from '@/views/user/main/MainNewView.vue';
   height: 100%;
   object-fit: cover;
   border: 1px solid white;
+}
+#IntroductionModal {
+  background-color: bisque;
+  position: absolute;
+  top: 130px;
+  left: 20%;
 }
 </style>

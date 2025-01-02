@@ -15,12 +15,9 @@ import { useWishStore } from '@/stores/WishStore';
 const userStore = useUserStore();
 const userLogin = computed(() => userStore.loginCheck);
 
-
 // 단위 변경
 const route = useRoute();
-const unit = ref(route.params.idx == 1 ? "g" : "ml");
-
-
+const unit = ref(route.params.idx == 1 ? 'g' : 'ml');
 
 // 상품리스트에 출력
 const props = defineProps({
@@ -63,7 +60,7 @@ const wishStore = useWishStore();
 
 watchEffect(() => {
   const wishProduct = wishStore.wishList.find(item => item === props.productInfo.productId);
-  console.log(wishProduct);
+  // console.log(wishProduct);
   if (wishProduct) {
     // store에 id 값이 있다면 값을 true로..
     redHeart.value = true;
@@ -117,9 +114,7 @@ const addToWishlist = async () => {
     </div>
     <div class="product_text">
       <ul>
-        <li @click="navDetailProduct" class="product_title">
-          {{ productName }} • {{ size }}{{ unit }}
-        </li>
+        <li @click="navDetailProduct" class="product_title">{{ productName }} • {{ size }}{{ unit }}</li>
         <li class="product_content">{{ content }}</li>
       </ul>
       <ul>

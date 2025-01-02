@@ -45,7 +45,7 @@ onMounted(() => {
         data-aos-offset="50"
         data-aos-delay="600"
       >
-        바로 판매하기 →
+        중고제품 바로 판매하기 →
       </div>
     </div>
   </article>

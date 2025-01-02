@@ -4,7 +4,7 @@ import MainEditorPicksSlideView from './MainEditorPicksSlideView.vue';
 
 <template>
   <article id="main_editor">
-    <h1>Editor's Picks</h1>
+    <h1>Editor's Pick of the Month</h1>
     <MainEditorPicksSlideView></MainEditorPicksSlideView>
   </article>
 </template>
