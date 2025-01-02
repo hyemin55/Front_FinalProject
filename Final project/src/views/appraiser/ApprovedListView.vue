@@ -167,7 +167,7 @@ watchEffect(() => {
   background-color: white;
   width: 100%;
   height: auto;
-  margin: 30px 0;
+  margin: 30px 0 0 0;
   border-radius: 15px;
   border: 5px solid var(--color-main-bloode);
 }

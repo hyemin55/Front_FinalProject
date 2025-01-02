@@ -263,7 +263,7 @@ dolode();
   width: 100%;
   height: auto;
   border-radius: 15px;
-  padding: 5px;
+  padding: 5px 5px 15px 5px;
   text-align: center;
 }
 input,

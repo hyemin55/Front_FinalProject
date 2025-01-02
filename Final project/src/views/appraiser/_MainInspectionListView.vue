@@ -111,7 +111,7 @@ watchEffect(() => {
   /* margin: 30px 0; */
   border-radius: 15px;
   border: 5px solid var(--color-main-bloode);
-  margin-bottom: 15px;
+  margin-bottom: 15px 0 0 0;
 }
 #notList {
   background-color: white;

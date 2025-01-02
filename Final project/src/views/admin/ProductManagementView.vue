@@ -38,8 +38,10 @@
             <td>{{ item.usedProductId }}</td>
             <td>{{ item.category }}</td>
             <td>{{ item.brandName }}</td>
-            <td><img class="productImages" :src="`${GLOBAL_URL}/api/file/download/${item.filename}`" alt="" /></td>
-            <td class="productName">{{ item.productName }}</td>
+            <td colspan="2" class="productName">
+              <img class="productImages" :src="`${GLOBAL_URL}/api/file/download/${item.filename}`" alt="" />
+              {{ item.productName }}
+            </td>
             <td>{{ item.productSize }} ml</td>
             <td>{{ item.productPrice.toLocaleString() }} 원</td>
             <td>
@@ -92,9 +94,8 @@ const stateOptionNumber = value => {
     if (stateOption[i].value === value) {
       console.log(i);
       return i;
-    }
-    else{
-      console.log('매칭되는 상태값이 없습니다.')
+    } else {
+      console.log('매칭되는 상태값이 없습니다.');
     }
   }
 };
@@ -141,6 +142,7 @@ select:focus,
 option:focus {
   outline: none;
 }
+/* 정렬, 검색 설정 */
 #sortByAndSearch {
   display: flex;
   justify-content: space-between;
@@ -171,7 +173,37 @@ option:focus {
   height: 20px;
   cursor: pointer;
 }
-.TableHeader {
+
+/* 테이블 설정 */
+table {
+  width: 100%;
+  font-size: 1.4rem;
+}
+tr {
+  width: 100%;
+}
+th {
+  border-bottom: 2px solid var(--color-main-gray);
+  border-right: 0.5px solid var(--color-main-gray);
+  padding: 0 1%;
+  height: 40px;
+}
+.TableHeader th:last-child {
+  border-right: none;
+}
+td {
+  width: auto;
+  height: 50px;
+  padding: 0 1%;
+  border-bottom: 0.5px solid var(--color-main-gray);
+  border-right: 0.5px solid var(--color-main-gray);
+}
+.TableBody td:last-child {
+  border-right: none;
+}
+.productName {
+  text-align: left;
+  line-height: 50px;
 }
 .productImages {
   width: 45px;
@@ -180,24 +212,9 @@ option:focus {
   border: 0.5px solid var(--color-main-Lgray);
   border-radius: 5px;
 }
-table {
-  width: 100%;
-  font-size: 1.4rem;
-}
-td {
-  height: 50px;
-  border-bottom: 0.5px solid var(--color-main-gray);
-}
-th {
-  border-bottom: 2px solid var(--color-main-gray);
-  height: 40px;
-}
 .selectState {
   background-color: var(--color-main-pink);
   border-radius: 10px;
   padding: 5px;
-}
-.productName {
-  text-align: left;
 }
 </style>

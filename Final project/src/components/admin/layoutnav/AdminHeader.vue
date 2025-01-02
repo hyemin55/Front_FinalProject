@@ -48,6 +48,9 @@ onMounted(() => {
   width: 100%;
   height: 70px;
   background-color: var(--color-main-bloode);
+  /* box-shadow: 0px 3px 5px var(--color-main-pink); */
+  box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.5);
+  z-index: 300;
 }
 #header img {
   width: 150px;

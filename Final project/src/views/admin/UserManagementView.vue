@@ -74,9 +74,9 @@
           </tr>
         </tbody>
       </table>
-      <article>
-        <PageNationComponent v-if="totalCount > 0" :pageNationData="pageNationData" @currentPage="pageUpdate" />
-      </article>
+    </article>
+    <article>
+      <PageNationComponent v-if="totalCount > 0" :pageNationData="pageNationData" @currentPage="pageUpdate" />
     </article>
   </section>
 </template>
@@ -230,7 +230,7 @@ option:focus {
   width: 100%;
   height: auto;
   border-radius: 15px;
-  padding: 5px;
+  padding: 5px 5px 15px 5px;
   text-align: center;
 }
 .TableHeader {
