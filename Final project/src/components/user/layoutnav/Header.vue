@@ -5,7 +5,6 @@ import { useRoute, useRouter } from 'vue-router';
 import { eventBus } from '@/eventBus';
 import { useCartStore } from '@/stores/CartStore';
 import { useWishStore } from '@/stores/WishStore';
-import { loginCheck } from '@/api/KakaoLoginApi';
 
 const cartStore = useCartStore();
 const route = useRoute();
@@ -48,9 +47,6 @@ onMounted(() => {
   } else {
     HeaderMode.value = false;
   }
-  // if (sessionStorage.getItem('token')) {
-  //   const res = loginCheck();
-  // }
 });
 
 const isSearchVisible = ref(false); // 검색창의 표시 여부
@@ -77,10 +73,6 @@ const handleClick = () => {
   // router.push()
 };
 
-const moveAdmin = () => {
-  useStore.moveNotMain();
-  router.push({ name: 'mainDashboard' });
-};
 </script>
 
 <template>
@@ -105,7 +97,7 @@ const moveAdmin = () => {
             <router-link to="/mainInspectionList">검수자</router-link>
           </li>
           <li class="noCursor" v-if="useStore.role === 'ADMIN'">&nbsp;|&nbsp;</li>
-          <li v-if="useStore.role === 'ADMIN'" @click="moveAdmin">관리자</li>
+          <li v-if="useStore.role === 'ADMIN'"><router-link  to="/mainDashboard">관리자</router-link></li>
         </ul>
       </template>
       <template v-else>

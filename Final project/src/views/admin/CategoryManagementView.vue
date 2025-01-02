@@ -34,8 +34,12 @@
             <td>{{ index + 1 }}</td>
             <td>{{ category[item.dtype] }}</td>
             <td>{{ item.brandName }}</td>
-            <td><img class="productImages" :src="`${GLOBAL_URL}/api/file/download/${item.filename}`" alt="" /></td>
-            <td class="productName">{{ item.productId }}. {{ item.productName }}</td>
+            <td class="productName" colspan="2">
+              <span
+                ><img class="productImages" :src="`${GLOBAL_URL}/api/file/download/${item.filename}`" alt="" />
+                {{ item.productId }}. {{ item.productName }}
+              </span>
+            </td>
             <td>{{ item.size.toLocaleString() }} ml</td>
             <td>{{ item.usedProductCount.toLocaleString() }}</td>
           </tr>
@@ -103,7 +107,7 @@ watchEffect(() => {
   width: 100%;
   height: auto;
   border-radius: 15px;
-  padding: 5px;
+  padding: 5px 5px 15px 5px;
   text-align: center;
 }
 input,
@@ -147,15 +151,7 @@ option:focus {
   height: 20px;
   cursor: pointer;
 }
-.TableHeader {
-}
-.productImages {
-  width: 45px;
-  height: 45px;
-  padding: 2px;
-  border: 0.5px solid var(--color-main-Lgray);
-  border-radius: 5px;
-}
+
 table {
   width: 100%;
   font-size: 1.4rem;
@@ -168,17 +164,34 @@ th {
   border-bottom: 2px solid var(--color-main-gray);
   height: 40px;
 }
+.TableBody:hover{
+  background-color: var(--color-main-Lgray);
+}
 .TableBody > td:nth-child(4) {
   text-align: left;
+}
+.productName {
+  text-align: left;
+}
+.productName span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.productImages {
+  width: 45px;
+  height: 45px;
+  padding: 2px;
+  background-color: white;
+  border: 0.5px solid var(--color-main-Lgray);
+  border-radius: 5px;
 }
 .selectState {
   background-color: var(--color-main-pink);
   border-radius: 10px;
   padding: 5px;
 }
-.productName {
-  text-align: left;
-}
+
 .PageNation {
 }
 </style>

@@ -55,7 +55,7 @@ const navDetailProduct = usedProductId => {
           <div class="item_info">
             <p>{{ slide.brandName }}</p>
             <p>이름{{ slide.productName }}ㆍ{{ slide.size }} ml</p>
-            <p>￦ {{ slide.price.toLocaleString() }}</p>
+            <p>￦ {{ Number(slide.price).toLocaleString() }}</p>
             <p></p>
           </div>
         </div>

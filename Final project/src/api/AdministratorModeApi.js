@@ -85,15 +85,12 @@ export const postRoleChange = async (memberId, role) => {
 // ReviewManagementView.vue
 export const deleteReviewManagement = async reviewId => {
   try {
-    await axios.get(`${GLOBAL_URL}/admin/review/management/delete?`, {
-      headers: {
-        'Content-type': 'application/json',
-        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-      },
+    const deleteReviewManagementRes = await axios.delete(`${GLOBAL_URL}/admin/review/management/delete`, {
       params: {
         reviewId: reviewId,
       },
     });
+    return deleteReviewManagementRes.data;
   } catch (error) {
     console.log('', error);
     throw error;

@@ -46,7 +46,7 @@
             placeholder="브랜드 검색"
             @input="fetchSuggestions('brand', item)"
           /><br />
-          <select v-model="item.selectedBrand">
+          <select v-model="item.selectedBrand" @change="handleBrandChange(item)">
             <option
               :value="brand.brandId + '.' + brand.brandName"
               v-for="(brand, index) in item.brandSuggestions"
@@ -64,7 +64,7 @@
             수정값:
             <input
               v-if="item.selectedBrand === 'brandNameInput'"
-              :value="item.selectedBrand"
+              v-model="item.directInputBrand"
               type="text"
               placeholder="직접입력"
             />
@@ -73,7 +73,7 @@
         </td>
         <!-- 상품명 검색 => 추후 브랜드 선택하면 select창이 뜨도록-->
         <td>
-          <select v-model="item.selectedProduct">
+          <select v-model="item.selectedProduct" @change="handleProductChange(item)">
             <option :value="product" v-for="(product, index) in item.productSuggestions" :key="index">
               {{ product.productName }}ㆍ{{ product.size }} ml
             </option>
@@ -87,7 +87,7 @@
             수정값:
             <input
               v-if="item.selectedProduct === 'productNameInput'"
-              :value="item.selectedProduct"
+              v-model="item.directInputProduct"
               type="text"
               placeholder="직접입력"
             />
@@ -335,6 +335,21 @@ const previewUrls = ref([]);
 const userImageFiles = ref([]);
 const emit = defineEmits(['dataUpdate']);
 
+// 브랜드이름 직접 입력
+const handleBrandChange = item => {
+  console.log(item);
+  // '직접입력'을 선택했을 경우 빈 값을 초기화
+  if (item.selectedBrand === 'brandNameInput') {
+    item.directInputBrand = ''; // 입력값 초기화
+  }
+};
+
+const handleProductChange = item => {
+  if (item.selectedProduct === 'productNameInput') {
+    item.directInputProduct = '';
+  }
+};
+
 // 검수자 이미지파일 등록`
 const handleFileUpload = event => {
   appraiserFiles.value = Array.from(event.target.files); // 선택된 파일 목록
@@ -379,17 +394,28 @@ const closeModal = value => {
 };
 
 const validatedInspectionSize = item => {
-  if (item.inspectionSize > item.selectedProduct.size) {
-    alert('검수 용량이 상품 기준 용량보다 많습니다.' + '\n' + '상품 기준 용량 : ' + item.selectedProduct.size + ' ml');
-    return false;
-  }
-  if (item.inspectionSize < item.selectedProduct.size / 2) {
-    alert(
-      '검수 용량이 상품 기준 용량의 절반 이하입니다.' + '\n' + '상품 기준 용량 : ' + item.selectedProduct.size + ' ml',
-    );
-    return false;
-  } else {
+  console.log(item);
+  if (item.selectedProduct === 'productNameInput') {
     return true;
+  } else {
+    if (item.inspectionSize > item.selectedProduct.size) {
+      alert(
+        '검수 용량이 상품 기준 용량보다 많습니다.' + '\n' + '상품 기준 용량 : ' + item.selectedProduct.size + ' ml',
+      );
+      return false;
+    }
+    if (item.inspectionSize < item.selectedProduct.size / 2) {
+      alert(
+        '검수 용량이 상품 기준 용량의 절반 이하입니다.' +
+          '\n' +
+          '상품 기준 용량 : ' +
+          item.selectedProduct.size +
+          ' ml',
+      );
+      return false;
+    } else {
+      return true;
+    }
   }
 };
 
@@ -449,12 +475,13 @@ const send = async item => {
           categoryName: categoriesList[item.categoryId],
         },
         inspectionBrandReqDto: {
-          brandId: item.selectedBrand.split('.')[0],
-          brandName: item.selectedBrand.split('.')[1],
+          brandId: item.selectedBrand === 'brandNameInput' ? null : item.selectedBrand.split('.')[0],
+          brandName: item.selectedBrand === 'brandNameInput' ? item.directInputBrand : item.selectedBrand.split('.')[1],
         },
         inspectionProductReqDto: {
-          productName: item.selectedProduct.productName,
-          productId: item.selectedProduct.productId,
+          productName:
+            item.selectedProduct === 'productNameInput' ? item.directInputProduct : item.selectedProduct.productName,
+          productId: item.selectedProduct === 'productNameInput' ? null : item.selectedProduct.productId,
           productSize: item.inspectionSize,
           verifiedSellingPrice: item.inspectionSellingPrice,
           quantity: 0,
@@ -574,17 +601,28 @@ table {
   font-size: 1.4rem;
   text-align: center;
 }
-th,
-td {
+th {
   width: 15%;
   padding: 10px;
+  background-color: var(--color-main-Lgray);
+  /* background-color: #a7b4a8 ; */
+  /* border-bottom: 0.5px solid #e5e5e5; */
+  border-right: 2px solid white;
 }
-th {
-  border-bottom: 0.5px solid #333;
-  background-color: var(--color-main-gray);
-  border-start-start-radius: 10px;
-  border-start-end-radius: 10px;
+th:last-child {
+  border-right: none;
 }
+td {
+  width: 15%;
+  text-align: center;
+  padding: 20px 10px;
+  margin: 5px 0;
+  border-right: 2px solid var(--color-main-Lgray);
+}
+td:last-child {
+  border-right: none;
+}
+
 textarea {
   resize: none;
   height: auto;
@@ -608,16 +646,15 @@ textarea:focus {
 }
 button {
   padding: 10px;
-  background-color: var(--color-main-bloode);
-  border-end-end-radius: 9px;
-  border-end-start-radius: 9px;
+  background-color: #8f9d8d;
+  border-radius: 9px;
   width: 100%;
   text-align: center;
   font-size: 1.8rem;
   color: white;
 }
 button:hover {
-  background-color: orange;
+  background-color: #627c85;
 }
 .InputDisplay,
 .category,

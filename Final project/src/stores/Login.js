@@ -34,6 +34,7 @@ export const useUserStore = defineStore('member', {
       }
       sessionStorage.setItem('nickName', this.nickName);
       sessionStorage.setItem('profileImage', this.profileImage);
+      console.log('mainVuePage',this.mainVuePage)
     },
     logout() {
       this.loginCheck = false;

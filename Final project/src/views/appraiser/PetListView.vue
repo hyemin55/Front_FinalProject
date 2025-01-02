@@ -5,12 +5,13 @@
     </article>
     <template v-if="rejectionList == null || rejectionList.length === 0">
       <article id="notList">
-        <img src="@/assets/img/icon/free-animated-icon-note-6172546.gif" alt="" />
         <p>판매 신청 목록이 없습니다.</p>
+        <img src="@/assets/img/icon/free-animated-icon-note-6172546.gif" alt="" />
       </article>
     </template>
     <template v-else>
       <article id="Inspection" v-for="(item, index) in rejectionList" :key="index">
+
         <table>
           <thead>
             <tr>
@@ -159,14 +160,6 @@ watchEffect(() => {
 });
 </script>
 <style scoped>
-#Inspection {
-  background-color: white;
-  width: 100%;
-  height: auto;
-  margin: 30px 0;
-  border-radius: 15px;
-  border: 5px solid var(--color-main-bloode);
-}
 #notList {
   background-color: white;
   width: 100%;
@@ -188,25 +181,43 @@ watchEffect(() => {
   font-size: 2rem;
   color: var(--color-text-gray);
 }
+#Inspection {
+  background-color: white;
+  width: 100%;
+  height: auto;
+  text-align: center;
+  padding: 20px;
+  margin: 30px 0 0 0;
+  border-radius: 15px;
+  border: 3px solid #8f9d8d;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
 table {
   width: 100%;
   font-size: 14px;
-  color: #333;
-}
-tr {
+  color: #000;
 }
 th {
   width: 15%;
-  border-bottom: 0.5px solid #333;
   padding: 10px;
-  background-color: var(--color-main-gray);
-  border-start-start-radius: 10px;
-  border-start-end-radius: 10px;
+  background-color: var(--color-main-Lgray);
+  /* background-color: #a7b4a8 ; */
+  /* border-bottom: 0.5px solid #e5e5e5; */
+  border-right: 2px solid white;
+}
+th:last-child{
+  border-right:none
 }
 td {
   width: 15%;
   text-align: center;
   padding: 20px 10px;
+  margin: 5px 0;
+  border-right: 2px solid var(--color-main-Lgray);
+}
+td:last-child{
+  border-right:none
 }
 img {
   width: 100px;

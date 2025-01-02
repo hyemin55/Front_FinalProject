@@ -64,9 +64,9 @@
           </tr>
         </tbody>
       </table>
-      <article>
-        <PageNationComponent :pageNationData="pageNationData" @currentPage="pageUpdate" />
-      </article>
+    </article>
+    <article>
+      <PageNationComponent :pageNationData="pageNationData" @currentPage="pageUpdate" />
     </article>
   </section>
 </template>
@@ -113,8 +113,9 @@ const DeleteButton = async item => {
   const result = confirm('정말 리뷰를 삭제하시겠습니까?');
   if (result) {
     console.log('리뷰 삭제합니다.');
-    await deleteReviewManagement(item.reviewId);
-    console.log('리뷰 삭제되었습니다.');
+    const deleteReviewManagementRes = await deleteReviewManagement(item.reviewId);
+    console.log(deleteReviewManagementRes);
+    dolode();
   }
 };
 const pageUpdate = pageNum => {
@@ -202,13 +203,6 @@ option:focus {
 }
 .TableHeader {
 }
-.productImages {
-  width: 45px;
-  height: 45px;
-  padding: 2px;
-  border: 0.5px solid var(--color-main-Lgray);
-  border-radius: 5px;
-}
 table {
   width: 100%;
   font-size: 1.4rem;
@@ -223,8 +217,19 @@ th {
   padding: 2px;
   height: 40px;
 }
+.TableBody:hover{
+  background-color: var(--color-main-Lgray);
+}
 .TableBody > td:nth-child(6) {
   text-align: left;
+}
+.productImages {
+  width: 45px;
+  height: 45px;
+  padding: 2px;
+  background-color: white;
+  border: 0.5px solid var(--color-main-Lgray);
+  border-radius: 5px;
 }
 .stateButtons {
 }
