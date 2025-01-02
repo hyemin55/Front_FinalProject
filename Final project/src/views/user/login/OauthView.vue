@@ -22,7 +22,6 @@ watchEffect(async () => {
     if (!res.status.toString().startsWith('2')) return;
     res = await loginCheck();
     useStore.login(res.data); //스토어 등록
-    // console.log(res.data);
 
     const wishListData = await categoryWishList(); // 로그인시 찜하기 정보 가져오기
     wishListData

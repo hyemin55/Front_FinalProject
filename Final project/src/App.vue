@@ -38,29 +38,28 @@ onBeforeUnmount(() => {
 
 <template>
   <div>
-    <div v-if="data.role === 'ADMIN' || data.role === 'APPRAISER'">
+    <div v-if="data.mainVuePage && (data.role === 'ADMIN' || data.role === 'APPRAISER')">
       <div>
         <AdminHeader></AdminHeader>
         <div>
           <AdminNav></AdminNav>
-          <RouterView class="MainAdmin" :class="{ expanded: isHovered }" @MouseHovered="MouseHovered()" />
+          <RouterView class="MainAdmin" @MouseHovered="MouseHovered()" />
         </div>
       </div>
     </div>
 
     <div v-else>
       <Header></Header>
-
       <div class="min-height">
         <RouterView />
       </div>
-
       <Footer></Footer>
     </div>
 
     <div class="scroll_btn pagaUp" v-if="isScrolled" @click="pageUp">
       <img src="@/assets/img/icon/up.svg" alt="" />
     </div>
+
     <div class="scroll_btn pagaDown" v-if="isScrolled" @click="pageDown">
       <img src="@/assets/img/icon/up.svg" alt="" />
     </div>

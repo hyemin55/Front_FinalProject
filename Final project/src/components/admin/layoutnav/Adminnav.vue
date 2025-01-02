@@ -123,9 +123,6 @@ const appraiserMenu = [
 const setActive = index => {
   activeIndex.value = index;
 };
-watch(useStore.role, _new => {
-  console.log(_new);
-});
 </script>
 
 <style scoped>

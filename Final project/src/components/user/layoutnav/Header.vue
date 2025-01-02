@@ -11,10 +11,8 @@ const cartStore = useCartStore();
 const route = useRoute();
 const router = useRouter();
 const HeaderMode = ref(false);
-
 const useStore = useUserStore();
 const wishStore = useWishStore();
-const role = ref('');
 const token = ref(false);
 watchEffect(() => {
   HeaderMode.value = route.path === '/';
@@ -22,30 +20,12 @@ watchEffect(() => {
 });
 
 const kakaoLogout = async () => {
-  // await logout(sessionStorage.getItem('token'))
   useStore.logout();
-  // console.log('로그아웃 성공')
-  // console.log(token.value)
-  // token.value = false
   wishStore.removeWishList();
   eventBus.emit('logout');
   router.push({ name: 'login2' });
 };
 
-onMounted(() => {
-  const savedToken = sessionStorage.getItem('token');
-  if (savedToken) {
-    token.value = true;
-    useStore.loginCheck = true; // 스토어에 로그인 상태 설정
-    role.value = useStore.role;
-    console.log('useStore = ', useStore.role);
-  } else {
-    useStore.loginCheck = false;
-  }
-});
-// onMounted(() => {
-//   token.value = localStorage.getItem('token')
-// })
 const categories = [
   { title: 'Perfume', path: '/category/Perfume/3' },
   { title: 'Diffuser', path: '/category/Diffuser/2' },
@@ -92,12 +72,15 @@ const toggleSearch = () => {
 };
 
 // 검색어 입력
-const handleClick = ()=>{
-  console.log('검색')
-  // router.push()  
-  
-}
+const handleClick = () => {
+  console.log('검색');
+  // router.push()
+};
 
+const moveAdmin = () => {
+  useStore.moveNotMain();
+  router.push({ name: 'mainDashboard' });
+};
 </script>
 
 <template>
@@ -117,10 +100,12 @@ const handleClick = ()=>{
           <li><router-link to="/mypage">마이페이지</router-link></li>
           <li class="noCursor">&nbsp;|&nbsp;</li>
           <li>고객센터</li>
-          <li class="noCursor" v-if="role === 'APPRAISER'">&nbsp;|&nbsp;</li>
-          <li v-if="role === 'APPRAISER'"><router-link to="/mainInspectionList">검수자</router-link></li>
-          <li class="noCursor" v-if="role === 'ADMIN'">&nbsp;|&nbsp;</li>
-          <li v-if="role === 'ADMIN'"><router-link to="/mainDashboard">관리자</router-link></li>
+          <li class="noCursor" v-if="useStore.role === 'APPRAISER'">&nbsp;|&nbsp;</li>
+          <li v-if="useStore.role === 'APPRAISER'">
+            <router-link to="/mainInspectionList">검수자</router-link>
+          </li>
+          <li class="noCursor" v-if="useStore.role === 'ADMIN'">&nbsp;|&nbsp;</li>
+          <li v-if="useStore.role === 'ADMIN'" @click="moveAdmin">관리자</li>
         </ul>
       </template>
       <template v-else>
@@ -153,7 +138,7 @@ const handleClick = ()=>{
             v-model="searchQuery"
             ref="searchInput"
             required
-            @keydown.enter="handleClick" 
+            @keydown.enter="handleClick"
           />
           <img @click="toggleSearch" class="icon" src="@/assets/img/icon/free-icon-font-search-3917132.png" alt="" />
         </li>
