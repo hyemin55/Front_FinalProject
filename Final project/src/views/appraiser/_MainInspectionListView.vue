@@ -39,6 +39,7 @@ import axios from 'axios';
 import { reactive, ref, watchEffect } from 'vue';
 import PageNationComponent from '@/components/PageNationComponent.vue';
 import MainInspectionItemView from './MainInspectionItemView.vue';
+import { getInspectionList, getInspectionListCount } from '@/api/InspectionListApi';
 
 const totalCount = ref(0);
 const pageNumber = ref(0);
