@@ -3,7 +3,7 @@
     <article>
       <AnnouncementComponent />
     </article>
-    <template v-if="rejectionList.length === 0">
+    <template v-if="rejectionList == null || rejectionList.length === 0">
       <article id="notList">
         <img src="@/assets/img/icon/free-animated-icon-note-6172546.gif" alt="" />
         <p>판매 신청 목록이 없습니다.</p>
@@ -107,7 +107,7 @@
         </table>
       </article>
     </template>
-    <article class="PageNation" v-if="rejectionList.length > 0">
+    <article class="PageNation" v-if="rejectionList != null && rejectionList.length > 0">
       <PageNationComponent :pageNationData="pageNationData" @currentPage="pageUpdate" />
     </article>
   </section>
