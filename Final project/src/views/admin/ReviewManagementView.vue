@@ -203,13 +203,6 @@ option:focus {
 }
 .TableHeader {
 }
-.productImages {
-  width: 45px;
-  height: 45px;
-  padding: 2px;
-  border: 0.5px solid var(--color-main-Lgray);
-  border-radius: 5px;
-}
 table {
   width: 100%;
   font-size: 1.4rem;
@@ -224,8 +217,19 @@ th {
   padding: 2px;
   height: 40px;
 }
+.TableBody:hover{
+  background-color: var(--color-main-Lgray);
+}
 .TableBody > td:nth-child(6) {
   text-align: left;
+}
+.productImages {
+  width: 45px;
+  height: 45px;
+  padding: 2px;
+  background-color: white;
+  border: 0.5px solid var(--color-main-Lgray);
+  border-radius: 5px;
 }
 .stateButtons {
 }

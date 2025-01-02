@@ -135,7 +135,8 @@ const setActive = index => {
 }
 .NavMenu:hover,
 .NavMenu.active {
-  background-color: var(--color-main-bloode);
+  /* background-color: var(--color-main-bloode); */
+  background-color: #627c85;
   color: white;
   transition: all 0.3s;
 }

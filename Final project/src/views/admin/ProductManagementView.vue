@@ -39,8 +39,8 @@
             <td>{{ item.category }}</td>
             <td>{{ item.brandName }}</td>
             <td colspan="2" class="productName">
-              <img class="productImages" :src="`${GLOBAL_URL}/api/file/download/${item.filename}`" alt="" />
-              {{ item.productName }}
+              <span><img class="productImages" :src="`${GLOBAL_URL}/api/file/download/${item.filename}`" alt="" />
+              {{ item.productName }}</span>
             </td>
             <td>{{ item.productSize }} ml</td>
             <td>{{ item.productPrice.toLocaleString() }} 원</td>
@@ -201,14 +201,21 @@ td {
 .TableBody td:last-child {
   border-right: none;
 }
+.TableBody:hover{
+  background-color: var(--color-main-Lgray);
+}
 .productName {
   text-align: left;
-  line-height: 50px;
+}
+.productName span{
+  display: flex;
+  align-items: center;
 }
 .productImages {
   width: 45px;
   height: 45px;
   padding: 2px;
+  background-color: white;
   border: 0.5px solid var(--color-main-Lgray);
   border-radius: 5px;
 }

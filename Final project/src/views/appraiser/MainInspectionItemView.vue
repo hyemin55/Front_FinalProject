@@ -574,17 +574,28 @@ table {
   font-size: 1.4rem;
   text-align: center;
 }
-th,
-td {
+th {
   width: 15%;
   padding: 10px;
+  background-color: var(--color-main-Lgray);
+  /* background-color: #a7b4a8 ; */
+  /* border-bottom: 0.5px solid #e5e5e5; */
+  border-right: 2px solid white;
 }
-th {
-  border-bottom: 0.5px solid #333;
-  background-color: var(--color-main-gray);
-  border-start-start-radius: 10px;
-  border-start-end-radius: 10px;
+th:last-child{
+  border-right:none
 }
+td {
+  width: 15%;
+  text-align: center;
+  padding: 20px 10px;
+  margin: 5px 0;
+  border-right: 2px solid var(--color-main-Lgray);
+}
+td:last-child{
+  border-right:none
+}
+
 textarea {
   resize: none;
   height: auto;

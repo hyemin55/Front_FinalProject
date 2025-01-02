@@ -309,13 +309,7 @@ option:focus {
 }
 .TableHeader {
 }
-.productImages {
-  width: 45px;
-  height: 45px;
-  padding: 2px;
-  border: 0.5px solid var(--color-main-Lgray);
-  border-radius: 5px;
-}
+
 table {
   width: 100%;
   font-size: 1.4rem;
@@ -328,8 +322,19 @@ th {
   border-bottom: 2px solid var(--color-main-gray);
   height: 40px;
 }
+.TableBody:hover{
+  background-color: var(--color-main-Lgray);
+}
 .TableBody > td:nth-child(3) {
   text-align: left;
+}
+.productImages {
+  width: 45px;
+  height: 45px;
+  padding: 2px;
+  background-color: white;
+  border: 0.5px solid var(--color-main-Lgray);
+  border-radius: 5px;
 }
 .selectState {
   background-color: var(--color-main-pink);

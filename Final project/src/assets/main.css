@@ -65,7 +65,8 @@ input[type='checkbox'] {
   left: 0;
   width: 200px;
   height: calc(100vh - 70px);
-  background-color: var(--color-main-pink);
+  /* background-color: var(--color-main-pink); */
+  background-color: #fdf4f1  ;
   font-size: 1.6rem;
   transition: all 0.3s;
 }

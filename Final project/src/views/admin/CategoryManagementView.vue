@@ -151,21 +151,6 @@ option:focus {
   height: 20px;
   cursor: pointer;
 }
-.productName {
-  /* line-height: 50px; */
-  text-align: left;
-}
-.productName span {
-  display: flex;
-  align-items: center;
-}
-.productImages {
-  width: 45px;
-  height: 45px;
-  padding: 2px;
-  border: 0.5px solid var(--color-main-Lgray);
-  border-radius: 5px;
-}
 
 table {
   width: 100%;
@@ -179,8 +164,27 @@ th {
   border-bottom: 2px solid var(--color-main-gray);
   height: 40px;
 }
+.TableBody:hover{
+  background-color: var(--color-main-Lgray);
+}
 .TableBody > td:nth-child(4) {
   text-align: left;
+}
+.productName {
+  text-align: left;
+}
+.productName span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.productImages {
+  width: 45px;
+  height: 45px;
+  padding: 2px;
+  background-color: white;
+  border: 0.5px solid var(--color-main-Lgray);
+  border-radius: 5px;
 }
 .selectState {
   background-color: var(--color-main-pink);

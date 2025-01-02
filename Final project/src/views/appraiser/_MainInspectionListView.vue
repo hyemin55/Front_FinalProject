@@ -22,8 +22,8 @@
     </template>
     <template v-else>
       <article id="notList">
-        <img src="@/assets/img/icon/free-animated-icon-note-6172546.gif" alt="" />
         <p>판매 신청 목록이 없습니다.</p>
+        <img src="@/assets/img/icon/free-animated-icon-note-6172546.gif" alt="" />
       </article>
     </template>
     <article>
@@ -105,13 +105,14 @@ watchEffect(() => {
 
 <style scoped>
 #Inspection {
-  background-color: #fff;
+  background-color: white;
   width: 100%;
   height: auto;
-  /* margin: 30px 0; */
+  text-align: center;
+  padding: 20px;
   border-radius: 15px;
-  border: 5px solid var(--color-main-bloode);
-  margin-bottom: 15px 0 0 0;
+  border: 3px solid #8f9d8d;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
 }
 #notList {
   background-color: white;
