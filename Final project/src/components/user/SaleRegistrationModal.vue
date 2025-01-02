@@ -81,42 +81,45 @@ const saleApprove = async(pendingSaleId) => {
               <tbody>
                 <tr>
                   <td>대표사진</td>
-                  <td>사진1</td>
-                  <td><span class="arrow-icon"><i class="fi fi-ss-left"></i></span>
+                  <td>
                     <img :src="`${GLOBAL_URL}/api/file/download/${data.image}`" alt="" />
+                  </td>
+                  <td>
+                    <span class="arrow-icon"><i class="fi fi-ss-left"></i></span>
+                    <img :src="`${GLOBAL_URL}/api/file/download/${data.verifiedImages}`" alt="" />
                   </td>
                 </tr>
                 <tr>
                   <td>카테고리</td>
-                  <td>스킨케어</td>
-                  <td><span class="arrow-icon"><i class="fi fi-ss-left"></i></span>{{ props.data.category }}</td>
+                  <td>{{ props.data.category }}</td>
+                  <td><span class="arrow-icon"><i class="fi fi-ss-left"></i></span></td>
                 </tr>
                 <tr>
                   <td>브랜드</td>
-                  <td>브랜드 A</td>
-                  <td><span class="arrow-icon"><i class="fi fi-ss-left"></i></span>{{ props.data.brand }}</td>
+                  <td>{{ props.data.brand }}</td>
+                  <td><span class="arrow-icon"><i class="fi fi-ss-left"></i></span></td>
                 </tr>
                 <tr>
                   <td>상품명</td>
-                  <td>상품 A</td>
-                  <td><span class="arrow-icon"><i class="fi fi-ss-left"></i></span>{{ props.data.name }}</td>
+                  <td>{{ props.data.name }}</td>
+                  <td><span class="arrow-icon"><i class="fi fi-ss-left"></i></span></td>
                 </tr>
                 <tr>
                   <td>가격</td>
-                  <td>₩50,000</td>
+                  <td>₩{{ props.data.price.toLocaleString() }}</td>
                   <td><span class="arrow-icon"><i class="fi fi-ss-left"></i>
                     </span><input v-model="salesPrice" type="number" min="0" placeholder="원하시는 판매가격을 입력해주세요."><br>
-                    <span class="small_text averPrice">평균 시세가 : ₩ {{ props.data.price.toLocaleString() }}</span>
+                    <span class="small_text averPrice">평균 시세가 : ₩ {{ props.data.verifiedPrice.toLocaleString() }}</span>
                   </td>
                 </tr>
                 <tr>
                   <td>용량</td>
-                  <td>50ml</td>
-                  <td><span class="arrow-icon"><i class="fi fi-ss-left"></i></span>{{ props.data.size }} ml</td>
+                  <td>{{ props.data.size }}ml</td>
+                  <td><span class="arrow-icon"><i class="fi fi-ss-left"></i></span>{{ props.data.verifiedSize }}ml</td>
                 </tr>
                 <tr>
                   <td>등급<br><span class="small_text">(사용유무)</span></td>
-                  <td>미사용 제품</td>
+                  <td> {{ props.data.verifiedUsedOrNot ? '미사용 제품' : '사용 제품' }} </td>
                   <td><span class="arrow-icon"><i class="fi fi-ss-left"></i></span>{{ props.data.grade }} 등급</td>
                 </tr>
               </tbody>

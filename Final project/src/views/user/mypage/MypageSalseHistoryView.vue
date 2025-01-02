@@ -31,10 +31,10 @@ onMounted(() => {
   getSaleList();
   pageNation();
 });
-
 const Rendering = () => {
   getSaleList();
 };
+
 
 // 페이지네이션
 const totalCount = ref(50);
