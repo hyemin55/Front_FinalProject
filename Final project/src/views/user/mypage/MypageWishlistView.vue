@@ -2,6 +2,7 @@
 import { addCartDatabase } from '@/api/cartApi';
 import { GLOBAL_URL } from '@/api/util';
 import { categoryWishClick, categoryWishList, itemWishClick, itemWishList } from '@/api/wishApi';
+import MypageEmptyComponent from '@/components/user/MypageEmptyComponent.vue';
 import { useCartStore } from '@/stores/CartStore';
 import { useUserStore } from '@/stores/Login';
 import { useWishStore } from '@/stores/WishStore';
@@ -189,49 +190,54 @@ const moveDetail = (productId, productName, brand) => {
     </div>
 
 
-    <!-- 카테고리 찜 목록 컴포넌트 -->
-    <div v-if="mode === 'categoryMode'" class="wish_product" v-for="product in data" :key="product.wishListCategoryDto.id">
-      <input class="pro_check" type="checkbox" v-model="product.isChecked" />
-      <div class="product_box">
-        <div class="img_box">
-          <img @click="moveDetail(product.wishListCategoryDto.id, product.wishListCategoryDto.name, product.brandName)"
-            :src="`${GLOBAL_URL}/api/file/download/${product.wishListCategoryDto.mainImage}`"
-            alt=""/>
+    <article v-if="data.length > 0">
+      <!-- 카테고리 찜 목록 컴포넌트 -->
+      <div v-if="mode === 'categoryMode'" class="wish_product" v-for="product in data" :key="product.wishListCategoryDto.id">
+        <input class="pro_check" type="checkbox" v-model="product.isChecked" />
+        <div class="product_box">
+          <div class="img_box">
+            <img @click="moveDetail(product.wishListCategoryDto.id, product.wishListCategoryDto.name, product.brandName)"
+              :src="`${GLOBAL_URL}/api/file/download/${product.wishListCategoryDto.mainImage}`"
+              alt=""/>
+          </div>
+          <ul @click="moveDetail(product.wishListCategoryDto.id, product.wishListCategoryDto.name, product.brandName)" class="content_box">
+            <li>{{ product.brandName }}</li>
+            <li>상품명 : {{ product.wishListCategoryDto.name }}</li>
+            <li>재고 : {{ product.productCount }}</li>
+          </ul>
         </div>
-        <ul @click="moveDetail(product.wishListCategoryDto.id, product.wishListCategoryDto.name, product.brandName)" class="content_box">
-          <li>{{ product.brandName }}</li>
-          <li>상품명 : {{ product.wishListCategoryDto.name }}</li>
-          <li>재고 : {{ product.productCount }}</li>
-        </ul>
-      </div>
-      <div class="btn">
-        <div class="delet_btn" @click="wishDelete(product.wishListCategoryDto.id, product.isChecked)">삭제</div>
-      </div>
-    </div>
-
-    
-    <!-- 상품 찜 목록 컴포넌트 -->
-    <div v-if="mode === 'itemMode'" class="wish_product" v-for="product in data" :key="product.productId">
-      <input class="pro_check" type="checkbox" v-model="product.isChecked" />
-      <div class="product_box">
-        <div class="img_box">
-          <img @click="moveDetail(product.productId, product.productName, product.brandName)"
-            :src="`${GLOBAL_URL}/api/file/download/${product.userSaleImages[0].filename}`"
-            alt=""/>
+        <div class="btn">
+          <div class="delet_btn" @click="wishDelete(product.wishListCategoryDto.id, product.isChecked)">삭제</div>
         </div>
-        <ul @click="moveDetail(product.productId, product.productName, product.brandName)" class="content_box">
-          <li>{{ product.brandName }}</li>
-          <li>상품명 : {{ product.productName }}</li>
-          <li>옵션 : {{ product.size }}</li>
-          <li>가격 : {{ product.price }}</li>
-          <li>등급 : {{ product.gradeType }}</li>
-        </ul>
       </div>
-      <div class="btn">
-        <div class="cart_btn" @click="addCart(product.productId, product.isChecked)">장바구니 담기</div>
-        <div class="delet_btn" @click="wishDelete(product.productId, product.isChecked)">삭제</div>
+  
+      
+      <!-- 상품 찜 목록 컴포넌트 -->
+      <div v-if="mode === 'itemMode'" class="wish_product" v-for="product in data" :key="product.productId">
+        <input class="pro_check" type="checkbox" v-model="product.isChecked" />
+        <div class="product_box">
+          <div class="img_box">
+            <img @click="moveDetail(product.productId, product.productName, product.brandName)"
+              :src="`${GLOBAL_URL}/api/file/download/${product.userSaleImages[0].filename}`"
+              alt=""/>
+          </div>
+          <ul @click="moveDetail(product.productId, product.productName, product.brandName)" class="content_box">
+            <li>{{ product.brandName }}</li>
+            <li>상품명 : {{ product.productName }}</li>
+            <li>옵션 : {{ product.size }}</li>
+            <li>가격 : {{ product.price }}</li>
+            <li>등급 : {{ product.gradeType }}</li>
+          </ul>
+        </div>
+        <div class="btn">
+          <div class="cart_btn" @click="addCart(product.productId, product.isChecked)">장바구니 담기</div>
+          <div class="delet_btn" @click="wishDelete(product.productId, product.isChecked)">삭제</div>
+        </div>
       </div>
-    </div>
+    </article>
+    <article v-else>
+      <MypageEmptyComponent></MypageEmptyComponent>
+    </article>
 
   </div>
 </template>

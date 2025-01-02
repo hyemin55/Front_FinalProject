@@ -70,6 +70,7 @@ const pageNation = () => {
   ></HistoryProduct>
 
   <SaleProductModal v-if="saleModal" @closeModal="showModal" />
+  
   <article>
     <PageNationComponent :pageNationData="pageNationData" @currentPage="pageUpdate" />
   </article>
