@@ -143,7 +143,9 @@ watchEffect(() => {
         >
       </li>
       <li>{{ formatPrice(productData.verifiedSellingPrice) }}</li>
-      <li>판매용량 : {{ productData.productSize }} ml</li>
+      <li>
+        판매용량 : {{ productData.productSize }} ml {{ productData.usedOrNot === 'true' ? '새상품' : '중고상품' }}
+      </li>
     </ul>
 
     <!-- <div>
