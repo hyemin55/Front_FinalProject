@@ -35,12 +35,14 @@
         </thead>
         <tbody>
           <tr class="TableBody" v-for="(item, index) in productList" :key="index">
-            <td>{{ item.usedProductId }}</td>
+            <td class="usedProductId">{{ item.usedProductId }}</td>
             <td>{{ item.category }}</td>
             <td>{{ item.brandName }}</td>
             <td colspan="2" class="productName">
-              <span><img class="productImages" :src="`${GLOBAL_URL}/api/file/download/${item.filename}`" alt="" />
-              {{ item.productName }}</span>
+              <span
+                ><img class="productImages" :src="`${GLOBAL_URL}/api/file/download/${item.filename}`" alt="" />
+                {{ item.productName }}</span
+              >
             </td>
             <td>{{ item.productSize }} ml</td>
             <td>{{ item.productPrice.toLocaleString() }} 원</td>
@@ -184,7 +186,7 @@ tr {
 }
 th {
   border-bottom: 2px solid var(--color-main-gray);
-  border-right: 0.5px solid var(--color-main-gray);
+  /* border-right: 0.5px solid var(--color-main-gray); */
   padding: 0 1%;
   height: 40px;
 }
@@ -196,20 +198,21 @@ td {
   height: 50px;
   padding: 0 1%;
   border-bottom: 0.5px solid var(--color-main-gray);
-  border-right: 0.5px solid var(--color-main-gray);
+  /* border-right: 0.5px solid var(--color-main-gray); */
 }
 .TableBody td:last-child {
   border-right: none;
 }
-.TableBody:hover{
+.TableBody:hover {
   background-color: var(--color-main-Lgray);
 }
 .productName {
   text-align: left;
 }
-.productName span{
+.productName span {
   display: flex;
   align-items: center;
+  gap: 5px;
 }
 .productImages {
   width: 45px;
@@ -219,9 +222,9 @@ td {
   border: 0.5px solid var(--color-main-Lgray);
   border-radius: 5px;
 }
-.selectState {
+/* .selectState {
   background-color: var(--color-main-pink);
   border-radius: 10px;
   padding: 5px;
-}
+} */
 </style>

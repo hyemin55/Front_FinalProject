@@ -10,7 +10,7 @@ emit = 아래의 이름으로 부모컴포넌트에서 emit을 받아주고 페�
  -->
 <template>
   <article>
-    <ul id="totalPages" v-if="pageNationData.totalCount > 0">
+    <ul id="totalPages" v-if="pageNationData != null && pageNationData.totalCount > 0">
       <li @click="backPage">이전</li>
       <li
         class="totalPages"
@@ -104,10 +104,11 @@ const activePage = pageNum => {
     return currentPage.value - 1 - currentPageGroup.value * 10 === pageNum - 1;
   }
 };
+
 const dolode = () => {
-  totalCount.value = props.pageNationData.totalCount;
+  totalCount.value = props.pageNationData != null ? props.pageNationData.totalCount : 5;
   console.log('totalCount', totalCount.value);
-  pageSize.value = props.pageNationData.pageSize;
+  pageSize.value = props.pageNationData != null ? props.pageNationData.pageSize : 5;
   viewCurrentPage();
 };
 watchEffect(() => {
@@ -115,7 +116,6 @@ watchEffect(() => {
   console.log(props.pageNationData);
 });
 </script>
-
 
 <style scoped>
 #totalPages {

@@ -85,7 +85,9 @@ const navDetailProduct = usedProductId => {
   /* border: 0.5px solid var(--color-main-bloode); */
   cursor: pointer;
 }
-
+.carousel__item:hover {
+  background-color: rgb(225, 225, 225);
+}
 .carousel__item img {
   position: absolute;
   width: 330px;

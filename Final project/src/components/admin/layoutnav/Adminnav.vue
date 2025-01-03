@@ -52,12 +52,12 @@ const adminMenu = [
   },
   {
     route: '/categoryManagement',
-    icon: new URL('@/assets/img/icon/free-icon-font-clipboard-list-7857488.svg', import.meta.url).href,
+    icon: new URL('@/assets/img/icon/free-icon-font-boxes-7857446.svg', import.meta.url).href,
     label: '카테고리관리',
   },
   {
     route: '/productManagement',
-    icon: new URL('@/assets/img/icon/free-icon-font-clipboard-list-7857488.svg', import.meta.url).href,
+    icon: new URL('@//assets/img/icon/free-icon-font-air-freshener-7857379.svg', import.meta.url).href,
     label: '상품관리',
   },
   {
@@ -87,12 +87,12 @@ const adminMenu = [
   },
   {
     route: '/approvedList',
-    icon: new URL('@/assets/img/icon/free-icon-font-clipboard-list-7857488.svg', import.meta.url).href,
+    icon: new URL('@/assets/img/icon/free-icon-font-smile-beam-6275928.svg', import.meta.url).href,
     label: '승인목록',
   },
   {
     route: '/petList',
-    icon: new URL('@/assets/img/icon/free-icon-font-clipboard-list-7857488.svg', import.meta.url).href,
+    icon: new URL('@/assets/img/icon/free-icon-font-face-anguished-9844296.svg', import.meta.url).href,
     label: '반려목록',
   },
   {

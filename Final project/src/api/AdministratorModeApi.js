@@ -41,6 +41,17 @@ export const getProductManagementList = async (pageNum, size) => {
   }
 };
 
+// OrderManagementView.vue
+export const getOrderManagementList = async () => {
+  try {
+    const OrderManagementListRes = await axios.get(`${GLOBAL_URL}/admin/order/management`, {});
+    return OrderManagementListRes.data;
+  } catch (error) {
+    console.log('', error);
+    throw error;
+  }
+};
+
 // UserManagementView.vue
 export const getNotSortByRoleMemberData = async pageNumber => {
   try {

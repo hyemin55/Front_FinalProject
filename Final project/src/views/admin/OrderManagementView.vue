@@ -35,198 +35,21 @@
             <th>정산</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody v-for="(item, index) in orderList" :key="index">
           <tr class="TableBody">
+            <td>{{ item.purchaseProductId }}</td>
+            <td><img class="productImages" :src="`${GLOBAL_URL}/api/file/download/${item.filename}`" alt="" /></td>
+            <td>{{ item.productName }}</td>
+            <td>{{ item.productSize }} ml</td>
+            <td>{{ item.price.toLocaleString() }} 원</td>
+            <td>{{ item.category }}</td>
+            <td>{{ item.purchaseStatus }}</td>
             <td>1</td>
-            <td><img class="productImages" src="@/assets/img/빵빵덕세안.png" alt="" /></td>
-            <td>카레토 프린트 캔들</td>
-            <td>340 ml</td>
-            <td>134,000</td>
-            <td>Candle</td>
-            <td>
-              구매확정
-              <!-- <select name="state" id="" v-model="selectState.value">
-                <option :value="list" v-for="(list, index) in stateOption" :key="index">{{ list.name }}</option>
-              </select> -->
-            </td>
-            <td>1</td>
-            <td>2024-11-19</td>
-            <td>2024-11-20</td>
-            <td>2024-11-25</td>
-            <td>2</td>
-            <td>Y</td>
-          </tr>
-          <tr class="TableBody">
-            <td>1</td>
-            <td><img class="productImages" src="@/assets/img/빵빵덕세안.png" alt="" /></td>
-            <td>카레토 프린트 캔들</td>
-            <td>340 ml</td>
-            <td>134,000</td>
-            <td>Candle</td>
-            <td>
-              <select name="state" id="" v-model="selectState.value">
-                <option :value="list" v-for="(list, index) in stateOption" :key="index">{{ list.name }}</option>
-              </select>
-            </td>
-            <td>1</td>
-            <td>2024-11-19</td>
-            <td>2024-11-20</td>
-            <td>2024-11-25</td>
-            <td>2</td>
-            <td>Y</td>
-          </tr>
-          <tr class="TableBody">
-            <td>1</td>
-            <td><img class="productImages" src="@/assets/img/빵빵덕세안.png" alt="" /></td>
-            <td>카레토 프린트 캔들</td>
-            <td>340 ml</td>
-            <td>134,000</td>
-            <td>Candle</td>
-            <td>
-              <select name="state" id="" v-model="selectState.value">
-                <option :value="list" v-for="(list, index) in stateOption" :key="index">{{ list.name }}</option>
-              </select>
-            </td>
-            <td>1</td>
-            <td>2024-11-19</td>
-            <td>2024-11-20</td>
-            <td>2024-11-25</td>
-            <td>2</td>
-            <td>Y</td>
-          </tr>
-          <tr class="TableBody">
-            <td>1</td>
-            <td><img class="productImages" src="@/assets/img/빵빵덕세안.png" alt="" /></td>
-            <td>카레토 프린트 캔들</td>
-            <td>340 ml</td>
-            <td>134,000</td>
-            <td>Candle</td>
-            <td>
-              <select name="state" id="" v-model="selectState.value">
-                <option :value="list" v-for="(list, index) in stateOption" :key="index">{{ list.name }}</option>
-              </select>
-            </td>
-            <td>1</td>
-            <td>2024-11-19</td>
-            <td>2024-11-20</td>
-            <td>2024-11-25</td>
-            <td>2</td>
-            <td>Y</td>
-          </tr>
-          <tr class="TableBody">
-            <td>1</td>
-            <td><img class="productImages" src="@/assets/img/빵빵덕세안.png" alt="" /></td>
-            <td>카레토 프린트 캔들</td>
-            <td>340 ml</td>
-            <td>134,000</td>
-            <td>Candle</td>
-            <td>
-              구매확정
-              <!-- <select name="state" id="" v-model="selectState.value">
-                <option :value="list" v-for="(list, index) in stateOption" :key="index">{{ list.name }}</option>
-              </select> -->
-            </td>
-            <td>1</td>
-            <td>2024-11-19</td>
-            <td>2024-11-20</td>
-            <td>2024-11-25</td>
-            <td>2</td>
-            <td>Y</td>
-          </tr>
-          <tr class="TableBody">
-            <td>1</td>
-            <td><img class="productImages" src="@/assets/img/빵빵덕세안.png" alt="" /></td>
-            <td>카레토 프린트 캔들</td>
-            <td>340 ml</td>
-            <td>134,000</td>
-            <td>Candle</td>
-            <td>
-              <select name="state" id="" v-model="selectState.value">
-                <option :value="list" v-for="(list, index) in stateOption" :key="index">{{ list.name }}</option>
-              </select>
-            </td>
-            <td>1</td>
-            <td>2024-11-19</td>
-            <td>2024-11-20</td>
-            <td>2024-11-25</td>
-            <td>2</td>
-            <td>Y</td>
-          </tr>
-          <tr class="TableBody">
-            <td>1</td>
-            <td><img class="productImages" src="@/assets/img/빵빵덕세안.png" alt="" /></td>
-            <td>카레토 프린트 캔들</td>
-            <td>340 ml</td>
-            <td>134,000</td>
-            <td>Candle</td>
-            <td>
-              <select name="state" id="" v-model="selectState.value">
-                <option :value="list" v-for="(list, index) in stateOption" :key="index">{{ list.name }}</option>
-              </select>
-            </td>
-            <td>1</td>
-            <td>2024-11-19</td>
-            <td>2024-11-20</td>
-            <td>2024-11-25</td>
-            <td>2</td>
-            <td>Y</td>
-          </tr>
-          <tr class="TableBody">
-            <td>1</td>
-            <td><img class="productImages" src="@/assets/img/빵빵덕세안.png" alt="" /></td>
-            <td>카레토 프린트 캔들</td>
-            <td>340 ml</td>
-            <td>134,000</td>
-            <td>Candle</td>
-            <td>
-              <select name="state" id="" v-model="selectState.value">
-                <option :value="list" v-for="(list, index) in stateOption" :key="index">{{ list.name }}</option>
-              </select>
-            </td>
-            <td>1</td>
-            <td>2024-11-19</td>
-            <td>2024-11-20</td>
-            <td>2024-11-25</td>
-            <td>2</td>
-            <td>Y</td>
-          </tr>
-          <tr class="TableBody">
-            <td>1</td>
-            <td><img class="productImages" src="@/assets/img/빵빵덕세안.png" alt="" /></td>
-            <td>카레토 프린트 캔들</td>
-            <td>340 ml</td>
-            <td>134,000</td>
-            <td>Candle</td>
-            <td>
-              <select name="state" id="" v-model="selectState.value">
-                <option :value="list" v-for="(list, index) in stateOption" :key="index">{{ list.name }}</option>
-              </select>
-            </td>
-            <td>1</td>
-            <td>2024-11-19</td>
-            <td>2024-11-20</td>
-            <td>2024-11-25</td>
-            <td>2</td>
-            <td>Y</td>
-          </tr>
-          <tr class="TableBody">
-            <td>1</td>
-            <td><img class="productImages" src="@/assets/img/빵빵덕세안.png" alt="" /></td>
-            <td>카레토 프린트 캔들</td>
-            <td>340 ml</td>
-            <td>134,000</td>
-            <td>Candle</td>
-            <td>
-              <select name="state" id="" v-model="selectState.value">
-                <option :value="list" v-for="(list, index) in stateOption" :key="index">{{ list.name }}</option>
-              </select>
-            </td>
-            <td>1</td>
-            <td>2024-11-19</td>
-            <td>2024-11-20</td>
-            <td>2024-11-25</td>
-            <td>2</td>
-            <td>Y</td>
+            <td>{{ dateTimeFormat(item.purchaseCreationDate) }}</td>
+            <td>{{ item.deliveredDate === null ? '-' : dateTimeFormat(item.deliveredDate) }}</td>
+            <td>2025-01-{{ 1 + index }}</td>
+            <td>{{ item.nickName }}</td>
+            <td>N</td>
           </tr>
         </tbody>
       </table>
@@ -235,9 +58,14 @@
 </template>
 
 <script setup>
+import { getOrderManagementList } from '@/api/AdministratorModeApi';
+import { GLOBAL_URL } from '@/api/util';
 import AnnouncementComponent from '@/components/admin/AnnouncementComponent.vue';
+import { dateTimeFormat } from '@/FormatData';
 import { ref } from 'vue';
 
+const orderList = ref([]);
+const totalCount = ref(0);
 const selectState = ref([]);
 const stateOption = [
   { value: 'PaymentCompleted', name: '결제완료' },
@@ -245,14 +73,15 @@ const stateOption = [
   { value: 'DeliveryCompleted', name: '배송완료' },
   { value: 'PurchaseConfirmation', name: '구매확정' },
   { value: 'CancelPurchase', name: '구매취소' },
-  { value: 'WaitingForPurchaseReturn', name: '구매반품대기' },
-  { value: 'PurchaseReturnCompleted', name: '구매반품완료' },
-  { value: 'WaitingForSalesReturn', name: '판매반품대기' },
-  { value: 'SalesReturnCompleted', name: '판매반품완료' },
 ];
 
-const dolode = () => {
+const dolode = async () => {
   selectState.value = stateOption[0];
+  const OrderManagementListRes = await getOrderManagementList();
+  orderList.value = OrderManagementListRes.content;
+  totalCount.value = OrderManagementListRes.totalElements;
+  console.log('orderList', orderList.value);
+  console.log('totalCount', totalCount.value);
 };
 dolode();
 </script>
@@ -316,13 +145,14 @@ table {
 }
 td {
   height: 50px;
+  padding: 0 1%;
   border-bottom: 0.5px solid var(--color-main-gray);
 }
 th {
   border-bottom: 2px solid var(--color-main-gray);
   height: 40px;
 }
-.TableBody:hover{
+.TableBody:hover {
   background-color: var(--color-main-Lgray);
 }
 .TableBody > td:nth-child(3) {
