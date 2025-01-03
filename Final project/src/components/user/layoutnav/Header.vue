@@ -70,7 +70,7 @@ const toggleSearch = () => {
 // 검색어 입력
 const handleClick = () => {
   console.log('검색');
-  // router.push()
+  router.push({ path: `/category/"${searchQuery.value}"/4` },)
 };
 
 </script>

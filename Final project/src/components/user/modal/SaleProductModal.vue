@@ -29,8 +29,8 @@ const productContent = ref("");
 const uploadedFiles = ref([]);
 
 // file 관리
-const imageSrc = ref([]);
-const files = ref([])
+const imageSrc = ref([]); // 이미지가 직접 보이는 배열
+const files = ref([]) // DB로 업로드할 배열
 
 const handleFileUpload = (event) => {
   files.value.push(...event.target.files);

@@ -92,17 +92,17 @@ const saleApprove = async(pendingSaleId) => {
                 <tr>
                   <td>카테고리</td>
                   <td>{{ props.data.category }}</td>
-                  <td><span class="arrow-icon"><i class="fi fi-ss-left"></i></span></td>
+                  <td><span class="arrow-icon"><i class="fi fi-ss-left"></i></span>{{ props.data.verifiedCategory }}</td>
                 </tr>
                 <tr>
                   <td>브랜드</td>
                   <td>{{ props.data.brand }}</td>
-                  <td><span class="arrow-icon"><i class="fi fi-ss-left"></i></span></td>
+                  <td><span class="arrow-icon"><i class="fi fi-ss-left"></i></span>{{ props.data.verifiedBrand }}</td>
                 </tr>
                 <tr>
                   <td>상품명</td>
                   <td>{{ props.data.name }}</td>
-                  <td><span class="arrow-icon"><i class="fi fi-ss-left"></i></span></td>
+                  <td><span class="arrow-icon"><i class="fi fi-ss-left"></i></span>{{ props.data.verifiedProductName }}</td>
                 </tr>
                 <tr>
                   <td>가격</td>

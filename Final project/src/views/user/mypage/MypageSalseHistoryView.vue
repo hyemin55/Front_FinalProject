@@ -3,7 +3,7 @@ import { GLOBAL_URL } from '@/api/util';
 import PageNationComponent from '@/components/PageNationComponent.vue';
 import HistoryProduct from '@/components/user/HistoryProduct.vue';
 import MypageEmptyComponent from '@/components/user/MypageEmptyComponent.vue';
-import SaleProductModal from '@/components/user/SaleProductModal.vue';
+import SaleProductModal from '@/components/user/modal/SaleProductModal.vue';
 import axios from 'axios';
 import { onMounted, ref } from 'vue';
 
