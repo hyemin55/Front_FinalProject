@@ -217,8 +217,15 @@ option:focus {
   font-size: 1.8rem;
   color: white;
   border-radius: 10px;
-  background-color: var(--color-main-bloode);
+  background-color: #8f9d8d;
+  box-shadow: inset 2px 2px 4px rgb(255, 255, 255);
+  transition: all 0.3s ease;
   cursor: pointer;
+}
+.save:hover {
+  background-color: #627c85;
+  box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2);
+  transform: translateY(2px);
 }
 .searchIcon {
   width: 20px;

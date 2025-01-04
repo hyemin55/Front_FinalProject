@@ -73,9 +73,9 @@
 
 <script setup>
 import {
-  deleteReviewManagement,
-  sortByReviewData,
-  notSortByReviewData,
+  getdeleteReviewManagement,
+  getSortByReviewData,
+  getNotSortByReviewData,
   getSearchKeyword,
 } from '@/api/AdministratorModeApi';
 import { GLOBAL_URL } from '@/api/util';
@@ -113,7 +113,7 @@ const DeleteButton = async item => {
   const result = confirm('정말 리뷰를 삭제하시겠습니까?');
   if (result) {
     console.log('리뷰 삭제합니다.');
-    const deleteReviewManagementRes = await deleteReviewManagement(item.reviewId);
+    const deleteReviewManagementRes = await getdeleteReviewManagement(item.reviewId);
     console.log(deleteReviewManagementRes);
     dolode();
   }
@@ -135,9 +135,9 @@ const dolode = async search => {
     }
   } else {
     if (reviewSortBy.value === '') {
-      reviewDataRes.value = await notSortByReviewData(pageNumber.value, pageSize.value);
+      reviewDataRes.value = await getNotSortByReviewData(pageNumber.value, pageSize.value);
     } else {
-      reviewDataRes.value = await sortByReviewData(reviewSortBy.value, pageNumber.value, pageSize.value);
+      reviewDataRes.value = await getSortByReviewData(reviewSortBy.value, pageNumber.value, pageSize.value);
     }
     reviewList.value = reviewDataRes.value.data.reviewManageDtos.content;
     totalCount.value = reviewDataRes.value.data.reviewCount;
@@ -217,7 +217,7 @@ th {
   padding: 2px;
   height: 40px;
 }
-.TableBody:hover{
+.TableBody:hover {
   background-color: var(--color-main-Lgray);
 }
 .TableBody > td:nth-child(6) {
@@ -239,8 +239,8 @@ th {
   box-shadow: inset 2px 2px 4px rgba(255, 255, 255, 0.5);
   transition: all 0.3s ease;
 }
-.stateButton:hover{
-box-shadow: inset 1px 1px 4px rgba(0, 0, 0, 0.3);
-transform: translateY(1px);
+.stateButton:hover {
+  box-shadow: inset 1px 1px 4px rgba(0, 0, 0, 0.3);
+  transform: translateY(1px);
 }
 </style>

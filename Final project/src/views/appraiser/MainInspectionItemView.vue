@@ -653,9 +653,12 @@ button {
   text-align: center;
   font-size: 1.8rem;
   color: white;
+  transition: all 0.3s ease;
 }
 button:hover {
   background-color: #627c85;
+  box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2);
+  transform: translateY(2px);
 }
 .InputDisplay,
 .category,
