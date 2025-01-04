@@ -13,7 +13,11 @@
         <li>판매금액</li>
         <li>주문시간</li>
       </ul>
-      <div v-for="(item, index) in orderList.dashOrderListDtoList.slice(0, 10)" :key="index">
+      <div
+        v-if="reviewList && reviewList.dashReviewListDtoList && reviewList.dashReviewListDtoList.length > 0"
+        v-for="(item, index) in orderList.dashOrderListDtoList.slice(0, 10)"
+        :key="index"
+      >
         <ul class="orderListContent">
           <li>{{ item.orderId }}</li>
           <li>{{ item.categoryName }}</li>
@@ -74,6 +78,7 @@
           <li>신청시간</li>
         </ul>
         <ul
+          v-if="reviewList && reviewList.dashReviewListDtoList && reviewList.dashReviewListDtoList.length > 0"
           class="pendingListContent"
           v-for="(item, index) in pendingList.dashPendingListDtoList.slice(0, 10)"
           :key="index"
@@ -120,6 +125,7 @@
         <li>용량</li>
       </ul>
       <div
+        v-if="reviewList && reviewList.dashReviewListDtoList && reviewList.dashReviewListDtoList.length > 0"
         class="reviewListTotalContent"
         v-for="(item, index) in reviewList.dashReviewListDtoList.slice(0, 10)"
         :key="index"
