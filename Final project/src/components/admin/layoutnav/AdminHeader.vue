@@ -63,10 +63,11 @@ watchEffect(() => {
   padding: 8px;
 }
 .header_nav li a:nth-child(1) {
+  color: white;
+}
+.header_nav li a:nth-child(1):hover {
   text-decoration: underline;
   text-underline-position: under;
-  /* border-bottom: 1px solid white; */
-  color: white;
 }
 .header_nav li:nth-child(2) {
   color: white;
@@ -78,8 +79,14 @@ watchEffect(() => {
 }
 .header_nav li:nth-child(3) {
   background-color: var(--color-main-pink);
+  box-shadow: inset -4px -4px 8px rgba(255, 255, 255, 0.5);
   border-radius: 10px;
   cursor: pointer;
+  transition: all 0.3s ease;
+}
+.header_nav li:nth-child(3):hover {
+box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.2);
+transform: translateY(1px);
 }
 
 @keyframes spin {

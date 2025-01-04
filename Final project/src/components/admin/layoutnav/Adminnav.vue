@@ -155,15 +155,11 @@ const setActive = index => {
   .NavMenu {
     padding-left: 10px;
   }
-  .NavMenu img {
-    margin-right: 1px;
-  }
   .NavMenuText {
     display: none;
     font-size: 0rem;
     width: 80px;
   }
-
   #AdminNav:hover .NavMenuText {
     display: block;
     font-size: 1.2rem;

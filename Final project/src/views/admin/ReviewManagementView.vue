@@ -231,12 +231,16 @@ th {
   border: 0.5px solid var(--color-main-Lgray);
   border-radius: 5px;
 }
-.stateButtons {
-}
 .stateButton {
   background-color: var(--color-main-gray);
   padding: 10px;
   border-radius: 10px;
   margin: 0 5px;
+  box-shadow: inset 2px 2px 4px rgba(255, 255, 255, 0.5);
+  transition: all 0.3s ease;
+}
+.stateButton:hover{
+box-shadow: inset 1px 1px 4px rgba(0, 0, 0, 0.3);
+transform: translateY(1px);
 }
 </style>

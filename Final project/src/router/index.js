@@ -48,11 +48,7 @@ const adminRouters = [
         name: 'mainDashboard',
         component: MainDashboardView,
       },
-      {
-        path: 'announcement',
-        name: 'announcement',
-        component: AnnouncementView,
-      },
+
       {
         path: 'orderManagement',
         name: 'orderManagement',
@@ -108,6 +104,11 @@ const appraiserRouters = [
         path: 'petList',
         name: 'petList',
         component: PetListView,
+      },
+      {
+        path: 'announcement',
+        name: 'announcement',
+        component: AnnouncementView,
       },
     ],
   },

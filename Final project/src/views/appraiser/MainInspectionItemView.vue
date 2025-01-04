@@ -647,6 +647,7 @@ textarea:focus {
 button {
   padding: 10px;
   background-color: #8f9d8d;
+  box-shadow: inset 2px 2px 4px rgb(255, 255, 255);
   border-radius: 9px;
   width: 100%;
   text-align: center;

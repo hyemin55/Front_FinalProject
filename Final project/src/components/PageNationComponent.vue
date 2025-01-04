@@ -13,7 +13,7 @@ emit = 아래의 이름으로 부모컴포넌트에서 emit을 받아주고 페�
     <ul id="totalPages" v-if="pageNationData != null && pageNationData.totalCount > 0">
       <li @click="backPage">이전</li>
       <li
-        class="totalPages"
+        class="Pages"
         v-for="pageNum in endPage - startPage + 1"
         v-bind:key="pageNum"
         @click="goToPage(startPage + pageNum - 1)"
@@ -133,7 +133,7 @@ watchEffect(() => {
   cursor: pointer;
   padding: 1%;
 }
-.totalPages {
+.Pages {
   /* background-color: rgb(236, 207, 172); */
   display: flex;
   align-items: center;
@@ -141,7 +141,8 @@ watchEffect(() => {
   /* width: 10%; */
   /* margin: 0 1%; */
 }
-.totalPages.active {
+.Pages.active,
+li:hover {
   color: var(--color-main-bloode);
   font-weight: 600;
   text-decoration: underline;
