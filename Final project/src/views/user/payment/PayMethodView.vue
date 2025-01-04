@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
 
-const paymentMethod = ref("");
+const paymentMethod = ref("easyPayment");
 const selectCheck = (method) => {
   paymentMethod.value = method;
 };
@@ -84,16 +84,20 @@ const selectCheck = (method) => {
       <transition name="expand">
         <div v-if="paymentMethod === 'easyPayment'" class="sub_div bank">
           <div>
-            <img src="../../assets/img/kakao.png" alt="" />
+            <img src="/src/assets/img/kakao.png" alt="" />
             카카오페이
           </div>
           <div>
-            <img src="../../assets/img/toss.png" alt="" />
+            <img src="/src/assets/img/toss.png" alt="" />
             토스페이
           </div>
           <div>
-            <img src="../../assets/img/naver.png" alt="" />
+            <img src="/src/assets/img/naver.png" alt="" />
             네이버페이
+          </div>
+          <div class="xxx">
+            <img src="/src/assets/img/inicis.png" alt="" />
+            이니시스
           </div>
         </div>
       </transition>
@@ -161,6 +165,7 @@ input[type="text"]{
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  height: 200px;
 }
 .bank > div {
   display: flex;
@@ -169,6 +174,7 @@ input[type="text"]{
   margin: 10px 0;
   font-size: 15px;
   cursor: pointer;
+  
 }
 .bank img {
   width: 50px;
@@ -193,5 +199,11 @@ input[type="text"]{
 .expand-leave-to {
   max-height: 0;
   opacity: 0;
+}
+.xxx{
+  background-color: var(--color-main-bloode);
+  color: #fff;
+  border-radius: 1.5rem;
+  padding: 5px 15px;
 }
 </style>

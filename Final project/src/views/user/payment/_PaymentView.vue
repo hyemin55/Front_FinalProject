@@ -7,8 +7,9 @@ import PayProduct from '@/views/user/payment/PayProductView.vue';
 import PayUserInfo from '@/views/user/payment/PayUserInfoView.vue';
 import axios from 'axios';
 import { computed, onMounted, ref, watchEffect } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
+const router = useRouter();
 // 결제 pinia
 // const payMentStore = usePayMentStore()
 // const payinfo = computed(() => payMentStore.payProduct)
@@ -41,6 +42,7 @@ watchEffect(() => {
     // SSE 연결을 초기화합니다.
     connectSSE();
     // window.location.reload()
+    router.push({ path: `/ordercomplete`},)
   }
 });
 
@@ -227,6 +229,9 @@ const connectSSE = () => {
 const payroute = useRoute();
 const payData = JSON.parse(decodeURIComponent(payroute.query.item));
 console.log(decodeURIComponent(payroute.query.item));
+
+console.log(('dfadfdas', payData));
+// console.log(decodeURIComponent('dfadfdas', ));
 </script>
 
 <template>
