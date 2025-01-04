@@ -3,19 +3,32 @@ import { GLOBAL_URL } from '@/api/util';
 import PageNationComponent from '@/components/PageNationComponent.vue';
 import HistoryProduct from '@/components/user/HistoryProduct.vue';
 import MypageEmptyComponent from '@/components/user/MypageEmptyComponent.vue';
-import SaleProductModal from '@/components/user/SaleProductModal.vue';
+import SaleProductModal from '@/components/user/modal/SaleProductModal.vue';
 import axios from 'axios';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
+// 판매신청 모달창
 const saleModal = ref(false);
 const showModal = () => {
   saleModal.value = !saleModal.value;
 };
 
+// 페이지네이션
+const totalCount = ref(50);
+const pageSize = ref(5);
+const pageNum = ref(0);
+const pageNationData = ref('');
+
+// 판매리스트 통신
 const saleList = ref([]);
-const getSaleList = async () => {
+const getSaleList = async (pageNum, pageSize) => {
+  console.log('페이지넘', pageNum)
   try {
     const res = await axios.get(`${GLOBAL_URL}/myPage/saleList`, {
+      params:{
+        pageNum : pageNum,
+        pageSize : pageSize
+      },
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         'Content-Type': 'application/json',
@@ -27,24 +40,26 @@ const getSaleList = async () => {
     console.error(error);
   }
 };
+
+// 페이지 랜더링
+watch(pageNum, (newPageNum) => {
+  getSaleList(newPageNum, pageSize.value);
+});
 onMounted(() => {
-  getSaleList();
+  getSaleList(pageNum.value, pageSize.value);
   pageNation();
 });
+
+
 const Rendering = () => {
   getSaleList();
 };
-
-
-// 페이지네이션
-const totalCount = ref(50);
-const pageSize = ref(5);
-const pageNumber = ref(0);
-const pageNationData = ref('');
-
-const pageUpdate = pageNum => {
-  pageNumber.value = pageNum;
+const pageUpdate = pageNumer => {
+  pageNum.value = pageNumer;
 };
+
+
+// 페이지컴포넌트 생성을 위해 보내는값(페이지수 생성)
 const pageNation = () => {
   pageNationData.value = {
     totalCount: totalCount.value,
@@ -76,9 +91,7 @@ const pageNation = () => {
     <MypageEmptyComponent></MypageEmptyComponent>
   </article>
 
-
-  <SaleProductModal v-if="saleModal" @closeModal="showModal" />
-  
+  <SaleProductModal v-if="saleModal" @closeModal="showModal" />  
 </template>
 
 <style scoped>

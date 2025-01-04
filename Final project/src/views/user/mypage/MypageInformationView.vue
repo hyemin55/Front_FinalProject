@@ -3,8 +3,6 @@ import { useUserStore } from '@/stores/Login';
 import { ref } from 'vue';
 
 const userStore = useUserStore();
-console.log('유저', userStore.nickName)
-
 
 const profileImage = sessionStorage.getItem('profileImage')
 const inputFile = ref();
@@ -45,8 +43,8 @@ const save = ()=>{
         <form>
           <div class="form-group">
             <label for="nickname">닉네임</label>
-            <span v-if="mode === 'read'">닉네임</span>
-            <input v-else type="text" id="nickname" value="닉네임" />
+            <span v-if="mode === 'read'">{{ userStore.nickName }}</span>
+            <input v-else type="text" id="nickname" :value="userStore.nickName" />
           </div>
           <div class="form-group">
             <label for="address">주소</label>
@@ -65,8 +63,8 @@ const save = ()=>{
           </div>
           <div class="form-group">
             <label for="email">이메일</label>
-            <span v-if="mode === 'read'">abcdefhijk@naver.com</span>
-            <input v-else type="email" id="email" value="abcdefhijk@naver.com" readonly/>
+            <span v-if="mode === 'read'">{{ userStore.email }}</span>
+            <input v-else type="email" id="email" :value="userStore.email" readonly/>
           </div>
           <div class="form-group">
             <label for="gender">성별</label>

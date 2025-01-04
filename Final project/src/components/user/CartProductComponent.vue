@@ -152,14 +152,15 @@ const moveDetail = () => {
 .img {
   width: 197px;
   height: 100%;
-  /* background-color: #fff; */
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 .img img {
   cursor: pointer;
   height: 90%;
+  border-radius: 1.5rem;
 }
 /* 텍스트 박스 설정 */
 .text {

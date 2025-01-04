@@ -3,7 +3,8 @@ import { GLOBAL_URL } from '@/api/util';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import { computed, ref } from 'vue';
-import SaleRegistrationModal from './SaleRegistrationModal.vue';
+import SaleRegistrationModal from './modal/SaleRegistrationModal.vue';
+import ReviewCreateModal from './modal/ReviewCreateModal.vue';
 
 // 주문, 판매 텍스트 변경
 const props = defineProps({
@@ -56,6 +57,9 @@ const mappedData = computed(() => {
       verifiedSaleId: item.verifiedSaleId,
       verifiedSize: item.verifiedSize,
       verifiedUsedOrNot: item.verifiedUsedOrNot,
+      verifiedCategory:item.verifiedCategory,
+      verifiedBrand:item.verifiedBrand,
+      verifiedProductName:item.verifiedProductName
     }));
   } else if (props.type === 'order') {
     return props.orderList.map(item => ({
@@ -73,12 +77,6 @@ const mappedData = computed(() => {
     }));
   }
 });
-const confirmed = () => {
-  console.log('구매확정 함수');
-};
-const goreview = () => {
-  console.log('리뷰작성 함수');
-};
 
 // 판매 반려
 const saleReject = async pendingSaleId => {
@@ -98,6 +96,7 @@ const saleReject = async pendingSaleId => {
 
 // 신청 결과 popup창
 const saleModal = ref(false);
+const reviewModal = ref(false);
 const modalData = ref(null);
 
 const showModal = data => {
@@ -112,6 +111,17 @@ const showModal = data => {
 // 신청 결과 popup창 닫기
 const closeModal = () => {
   saleModal.value = false;
+  reviewModal.value = false;
+};
+
+const goreview = (data) => {
+  reviewModal.value = true;
+  modalData.value = data;
+  console.log('리뷰작성 함수');
+};
+
+const confirmed = () => {
+  console.log('구매확정 함수');
 };
 </script>
 
@@ -147,7 +157,7 @@ const closeModal = () => {
 
         <div class="history_product_btn" v-if="props.showBtn">
           <button @click="confirmed()">구매확정</button>
-          <button @click="goreview()">구매후기 작성</button>
+          <button @click="goreview(data)">구매후기 작성</button>
         </div>
         <div class="history_product_btn" v-else>
           <button v-if="data.status === 'ACCEPTED' || data.status === 'WAITING'" @click="showModal(data)">
@@ -165,6 +175,14 @@ const closeModal = () => {
     @closeModal="closeModal()"
     @Rendering="rendering"
   ></SaleRegistrationModal>
+
+  <ReviewCreateModal
+    v-if="reviewModal"
+    :data="modalData"
+    @closeModal="closeModal()"
+  ></ReviewCreateModal>
+    
+  
 </template>
 
 <style scoped>
