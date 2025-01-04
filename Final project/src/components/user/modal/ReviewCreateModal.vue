@@ -16,7 +16,6 @@ const props = defineProps({
     }
 })
 
-
 // input.value 맵핑
 const starPoint = ref();
 const content = ref();
