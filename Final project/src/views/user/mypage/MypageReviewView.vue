@@ -1,20 +1,30 @@
 <script setup>
 import { GLOBAL_URL } from '@/api/util';
+import PageNationComponent from '@/components/PageNationComponent.vue';
 import axios from 'axios';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
+// 페이지네이션
+const totalCount = ref(50);
+const pageSize = ref(5);
+const pageNum = ref(0);
+const pageNationData = ref('');
 
 // 리뷰 리스트 가져오기
 const data = ref([]);
-const getReview = async()=>{
+const getReview = async(pageNum, size)=>{
   try{
     const res = await axios.get(`${GLOBAL_URL}/myPage/reviewList`, {
+      params:{
+        pageNum : pageNum,
+        size : size
+      },
       headers:{
         Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         'Content-Type':'application/json'
       },
     })
-    // data.value = res.data;
+    totalCount.value = res.data[0].reviewCount;
     data.value = res.data.map(product => ({
       ...product,
       updateMode: true,
@@ -25,10 +35,6 @@ const getReview = async()=>{
     console.error(error)
   }
 }
-onMounted(()=>{
-  getReview();
-})
-
 
 const getStarIcon = (star)=>{
   switch(star){
@@ -46,8 +52,6 @@ const getStarIcon = (star)=>{
       return '☆☆☆☆☆';
   }
 }
-
-
 
 // 리뷰 삭제 
 const deleteReview = async(reviewId)=>{
@@ -89,6 +93,27 @@ const updateReview = async(list, reviewId, content)=>{
   } 
 }
 
+// 페이지 랜더링
+watch([pageNum, totalCount], ([newPageNum, newTotalCount]) => {
+  getReview(newPageNum, pageSize.value);
+  pageNation(newTotalCount);
+});
+onMounted(()=>{
+  getReview(pageNum.value, pageSize.value);
+  pageNation();
+})
+const pageUpdate = pageNumer => {
+  pageNum.value = pageNumer;
+};
+
+// 페이지컴포넌트 생성을 위해 보내는값(페이지수 생성)
+const pageNation = () => {
+  pageNationData.value = {
+    totalCount: totalCount.value,
+    pageSize: pageSize.value,
+  };
+};
+
 </script>
 
 <template>
@@ -107,7 +132,7 @@ const updateReview = async(list, reviewId, content)=>{
 
         <div class="review_content">
           <div class="img_box">
-            <img src="@/assets/img/c008.png" alt="">
+            <img :src="`${GLOBAL_URL}/api/file/download/${list.reviewImage}`" alt="">
           </div>
           <div class="text_box">
             <p v-if="list.updateMode" class="text_content">{{ list.content }}</p>
@@ -121,6 +146,8 @@ const updateReview = async(list, reviewId, content)=>{
         <button v-if="list.updateMode" class="btn"  @click="setMode(list)">수정</button>
         <button v-else class="btn" @click="updateReview(list, list.reviewId, list.content)">저장</button>
     </article>
+
+    <PageNationComponent :pageNationData="pageNationData" @currentPage="pageUpdate" />
 
     <!-- <article>
       <h1>리뷰가 없을때 article</h1>  
@@ -176,6 +203,7 @@ const updateReview = async(list, reviewId, content)=>{
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 .img_box img{
   height: 100%;
