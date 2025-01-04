@@ -53,8 +53,8 @@ const save = ()=>{
           </div>
           <div class="form-group">
             <label for="name">이름</label>
-            <span v-if="mode === 'read'">김영희</span>
-            <input v-else type="text" id="name" value="김영희" />
+            <span v-if="mode === 'read'">{{ userStore.nickName }}</span>
+            <input v-else type="text" id="name" :value="userStore.nickName" />
           </div>
           <div class="form-group">
             <label for="phone">핸드폰번호</label>
@@ -68,7 +68,7 @@ const save = ()=>{
           </div>
           <div class="form-group">
             <label for="gender">성별</label>
-            <span v-if="mode === 'read'">여</span>
+            <span v-if="mode === 'read'">비공개</span>
             <input v-else type="text" id="gender" value="여" readonly/>
           </div>
 

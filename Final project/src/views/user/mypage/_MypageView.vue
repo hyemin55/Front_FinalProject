@@ -24,7 +24,9 @@ const componentMap = {
 };
 const currentComponent = computed(() => componentMap[selectpage.value]);
 
+const selectedItem = ref('myOrderHistory');
 const handleNavClick = (page) => {
+  selectedItem.value = page;
   selectpage.value = page;
   window.scrollTo({ top: 0 });
 };
@@ -39,12 +41,12 @@ const handleNavClick = (page) => {
         <p>{{ user.nickName }}</p>
       </div>
       <ul id="myInfoNavList">
-      <li @click="handleNavClick('myOrderHistory')">주문 내역 조회</li>
-      <li @click="handleNavClick('mySalseHistory')">판매 내역 조회</li>
-      <li @click="handleNavClick('myWishlist')">찜 목록</li>
-      <li @click="handleNavClick('myReview')">내 리뷰 관리</li>
-      <li @click="handleNavClick('myInformation')">회원 정보 관리</li>
-    </ul>
+        <li :class="{ active: selectedItem === 'myOrderHistory' }" @click="handleNavClick('myOrderHistory')">주문 내역 조회</li>
+        <li :class="{ active: selectedItem === 'mySalseHistory' }" @click="handleNavClick('mySalseHistory')">판매 내역 조회</li>
+        <li :class="{ active: selectedItem === 'myWishlist' }" @click="handleNavClick('myWishlist')">찜 목록</li>
+        <li :class="{ active: selectedItem === 'myReview' }" @click="handleNavClick('myReview')">내 리뷰 관리</li>
+        <li :class="{ active: selectedItem === 'myInformation' }" @click="handleNavClick('myInformation')">회원 정보 관리</li>
+      </ul>
     </article>
 
     <main id="rightGroub">
@@ -137,5 +139,11 @@ const handleNavClick = (page) => {
   margin: 15px 0 15px 3%;
   /* background-color: rgb(207, 232, 255); */
   height: auto;
+}
+
+#myInfoNavList li.active {
+  color: var(--color-main-bloode);
+  font-weight: bold;
+  position: relative;
 }
 </style>

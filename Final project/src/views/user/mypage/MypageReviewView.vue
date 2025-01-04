@@ -87,7 +87,7 @@ const updateReview = async(list, reviewId, content)=>{
         'Content-Type':'application/json'
       }
     })
-    await getReview();
+    await getReview(pageNum.value, pageSize.value);
   }catch(error){
     console.error(error);
   } 

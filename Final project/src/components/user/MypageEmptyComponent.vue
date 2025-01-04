@@ -10,12 +10,12 @@
 <style scoped>
 .layout{
     width: 100%;
-    height: 250px;
+    height: 300px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #f0f0f0;
+    background-color: #fff;
     position: relative;
 }
 .layout img{
