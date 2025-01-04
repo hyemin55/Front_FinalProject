@@ -1,6 +1,7 @@
 <script setup>
 import { GLOBAL_IMP_KEY, GLOBAL_URL } from '@/api/util';
 import { usePayMentStore } from '@/stores/PayMentStore';
+import { useUserStore } from '@/stores/Login';
 import PayMethod from '@/views/user/payment/PayMethodView.vue';
 import PayMoney from '@/views/user/payment/PayMoneyView.vue';
 import PayProduct from '@/views/user/payment/PayProductView.vue';
@@ -16,6 +17,8 @@ const router = useRouter();
 
 // JSON 문자열을 객체로 변환
 // const cartItems = route.params.item ? route.params.item.split(',') : [];
+const nickName = useUserStore().nickName;
+const email = useUserStore().email;
 const route = useRoute();
 const cartData = JSON.parse(decodeURIComponent(route.query.item));
 console.log('받은 배열', cartData.purchaseProductDtos);
@@ -41,7 +44,10 @@ watchEffect(() => {
     // SSE 연결을 초기화합니다.
     connectSSE();
     // window.location.reload()
-    router.push({ path: `/ordercomplete`},)
+    router.push({
+      name: 'ordercomplete',
+      query: { merchant_uid },
+    });
   }
 });
 
@@ -87,11 +93,11 @@ const requestPay = async () => {
       pg: 'html5_inicis',
       pay_method: 'card',
       merchant_uid: merchant_uid,
-      name: cartData.purchaseProductDtos.map((item) => item.usedProductId).join(','),
+      name: cartData.purchaseProductDtos.map(item => item.usedProductId).join(','),
       // name: 'test',
       amount: cartData.totalPrice,
-      buyer_email: 'kdh7313@naver.com',
-      buyer_name: '김태영',
+      buyer_email: email,
+      buyer_name: nickName,
       buyer_tel: '010-1234-5678',
       buyer_addr: '대구광역시 중구',
       buyer_postcode: '123-456',

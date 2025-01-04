@@ -204,7 +204,7 @@ routers.beforeEach(async (to, from, next) => {
         alert('페이지 권한이 없습니다.');
         return next('/');
       }
-      useStore.moveNotMain()
+      useStore.moveNotMain();
       return next(); // 권한이 유효하면 계속 진행
     } else {
       alert('로그인이 필요한 페이지입니다.');
@@ -214,10 +214,10 @@ routers.beforeEach(async (to, from, next) => {
     if (sessionStorage.getItem('token')) {
       res = await loginCheck();
       useStore.login(res.data); //스토어 등록
-      useStore.moveMain()
+      useStore.moveMain();
       return next();
     } else {
-      useStore.moveMain()
+      useStore.moveMain();
       next();
       console.log('next로 이동', useStore.role);
     }
