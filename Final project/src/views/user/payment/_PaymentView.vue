@@ -19,7 +19,6 @@ const route = useRoute();
 const cartData = JSON.parse(decodeURIComponent(route.query.item));
 console.log('받은 배열', cartData.purchaseProductDtos);
 console.log('받은 총 가격', cartData.totalPrice);
-
 const merchant_uid = `IMP${Date.now()}`; // 결제외부API 키 (항사 새로이 생성된다.)
 
 // 검증 순서
@@ -86,8 +85,8 @@ const requestPay = async () => {
       pg: 'html5_inicis',
       pay_method: 'card',
       merchant_uid: merchant_uid,
-      // name: cartData.purchaseProductDtos.map((item) => item.name).join(','),
-      name: 'test',
+      name: cartData.purchaseProductDtos.map((item) => item.usedProductId).join(','),
+      // name: 'test',
       amount: cartData.totalPrice,
       buyer_email: 'kdh7313@naver.com',
       buyer_name: '김태영',
