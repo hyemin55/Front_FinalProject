@@ -97,6 +97,7 @@ watchEffect(async () => {
   align-items: center;
   justify-content: center;
   background-color: #fff;
+  overflow: hidden;
 }
 .pay_product_img img {
   height: 90%;

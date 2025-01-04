@@ -1,5 +1,5 @@
 <script setup>
-import SaleProductModal from '@/components/user/SaleProductModal.vue';
+import SaleProductModal from '@/components/user/modal/SaleProductModal.vue';
 import { useUserStore } from '@/stores/Login';
 import Aos from 'aos';
 import 'aos/dist/aos.css';

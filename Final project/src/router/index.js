@@ -22,6 +22,7 @@ import PetListView from '@/views/appraiser/PetListView.vue';
 import ProductMasonryView from '@/views/user/product/ProductMasonryView.vue';
 import AnnouncementView from '@/views/admin/AnnouncementVIew.vue';
 import CategoryManagementView from '@/views/admin/CategoryManagementView.vue';
+import OrderCompleteDetale from '@/components/OrderCompleteDetale.vue';
 
 // 로그인
 const loginRouters = [
@@ -153,6 +154,11 @@ const userRouters = [
     path: '/mypage',
     name: 'mypage',
     component: MypageView,
+  },
+  {
+    path: '/ordercomplete',
+    name: 'ordercomplete',
+    component: OrderCompleteDetale,
   },
 ];
 const routers = createRouter({

@@ -7,8 +7,9 @@ import PayProduct from '@/views/user/payment/PayProductView.vue';
 import PayUserInfo from '@/views/user/payment/PayUserInfoView.vue';
 import axios from 'axios';
 import { computed, onMounted, ref, watchEffect } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
+const router = useRouter();
 // 결제 pinia
 // const payMentStore = usePayMentStore()
 // const payinfo = computed(() => payMentStore.payProduct)
@@ -19,7 +20,6 @@ const route = useRoute();
 const cartData = JSON.parse(decodeURIComponent(route.query.item));
 console.log('받은 배열', cartData.purchaseProductDtos);
 console.log('받은 총 가격', cartData.totalPrice);
-
 const merchant_uid = `IMP${Date.now()}`; // 결제외부API 키 (항사 새로이 생성된다.)
 
 // 검증 순서
@@ -41,6 +41,7 @@ watchEffect(() => {
     // SSE 연결을 초기화합니다.
     connectSSE();
     // window.location.reload()
+    router.push({ path: `/ordercomplete`},)
   }
 });
 
@@ -86,8 +87,8 @@ const requestPay = async () => {
       pg: 'html5_inicis',
       pay_method: 'card',
       merchant_uid: merchant_uid,
-      // name: cartData.purchaseProductDtos.map((item) => item.name).join(','),
-      name: 'test',
+      name: cartData.purchaseProductDtos.map((item) => item.usedProductId).join(','),
+      // name: 'test',
       amount: cartData.totalPrice,
       buyer_email: 'kdh7313@naver.com',
       buyer_name: '김태영',
@@ -227,6 +228,9 @@ const connectSSE = () => {
 const payroute = useRoute();
 const payData = JSON.parse(decodeURIComponent(payroute.query.item));
 console.log(decodeURIComponent(payroute.query.item));
+
+console.log(('dfadfdas', payData));
+// console.log(decodeURIComponent('dfadfdas', ));
 </script>
 
 <template>

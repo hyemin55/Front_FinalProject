@@ -90,7 +90,8 @@ onMounted(() => {
       <div class="slides_info">
         <p>{{ slide.brandName }}</p>
         <p>{{ slide.productName }}</p>
-        <p>￦ {{ slide.price.toLocaleString() }}</p>
+        <p>￦ {{ slide.minPrice.toLocaleString() }} ~ {{ slide.maxPrice.toLocaleString() }}</p>
+        <p>재고 : {{ slide.usedProductCount.toLocaleString() }}</p>
       </div>
       <div v-if="index === 0" class="extra_content">
         <p>{{ slide.productName }}ㆍ{{ slide.size }} ml</p>

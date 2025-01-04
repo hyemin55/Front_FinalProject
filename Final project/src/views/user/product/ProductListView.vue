@@ -167,7 +167,7 @@ const chageMode = ()=>{
 <template>
   <section id="product_wrapper" class="scroll-target">
     <article class="product_gnb">
-      <h1 class="product_category_title">{{ categoryTitle }}</h1>
+      <h1 class="product_category_title">{{ categoryTitle }} {{ categoryId == 4 ? '검색결과' : undefined }}</h1>
 
       <div class="filter_btn">
         <p class="filter_btn_text">
@@ -194,7 +194,7 @@ const chageMode = ()=>{
       </div>
     </article>
 
-    <article class="product_list" v-if="list && list.pages && list.pages[0]">
+    <article class="product_list" v-if="list && list.pages && list.pages[0] && categoryId.value !== 4 " >
       <div class="product_fillter" v-if="filterMode">
         <form class="product_fillter_form">
           <ProductFilter v-for="filterData in filterData" :key="filterData.id" :filterInfo="filterData"> </ProductFilter>

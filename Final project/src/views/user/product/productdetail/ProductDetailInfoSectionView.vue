@@ -7,7 +7,7 @@ import { getProductData, getReviewData } from '@/api/productDetailApi';
 import ProductDetailSalseChartViewVue from '@/views/user/product/productdetail/ProductDetailSalseChartView.vue';
 import { useCartStore } from '@/stores/CartStore';
 import { useUserStore } from '@/stores/Login';
-import SaleProductModal from '@/components/user/SaleProductModal.vue';
+import SaleProductModal from '@/components/user/modal/SaleProductModal.vue';
 import axios from 'axios';
 import { GLOBAL_URL } from '@/api/util';
 import { fetchMemeberCart, mergeMemberCart } from '@/api/cartApi';

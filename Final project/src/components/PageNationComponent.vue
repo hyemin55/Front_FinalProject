@@ -78,6 +78,7 @@ const goToPage = page => {
   }
   currentPage.value = page;
   viewCurrentPage();
+  window.scrollTo({ top: 0 });
 };
 
 // 현재페이지
