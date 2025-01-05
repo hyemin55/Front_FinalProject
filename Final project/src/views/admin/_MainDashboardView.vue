@@ -135,7 +135,7 @@
         <li>상품명</li>
         <li>용량</li>
       </ul>
-     <div  v-if="reviewList.reviewCount>0">
+     <div  v-if="reviewList && reviewList.dashReviewListDtoList && reviewList.dashReviewListDtoList.length > 0">
         <div
           class="reviewListTotalContent" v-for="(item, index) in reviewList.dashReviewListDtoList.slice(0, 10)"
       :key="index"
