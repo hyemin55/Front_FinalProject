@@ -70,10 +70,11 @@ const pageNation = () => {
 
 <style scoped>
 .orderHistory_title {
-  font-size: 3.2rem;
-  font-weight: 400;
+  font-size: 3.1rem;
+  font-weight: 700;
   border-bottom: solid 1px #000;
   padding: 20px 0;
   margin-top: 32px;
+  /* margin-bottom: 10px; */
 }
 </style>

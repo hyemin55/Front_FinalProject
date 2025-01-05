@@ -53,11 +53,12 @@ watchEffect(async () => {
         <div class="pay_product_content">
           <ul>
             <li>
-              <b>상품이름</b> : <b>{{ item.productName }}</b>
+              <h6>{{ item.productName }}</h6>
             </li>
-            <li class="pro_content">상세 : {{ item.content }}</li>
+            <li class="pro_content"> {{ item.content }}</li>
             <li>
-              <b>옵션 : {{ item.size }}</b> / <b>수량 : {{ item.quantity }}개</b>
+              
+              옵션 : {{ item.size }} / 수량 : {{ item.quantity }}개
             </li>
           </ul>
           <p>가격 : {{ item.price.toLocaleString() }}원</p>
@@ -80,7 +81,7 @@ watchEffect(async () => {
   width: 100%;
   position: relative;
   border-radius: 5px;
-  background-color: var(--color-main-pink);
+  background-color: #F5F5F5;
 }
 /* 상품 컴포넌트 설정 */
 .pay_product_compnents {
@@ -88,27 +89,27 @@ watchEffect(async () => {
   padding: 15px 0px;
   width: calc(100% - 60px);
   display: flex;
-  border-bottom: 1px solid rgb(155, 155, 155);
+  margin-bottom: 15px;
+  background: #fff;
 }
+.pay_product_compnents:last-child {margin-bottom: 0;}
 .pay_product_img {
   width: 145px;
   height: 145px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #fff;
   overflow: hidden;
+  border-radius: 1rem;
+  margin-left: 15px;
 }
 .pay_product_img img {
   height: 90%;
+  border-radius: 1rem;
   width: auto;
 }
 .pay_product_content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: calc(100% - 145px);
-  background-color: #fff;
+  width: 100%;
 }
 .pay_product_content ul {
   margin-left: 30px;
@@ -119,7 +120,14 @@ watchEffect(async () => {
   margin: 10px 0;
   font-weight: 400;
 }
+.pay_product_content ul li h6 {
+  font-size: 2.2rem;
+  letter-spacing: -0.034rem;
+  margin: 10px 0;
+  font-weight: 700;
+}
 .pay_product_content p {
+  text-align: right;
   font-size: 1.8rem;
   letter-spacing: -0.034rem;
   font-weight: 600;

@@ -101,6 +101,7 @@ const save = ()=>{
   display: flex;
   width: 100%;
   height: 630px;
+  background: #f9f9f9;
 }
 /* 프로필이미지 설정 */
 .profile_image {
@@ -138,7 +139,6 @@ const save = ()=>{
   width: calc(100% - 250px);
   height: 100%;
   position: relative;
-  background-color: var(--color-main-pink);
 }
 .user_info form{
   text-align: center;

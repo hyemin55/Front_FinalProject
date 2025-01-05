@@ -111,7 +111,7 @@ import { useRoute, useRouter } from 'vue-router';
 <style scoped>
 /* 전체설정 */
 .order_complete_wrapper {
-  max-width: var(--main-max-width);
+  max-width: 600px;
   width: 100%;
   margin: 0 auto;
   text-align: center;
@@ -146,16 +146,14 @@ import { useRoute, useRouter } from 'vue-router';
 
 /* 주문완료 배송지 */
 .order_complete_delivery {
-  width: 90%;
   margin: 0 auto;
   border-bottom: 2px solid #e2e2e2;
 }
 .order_complete_delivery ul {
   font-size: 2rem;
-  width: 60%;
   margin: 0 auto;
   text-align: left;
-  padding: 10px 0;
+  padding: 10px 10px;
 }
 .order_complete_delivery ul li{
   margin: 14px 0;
@@ -164,30 +162,27 @@ import { useRoute, useRouter } from 'vue-router';
 
 /* 주문완료 상품 */
 .order_complete_product {
-  width: 90%;
   margin: 0 auto;
 }
 .product{
   border-bottom: 2px solid #e2e2e2;
-  padding: 5px 0;
+  padding: 0px 10px;
 }
 .product>p{
   font-size: 2rem;
 }
 .product_title{
-  width: 60%;
   margin: 0 auto;
   margin-top: 20px;
   text-align: left;
 }
 .product_component{
   display: flex;
-  width: 60%;
   height: 142px;
   margin: 20px auto;
-  padding: 10px;
-  background-color: var(--color-main-pink);
-  border-radius: 1rem;
+  padding: 15px;
+  background-color: #f5f5f5;
+  border-radius: 10px;
 }
 .img_box{
   background-color: #fff;
@@ -202,7 +197,6 @@ import { useRoute, useRouter } from 'vue-router';
 }
 .product ul{
   font-size: 1.5rem;
-  width: 60%;
   text-align: left;
   margin-left: 26px;
 }
@@ -213,11 +207,10 @@ import { useRoute, useRouter } from 'vue-router';
 /* 주문완료 금액 */
 .pay ul{
   font-size: 2.2rem;
-  width: 60%;
   margin: 0 auto;
   text-align: left;
   /* background-color: #e2e2e2; */
-  padding: 10px 0;
+  padding: 10px 10px;
   border-radius: 1.5rem;
 }
 .pay ul li{

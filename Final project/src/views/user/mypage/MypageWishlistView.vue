@@ -302,7 +302,7 @@ const moveDetail = (productId, productName, brand) => {
   color: #fff;
 }
 .none_click_btn{
-  background-color: antiquewhite;
+  background-color: rgb(245, 245, 245);
   color: #000;
 }
 

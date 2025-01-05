@@ -66,7 +66,7 @@ const mappedData = computed(() => {
       text01: '주문',
       text02: '주문',
       id: item.purchaseProductId,
-      startDate: dayjs(item.purchaseCreationDate || Date.now()).format('YYYY년 MM월 DD일 / HH:mm'),
+      startDate: dayjs(item.purchaseCreationDate || Date.now()).format('YYYY. MM. DD / HH:mm'),
       name: item.productName || 'name N/A',
       category: item.categoryName || 'category N/A',
       brand: item.brandName || 'brand N/A',
@@ -129,12 +129,12 @@ const confirmed = () => {
   <article class="history_box" v-for="(data, index) in mappedData" :key="index">
     <div class="top_box">
       <div>
+        <p class="history_number">No. {{ data.id }}</p>
         <p class="history_date">
-          <span>{{ data.text01 }}날짜</span> {{ data.startDate }}
+          {{ data.text01 }}일자 : {{ data.startDate }}
         </p>
-        <p class="history_number">{{ data.text02 }}번호 {{ data.id }}</p>
       </div>
-      <p class="detail_more" v-if="props.showBtn">{{ data.text02 }}상세 ></p>
+      <p class="detail_more" v-if="props.showBtn">{{ data.text02 }}상세 🗒️</p>
     </div>
 
     <div class="bottom_box">
@@ -188,7 +188,7 @@ const confirmed = () => {
 <style scoped>
 /* 컴포넌트 설정 ########### */
 .history_box {
-  border-bottom: 4px solid var(--color-main-gray);
+  /* border-bottom: 1px solid var(--color-main-gray); */
 }
 /* 윗 박스 */
 .top_box {
@@ -197,20 +197,22 @@ const confirmed = () => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: solid 1px var(--color-main-gray);
-  background-color: var(--color-main-pink);
+  border-top: solid 1px var(--color-main-gray);
+  background-color: #f5f5f5;
   padding: 0 12px;
 }
 .history_date {
-  font-size: 2rem;
+  font-size: 1.5rem;
   letter-spacing: -0.034rem;
-}
-.history_date span {
-  color: rgb(226, 28, 28);
 }
 .history_number {
-  font-size: 1.3rem;
+  font-size: 2.1rem;
   letter-spacing: -0.034rem;
+  line-height: 3.7rem;
+}
+.history_number span{
+  font-weight: 600;
+  /* color: var(--color-main-bloode); */
 }
 .history_more {
   font-size: 1.5rem;
@@ -234,6 +236,7 @@ const confirmed = () => {
   display: flex;
   align-items: center;
   padding-left: 12px;
+  padding-top: 20px;
 }
 .history_product {
   height: 200px;

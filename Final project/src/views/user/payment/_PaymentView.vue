@@ -293,7 +293,7 @@ h2 {
 }
 .pay_btn:hover {
   background-color: var(--color-main-bloode);
-  color: #a7ae9c;
+  color: #fff;
 }
 .line {
   width: 100%;

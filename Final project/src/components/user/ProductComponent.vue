@@ -131,6 +131,9 @@ const addToWishlist = async () => {
         </li>
       </ul>
     </div>
+    <!-- <div class="sild_out" v-if="!gradeTypesArray.length">
+      <p>상품이<br>품절되었습니다.</p>
+    </div> -->
   </article>
 </template>
 
@@ -138,6 +141,7 @@ const addToWishlist = async () => {
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 /* 전체설정 */
 .products {
+  position: relative;
   max-width: 305px;
   width: 100%;
   /* height: 400px; */
@@ -146,6 +150,8 @@ const addToWishlist = async () => {
   overflow: hidden;
   margin: 10px 0;
 }
+.products .sild_out {position: absolute; left: 0; top: 0; width: 100%; height: 100%; z-index: 9; background: rgba(0, 0, 0, 0.4); display: flex; align-items: center; justify-content: center;}
+.products .sild_out p {font-size: 2.2rem; text-align: center; color: #fff; line-height: 1.4;}
 /* 상단_이미지 설정 */
 .product_img {
   position: relative;
