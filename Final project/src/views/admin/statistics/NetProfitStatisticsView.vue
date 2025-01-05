@@ -69,27 +69,36 @@ const renderChart = () => {
     options: {
       responsive: true,
       plugins: {
-        legend: { position: 'top' },
+        legend: { position: 'top',
+        labels: { font: { size: 14 }, color: '#333' },
+         },
         title: { display: true, text: '총 순수익', font: { size: 20 }, color: '#333' },
         datalabels: {
           anchor: 'center',
           align: 'center',
-          color: '#555',
-          font: { size: 13 },
+          color: '#444',
+          font: { size: 12 },
           formatter: value => {
             return value > 0 ? `₩${value.toLocaleString()}` : '';
           }, // 데이터 레이블 표시 형식
         },
-        tooltip: { callbacks: { label: ctx => `₩${ctx.raw.toLocaleString()}` } },
+        tooltip: {     backgroundColor: '#fff',
+          titleColor: '#333',
+          bodyColor: '#555',
+          borderColor: '#ddd',
+          borderWidth: 1,
+          callbacks: { label: ctx => `₩${ctx.raw.toLocaleString()}` } },
       },
       scales: {
         x: {
           stacked: true,
-          title: { display: true, text: '거래날짜' },
+          title: { display: true, text: '거래 날짜', font: { size: 14 }, color: '#666' },
+          grid: { color: '#eaeaea' },
         },
         y: {
           stacked: true,
-          title: { display: true, text: '순수익 (₩)' },
+          title: { display: true, text: '순수익 (₩)' , font: { size: 14 }, color: '#666' },
+          grid: { color: '#eaeaea' },
         },
       },
     },
@@ -122,37 +131,47 @@ dolode();
 * {
   font-size: 1.5rem;
 }
+.chartBox {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: flex-end;
+}
 .handleStandardButton {
-  height: 30px;
+  height: 40px;
   font-size: 1.4rem;
   display: flex;
-  justify-content: end;
   align-items: center;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 5px 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 .handleStandardButton li,
 .slash {
   text-align: center;
-  background-color: white;
-  padding: 10px 0;
+  padding: 8px 16px;
+  margin: 0 5px;
 }
 .handleStandardButton li {
   color: #555;
   cursor: pointer;
-  padding: 10px 50px;
+  transition: all 0.3s ease-in-out;
 }
-.handleStandardButton li:hover,
-.active {
+.handleStandardButton li:hover {
+  color: #000;
   text-decoration: underline;
   text-underline-position: under;
 }
 .active {
-  color: #000 !important;
-  font-weight: 600;
+  color: #fff !important;
+  background-color: #8f9d8d;
+  border-radius: 4px;
+  font-weight: bold;
 }
 #stackedBarChart2 {
-  background-color: white;
-  width: 100%;
-  height: auto;
-  padding:1%;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 1%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 </style>

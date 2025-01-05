@@ -64,6 +64,9 @@
           </tr>
         </tbody>
       </table>
+      <div class="deleteNotification" v-if="deleteNotification">
+        <p>삭제되었습니다.</p>
+      </div>
     </article>
     <article>
       <PageNationComponent :pageNationData="pageNationData" @currentPage="pageUpdate" />
@@ -93,6 +96,7 @@ const reviewDataRes = ref([]);
 const pageNumber = ref(0);
 const pageNationData = ref('');
 const searchKeyword = ref('');
+const deleteNotification = ref(false);
 
 const pageNation = () => {
   pageNationData.value = {
@@ -115,6 +119,10 @@ const DeleteButton = async item => {
     console.log('리뷰 삭제합니다.');
     const deleteReviewManagementRes = await getdeleteReviewManagement(item.reviewId);
     console.log(deleteReviewManagementRes);
+    deleteNotification.value = true;
+    setTimeout(() => {
+      deleteNotification.value = false;
+    }, 2000);
     dolode();
   }
 };
@@ -242,5 +250,18 @@ th {
 .stateButton:hover {
   box-shadow: inset 1px 1px 4px rgba(0, 0, 0, 0.3);
   transform: translateY(1px);
+}
+.deleteNotification {
+  width: 25%;
+  height: 35px;
+  font-size: 1.8rem;
+  align-content: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 10px;
+  background-color: var(--color-main-gray);
+  z-index: 50;
 }
 </style>
