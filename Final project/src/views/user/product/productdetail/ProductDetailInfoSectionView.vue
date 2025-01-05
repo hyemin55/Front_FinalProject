@@ -23,7 +23,7 @@ const productData = ref([]);
 const reviewData = ref(null);
 const productImages = ref([]);
 const idx = ref(route.params.idx);
-const redHeart = ref(false);
+const wishHeart = ref(false);
 const cartHeart = ref(false);
 
 // 로그인 pinia
@@ -58,7 +58,7 @@ const cartAndWishView = () => {
   }
   if (wishStore.itemWishList.find(itemWishList => itemWishList === productData.value.usedProductId)) {
     console.log(wishStore.itemWishList)
-    redHeart.value = true;
+    wishHeart.value = true;
   }
 };
 
@@ -105,8 +105,9 @@ const addToWishlist = async () => {
     // DB통신(추가,삭제)
     await itemWishClick(productData.value.usedProductId);
     // Pinia(추가, 삭제)
-    wishStore.itemMakeWishList(productData.value.usedProductId);
+    const itemMakeWishListRes = wishStore.itemMakeWishList(productData.value.usedProductId);
     cartAndWishView()
+
   } else {
     alert('로그인 후 사용이 가능합니다.');
     router.push({ path: '/login2' });
@@ -182,7 +183,7 @@ watchEffect(() => {
       <button class="icon_box" @click="addToCart" :class="{ active: cartHeart }">
         <img class="icon" src="@/assets/img/icon/free-icon-font-shopping-cart.svg" alt="" />
       </button>
-      <button class="icon_box" :class="{ active: redHeart }" @click.stop="addToWishlist">
+      <button class="icon_box" :class="{ active: wishHeart }" @click.stop="addToWishlist">
         <img class="icon" src="@/assets/img/icon/free-icon-font-heart-line.svg" alt="" />
       </button>
     </div>

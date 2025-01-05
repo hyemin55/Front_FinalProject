@@ -307,8 +307,6 @@ watch(
   justify-content: space-between;
   height: 50px;
   width: auto;
-  margin: 25px 0 7px 0;
-  /* background-color: aqua; */
 }
 .userInfo {
   display: flex;
@@ -349,7 +347,8 @@ watch(
   /* width: 10%; */
   /* margin: 0 1%; */
 }
-.totalPages.active {
+.totalPages.active,
+#totalPages li:hover {
   color: var(--color-main-bloode);
   font-weight: 600;
   text-decoration: underline;
