@@ -12,10 +12,10 @@
         <option value="waitingForSale">판매대기</option>
         <option value="saleCompleted">판매완료</option> -->
       </select>
-      <div id="search">
+      <!-- <div id="search">
         <input type="search" id="productSearch" placeholder="상품명 검색" />
         <img class="searchIcon" src="@/assets/img/icon/free-icon-font-search-3917132.png" alt="productSearch" />
-      </div>
+      </div> -->
     </article>
     <article id="Inspection">
       <table>
@@ -30,11 +30,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="TableBody" v-for="(item, index) in categoryList" :key="index">
+          <tr class="TableBody" v-for="(item, index) in categoryList" :key="index" >
             <td>{{ index + 1 }}</td>
             <td>{{ category[item.dtype] }}</td>
             <td>{{ item.brandName }}</td>
-            <td class="productName" colspan="2">
+            <td class="productName" colspan="2" @click="goMasonry(item)">
               <span
                 ><img class="productImages" :src="`${GLOBAL_URL}/api/file/download/${item.filename}`" alt="" />
                 {{ item.productId }}. {{ item.productName }}
@@ -58,13 +58,14 @@ import { GLOBAL_URL } from '@/api/util';
 import AnnouncementComponent from '@/components/admin/AnnouncementComponent.vue';
 import PageNationComponent from '@/components/PageNationComponent.vue';
 import { ref, watchEffect } from 'vue';
-
+import {  useRouter } from 'vue-router';
 const category = {
   P: 'Perfume',
   C: 'Candle',
   D: 'Diffuser',
 };
 
+const router = useRouter()
 const categoryList = ref([]);
 const totalCount = ref(0);
 const size = ref(20);
@@ -83,12 +84,16 @@ const updatePage = selectPage => {
   currentPage.value = selectPage;
 };
 
+const goMasonry = (item)=>{
+router.push({path:`/masonry/${item.productId}`})
+}
+
 const dolode = async () => {
   selectState.value = stateOption[0];
   const CategoryManagementListRes = await getCategoryManagementList(currentPage.value, size.value);
   categoryList.value = CategoryManagementListRes.categoryManageDtoPage;
   totalCount.value = CategoryManagementListRes.count;
-  console.log('categoryList', totalCount.value, categoryList.value);
+  // console.log('categoryList', totalCount.value, categoryList.value);
 
   pageNationData.value = {
     totalCount: totalCount.value,
@@ -159,6 +164,7 @@ table {
 td {
   height: 50px;
   border-bottom: 0.5px solid var(--color-main-gray);
+
 }
 th {
   border-bottom: 2px solid var(--color-main-gray);
@@ -172,6 +178,7 @@ th {
 }
 .productName {
   text-align: left;
+  cursor: pointer;
 }
 .productName span {
   display: flex;

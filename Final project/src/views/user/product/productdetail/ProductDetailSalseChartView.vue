@@ -13,15 +13,35 @@ const displayedList = ref([]);
 const chartRef = ref(null); // chart element 참조
 let chartInstance = null;
 const showMore = ref(5);
+const chartCycle = ref('total');
 // const size = ref(route.query.size);
 let sortTotalSaleTradeList = [];
+
+const props = defineProps({
+  size:{
+    type:Number,
+    required: true,
+  }
+})
+const selectChartCycle = selectCycleNum => {
+  chartCycle.value = selectCycleNum
+  doLode();
+};
 // 데이터 로드 함수
 const doLode = async () => {
   try {
-    const response = await axios.get(`${GLOBAL_URL}/detail/chart/${idx.value}`);
-    console.log(response);
-    totalSalesList.value = response.data;
-    console.log(totalSalesList.value);
+    if (chartCycle.value === '1month') {
+      const response = await axios.get(`${GLOBAL_URL}/detail/chart/oneMonth/${idx.value}`);
+      totalSalesList.value = response.data;
+    } else if (chartCycle.value === '6month') {
+      const response = await axios.get(`${GLOBAL_URL}/detail/chart/sixMonth/${idx.value}`);
+      totalSalesList.value = response.data;
+    } else {
+      const response = await axios.get(`${GLOBAL_URL}/detail/chart/${idx.value}`);
+      totalSalesList.value = response.data;
+    }
+    console.log(totalSalesList.value)
+    // console.log(totalSalesList.value);
     // console.log(response.data[0].tradeCompletedDate);
     if (totalSalesList.value.length > 0) {
       displayedList.value = totalSalesList.value.slice(0, showMore.value);
@@ -31,8 +51,7 @@ const doLode = async () => {
       // JSON.stringify로 문자열로 바꾼뒤 다시 JSON.parse로 객채를 만들어 sortTotalSaleTradeList가 다른곳을 바라보게 만든다.
       sortTotalSaleTradeList = JSON.parse(JSON.stringify(totalSalesList.value));
       sortTotalSaleTradeList.reverse();
-      console.log(displayedList.value);
-
+      // console.log(displayedList.value);
       initializeChart();
     }
   } catch (error) {
@@ -71,8 +90,8 @@ const initializeChart = async () => {
   if (totalSalesList.value.length > 0) {
     const firstTradeDate = totalSalesList.value[totalSalesList.value.length - 1].createdDate;
 
-    console.log(totalSalesList.value[totalSalesList.value.length - 1].createdDate);
-    console.log(firstTradeDate);
+    // console.log(totalSalesList.value[totalSalesList.value.length - 1].createdDate);
+    // console.log(firstTradeDate);
     const maxPrice = Math.ceil(Math.max(...totalSalesList.value.map(item => item.tradePrice)) * 1.1); // 최대 가격의 110%
 
     // console.log(totalSalesList.value);
@@ -100,7 +119,7 @@ const initializeChart = async () => {
         maintainAspectRatio: false,
         plugins: {
           legend: {
-            display: false,
+            display: true,
             labels: {
               font: { size: 14 },
             },
@@ -141,7 +160,7 @@ const initializeChart = async () => {
 };
 
 const loadMore = () => {
-  console.log(totalSalesList.value.length);
+
   if (totalSalesList.value.length > showMore.value) {
     showMore.value += 5;
     displayedList.value = totalSalesList.value.slice(0, showMore.value);
@@ -165,9 +184,11 @@ watchEffect(() => {
   <figure id="salseChart" v-if="totalSalesList.length > 0">
     <h1>시세</h1>
     <div class="chartCycle">
-      <p>1개월</p>
-      <p>6개월</p>
-      <p class="chartCycleFix">전체</p>
+      <p @click="selectChartCycle('1month')" :class="{ cycleAction: chartCycle === '1month' }">1개월</p>
+      <p @click="selectChartCycle('6month')" :class="{ cycleAction: chartCycle === '6month' }">6개월</p>
+      <p @click="selectChartCycle('total')" :class="{ cycleAction: chartCycle === 'total' }">
+        전체
+      </p>
     </div>
     <figcaption>
       <canvas ref="chartRef" style="height: 250px; width: 100%"></canvas>
@@ -179,7 +200,7 @@ watchEffect(() => {
     </div>
     <div class="TransactionHistoryPosition">
       <ul class="TransactionHistoryTitle">
-        <li>옵션 ({{ size }} ml)</li>
+        <li>옵션 ({{ props.size }} ml)</li>
         <li>거래가격</li>
         <li>거래날짜</li>
       </ul>
@@ -188,7 +209,7 @@ watchEffect(() => {
         <li>￦ {{ list.tradePrice.toLocaleString() }}</li>
         <li>{{ dateTimeFormat(list.createdDate) }}</li>
       </ul>
-      <div class="showButtonBox">
+      <div class="showButtonBox" v-if="totalSalesList.length > 5">
         <button v-if="showMore && totalSalesList.length > showMore" @click="loadMore" class="showButton">
           체결 내역 더보기 ▽
         </button>
@@ -201,9 +222,11 @@ watchEffect(() => {
   <figure id="salseChart" v-else>
     <h1>시세</h1>
     <div class="chartCycle">
-      <p>1개월</p>
-      <p>6개월</p>
-      <p class="chartCycleFix">전체</p>
+      <p @click="selectChartCycle('1month')" :class="{ cycleAction: chartCycle === '1month' }">1개월</p>
+      <p @click="selectChartCycle('6month')" :class="{ cycleAction: chartCycle === '6month' }">6개월</p>
+      <p @click="selectChartCycle('total')" :class="{ cycleAction: chartCycle === 'total' }">
+        전체
+      </p>
     </div>
     <div class="elseChartImg">
       <img src="@/assets/img/chartImg.png" alt="" />
@@ -217,7 +240,7 @@ watchEffect(() => {
     </div>
     <div class="TransactionHistoryPosition">
       <ul class="TransactionHistoryTitle">
-        <li>옵션</li>
+        <li>옵션 ({{ props.size }} ml)</li>
         <li>가격</li>
         <li>거래날짜</li>
       </ul>
@@ -244,12 +267,6 @@ watchEffect(() => {
   height: 30px;
   gap: 3%;
 }
-.chartCycleFix {
-  background-color: var(--color-main-bloode);
-  color: white;
-  border: none;
-}
-
 .chartCycle p {
   width: 33%;
   height: 100%;
@@ -261,6 +278,11 @@ watchEffect(() => {
   font-size: 1.4rem;
   padding: 5px 0;
   cursor: pointer;
+}
+.cycleAction {
+  background-color: var(--color-main-bloode);
+  color: white;
+  border: none;
 }
 figcaption {
   width: 100%;

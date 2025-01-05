@@ -205,10 +205,16 @@ input:focus {
   font-size: 1.8rem;
   color: white;
   border-radius: 10px;
-  background-color: var(--color-main-bloode);
+  background-color: #8f9d8d;
+  box-shadow: inset 2px 2px 4px rgb(255, 255, 255);
   cursor: pointer;
+  transition: all 0.3s ease;
 }
-
+.save:hover {
+  background-color: #627c85;
+  box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2);
+  transform: translateY(2px);
+}
 /* 공지사항 내용들 */
 #announcementData {
   background-color: white;

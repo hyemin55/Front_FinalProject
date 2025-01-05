@@ -11,7 +11,7 @@
         <option value="ADMIN">ADMIN</option>
       </select>
       <div id="saveAndSearch">
-        <div id="search">
+        <!-- <div id="search">
           <input
             type="search"
             @input="fetchSuggestions()"
@@ -20,7 +20,8 @@
             placeholder="이메일주소 검색"
           />
           <img class="searchIcon" src="@/assets/img/icon/free-icon-font-search-3917132.png" alt="productSearch" />
-        </div>
+        </div> -->
+        <div v-if="setIntervalModal">✔저장 버튼을 눌러주세요  </div>
         <div class="save" @click="memberRoleSave">저장</div>
       </div>
     </article>
@@ -54,7 +55,9 @@
             <td>{{ memberItem.phoneNum }}</td>
             <td>{{ memberItem.email }}</td>
             <td>
-              <select name="sortBy" id="sortByColor" v-model="memberItem.role" @change="roleChange(memberItem)">
+              <select name="sortBy" id="sortByColor"
+              v-model="memberItem.role" @change="roleChange(memberItem)"
+              @mous="setIntervalModalView()">
                 <option value="USER">USER</option>
                 <option value="APPRAISER">APPRAISER</option>
                 <option value="ADMIN">ADMIN</option>
@@ -96,6 +99,7 @@ const membersList = ref([]);
 const memberRoleUpdate = ref([]);
 const pageNationData = ref('');
 const emailSearchKeyword = ref('');
+const setIntervalModal = ref(false)
 
 const pageNation = () => {
   pageNationData.value = {
@@ -103,6 +107,7 @@ const pageNation = () => {
     pageSize: pageSize.value,
   };
 };
+
 
 // 상품명 검색 시 호출
 const fetchSuggestions = () => {
@@ -135,6 +140,10 @@ const memberRoleSave = async () => {
 // 멤버 권한 변경 시 담는 곳
 const roleChange = item => {
   memberRoleUpdate.value.push(item);
+  setIntervalModal.value=true
+ setTimeout(()=>{
+  setIntervalModal.value = false
+ },2500)
 };
 
 // 첫 화면
@@ -182,7 +191,9 @@ option:focus {
 #saveAndSearch {
   display: flex;
   justify-content: right;
+  align-items: center;
   width: 40%;
+  font-size: 1.5rem;
   gap: 1%;
 }
 
@@ -212,6 +223,7 @@ option:focus {
 }
 .save {
   width: 20%;
+  height: 35px;
   text-align: center;
   align-content: center;
   font-size: 1.8rem;

@@ -228,4 +228,16 @@ watchEffect(() => {
   background-color: var(--color-main-bloode);
   color: white;
 }
+
+@media (max-width: 630px) {
+  #detailReview{
+    padding: 0 3%;
+  }
+#TotalReviewWrapper {
+  flex-direction: column;
+}
+#starCounting {
+  width: 88%;
+}
+}
 </style>

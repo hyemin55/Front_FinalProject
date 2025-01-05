@@ -286,7 +286,7 @@
                 v-model="item.userSaleResImageList[index].used"
               />
               <label :for="`${item.saleApplicationId}img-${index}`"
-                ><img :src="`${GLOBAL_URL}/api/file/download/${userSaleImage.name}`" alt="" class="userSaleImage"
+                ><img class="userSaleImage" :src="`${GLOBAL_URL}/api/file/download/${userSaleImage.name}`" alt=""
               /></label>
             </div>
           </div>
@@ -601,6 +601,7 @@ table {
   font-size: 1.4rem;
   text-align: center;
 }
+
 th {
   width: 15%;
   padding: 10px;
@@ -676,10 +677,13 @@ button:hover {
 .icon > img {
   width: 1.4rem;
 }
-.mainImage,
+.mainImage{
+  width: 150px;
+}
 .userSaleImage,
 .previewUrls {
   width: 100px;
+  height: auto;
 }
 .userSaleResImageList {
   float: left;

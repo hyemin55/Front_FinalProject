@@ -12,7 +12,7 @@ import { useUserStore } from '@/stores/Login';
 import OrderManagementView from '@/views/admin/OrderManagementView.vue';
 import ProductManagementView from '@/views/admin/ProductManagementView.vue';
 import ReviewManagementView from '@/views/admin/ReviewManagementView.vue';
-import StatisticsView from '@/views/admin/StatisticsView.vue';
+import StatisticsView from '@/views/admin/statistics/StatisticsView.vue';
 import UserManagementView from '@/views/admin/UserManagementView.vue';
 import MainDashboardView from '@/views/admin/_MainDashboardView.vue';
 import { loginCheck } from '@/api/KakaoLoginApi';

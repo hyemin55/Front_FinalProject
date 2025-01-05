@@ -1,8 +1,8 @@
 <template>
   <article id="AdminNav" v-if="role === 'ADMIN'" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
     <ul>
-      <Router-link v-for="(item, index) in adminMenu" :key="item.route" :to="item.route">
-        <li class="NavMenu" :class="{ active: activeIndex === index }" @click="setActive(index)">
+      <Router-link v-for="(item) in adminMenu" :key="item.route" :to="item.route">
+        <li class="NavMenu" :class="{ active: activeIndex === item.route }" @click="setActive()">
           <img :src="item.icon" alt="" /><span class="NavMenuText">{{ item.label }}</span>
         </li>
       </Router-link>
@@ -11,8 +11,8 @@
 
   <article id="AdminNav" v-if="role === 'APPRAISER'">
     <ul>
-      <RouterLink :to="item.route" v-for="(item, index) in appraiserMenu" :key="item.route">
-        <li class="NavMenu" :class="{ active: activeIndex === index }" @click="setActive(index)">
+      <RouterLink :to="item.route" v-for="(item) in appraiserMenu" :key="item.route">
+        <li class="NavMenu" :class="{ active: activeIndex === item.route }" @click="setActive()">
           <img :src="item.icon" alt="" /><span class="NavMenuText">{{ item.label }}</span>
         </li>
       </RouterLink>
@@ -120,9 +120,10 @@ const appraiserMenu = [
   },
 ];
 
-const setActive = index => {
-  activeIndex.value = index;
+const setActive = () => {
+  activeIndex.value = route.fullPath;
 };
+watch(setActive)
 </script>
 
 <style scoped>
