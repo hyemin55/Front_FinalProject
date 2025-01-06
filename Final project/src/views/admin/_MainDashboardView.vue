@@ -36,27 +36,27 @@
       <div class="todayCounts">
         <ul>
           <router-link to="/userManagement">
-          <li>{{ joinCount.memberCount }}</li>
-          <li>신규회원</li>
-        </router-link>
+            <li>{{ joinCount.memberCount }}</li>
+            <li>신규회원</li>
+          </router-link>
         </ul>
         <ul>
           <router-link to="/userManagement">
-          <li>{{ logInCount.memberCount }}</li>
-          <li>방문자</li>
-        </router-link>
+            <li>{{ logInCount.memberCount }}</li>
+            <li>방문자</li>
+          </router-link>
         </ul>
         <ul>
           <router-link to="/orderManagement">
-          <li>{{ orderList.orderCount }}</li>
-          <li>구매</li>
-        </router-link>
+            <li>{{ orderList.orderCount }}</li>
+            <li>구매</li>
+          </router-link>
         </ul>
         <ul>
           <router-link to="/mainInspectionList">
-          <li>{{ pendingList.pendingSaleCount }}</li>
-          <li>판매신청</li>
-        </router-link>
+            <li>{{ pendingList.pendingSaleCount }}</li>
+            <li>판매신청</li>
+          </router-link>
         </ul>
       </div>
       <div class="todayContent">
@@ -122,7 +122,7 @@
       </div>
     </article>
     <!--하단 왼쪽 / 리뷰리스트 -->
-    <article id="reviewList" >
+    <article id="reviewList">
       <div class="reviewListTitle">
         <h1>리뷰 리스트</h1>
         <p class="underline"><router-link to="/reviewManagement">더보기▸</router-link></p>
@@ -135,10 +135,11 @@
         <li>상품명</li>
         <li>용량</li>
       </ul>
-     <div  v-if="reviewList && reviewList.dashReviewListDtoList && reviewList.dashReviewListDtoList.length > 0">
+      <div v-if="reviewList && reviewList.dashReviewListDtoList && reviewList.dashReviewListDtoList.length > 0">
         <div
-          class="reviewListTotalContent" v-for="(item, index) in reviewList.dashReviewListDtoList.slice(0, 10)"
-      :key="index"
+          class="reviewListTotalContent"
+          v-for="(item, index) in reviewList.dashReviewListDtoList.slice(0, 10)"
+          :key="index"
         >
           <ul class="reviewListContentFirst">
             <li>{{ item.reviewId }}</li>
@@ -434,6 +435,14 @@ h1 {
   }
   from {
     transform: translateY(10px) rotate(4deg);
+  }
+}
+@media (max-width: 1000px) {
+  #dashboard {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  .dashboardImg img {
+    width: 50%;
   }
 }
 </style>

@@ -30,6 +30,7 @@ Chart.register(BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend, C
 const dolode = async () => {
   const netProfitStatisticsDataRes = await getNetProfitStatisticsData(standard.value);
   netProfitData.value = netProfitStatisticsDataRes;
+
   // 중복되지 않는 날짜 리스트 생성
   const labels = [...new Set(netProfitData.value.map(item => item.saleDate))];
 
@@ -47,12 +48,7 @@ const dolode = async () => {
     };
   });
 
-  // 날짜별 총 순수익 계산
-  const netProfit = labels.map(date =>
-    netProfitData.value.filter(item => item.saleDate === date).reduce((sum, item) => sum + item.categoryNetProfit, 0),
-  );
-
-  chartData.value = { labels, datasets, netProfit };
+  chartData.value = { labels, datasets };
 };
 
 const renderChart = () => {
@@ -68,9 +64,7 @@ const renderChart = () => {
     options: {
       responsive: true,
       plugins: {
-        legend: { position: 'top',
-        labels: { font: { size: 14 }, color: '#333' },
-         },
+        legend: { position: 'top', labels: { font: { size: 14 }, color: '#333' } },
         title: { display: true, text: '총 순수익', font: { size: 20 }, color: '#333' },
         datalabels: {
           anchor: 'center',
@@ -81,12 +75,14 @@ const renderChart = () => {
             return value > 0 ? `₩${value.toLocaleString()}` : '';
           }, // 데이터 레이블 표시 형식
         },
-        tooltip: {     backgroundColor: '#fff',
+        tooltip: {
+          backgroundColor: '#fff',
           titleColor: '#333',
           bodyColor: '#555',
           borderColor: '#ddd',
           borderWidth: 1,
-          callbacks: { label: ctx => `₩${ctx.raw.toLocaleString()}` } },
+          callbacks: { label: ctx => `₩${ctx.raw.toLocaleString()}` },
+        },
       },
       scales: {
         x: {
@@ -96,7 +92,7 @@ const renderChart = () => {
         },
         y: {
           stacked: true,
-          title: { display: true, text: '순수익 (₩)' , font: { size: 14 }, color: '#666' },
+          title: { display: true, text: '순수익 (₩)', font: { size: 14 }, color: '#666' },
           grid: { color: '#eaeaea' },
         },
       },
