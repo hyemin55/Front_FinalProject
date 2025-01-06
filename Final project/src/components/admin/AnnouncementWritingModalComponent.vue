@@ -13,8 +13,8 @@ const props = defineProps({
     Required:true
   }
 });
-console.log(new Intl.DateTimeFormat('ko-KR',{year: 'numeric',month:'2-digit', day:'2-digit',hour:'numeric',minute:'numeric'}).format(new Date()))
-console.log(props)
+// console.log(new Intl.DateTimeFormat('ko-KR',{year: 'numeric',month:'2-digit', day:'2-digit',hour:'numeric',minute:'numeric'}).format(new Date()))
+// console.log(props)
     const send = ()=>{
       const res = confirm('등록하시겠습니까?')
       if(res){

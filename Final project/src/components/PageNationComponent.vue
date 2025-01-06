@@ -50,7 +50,7 @@ const endPage = ref(0);
 // 이전페이지
 const backPage = () => {
   if (currentPageGroup.value <= 0) {
-    console.log('첫페이지입니다.');
+    // console.log('첫페이지입니다.');
     alert('첫페이지입니다.');
     return;
   }
@@ -61,7 +61,7 @@ const backPage = () => {
 // 다음페이지
 const nextPage = () => {
   if (currentPageGroup.value >= totalPageGroup.value) {
-    console.log('마지막페이지입니다.');
+    // console.log('마지막페이지입니다.');
     alert('마지막페이지입니다.');
     return;
   }
@@ -71,9 +71,8 @@ const nextPage = () => {
 
 // 선택페이지
 const goToPage = page => {
-  console.log('page', page);
   if (currentPage.value == page) {
-    console.log('현재페이지입니다.');
+    // console.log('현재페이지입니다.');
     return;
   }
   currentPage.value = page;
@@ -108,13 +107,12 @@ const activePage = pageNum => {
 
 const dolode = () => {
   totalCount.value = props.pageNationData != null ? props.pageNationData.totalCount : 5;
-  console.log('totalCount', totalCount.value);
   pageSize.value = props.pageNationData != null ? props.pageNationData.pageSize : 5;
   viewCurrentPage();
 };
 watchEffect(() => {
   dolode();
-  console.log(props.pageNationData);
+  props.pageNationData
 });
 </script>
 

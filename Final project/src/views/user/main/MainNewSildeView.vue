@@ -17,7 +17,6 @@ const getNewList = async () => {
   try {
     const newSildesRes = await getNewSildes();
     slides.value = newSildesRes;
-    console.log(slides.value);
   } catch (e) {
     console.log('리스트 못 받아오는 오류에요 = ' + e);
   }
@@ -27,7 +26,6 @@ watchEffect(() => {
   getNewList();
 });
 const navDetailProduct = usedProductId => {
-  console.log(usedProductId);
   router.push({
     path: `/productsdetail/${usedProductId}`,
   });

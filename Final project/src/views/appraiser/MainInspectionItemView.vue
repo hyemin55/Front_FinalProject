@@ -337,7 +337,7 @@ const emit = defineEmits(['dataUpdate']);
 
 // 브랜드이름 직접 입력
 const handleBrandChange = item => {
-  console.log(item);
+  // console.log(item);
   // '직접입력'을 선택했을 경우 빈 값을 초기화
   if (item.selectedBrand === 'brandNameInput') {
     item.directInputBrand = ''; // 입력값 초기화
@@ -363,14 +363,14 @@ const handleFileUpload = event => {
     }
   }
 
-  console.log('appraiserFiles.value', appraiserFiles.value);
+  // console.log('appraiserFiles.value', appraiserFiles.value);
 };
 
 // 판매자 사진 선택하기
 const selectImages = (img, index) => {
   //isUsed : true = 사용하는 사진 , false =  사용하지 않는 사진
   img.used = !img.used;
-  console.log('선택한 이미지 번호', index, '선택한 이미지 내용', img);
+  // console.log('선택한 이미지 번호', index, '선택한 이미지 내용', img);
 };
 
 // pageNation emit 업데이트
@@ -387,14 +387,14 @@ const closeModal = value => {
   item.value.userSaleResImageList.forEach(image => {
     image.used = false;
   });
-  console.log('value', value);
+  // console.log('value', value);
   if (value === 'success') {
     emit('dataUpdate');
   }
 };
 
 const validatedInspectionSize = item => {
-  console.log(item);
+  // console.log(item);
   if (item.selectedProduct === 'productNameInput') {
     return true;
   } else {
@@ -421,8 +421,8 @@ const validatedInspectionSize = item => {
 
 // ======================검수 전송 버튼 눌렀을 때======================
 const send = async item => {
-  console.log('item', item);
-  console.log('item.userSaleResImageList', item.userSaleResImageList);
+  // console.log('item', item);
+  // console.log('item.userSaleResImageList', item.userSaleResImageList);
   const InspectionResultId = [item.PassGrade.gradeId, item.FailReason.rejectionReasonId];
 
   for (let i = 0; item.userSaleResImageList.length > i; i++) {
@@ -430,7 +430,7 @@ const send = async item => {
       userImageFiles.value.push(item.userSaleResImageList[i]);
     }
   }
-  console.log(userImageFiles.value);
+  // console.log(userImageFiles.value);
 
   // 각 항목에 필드 이름과 값을 함께 저장
   const valueError = [
@@ -462,9 +462,9 @@ const send = async item => {
   const error = validatedInspectionSize(item);
   if (!error) return;
 
-  console.log(appraiserFiles.value);
+  // console.log(appraiserFiles.value);
   if (item.TestResult === 'Y') {
-    console.log('모든 값이 올바르게 입력되었습니다.');
+    // console.log('모든 값이 올바르게 입력되었습니다.');
 
     const passData = {
       inspectionPassReqDto: {
@@ -536,12 +536,12 @@ const send = async item => {
       failImageFiles: appraiserFiles.value,
       userImageFiles: userImageFiles.value,
     };
-    console.log('failData', failData);
+    // console.log('failData', failData);
     DeliveryData.value = { DeliveryData: failData, item: item, appraiserPreviewUrls: previewUrls.value };
   }
   InspectionModal.value = true;
-  console.log(DeliveryData.value);
-  console.log('모달창 나옵니다.');
+  // console.log(DeliveryData.value);
+  // console.log('모달창 나옵니다.');
 };
 
 // 브랜드, 상품명 검색 입력 시 호출
@@ -572,7 +572,7 @@ const fetchSuggestions = async (type, item) => {
       const productResponseRes = await getProductResponse(Number(item.selectedBrand.split('.')[0]));
       item.productSuggestions = productResponseRes.data;
       if (item.productSuggestions.length > 0) {
-        console.log(item.productSuggestions);
+        // console.log(item.productSuggestions);
         item.selectedProduct = item.productSuggestions[0];
       } else {
         item.selectedProduct = '';

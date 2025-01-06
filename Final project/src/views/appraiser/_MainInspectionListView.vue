@@ -92,7 +92,7 @@ const dolode = async () => {
       FailReason: [],
       Content: '',
     }));
-    console.log('InspectionList.value', InspectionList.value);
+    // console.log('InspectionList.value', InspectionList.value);
   } catch (error) {
     console.error('Error loading inspection list:', error);
   }

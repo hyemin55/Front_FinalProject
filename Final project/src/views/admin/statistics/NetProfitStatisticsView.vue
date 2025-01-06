@@ -30,7 +30,6 @@ Chart.register(BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend, C
 const dolode = async () => {
   const netProfitStatisticsDataRes = await getNetProfitStatisticsData(standard.value);
   netProfitData.value = netProfitStatisticsDataRes;
-  console.log(netProfitData.value);
   // 중복되지 않는 날짜 리스트 생성
   const labels = [...new Set(netProfitData.value.map(item => item.saleDate))];
 

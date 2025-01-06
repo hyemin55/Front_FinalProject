@@ -47,7 +47,7 @@
             <td>1</td>
             <td>{{ dateTimeFormat(item.purchaseCreationDate) }}</td>
             <td>{{ item.deliveredDate === null ? '-' : dateTimeFormat(item.deliveredDate) }}</td>
-            <td>2025-01-{{ 1 + index }}</td>
+            <td>{{ item.deliveredDate === null ? '-' : dateTimeFormat(item.deliveredDate) }}</td>
             <td>{{ item.nickName }}</td>
             <td>N</td>
           </tr>
@@ -91,8 +91,8 @@ const dolode = async () => {
   const OrderManagementListRes = await getOrderManagementList();
   orderList.value = OrderManagementListRes.content;
   totalCount.value = OrderManagementListRes.totalElements;
-  console.log('orderList', orderList.value);
-  console.log('totalCount', totalCount.value);
+  // console.log('orderList', orderList.value);
+  // console.log('totalCount', totalCount.value);
   pageNationData.value = {
     totalCount: totalCount.value,
     pageSize: size.value,

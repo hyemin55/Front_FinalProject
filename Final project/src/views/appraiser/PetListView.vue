@@ -151,7 +151,6 @@ const statusMap = {
 const dolode = async () => {
   const rejectionListRes = await getRejectionList();
   rejectionList.value = rejectionListRes;
-  console.log('rejectionList', rejectionList.value);
   pageNation();
 };
 

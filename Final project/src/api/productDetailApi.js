@@ -51,7 +51,6 @@ export const getstarCounting = async idx => {
 
 //ProductDetailInfoSectionView
 export const getProductData = async idx => {
-  console.log('idx', idx);
   try {
     const productData = await axios.get(`${GLOBAL_URL}/detail/detailProductInfo/${idx}`);
     // console.log('getProductData = ', productData);
@@ -74,7 +73,7 @@ export const getProductData = async idx => {
 export const getReviewData = async idx => {
   try {
     const reviewData = await axios.get(`${GLOBAL_URL}/detail/detailReviewInfo/${idx}`);
-    console.log('getReviewData = ', reviewData);
+    // console.log('getReviewData = ', reviewData);
     return reviewData.data;
   } catch (error) {
     console.log('', error);
@@ -133,13 +132,3 @@ export const getReviewListGoodIconState = async reviewId => {
     throw error;
   }
 };
-
-// export const aaaaa = async idx => {
-//     try {
-//      const aaaa = apiClient.get()
-//       return aaaa;
-//     } catch (error) {
-//       console.log('', error);
-//       throw error;
-//     }
-//   };

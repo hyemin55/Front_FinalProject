@@ -22,7 +22,6 @@ const LatestHandle = () => {
 
 // 리뷰 평균 점수 관리
 const starAverage = ref(0);
-// console.log('idx.value', idx.value);
 const circumference = 2 * Math.PI * 45; // 원 둘레 (r = 45)
 
 const fullStars = ref(0);

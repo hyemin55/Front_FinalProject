@@ -40,9 +40,6 @@ const doLode = async () => {
       const response = await axios.get(`${GLOBAL_URL}/detail/chart/${idx.value}`);
       totalSalesList.value = response.data;
     }
-    console.log(totalSalesList.value)
-    // console.log(totalSalesList.value);
-    // console.log(response.data[0].tradeCompletedDate);
     if (totalSalesList.value.length > 0) {
       displayedList.value = totalSalesList.value.slice(0, showMore.value);
 
@@ -51,7 +48,6 @@ const doLode = async () => {
       // JSON.stringify로 문자열로 바꾼뒤 다시 JSON.parse로 객채를 만들어 sortTotalSaleTradeList가 다른곳을 바라보게 만든다.
       sortTotalSaleTradeList = JSON.parse(JSON.stringify(totalSalesList.value));
       sortTotalSaleTradeList.reverse();
-      // console.log(displayedList.value);
       initializeChart();
     }
   } catch (error) {
@@ -90,15 +86,8 @@ const initializeChart = async () => {
   if (totalSalesList.value.length > 0) {
     const firstTradeDate = totalSalesList.value[totalSalesList.value.length - 1].createdDate;
 
-    // console.log(totalSalesList.value[totalSalesList.value.length - 1].createdDate);
-    // console.log(firstTradeDate);
     const maxPrice = Math.ceil(Math.max(...totalSalesList.value.map(item => item.tradePrice)) * 1.1); // 최대 가격의 110%
 
-    // console.log(totalSalesList.value);
-    // console.log(
-    //   'totalSalesList',
-    //   sortTotalSaleTradeList.map(item => item.tradePrice),
-    // );
     chartInstance = new Chart(chartRef.value, {
       type: 'line',
       data: {

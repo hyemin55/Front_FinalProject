@@ -194,11 +194,11 @@ const doload = async () => {
   const dashboardReviewListRes = await getDashboardReviewList();
   reviewList.value = dashboardReviewListRes;
 
-  console.log('joinCount', joinCount.value);
-  console.log('logInCount', logInCount.value);
-  console.log('orderList', orderList.value);
-  console.log('pendingList', pendingList.value);
-  console.log('reviewList', reviewList.value);
+  // console.log('joinCount', joinCount.value);
+  // console.log('logInCount', logInCount.value);
+  // console.log('orderList', orderList.value);
+  // console.log('pendingList', pendingList.value);
+  // console.log('reviewList', reviewList.value);
 };
 
 announcementData.value = [

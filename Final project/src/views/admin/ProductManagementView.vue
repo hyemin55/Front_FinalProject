@@ -96,10 +96,10 @@ const stateOption = [
 const stateOptionNumber = value => {
   for (let i = 0; stateOption.length > i; i++) {
     if (stateOption[i].value === value) {
-      console.log(i);
+      // console.log(i);
       return i;
     } else {
-      console.log('매칭되는 상태값이 없습니다.');
+      // console.log('매칭되는 상태값이 없습니다.');
     }
   }
 };

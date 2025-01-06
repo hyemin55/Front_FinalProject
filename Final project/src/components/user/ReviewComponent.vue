@@ -38,7 +38,7 @@ const star_list = ['★', '★★', '★★★', '★★★★', '★★★★�
 const GoodIcon = ref(true);
 // 유저별 리뷰 도움되요 표시
 const dolode = async () => {
-  console.log('currentPage', currentPage.value);
+  // console.log('currentPage', currentPage.value);
   GoodIcon.value = [];
   if (useStore.loginCheck === false) {
     GoodIcon.value = false;
@@ -46,21 +46,21 @@ const dolode = async () => {
   }
   const reviewListRes = await getReviewList(idx.value, currentPage.value - 1);
   GoodIcon.value = reviewListRes.data;
-  console.log(GoodIcon.value);
+  // console.log(GoodIcon.value);
 };
 
 // 유저별 도움돼요 클릭 시 서버로 데이터 넘기기
 const GoodIconState = async reviewId => {
-  console.log(reviewId);
+  // console.log(reviewId);
   if (!useStore.loginCheck) {
     alert('로그인이 필요한 기능입니다.');
     router.push({ name: 'login2' });
     return;
   }
   const reviewListRes = await getReviewListGoodIconState(reviewId);
-  console.log(reviewListRes.data.checked);
-  console.log(reviewList.value);
-  console.log(GoodIcon.value.checked);
+  // console.log(reviewListRes.data.checked);
+  // console.log(reviewList.value);
+  // console.log(GoodIcon.value.checked);
   dolode();
   viewCurrentPage();
 };
@@ -68,7 +68,7 @@ const GoodIconState = async reviewId => {
 // 이전페이지
 const backPage = () => {
   if (currentPageGroup.value <= 0) {
-    console.log('첫페이지입니다.');
+    // console.log('첫페이지입니다.');
     alert('첫페이지입니다.');
     return;
   }
@@ -79,7 +79,7 @@ const backPage = () => {
 // 다음페이지
 const nextPage = () => {
   if (currentPageGroup.value >= totalPageGroup.value) {
-    console.log('마지막페이지입니다.');
+    // console.log('마지막페이지입니다.');
     alert('마지막페이지입니다.');
     return;
   }
@@ -89,9 +89,9 @@ const nextPage = () => {
 
 // 선택페이지
 const goToPage = page => {
-  console.log('page', page);
+  // console.log('page', page);
   if (currentPage.value == page) {
-    console.log('현재페이지입니다.');
+    // console.log('현재페이지입니다.');
     return;
   }
   currentPage.value = page;
@@ -110,7 +110,7 @@ const viewCurrentPage = async () => {
     totalPageGroup.value = Math.floor(totalPages.value / 10);
     startPage.value = currentPageGroup.value * 10 + 1;
     endPage.value = Math.min(startPage.value + 9, totalPages.value);
-    console.log(reviewList.value);
+    // console.log(reviewList.value);
   }
   dolode();
 };

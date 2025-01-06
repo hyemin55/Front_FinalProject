@@ -35,13 +35,10 @@ const isHovered = ref(false);
 const handleMouseEnter = () => {
   isHovered.value = true;
   emit('MouseHovered', isHovered.value);
-  console.log('넘겻니?');
 };
 const handleMouseLeave = () => {
   isHovered.value = false;
   emit('MouseHovered', isHovered.value);
-  console.log('마우스 떠났다');
-  // console.log(isHovered.value);
 };
 // 메뉴 항목 데이터
 const adminMenu = [

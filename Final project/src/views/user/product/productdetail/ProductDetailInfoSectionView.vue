@@ -33,19 +33,13 @@ const userLogin = computed(() => userStore.loginCheck);
 
 // 3. 옵션값을 클릭하면 watch에서 추적하는 idx값이 바뀌고 doLoad를 호출한다.
 const doLoad = async () => {
-  // console.log(`doLoad = ${idx.value}`);
   try {
     const productDataRes = await getProductData(idx.value);
     const reviewDataRes = await getReviewData(idx.value);
 
-    // console.log('productDataRes 값 : ', productDataRes);
-    // console.log('reviewDataRes 값 : ', reviewDataRes);
     productData.value = productDataRes.detailProductInfoDto;
     productImages.value = productDataRes.productImage;
     reviewData.value = reviewDataRes;
-    console.log('productData 값 : ', productDataRes);
-    console.log('productImages 값 : ', productImages.value);
-    console.log('reviewData 값 : ', reviewData.value);
     cartAndWishView()
   } catch (err) {
     console.log('실패2' + err);
@@ -57,14 +51,12 @@ const cartAndWishView = () => {
     cartHeart.value = true;
   }
   if (wishStore.itemWishList.find(itemWishList => itemWishList === productData.value.usedProductId)) {
-    console.log(wishStore.itemWishList)
     wishHeart.value = true;
   }
 };
 
 // 바로 판매하기 클릭 시 모달 창 열림
 const SellNowOpenModal = () => {
-  console.log('이제 팔아야징');
   if (userStore.loginCheck) {
     Modal.value = true;
   } else {
@@ -75,8 +67,6 @@ const SellNowOpenModal = () => {
 const closeModal = () => {
   Modal.value = false;
 };
-
-// console.log(productData);
 
 // 장바구니 추가
 
@@ -132,13 +122,10 @@ const doPayment = () => {
         productName: productData.value.productName,
       },
     ];
-    // console.log('purchaseProductDto', purchaseProductDto);
     const data = {
       purchaseProductDtos: purchaseProductDto,
       totalPrice: productData.value.verifiedSellingPrice,
     };
-    // console.log('data', data);
-    // payMentStore.payProductScan(data)
 
     router.push({
       path: '/payment',
@@ -152,7 +139,6 @@ const doPayment = () => {
 
 watchEffect(() => {
   idx.value = route.params.idx;
-  // cartAndWishView();/
   doLoad();
 });
 </script>

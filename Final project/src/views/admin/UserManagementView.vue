@@ -121,7 +121,7 @@ const pageUpdate = pageNum => {
 
 // 권한 변경 후 서버에 데이터 전송
 const memberRoleSave = async () => {
-  console.log(memberRoleUpdate.value);
+  // console.log(memberRoleUpdate.value);
   if (memberRoleUpdate.value.length === 0) {
     alert('수정된 내용이 없습니다.');
     return;
@@ -157,8 +157,8 @@ const dolode = async () => {
     membersList.value = memberDataRes.data.memberManageDtos;
     totalCount.value = memberDataRes.data.memberCount;
   }
-  console.log(totalCount.value);
-  console.log(membersList.value);
+  // console.log(totalCount.value);
+  // console.log(membersList.value);
   pageNation();
 };
 

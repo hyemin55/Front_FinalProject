@@ -27,8 +27,8 @@ const appraiserCustomDataView = appraiserCustomData.inspectionPassReqDto
 // 서버에서 받은 아이템
 const serverItemReqBySeller = props.Data?.item || {};
 const appraiserPreviewUrls = props.Data?.appraiserPreviewUrls || {};
-console.log(serverItemReqBySeller);
-console.log(appraiserPreviewUrls);
+// console.log(serverItemReqBySeller);
+// console.log(appraiserPreviewUrls);
 
 const TestResult = computed(() => {
   const testResult = serverItemReqBySeller?.TestResult;
@@ -69,11 +69,11 @@ const send = async () => {
         formdata.append('passImageFiles', new Blob([], { type: 'application/octet-stream' }));
       }
       for (let [key, value] of formdata.entries()) {
-        console.log(key, value);
+        // console.log(key, value);
       }
 
       const passRes = await postPassFormdata(formdata);
-      console.log(passRes.data);
+      // console.log(passRes.data);
       alert('합격 전송되었습니다.');
       emit('close', 'success');
     }
@@ -91,10 +91,10 @@ const send = async () => {
         formdata.append('failImageFiles', new Blob([], { type: 'application/octet-stream' }));
       }
       for (let [key, value] of formdata.entries()) {
-        console.log(key, value);
+        // console.log(key, value);
       }
       const rejectRes = await postRejectFormdata(formdata);
-      console.log(rejectRes.data);
+      // console.log(rejectRes.data);
       alert('불합격 전송되었습니다.');
       emit('close');
     }
