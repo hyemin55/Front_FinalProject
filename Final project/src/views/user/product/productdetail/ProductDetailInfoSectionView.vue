@@ -40,7 +40,7 @@ const doLoad = async () => {
     productData.value = productDataRes.detailProductInfoDto;
     productImages.value = productDataRes.productImage;
     reviewData.value = reviewDataRes;
-    cartAndWishView()
+    cartAndWishView();
   } catch (err) {
     console.log('실패2' + err);
   }
@@ -52,6 +52,8 @@ const cartAndWishView = () => {
   }
   if (wishStore.itemWishList.find(itemWishList => itemWishList === productData.value.usedProductId)) {
     wishHeart.value = true;
+  } else {
+    wishHeart.value = false;
   }
 };
 
@@ -85,7 +87,7 @@ const addToCart = async () => {
     quantity: 1,
   };
   cartStore.addItem(data);
-  cartAndWishView()
+  cartAndWishView();
   // alert('장바구니에 담았습니다.');
 };
 
@@ -95,9 +97,8 @@ const addToWishlist = async () => {
     // DB통신(추가,삭제)
     await itemWishClick(productData.value.usedProductId);
     // Pinia(추가, 삭제)
-    const itemMakeWishListRes = wishStore.itemMakeWishList(productData.value.usedProductId);
-    cartAndWishView()
-
+    wishStore.itemMakeWishList(productData.value.usedProductId);
+    cartAndWishView();
   } else {
     alert('로그인 후 사용이 가능합니다.');
     router.push({ path: '/login2' });
@@ -139,6 +140,7 @@ const doPayment = () => {
 
 watchEffect(() => {
   idx.value = route.params.idx;
+  wishHeart.value;
   doLoad();
 });
 </script>
