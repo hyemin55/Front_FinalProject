@@ -34,7 +34,8 @@ const getSaleList = async (pageNum, pageSize) => {
         'Content-Type': 'application/json',
       },
     });
-    saleList.value = res.data;
+    saleList.value = res.data.saleListResDtos;
+    totalCount.value = res.data.totalCount;
     console.log('세일리스트', saleList.value);
   } catch (error) {
     console.error(error);
@@ -42,15 +43,14 @@ const getSaleList = async (pageNum, pageSize) => {
 };
 
 // 페이지 랜더링
-watch(pageNum, (newPageNum) => {
+watch([pageNum,totalCount], ([newPageNum, newTotalCount]) => {
   getSaleList(newPageNum, pageSize.value);
+  pageNation(newTotalCount)
 });
 onMounted(() => {
   getSaleList(pageNum.value, pageSize.value);
   pageNation();
 });
-
-
 const Rendering = () => {
   getSaleList();
 };
