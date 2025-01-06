@@ -10,7 +10,7 @@ const arrowIcon = ref('fi fi-rr-angle-right')
     <ul>
       <li>
         <p>결제완료</p>
-        <p>0</p>
+        <p>2</p>
       </li>
       <li><i :class="arrowIcon"></i></li>
       <li>
@@ -25,7 +25,7 @@ const arrowIcon = ref('fi fi-rr-angle-right')
       <li><i :class="arrowIcon"></i></li>
       <li>
         <p>배송 완료</p>
-        <p>0</p>
+        <p>1</p>
       </li>
       <li><i :class="arrowIcon"></i></li>
       <li>
@@ -55,17 +55,17 @@ const arrowIcon = ref('fi fi-rr-angle-right')
       <li><i :class="arrowIcon"></i></li>
       <li>
         <p>감정 진행중</p>
-        <p>0</p>
+        <p>1</p>
       </li>
       <li><i :class="arrowIcon"></i></li>
       <li>
         <p>등록 대기중</p>
-        <p>0</p>
+        <p>1</p>
       </li>
       <li><i :class="arrowIcon"></i></li>
       <li>
         <p>판매중</p>
-        <p>0</p>
+        <p>1</p>
       </li>
       <li><i :class="arrowIcon"></i></li>
       <li>
