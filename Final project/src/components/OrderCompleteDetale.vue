@@ -5,24 +5,24 @@ import { ref } from 'vue';
 import { onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-// // 계속 쇼핑하기
-// const router = useRouter();
-// const gohome = () => {
-//   router.push({ name: 'main' });
-// };
+// 계속 쇼핑하기
+const router = useRouter();
+const gohome = () => {
+  router.push({ name: 'main' });
+};
 
-// const buyerInfoRef = ref(null);
+const buyerInfoRef = ref(null);
 
-// // 주무자 정보 받아오기
-// const route = useRoute();
-// const merchantUid = route.query.merchant_uid;
-// console.log('merchantUid:', merchantUid);
+// 주무자 정보 받아오기
+const route = useRoute();
+const merchantUid = route.query.merchant_uid;
+console.log('merchantUid:', merchantUid);
 
-// onMounted(async () => {
-//   const res = await axios.get(`${GLOBAL_URL}/api/payment/orderCompleted?merchant_uid=${merchantUid}`);
-//   buyerInfoRef.value = res.data;
-//   console.log(buyerInfoRef.value);
-// });
+onMounted(async () => {
+  const res = await axios.get(`${GLOBAL_URL}/api/payment/orderCompleted?merchant_uid=${merchantUid}`);
+  buyerInfoRef.value = res.data;
+  console.log(buyerInfoRef.value);
+});
 </script>
 
 <template>
@@ -67,7 +67,7 @@ import { useRoute, useRouter } from 'vue-router';
       </ul>
     </article>
   </section> -->
-  <section class="order_complete_wrapper" >
+  <section class="order_complete_wrapper" v-if="buyerInfoRef">
     <article class="order_complete_title">
       <img src="/src/assets/img/shoppingBag.jpg" alt="">
       <ul>
@@ -79,29 +79,35 @@ import { useRoute, useRouter } from 'vue-router';
 
     <article class="order_complete_delivery">
       <ul>
-        <li>주문자 : </li>
-        <li>배송지 : </li>
+        <li>주문자 : {{ buyerInfoRef.buyerName }} </li>
+        <li>배송지 : {{ buyerInfoRef.buyerAddr }} {{ buyerInfoRef.buyerPostcode }}</li>
       </ul>
     </article>
 
     <article class="order_complete_product product">
       <p class="product_title">주문 상품</p>      
-      <div class="product_component">
-        <div class="img_box">이미지</div>
+      <div class="product_component" v-for="item in buyerInfoRef.usedProductResDtos" :key="item.idx">
+        <div class="img_box">
+            <img
+            :src="`${GLOBAL_URL}/api/file/download/${item.userSaleImages[0].filename}`"
+            alt=""
+            class="userReviewImg"
+          />
+        </div>
         <ul>
-          <li>상품명 :</li>
-          <li>브랜드 :</li>
-          <li>사이즈 : </li>
-          <li>등급 :</li>
+          <li>상품명 : {{ item.productName }}</li>
+          <li>브랜드 : {{ item.brandName }}</li>
+          <li>사이즈 : {{ item.size }}</li>
+          <li>등급 : {{ item.verifiedSaleGradeType }}</li>
         </ul>
       </div>
     </article>
 
     <article class="order_complete_product pay">
       <ul>
-        <li><span>주문금액 :</span>1 원</li>
+        <li><span>주문금액 :</span> {{ buyerInfoRef.amount }}원</li>
         <li><span>배송비 :</span>0 원</li>
-        <li><b>결제금액 :</b>1 원</li>
+        <li><b>결제금액 :</b> {{ buyerInfoRef.amount }} 원</li>
       </ul>
     </article>
 
