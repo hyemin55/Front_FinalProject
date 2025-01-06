@@ -11,16 +11,20 @@ import SaleProductModal from '@/components/user/modal/SaleProductModal.vue';
 import axios from 'axios';
 import { GLOBAL_URL } from '@/api/util';
 import { fetchMemeberCart, mergeMemberCart } from '@/api/cartApi';
+import { itemWishClick } from '@/api/wishApi';
+import { useWishStore } from '@/stores/WishStore';
 
 const route = useRoute();
 const router = useRouter();
+const wishStore = useWishStore();
+const cartStore = useCartStore();
 const Modal = ref(false);
 const productData = ref([]);
 const reviewData = ref(null);
 const productImages = ref([]);
 const idx = ref(route.params.idx);
-
-const cartStore = useCartStore();
+const wishHeart = ref(false);
+const cartHeart = ref(false);
 
 // 로그인 pinia
 const userStore = useUserStore();
@@ -29,27 +33,30 @@ const userLogin = computed(() => userStore.loginCheck);
 
 // 3. 옵션값을 클릭하면 watch에서 추적하는 idx값이 바뀌고 doLoad를 호출한다.
 const doLoad = async () => {
-  // console.log(`doLoad = ${idx.value}`);
   try {
     const productDataRes = await getProductData(idx.value);
     const reviewDataRes = await getReviewData(idx.value);
 
-    // console.log('productDataRes 값 : ', productDataRes);
-    // console.log('reviewDataRes 값 : ', reviewDataRes);
     productData.value = productDataRes.detailProductInfoDto;
     productImages.value = productDataRes.productImage;
     reviewData.value = reviewDataRes;
-    console.log('productData 값 : ', productDataRes);
-    console.log('productImages 값 : ', productImages.value);
-    console.log('reviewData 값 : ', reviewData.value);
+    cartAndWishView()
   } catch (err) {
     console.log('실패2' + err);
   }
 };
 
+const cartAndWishView = () => {
+  if (cartStore.cartItems.find(cartItem => cartItem.usedProductId === productData.value.usedProductId)) {
+    cartHeart.value = true;
+  }
+  if (wishStore.itemWishList.find(itemWishList => itemWishList === productData.value.usedProductId)) {
+    wishHeart.value = true;
+  }
+};
+
 // 바로 판매하기 클릭 시 모달 창 열림
 const SellNowOpenModal = () => {
-  console.log('이제 팔아야징');
   if (userStore.loginCheck) {
     Modal.value = true;
   } else {
@@ -61,9 +68,8 @@ const closeModal = () => {
   Modal.value = false;
 };
 
-// console.log(productData);
-
 // 장바구니 추가
+
 const addToCart = async () => {
   const data = {
     brandName: productData.value.brandName,
@@ -79,14 +85,23 @@ const addToCart = async () => {
     quantity: 1,
   };
   cartStore.addItem(data);
+  cartAndWishView()
   // alert('장바구니에 담았습니다.');
 };
 
 // 찜 클릭 이벤트
-const redHeart = ref(false);
-const addToWishlist = () => {
-  redHeart.value = !redHeart.value;
-  if (redHeart.value == true) alert('༼ つ ◕_◕ ༽つ 찜~');
+const addToWishlist = async () => {
+  if (userLogin.value) {
+    // DB통신(추가,삭제)
+    await itemWishClick(productData.value.usedProductId);
+    // Pinia(추가, 삭제)
+    const itemMakeWishListRes = wishStore.itemMakeWishList(productData.value.usedProductId);
+    cartAndWishView()
+
+  } else {
+    alert('로그인 후 사용이 가능합니다.');
+    router.push({ path: '/login2' });
+  }
 };
 
 // 리뷰별점평균을 소수점 1자리만 남긴다.
@@ -107,13 +122,10 @@ const doPayment = () => {
         productName: productData.value.productName,
       },
     ];
-    console.log('purchaseProductDto', purchaseProductDto);
     const data = {
       purchaseProductDtos: purchaseProductDto,
       totalPrice: productData.value.verifiedSellingPrice,
     };
-    console.log('data', data);
-    // payMentStore.payProductScan(data)
 
     router.push({
       path: '/payment',
@@ -143,9 +155,7 @@ watchEffect(() => {
         >
       </li>
       <li>{{ formatPrice(productData.verifiedSellingPrice) }}</li>
-      <li>
-        판매용량 : {{ productData.productSize }} ml {{ productData.usedOrNot === 'true' ? '새상품' : '중고상품' }}
-      </li>
+      <li>판매용량 : {{ productData.productSize }} ml / {{ productData.usedOrNot ? '새상품' : '중고상품' }}</li>
     </ul>
 
     <!-- <div>
@@ -156,15 +166,15 @@ watchEffect(() => {
     <div class="addButtonGroub">
       <button class="addToCart Sell​​Now" @click="SellNowOpenModal">바로 판매하기</button>
       <button class="addToCart BuyNow" @click="doPayment">바로 구매하기</button>
-      <button class="icon_box" @click="addToCart">
+      <button class="icon_box" @click="addToCart" :class="{ active: cartHeart }">
         <img class="icon" src="@/assets/img/icon/free-icon-font-shopping-cart.svg" alt="" />
       </button>
-      <button class="icon_box" :class="{ active: redHeart }" @click.stop="addToWishlist">
+      <button class="icon_box" :class="{ active: wishHeart }" @click.stop="addToWishlist">
         <img class="icon" src="@/assets/img/icon/free-icon-font-heart-line.svg" alt="" />
       </button>
     </div>
 
-    <ProductDetailSalseChartViewVue />
+    <ProductDetailSalseChartViewVue v-if="productData" :size="productData.size" />
   </article>
   <article>
     <SaleProductModal v-if="Modal" @closeModal="closeModal" />
@@ -280,6 +290,8 @@ button.selectedSize {
 @media (max-width: 630px) {
   #productInfoSection {
     width: 100%;
+    margin: 0 auto;
+    padding: 0 3%;
   }
 }
 </style>

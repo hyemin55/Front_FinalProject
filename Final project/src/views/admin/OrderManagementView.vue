@@ -6,16 +6,16 @@
     <article id="sortByAndSearch">
       <select name="sortBy" id="sortBy">
         <option value="total">전체</option>
-        <option value="PaymentCompleted">결제완료</option>
+        <!-- <option value="PaymentCompleted">결제완료</option>
         <option value="InDelivery">배송중</option>
         <option value="DeliveryCompleted">배송완료</option>
         <option value="PurchaseConfirmation">구매확정</option>
-        <option value="CancelPurchase">구매취소</option>
+        <option value="CancelPurchase">구매취소</option> -->
       </select>
-      <div id="search">
+      <!-- <div id="search">
         <input type="search" id="productSearch" placeholder="상품명 검색" />
         <img class="searchIcon" src="@/assets/img/icon/free-icon-font-search-3917132.png" alt="productSearch" />
-      </div>
+      </div> -->
     </article>
     <article id="Inspection">
       <table>
@@ -47,12 +47,15 @@
             <td>1</td>
             <td>{{ dateTimeFormat(item.purchaseCreationDate) }}</td>
             <td>{{ item.deliveredDate === null ? '-' : dateTimeFormat(item.deliveredDate) }}</td>
-            <td>2025-01-{{ 1 + index }}</td>
+            <td>{{ item.deliveredDate === null ? '-' : dateTimeFormat(item.deliveredDate) }}</td>
             <td>{{ item.nickName }}</td>
             <td>N</td>
           </tr>
         </tbody>
       </table>
+    </article>
+    <article>
+      <PageNationComponent :pageNationData="pageNationData" @currentPage="updatePage" />
     </article>
   </section>
 </template>
@@ -60,6 +63,7 @@
 <script setup>
 import { getOrderManagementList } from '@/api/AdministratorModeApi';
 import { GLOBAL_URL } from '@/api/util';
+import PageNationComponent from '@/components/PageNationComponent.vue';
 import AnnouncementComponent from '@/components/admin/AnnouncementComponent.vue';
 import { dateTimeFormat } from '@/FormatData';
 import { ref } from 'vue';
@@ -67,6 +71,9 @@ import { ref } from 'vue';
 const orderList = ref([]);
 const totalCount = ref(0);
 const selectState = ref([]);
+const size = ref(20);
+const pageNationData = ref();
+const currentPage = ref(0);
 const stateOption = [
   { value: 'PaymentCompleted', name: '결제완료' },
   { value: 'InDelivery', name: '배송중' },
@@ -75,13 +82,21 @@ const stateOption = [
   { value: 'CancelPurchase', name: '구매취소' },
 ];
 
+const updatePage = selectPage => {
+  currentPage.value = selectPage;
+};
+
 const dolode = async () => {
   selectState.value = stateOption[0];
   const OrderManagementListRes = await getOrderManagementList();
   orderList.value = OrderManagementListRes.content;
   totalCount.value = OrderManagementListRes.totalElements;
-  console.log('orderList', orderList.value);
-  console.log('totalCount', totalCount.value);
+  // console.log('orderList', orderList.value);
+  // console.log('totalCount', totalCount.value);
+  pageNationData.value = {
+    totalCount: totalCount.value,
+    pageSize: size.value,
+  };
 };
 dolode();
 </script>

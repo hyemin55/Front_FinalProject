@@ -128,12 +128,10 @@ const totalCount = ref(5);
 const pageSize = ref(5);
 
 const pageUpdate = pageNum => {
-  console.log(pageNum);
   pageNumber.value = pageNum;
 };
 
 const pageNation = () => {
-  console.log('totalCount', totalCount.value);
   pageNationData.value = {
     totalCount: totalCount.value,
     pageSize: pageSize.value,
@@ -152,8 +150,6 @@ const statusMap = {
 const dolode = async () => {
   const acceptedListRes = await getAcceptedList();
   acceptedList.value = acceptedListRes;
-  console.log(acceptedList.value);
-  console.log(acceptedList.value.length);
   pageNation();
 };
 

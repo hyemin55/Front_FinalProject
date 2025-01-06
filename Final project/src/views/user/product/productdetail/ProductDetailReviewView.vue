@@ -22,7 +22,6 @@ const LatestHandle = () => {
 
 // 리뷰 평균 점수 관리
 const starAverage = ref(0);
-// console.log('idx.value', idx.value);
 const circumference = 2 * Math.PI * 45; // 원 둘레 (r = 45)
 
 const fullStars = ref(0);
@@ -227,5 +226,17 @@ watchEffect(() => {
   border: 0.5px solid var(--color-main-bloode);
   background-color: var(--color-main-bloode);
   color: white;
+}
+
+@media (max-width: 630px) {
+  #detailReview{
+    padding: 0 3%;
+  }
+#TotalReviewWrapper {
+  flex-direction: column;
+}
+#starCounting {
+  width: 88%;
+}
 }
 </style>

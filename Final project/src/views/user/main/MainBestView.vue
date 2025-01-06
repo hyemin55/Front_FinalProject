@@ -13,7 +13,7 @@ let intervalId = null;
 
 onMounted(async () => {
   bestListRef.value = await getBestProducts();
-  console.log(bestListRef.value);
+  // console.log(bestListRef.value);
   bestListRef.value.forEach(best_product => {
     bestListImagesRef.value.push(best_product.mainImage);
   });
@@ -30,7 +30,7 @@ const prevChangeIdx = () => {
   currentIdxRef.value = (currentIdxRef.value - 1 + 3) % 3;
 };
 const navDetailProduct = productId => {
-  console.log(productId);
+  // console.log(productId);
   router.push({
     path: `/masonry/${productId}`,
   });
@@ -42,7 +42,7 @@ watchEffect(() => {
 onBeforeUnmount(() => {
   if (intervalId) {
     clearInterval(intervalId);
-    console.log('setInterval 끝났음');
+    // console.log('setInterval 끝났음');
   }
 });
 </script>

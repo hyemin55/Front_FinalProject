@@ -64,6 +64,9 @@
           </tr>
         </tbody>
       </table>
+      <div class="deleteNotification" v-if="deleteNotification">
+        <p>삭제되었습니다.</p>
+      </div>
     </article>
     <article>
       <PageNationComponent :pageNationData="pageNationData" @currentPage="pageUpdate" />
@@ -93,6 +96,7 @@ const reviewDataRes = ref([]);
 const pageNumber = ref(0);
 const pageNationData = ref('');
 const searchKeyword = ref('');
+const deleteNotification = ref(false);
 
 const pageNation = () => {
   pageNationData.value = {
@@ -102,19 +106,23 @@ const pageNation = () => {
 };
 
 const reviewSearchKeyword = async () => {
-  console.log(searchKeyword.value);
+  // console.log(searchKeyword.value);
   pageNumber.value = 0;
   dolode('search');
 };
 
 // 서버에 삭제할 데이터 넘겨주기
 const DeleteButton = async item => {
-  console.log(item);
+  // console.log(item);
   const result = confirm('정말 리뷰를 삭제하시겠습니까?');
   if (result) {
-    console.log('리뷰 삭제합니다.');
+    // console.log('리뷰 삭제합니다.');
     const deleteReviewManagementRes = await getdeleteReviewManagement(item.reviewId);
-    console.log(deleteReviewManagementRes);
+    // console.log(deleteReviewManagementRes);
+    deleteNotification.value = true;
+    setTimeout(() => {
+      deleteNotification.value = false;
+    }, 2000);
     dolode();
   }
 };
@@ -125,12 +133,11 @@ const pageUpdate = pageNum => {
 const dolode = async search => {
   if (search === 'search' || searchKeyword.value.length > 1) {
     if (searchKeyword.value.length > 1) {
-      console.log('실행되나?');
       const searchKeywordRes = await getSearchKeyword(searchKeyword.value, pageNumber.value);
-      console.log(searchKeywordRes);
+      // console.log(searchKeywordRes);
       reviewList.value = searchKeywordRes.data.reviewManageDtos.content;
       totalCount.value = searchKeywordRes.data?.reviewCount;
-      console.log(totalCount.value);
+      // console.log(totalCount.value);
       pageNation();
     }
   } else {
@@ -142,7 +149,7 @@ const dolode = async search => {
     reviewList.value = reviewDataRes.value.data.reviewManageDtos.content;
     totalCount.value = reviewDataRes.value.data.reviewCount;
     pageNation();
-    console.log(reviewList.value);
+    // console.log(reviewList.value);
   }
 };
 
@@ -242,5 +249,18 @@ th {
 .stateButton:hover {
   box-shadow: inset 1px 1px 4px rgba(0, 0, 0, 0.3);
   transform: translateY(1px);
+}
+.deleteNotification {
+  width: 25%;
+  height: 35px;
+  font-size: 1.8rem;
+  align-content: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 10px;
+  background-color: var(--color-main-gray);
+  z-index: 50;
 }
 </style>

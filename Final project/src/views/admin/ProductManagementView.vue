@@ -6,16 +6,16 @@
     <article id="sortByAndSearch">
       <select name="sortBy" id="sortBy">
         <option value="total">전체</option>
-        <option value="onSale">판매중</option>
+        <!-- <option value="onSale">판매중</option>
         <option value="soldOut">품절</option>
         <option value="hiding">숨김</option>
         <option value="waitingForSale">판매대기</option>
-        <option value="saleCompleted">판매완료</option>
+        <option value="saleCompleted">판매완료</option> -->
       </select>
-      <div id="search">
+      <!-- <div id="search">
         <input type="search" id="productSearch" placeholder="상품명 검색" />
         <img class="searchIcon" src="@/assets/img/icon/free-icon-font-search-3917132.png" alt="productSearch" />
-      </div>
+      </div> -->
     </article>
     <article id="Inspection">
       <table>
@@ -34,11 +34,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="TableBody" v-for="(item, index) in productList" :key="index">
+          <tr class="TableBody" v-for="(item, index) in productList" :key="index" >
             <td class="usedProductId">{{ item.usedProductId }}</td>
             <td>{{ item.category }}</td>
             <td>{{ item.brandName }}</td>
-            <td colspan="2" class="productName">
+            <td colspan="2" class="productName" @click="goProductsDetail(item)">
               <span
                 ><img class="productImages" :src="`${GLOBAL_URL}/api/file/download/${item.filename}`" alt="" />
                 {{ item.productName }}</span
@@ -75,7 +75,9 @@ import PageNationComponent from '@/components/PageNationComponent.vue';
 import { GLOBAL_URL } from '@/api/util';
 import { ref, watchEffect } from 'vue';
 import { dateTimeFormat } from '@/FormatData';
+import { useRouter } from 'vue-router';
 
+const router = useRouter()
 const productList = ref([]);
 const totalCount = ref(0);
 const size = ref(20);
@@ -94,10 +96,10 @@ const stateOption = [
 const stateOptionNumber = value => {
   for (let i = 0; stateOption.length > i; i++) {
     if (stateOption[i].value === value) {
-      console.log(i);
+      // console.log(i);
       return i;
     } else {
-      console.log('매칭되는 상태값이 없습니다.');
+      // console.log('매칭되는 상태값이 없습니다.');
     }
   }
 };
@@ -106,12 +108,16 @@ const updatePage = selectPage => {
   currentPage.value = selectPage;
 };
 
+const goProductsDetail = (item)=>{
+router.push({path:`/productsdetail/${item.usedProductId}`})
+}
+
 const dolode = async () => {
   selectState.value = stateOption[0];
   const productManagementListRes = await getProductManagementList();
   productList.value = productManagementListRes.productManageDtos.content;
   totalCount.value = productManagementListRes.productCount;
-  console.log('productList', totalCount.value, productList.value);
+  // console.log('productList', totalCount.value, productList.value);
 
   pageNationData.value = {
     totalCount: totalCount.value,
@@ -198,6 +204,7 @@ td {
   height: 50px;
   padding: 0 1%;
   border-bottom: 0.5px solid var(--color-main-gray);
+
   /* border-right: 0.5px solid var(--color-main-gray); */
 }
 .TableBody td:last-child {
@@ -208,6 +215,7 @@ td {
 }
 .productName {
   text-align: left;
+  cursor: pointer;
 }
 .productName span {
   display: flex;

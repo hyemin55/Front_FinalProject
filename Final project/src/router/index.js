@@ -12,7 +12,7 @@ import { useUserStore } from '@/stores/Login';
 import OrderManagementView from '@/views/admin/OrderManagementView.vue';
 import ProductManagementView from '@/views/admin/ProductManagementView.vue';
 import ReviewManagementView from '@/views/admin/ReviewManagementView.vue';
-import StatisticsView from '@/views/admin/StatisticsView.vue';
+import StatisticsView from '@/views/admin/statistics/StatisticsView.vue';
 import UserManagementView from '@/views/admin/UserManagementView.vue';
 import MainDashboardView from '@/views/admin/_MainDashboardView.vue';
 import { loginCheck } from '@/api/KakaoLoginApi';
@@ -191,12 +191,13 @@ const routers = createRouter({
 routers.beforeEach(async (to, from, next) => {
   const useStore = useUserStore();
   let res = [null];
-
   if (to.meta.role) {
     // 관리자페이지들어가면 무조건 작동
     if (sessionStorage.getItem('token')) {
-      res = await loginCheck();
-      useStore.login(res.data); //스토어 등록
+      if (useStore.role === '') {
+        res = await loginCheck();
+        useStore.login(res.data); //스토어 등록
+      }
       const userRole = useStore.role;
       const roles = Array.isArray(to.meta.role) ? to.meta.role : [to.meta.role];
       if (!roles.includes(userRole)) {
@@ -218,8 +219,8 @@ routers.beforeEach(async (to, from, next) => {
       return next();
     } else {
       useStore.moveMain();
+      // console.log('next로 이동', useStore.role);
       next();
-      console.log('next로 이동', useStore.role);
     }
   }
 });

@@ -4,7 +4,7 @@
     <article id="orderList">
       <div class="orderListTitle">
         <h1>구매 리스트</h1>
-        <p><router-link to="/orderManagement">더보기▸</router-link></p>
+        <p class="underline"><router-link to="/orderManagement">더보기▸</router-link></p>
       </div>
       <ul class="orderListHeader">
         <li>No.</li>
@@ -13,18 +13,17 @@
         <li>판매금액</li>
         <li>주문시간</li>
       </ul>
-      <div
-        v-if="reviewList && reviewList.dashReviewListDtoList && reviewList.dashReviewListDtoList.length > 0"
-        v-for="(item, index) in orderList.dashOrderListDtoList.slice(0, 10)"
-        :key="index"
-      >
-        <ul class="orderListContent">
+      <div v-if="orderList.orderCount > 0">
+        <ul class="orderListContent" v-for="(item, index) in orderList.dashOrderListDtoList?.slice(0, 10)" :key="index">
           <li>{{ item.orderId }}</li>
           <li>{{ item.categoryName }}</li>
           <li>{{ item.productName }}</li>
           <li>{{ item.price.toLocaleString() }} 원</li>
           <li>{{ dateTimeFormat(item.createDate) }}</li>
         </ul>
+      </div>
+      <div v-else class="notList">
+        <p>오늘 구매 내역이 없습니다.</p>
       </div>
     </article>
 
@@ -36,20 +35,28 @@
       </div>
       <div class="todayCounts">
         <ul>
+          <router-link to="/userManagement">
           <li>{{ joinCount.memberCount }}</li>
           <li>신규회원</li>
+        </router-link>
         </ul>
         <ul>
+          <router-link to="/userManagement">
           <li>{{ logInCount.memberCount }}</li>
           <li>방문자</li>
+        </router-link>
         </ul>
         <ul>
+          <router-link to="/orderManagement">
           <li>{{ orderList.orderCount }}</li>
           <li>구매</li>
+        </router-link>
         </ul>
         <ul>
+          <router-link to="/mainInspectionList">
           <li>{{ pendingList.pendingSaleCount }}</li>
           <li>판매신청</li>
+        </router-link>
         </ul>
       </div>
       <div class="todayContent">
@@ -67,7 +74,7 @@
     <article id="pendingList">
       <div class="pendingListTitle">
         <h1>판매 리스트</h1>
-        <p><router-link to="/mainInspectionList">더보기▸</router-link></p>
+        <p class="underline"><router-link to="/mainInspectionList">더보기▸</router-link></p>
       </div>
       <div>
         <ul class="pendingListHeader">
@@ -77,10 +84,11 @@
           <li>닉네임</li>
           <li>신청시간</li>
         </ul>
+      </div>
+      <div v-if="pendingList.pendingSaleCount > 0">
         <ul
-          v-if="reviewList && reviewList.dashReviewListDtoList && reviewList.dashReviewListDtoList.length > 0"
           class="pendingListContent"
-          v-for="(item, index) in pendingList.dashPendingListDtoList.slice(0, 10)"
+          v-for="(item, index) in pendingList.dashPendingListDtoList?.slice(0, 10)"
           :key="index"
         >
           <li>{{ item.pendingSaleId }}</li>
@@ -90,12 +98,15 @@
           <li>{{ dateTimeFormat(item.createDate) }}</li>
         </ul>
       </div>
+      <div v-else class="notList">
+        <p>오늘 판매신청 내역이 없습니다.</p>
+      </div>
     </article>
     <!-- 중간 오른쪽 공지사항 -->
     <article id="announcement">
       <div class="announcementTitle">
         <h1>공지사항</h1>
-        <p><router-link to="/announcement">더보기▸</router-link></p>
+        <p class="underline"><router-link to="/announcement">더보기▸</router-link></p>
       </div>
       <div>
         <ul class="announcementHeader">
@@ -111,10 +122,10 @@
       </div>
     </article>
     <!--하단 왼쪽 / 리뷰리스트 -->
-    <article id="reviewList">
+    <article id="reviewList" >
       <div class="reviewListTitle">
         <h1>리뷰 리스트</h1>
-        <p><router-link to="/reviewManagement">더보기▸</router-link></p>
+        <p class="underline"><router-link to="/reviewManagement">더보기▸</router-link></p>
       </div>
       <ul class="reviewListHeader">
         <li>No.</li>
@@ -124,24 +135,27 @@
         <li>상품명</li>
         <li>용량</li>
       </ul>
-      <div
-        v-if="reviewList && reviewList.dashReviewListDtoList && reviewList.dashReviewListDtoList.length > 0"
-        class="reviewListTotalContent"
-        v-for="(item, index) in reviewList.dashReviewListDtoList.slice(0, 10)"
-        :key="index"
-      >
-        <ul class="reviewListContentFirst">
-          <li>{{ item.reviewId }}</li>
-          <li>{{ item.nickName }}</li>
-          <li>{{ item.categoryName }}</li>
-          <li>{{ item.brandName }}</li>
-          <li>{{ item.productName }}</li>
-          <li>{{ item.productSize }} ml</li>
-        </ul>
-        <ul class="reviewListContentSecond">
-          <li>{{ item.content }}</li>
-          <li>{{ dateTimeFormat(item.reviewCreateDate) }}</li>
-        </ul>
+     <div  v-if="reviewList && reviewList.dashReviewListDtoList && reviewList.dashReviewListDtoList.length > 0">
+        <div
+          class="reviewListTotalContent" v-for="(item, index) in reviewList.dashReviewListDtoList.slice(0, 10)"
+      :key="index"
+        >
+          <ul class="reviewListContentFirst">
+            <li>{{ item.reviewId }}</li>
+            <li>{{ item.nickName }}</li>
+            <li>{{ item.categoryName }}</li>
+            <li>{{ item.brandName }}</li>
+            <li>{{ item.productName }}</li>
+            <li>{{ item.productSize }} ml</li>
+          </ul>
+          <ul class="reviewListContentSecond">
+            <li>{{ item.content }}</li>
+            <li>{{ dateTimeFormat(item.reviewCreateDate) }}</li>
+          </ul>
+        </div>
+      </div>
+      <div v-else class="notList">
+        <p>오늘 작성된 리뷰가 없습니다.</p>
       </div>
     </article>
     <div class="dashboardImg">
@@ -180,12 +194,11 @@ const doload = async () => {
   const dashboardReviewListRes = await getDashboardReviewList();
   reviewList.value = dashboardReviewListRes;
 
-  console.log('dashboardJoinCountRes', joinCount.value);
-  console.log('dashboardLogInCountRes', logInCount.value);
-  console.log('dashboardOrderListRes', orderList.value);
-  console.log('dashboardPendingListRes', pendingList.value);
-  console.log('dashboardReviewListRes', reviewList.value);
-  console.log('dashboardReviewListRes', dashboardReviewListRes.dashReviewListDtoList.slice(0, 5));
+  // console.log('joinCount', joinCount.value);
+  // console.log('logInCount', logInCount.value);
+  // console.log('orderList', orderList.value);
+  // console.log('pendingList', pendingList.value);
+  // console.log('reviewList', reviewList.value);
 };
 
 announcementData.value = [
@@ -278,7 +291,19 @@ article {
   box-shadow: inset -4px -4px 6px rgba(167, 180, 168, 0.5);
   border-bottom-right-radius: 10px;
 }
-
+.underline:hover {
+  text-decoration: underline;
+  text-underline-position: under;
+}
+h1 {
+  font-size: 2rem;
+}
+.notList {
+  text-align: center;
+  height: 50%;
+  align-content: center;
+}
+/* 각 블록의 타이틀 설정 */
 .orderListTitle,
 .todayCountTitle,
 .pendingListTitle,
@@ -290,13 +315,6 @@ article {
   align-items: center;
   border-bottom: 2px solid var(--color-text-gray);
   line-height: 3.2rem;
-}
-article p:hover {
-  text-decoration: underline;
-  text-underline-position: under;
-}
-h1 {
-  font-size: 2rem;
 }
 /* 목록들 레이아웃 및 선 설정*/
 .orderListHeader,
@@ -382,6 +400,9 @@ h1 {
   font-size: 4rem;
   color: orange;
 }
+.todayCounts ul:hover {
+  background-color: #dceff7;
+}
 .todayContent {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -409,10 +430,10 @@ h1 {
 }
 @keyframes imgMove {
   to {
-    transform: translateX(-10px) rotate(5deg);
+    transform: translateX(-10px) rotate(-4deg);
   }
   from {
-    transform: translateY(10px) rotate(-5deg);
+    transform: translateY(10px) rotate(4deg);
   }
 }
 </style>

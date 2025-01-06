@@ -25,7 +25,7 @@ const pageDown = () => {
   window.scrollTo({ top: 30000, behavior: 'smooth' });
 };
 const MouseHovered = boolean => {
-  console.log('boolean', boolean);
+  // console.log('boolean', boolean);
   isScrolled = boolean;
 };
 onMounted(() => {

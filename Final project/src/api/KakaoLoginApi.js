@@ -6,7 +6,7 @@ export const login = async code => {
     const res = await axios.get(`${GLOBAL_URL}/kakao/login?code=${code}`);
     if (res.status.toString().startsWith('2')) {
       sessionStorage.setItem('token', res.data);
-      console.log('token', res.data);
+      // console.log('token', res.data);
     }
     return res;
   } catch (err) {
@@ -23,7 +23,7 @@ export const loginCheck = async () => {
         Authorization: `Bearer ${sessionStorage.getItem('token')}`,
       },
     });
-    console.log(res.data);
+    // console.log(res.data);
     return res;
   } catch (err) {
     console.error(err);
@@ -38,5 +38,5 @@ export const logout = async ACCESS_TOKEN => {
       Authorization: `Bearer ${ACCESS_TOKEN}`,
     },
   });
-  console.log(res);
+  // console.log(res);
 };

@@ -13,16 +13,16 @@ let image_list = [];
 // 클릭 시 index 값을 받아오는 함수
 const handleClick = index => {
   0.0;
-  console.log('Clicked index:', index);
+  // console.log('Clicked index:', index);
   // 클릭한 슬라이드의 index에 따른 로직 추가
 
-  console.log('queuepeek: ', queue.peek());
+  // console.log('queuepeek: ', queue.peek());
   let maxIterations = queue.size();
   if (queue.peek() == index) return;
   while (queue.peek() != index && maxIterations > 0) {
     queue.enqueue(queue.dequeue());
     maxIterations--;
-    console.log('queue : ' + queue.elements);
+    // console.log('queue : ' + queue.elements);
   }
   if (maxIterations === 0) {
     console.warn('Infinite loop detected. Exiting...');
@@ -31,7 +31,7 @@ const handleClick = index => {
   slides.value = [];
   while (!queue.isEmpty()) {
     const index = queue.dequeue(); // 큐에서 인덱스 값 추출
-    console.log(index);
+    // console.log(index);
     if (index >= 0 && index < image_list.length) {
       // 유효한 인덱스인지 확인
       slides.value.push(image_list[index]);
@@ -48,7 +48,7 @@ const handleClick = index => {
 
 // 자세히보기를 클릭했을 때 넘겨줄 idx와 size이다.
 const navDetailProduct = (productId, size) => {
-  console.log(productId);
+  // console.log(productId);
   router.push({
     path: `/masonry/${productId}`,
   });
@@ -58,7 +58,7 @@ const navDetailProduct = (productId, size) => {
 const dolode = async () => {
   const pickRes = await getEditorPicks();
   slides.value = pickRes;
-  console.log(slides.value);
+  // console.log(slides.value);
   // 1. img idx => q
   for (let i = 0; i < slides.value.length; i++) {
     // console.log('ddd ' + i)
@@ -117,6 +117,7 @@ onMounted(() => {
 .Slidebox {
   position: relative;
   object-fit: cover;
+
   background-color: var(--color-main-Lgray);
   transition:
     opacity 0.3s ease,
@@ -138,6 +139,7 @@ onMounted(() => {
   height: auto;
   padding: 1%;
   font-size: 2.5rem;
+  cursor: pointer;
 }
 .otherSlideImg {
   width: 20%;
