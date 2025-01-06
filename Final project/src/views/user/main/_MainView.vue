@@ -4,12 +4,12 @@
       <video autoplay muted loop src="@/assets/img/main.mp4"></video>
       <article id="IntroductionModal" v-if="eventModal">
         <div>
-          <h1 class="title">
-          전문 중고거래 쇼핑몰 CHERRISH
-        </h1>
+          <h1 class="title">향수 전문 중고거래 쇼핑몰 CHERRISH</h1>
           <img src="@/assets/img/shutterstock_1346355935.jpg" alt="" />
-          <h1 class="subTitle">꼼꼼한 검수 과정을 통해 <br />
-            믿고 구매하실 수 있습니다.</h1>
+          <h1 class="subTitle">
+            꼼꼼한 검수 과정을 통해 <br />
+            믿고 구매하실 수 있습니다.
+          </h1>
           <div class="content">
             <p>(중고상품) 향수 검수 특이사항</p>
             <p>향수 거래 시 아래 사유로 검수 불합격 및 거래 취소될 수 있으므로 반드시 확인 부탁드립니다.</p>
@@ -84,43 +84,44 @@ modalState();
 }
 #IntroductionModal {
   position: fixed;
-  width: 430px;
+  width: 350px;
   top: 130px;
   left: 10%;
   text-align: center;
-  line-height: 2.7rem;
+  line-height: 2rem;
   background-color: white;
-  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5),
-  inset 2px 2px 4px rgba(0, 0, 0, 0.1) ;
+  box-shadow:
+    2px 2px 6px rgba(0, 0, 0, 0.5),
+    inset 2px 2px 4px rgba(0, 0, 0, 0.1);
   z-index: 50;
 }
 .title {
-  font-size: 3rem;
+  font-size: 2.7rem;
   padding: 10px 0;
   line-height: 3.5rem;
   color: var(--color-main-bloode);
 }
 #IntroductionModal img {
-  width: 400px;
+  width: 340px;
   height: auto;
 }
-.subTitle{
+.subTitle {
   padding-top: 15px;
   font-size: 2rem;
   font-weight: 600;
 }
 .content {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   text-align: left;
-  padding:15px;
+  padding: 10px 15px;
   color: #555;
 }
-.content p:nth-child(1){
-  font-size: 1.7rem;
+.content p:nth-child(1) {
+  font-size: 1.5rem;
   font-weight: 600;
 }
 .closeModalButtons {
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   color: white;
   padding: 0 10px;
   background-color: #333;
@@ -128,7 +129,7 @@ modalState();
   justify-content: space-between;
   align-items: center;
 }
-.closeModalButtons Button:hover{
+.closeModalButtons Button:hover {
   text-decoration: underline;
   text-underline-position: under;
 }
