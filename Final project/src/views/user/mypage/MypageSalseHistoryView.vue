@@ -84,6 +84,7 @@ const pageNation = () => {
       :showBtn="false"
       @UpdateRendering="Rendering"
       @DeleteRendering="Rendering"
+      @CreateRendering="Rendering"
     ></HistoryProduct>
     <PageNationComponent :pageNationData="pageNationData" @currentPage="pageUpdate" />
   </article>
