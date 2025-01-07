@@ -72,7 +72,7 @@ onMounted(async () => {
       <img src="/src/assets/img/shoppingBag.jpg" alt="">
       <ul>
         <li>상품 주문이 완료되었습니다.</li>
-        <li>주문번호 : </li>
+        <li>주문번호 : {{ buyerInfoRef.purchaseId }} </li>
         <li @click="gohome()">계속 쇼핑하기</li>
       </ul>
     </article>
