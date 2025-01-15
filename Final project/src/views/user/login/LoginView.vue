@@ -15,7 +15,7 @@ const loginSelectRole = selectRole => {
   console.log(role.value);
 };
 
-const login = () => {
+const handleLogin = () => {
   const data = { 
     email: email.value, 
     password: password.value 
@@ -31,13 +31,15 @@ const login = () => {
       <div>
         <span @click="loginSelectRole('user')">user</span> | <span @click="loginSelectRole('admin')">admin</span>
       </div>
-      <div v-if="role === 'admin'">
-        <div>
-          <input type="email" placeholder="email" v-model="email" />
-          <input type="password" placeholder="password" v-model="password" />
+      <form @submit.prevent="handleLogin" v-if="role === 'admin'">
+        <div >
+          <div>
+            <input type="email" placeholder="email" v-model="email" required/>
+            <input type="password" placeholder="password" v-model="password" required/>
+          </div>
+          <button type="submit">login</button>
         </div>
-        <div @click="login">login</div>
-      </div>
+      </form>
       <div v-else>
         <div class="login_box_btn" @click="kakaoLogin()">
           <a id="kakao-login-btn"> <img src="@/assets/img/btn_kakao.svg" />카카오로 시작하기 </a>
