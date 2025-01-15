@@ -1,28 +1,53 @@
 <script setup>
+import { ref } from 'vue';
+
+const email = ref('');
+const password = ref('');
+const role = ref('user');
 const kakaoLogin = () => {
   window.Kakao.Auth.authorize({
     redirectUri: 'http://localhost:5173/login',
   });
 };
 
-// const kakaoLogout = () => {
-//   localStorage.removeItem('token')
-//   alert('로그아웃 성공')
-// }
+const loginSelectRole = selectRole => {
+  role.value = selectRole;
+  console.log(role.value);
+};
+
+const login = () => {
+  const data = { 
+    email: email.value, 
+    password: password.value 
+  };
+  console.log(data)
+};
 </script>
 
 <template>
   <section id="login">
     <article id="login_box">
       <h1 class="login_box_h1">Sign in</h1>
-      <div class="login_box_btn" @click="kakaoLogin()">
-        <a id="kakao-login-btn"> <img src="@/assets/img/btn_kakao.svg" />카카오로 시작하기 </a>
+      <div>
+        <span @click="loginSelectRole('user')">user</span> | <span @click="loginSelectRole('admin')">admin</span>
       </div>
-      <div class="login_box_btn" @click="kakaoLogin()">
-        <a id="kakao-login-btn"> <img src="@/assets/img/btn_naver.svg" />네이버로 시작하기 </a>
+      <div v-if="role === 'admin'">
+        <div>
+          <input type="email" placeholder="email" v-model="email" />
+          <input type="password" placeholder="password" v-model="password" />
+        </div>
+        <div @click="login">login</div>
       </div>
-      <div class="login_box_btn" @click="kakaoLogin()">
-        <a id="kakao-login-btn"> <img src="@/assets/img/btn_google.svg" />구글로 시작하기 </a>
+      <div v-else>
+        <div class="login_box_btn" @click="kakaoLogin()">
+          <a id="kakao-login-btn"> <img src="@/assets/img/btn_kakao.svg" />카카오로 시작하기 </a>
+        </div>
+        <div class="login_box_btn" @click="kakaoLogin()">
+          <a id="kakao-login-btn"> <img src="@/assets/img/btn_naver.svg" />네이버로 시작하기 </a>
+        </div>
+        <div class="login_box_btn" @click="kakaoLogin()">
+          <a id="kakao-login-btn"> <img src="@/assets/img/btn_google.svg" />구글로 시작하기 </a>
+        </div>
       </div>
     </article>
   </section>
