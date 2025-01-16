@@ -31,7 +31,8 @@
 ## ❣ 관련 자료  
  
 - **Backend GitHub:** [Backend GitHub 바로가기](https://github.com/Pa-fs/4Hwang-backend)
-- **요구사항 명세서:** [Notion 바로가기](https://www.notion.so/CHERISH-Project-10ebfd03f4bf804c9b05d84caf221102?pvs=4)  
+- **요구사항 명세서:** [Notion 바로가기](https://www.notion.so/CHERISH-Project-10ebfd03f4bf804c9b05d84caf221102?pvs=4)
+- **ERD:** [ERD 바로가기](https://www.erdcloud.com/d/zmWWSeZhqRCtuiLiG)
 
 ---
 
