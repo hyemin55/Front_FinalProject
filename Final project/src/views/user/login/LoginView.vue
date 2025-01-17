@@ -16,11 +16,11 @@ const loginSelectRole = selectRole => {
 };
 
 const handleLogin = () => {
-  const data = { 
-    email: email.value, 
-    password: password.value 
+  const data = {
+    email: email.value,
+    password: password.value,
   };
-  console.log(data)
+  console.log(data);
 };
 </script>
 
@@ -28,16 +28,15 @@ const handleLogin = () => {
   <section id="login">
     <article id="login_box">
       <h1 class="login_box_h1">Sign in</h1>
-      <div>
-        <span @click="loginSelectRole('user')">user</span> | <span @click="loginSelectRole('admin')">admin</span>
+      <div id="loginType_box">
+        <span class="loginType" @click="loginSelectRole('user')">user</span> |
+        <span class="loginType" @click="loginSelectRole('admin')">admin</span>
       </div>
       <form @submit.prevent="handleLogin" v-if="role === 'admin'">
-        <div >
-          <div>
-            <input type="email" placeholder="email" v-model="email" required/>
-            <input type="password" placeholder="password" v-model="password" required/>
-          </div>
-          <button type="submit">login</button>
+        <div class="formLogin">
+          <input class="input_box" type="email" placeholder="email" v-model="email" required />
+          <input class="input_box" type="password" placeholder="password" v-model="password" required />
+          <button class="input_login_box" type="submit">login</button>
         </div>
       </form>
       <div v-else>
@@ -78,6 +77,43 @@ const handleLogin = () => {
   font-size: 1.7rem;
   padding: 20px;
   margin-top: -20px;
+}
+#loginType_box {
+  width: 50%;
+  height: auto;
+  padding: 0 2%;
+  text-align: center;
+}
+.loginType {
+  padding: 0 2%;
+  color: #333;
+  cursor: pointer;
+}
+.formLogin{
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  padding: 20px;
+}
+.input_box{
+  border: 0.5px solid var(--color-main-bloode);
+  width: 350px;
+  height: 35px;
+  border-radius: 9px;
+  margin: 5px 0;
+  padding: 2%;
+}
+.input_login_box{
+  border: 0.5px solid var(--color-main-bloode);
+  background-color: var(--color-main-bloode);
+  color: white;
+  text-align: center;
+  font-size: 1.7rem;
+  width: 350px;
+  height: 35px;
+  border-radius: 9px;
+  margin: 5px 0;
 }
 .login_box_btn {
   display: flex;
