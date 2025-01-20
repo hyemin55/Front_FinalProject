@@ -1,26 +1,29 @@
 <script setup>
+import { GLOBAL_URL } from '@/api/util';
+import axios from 'axios';
 import { ref } from 'vue';
 
 const email = ref('');
 const password = ref('');
-const role = ref('user');
+const loginType = ref('kakaoLogin');
 const kakaoLogin = () => {
   window.Kakao.Auth.authorize({
     redirectUri: 'http://localhost:5173/login',
   });
 };
 
-const loginSelectRole = selectRole => {
-  role.value = selectRole;
-  console.log(role.value);
+const loginSelectType = type => {
+  loginType.value = type;
+  console.log(loginType.value);
 };
 
-const handleLogin = () => {
+const handleLogin = async() => {
   const data = {
     email: email.value,
     password: password.value,
   };
   console.log(data);
+  const res = await axios.get(`${GLOBAL_URL}/formLogin`)
 };
 </script>
 
@@ -29,10 +32,10 @@ const handleLogin = () => {
     <article id="login_box">
       <h1 class="login_box_h1">Sign in</h1>
       <div id="loginType_box">
-        <span class="loginType" @click="loginSelectRole('user')">user</span> |
-        <span class="loginType" @click="loginSelectRole('admin')">admin</span>
+        <span class="loginType" @click="loginSelectType('kakaoLogin')">Social Login</span> |
+        <span class="loginType" @click="loginSelectType('formLogin')">Login</span>
       </div>
-      <form @submit.prevent="handleLogin" v-if="role === 'admin'">
+      <form @submit.prevent="handleLogin" v-if="loginType === 'formLogin'">v 
         <div class="formLogin">
           <input class="input_box" type="email" placeholder="email" v-model="email" required />
           <input class="input_box" type="password" placeholder="password" v-model="password" required />
