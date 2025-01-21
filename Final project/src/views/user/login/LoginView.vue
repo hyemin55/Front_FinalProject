@@ -1,17 +1,21 @@
 <script setup>
+import { loginCheck } from '@/api/KakaoLoginApi';
 import { GLOBAL_URL } from '@/api/util';
+import { useUserStore } from '@/stores/Login';
 import axios from 'axios';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const email = ref('');
 const password = ref('');
 const loginType = ref('kakaoLogin');
+const useStore = useUserStore()
+const router = useRouter()
 const kakaoLogin = () => {
   window.Kakao.Auth.authorize({
     redirectUri: 'http://localhost:5173/login',
   });
 };
-
 const loginSelectType = type => {
   loginType.value = type;
   console.log(loginType.value);
@@ -22,8 +26,12 @@ const handleLogin = async() => {
     email: email.value,
     password: password.value,
   };
-  console.log(data);
-  const res = await axios.get(`${GLOBAL_URL}/formLogin`)
+  let res = await axios.post(`${GLOBAL_URL}/kakao/formLogin`,data)
+  console.log(res.data)
+  sessionStorage.setItem('token', res.data);
+  res = await loginCheck();
+  useStore.login(res.data);
+  router.push({name:'main'})
 };
 </script>
 
@@ -35,7 +43,7 @@ const handleLogin = async() => {
         <span class="loginType" @click="loginSelectType('kakaoLogin')">Social Login</span> |
         <span class="loginType" @click="loginSelectType('formLogin')">Login</span>
       </div>
-      <form @submit.prevent="handleLogin" v-if="loginType === 'formLogin'">v 
+      <form @submit.prevent="handleLogin" v-if="loginType === 'formLogin'">
         <div class="formLogin">
           <input class="input_box" type="email" placeholder="email" v-model="email" required />
           <input class="input_box" type="password" placeholder="password" v-model="password" required />
