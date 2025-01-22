@@ -100,6 +100,10 @@ const handleLogin = async() => {
   color: #333;
   cursor: pointer;
 }
+.loginType:hover{
+  text-decoration: underline;
+  text-underline-position: under;
+}
 .formLogin{
   display: flex;
   flex-direction: column;
