@@ -130,8 +130,8 @@ const memberRoleSave = async () => {
     for (let i = 0; memberRoleUpdate.value.length > i; i++) {
       const { memberId, role } = memberRoleUpdate.value[i];
       await postRoleChange(memberId, role);
-      alert('저장되었습니다.');
     }
+    alert('저장되었습니다.');
   } catch (error) {
     console.error('권한 변경 전송 에러:', error.response?.data || error.message);
   }

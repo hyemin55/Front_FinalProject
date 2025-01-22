@@ -1,26 +1,37 @@
 <script setup>
+import { loginCheck } from '@/api/KakaoLoginApi';
+import { GLOBAL_URL } from '@/api/util';
+import { useUserStore } from '@/stores/Login';
+import axios from 'axios';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const email = ref('');
 const password = ref('');
-const role = ref('user');
+const loginType = ref('kakaoLogin');
+const useStore = useUserStore()
+const router = useRouter()
 const kakaoLogin = () => {
   window.Kakao.Auth.authorize({
     redirectUri: 'http://localhost:5173/login',
   });
 };
-
-const loginSelectRole = selectRole => {
-  role.value = selectRole;
-  console.log(role.value);
+const loginSelectType = type => {
+  loginType.value = type;
+  console.log(loginType.value);
 };
 
-const handleLogin = () => {
-  const data = { 
-    email: email.value, 
-    password: password.value 
+const handleLogin = async() => {
+  const data = {
+    email: email.value,
+    password: password.value,
   };
-  console.log(data)
+  let res = await axios.post(`${GLOBAL_URL}/kakao/formLogin`,data)
+  console.log(res.data)
+  sessionStorage.setItem('token', res.data);
+  res = await loginCheck();
+  useStore.login(res.data);
+  router.push({name:'main'})
 };
 </script>
 
@@ -28,16 +39,15 @@ const handleLogin = () => {
   <section id="login">
     <article id="login_box">
       <h1 class="login_box_h1">Sign in</h1>
-      <div>
-        <span @click="loginSelectRole('user')">user</span> | <span @click="loginSelectRole('admin')">admin</span>
+      <div id="loginType_box">
+        <span class="loginType" @click="loginSelectType('kakaoLogin')">Social Login</span> |
+        <span class="loginType" @click="loginSelectType('formLogin')">Login</span>
       </div>
-      <form @submit.prevent="handleLogin" v-if="role === 'admin'">
-        <div >
-          <div>
-            <input type="email" placeholder="email" v-model="email" required/>
-            <input type="password" placeholder="password" v-model="password" required/>
-          </div>
-          <button type="submit">login</button>
+      <form @submit.prevent="handleLogin" v-if="loginType === 'formLogin'">
+        <div class="formLogin">
+          <input class="input_box" type="email" placeholder="email" v-model="email" required />
+          <input class="input_box" type="password" placeholder="password" v-model="password" required />
+          <button class="input_login_box" type="submit">login</button>
         </div>
       </form>
       <div v-else>
@@ -78,6 +88,47 @@ const handleLogin = () => {
   font-size: 1.7rem;
   padding: 20px;
   margin-top: -20px;
+}
+#loginType_box {
+  width: 50%;
+  height: auto;
+  padding: 0 2%;
+  text-align: center;
+}
+.loginType {
+  padding: 0 2%;
+  color: #333;
+  cursor: pointer;
+}
+.loginType:hover{
+  text-decoration: underline;
+  text-underline-position: under;
+}
+.formLogin{
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  padding: 20px;
+}
+.input_box{
+  border: 0.5px solid var(--color-main-bloode);
+  width: 350px;
+  height: 35px;
+  border-radius: 9px;
+  margin: 5px 0;
+  padding: 2%;
+}
+.input_login_box{
+  border: 0.5px solid var(--color-main-bloode);
+  background-color: var(--color-main-bloode);
+  color: white;
+  text-align: center;
+  font-size: 1.7rem;
+  width: 350px;
+  height: 35px;
+  border-radius: 9px;
+  margin: 5px 0;
 }
 .login_box_btn {
   display: flex;
